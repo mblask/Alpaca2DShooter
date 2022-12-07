@@ -1,0 +1,124 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1311804304442197512
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1311804304442197513}
+  - component: {fileID: 3702992166257012821}
+  m_Layer: 0
+  m_Name: GameAssets
+  m_TagString: Untagged
+  m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1311804304442197513
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1311804304442197512}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -18.31, y: -3.07, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3702992166257012821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1311804304442197512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eb1684c6366e554991647db792e84a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HeadshotPostProcessing: {fileID: 1595008553273350601, guid: dbdb2c719e4938b4ca544c79df83c4bf,
+    type: 3}
+  PossibleCraftUI: {fileID: 6758386029226925539, guid: c04b940e4ea2be044a2c60b2eef2709c,
+    type: 3}
+  ItemSlotUIPrefab: {fileID: 8364620979190049944, guid: ab90f7bae0f7b5849a04135b900a1fec,
+    type: 3}
+  NPCPrefab: {fileID: 5836229255098059071, guid: 9d0c1464df6cc1c4d9ae7af291b5685c,
+    type: 3}
+  ItemTemplate: {fileID: 9080969874544118615, guid: 4312b61d953601e48a5486a87b8b6234,
+    type: 3}
+  BulletPrefab: {fileID: 1007870438374792367, guid: d462873853495e944b9022805b398e19,
+    type: 3}
+  SpawnPortal: {fileID: 1487866185485382945, guid: 1fe946c524b17cc42a94b7c41fadcbde,
+    type: 3}
+  ExitPortal: {fileID: 7770807430521580663, guid: 359b80d0b9b99dc48a9578d261c6eba2,
+    type: 3}
+  ChatBubble: {fileID: 2580099622416704539, guid: 3c99b6026153d8547b5af33656d073c9,
+    type: 3}
+  Blood: {fileID: 9144573411589949775, guid: 1208b2fe3d9aed24791cf90e9099a653, type: 3}
+  ObjectDestroyPS: {fileID: 6286873006748181700, guid: 09af176826afcd4438fddea34718dade,
+    type: 3}
+  BloodPS: {fileID: 465937862284247560, guid: 8f46ec2d9399963429da0758697b32e6, type: 3}
+  ShootingPS: {fileID: 7398117331316292049, guid: e4ef56d0a8011f345957ddcfe7e489d7,
+    type: 3}
+  AvailableWeaponsList:
+  - {fileID: 11400000, guid: 8e403aae5daf09c49a7cc32cfef2d5d2, type: 2}
+  - {fileID: 11400000, guid: e8a7754bc5105c74696fd95bff87f112, type: 2}
+  - {fileID: 11400000, guid: 347dff94e829f684dbc2ea07a9ffb197, type: 2}
+  - {fileID: 11400000, guid: 27da57185e6a67d4d9732d5ab8efa4eb, type: 2}
+  CharacterBaseList:
+  - CharacterType: 0
+    CharacterAOC: {fileID: 22100000, guid: c35c335cec9bb2945a7d846c5f91db90, type: 2}
+    MovementSpeed: 3.5
+    Accuracy: 3
+    HealthModifier: 1.2
+  - CharacterType: 1
+    CharacterAOC: {fileID: 22100000, guid: 69fb994b734228246b4c22edc2c2b3d4, type: 2}
+    MovementSpeed: 4
+    Accuracy: 3
+    HealthModifier: 1.1
+  - CharacterType: 2
+    CharacterAOC: {fileID: 22100000, guid: d679b3bd68fd73047abca3f541a0381e, type: 2}
+    MovementSpeed: 3.5
+    Accuracy: 3
+    HealthModifier: 1.1
+  - CharacterType: 3
+    CharacterAOC: {fileID: 22100000, guid: bdcba94b8ea006645b3ac2faa90af47c, type: 2}
+    MovementSpeed: 2.5
+    Accuracy: 2
+    HealthModifier: 1
+  - CharacterType: 4
+    CharacterAOC: {fileID: 22100000, guid: 81466b54971cc6f48b4044fba4a072fb, type: 2}
+    MovementSpeed: 4
+    Accuracy: 8
+    HealthModifier: 1.5
+  - CharacterType: 5
+    CharacterAOC: {fileID: 22100000, guid: 751c269919c9a794f9bcbde5732099e6, type: 2}
+    MovementSpeed: 4.5
+    Accuracy: 7
+    HealthModifier: 1.3
+  - CharacterType: 6
+    CharacterAOC: {fileID: 22100000, guid: d69bcb1edae53c54b8d32cb42def5134, type: 2}
+    MovementSpeed: 4.5
+    Accuracy: 3
+    HealthModifier: 1.4
+  - CharacterType: 7
+    CharacterAOC: {fileID: 22100000, guid: 2c87d373423663f46a30afb601ed7185, type: 2}
+    MovementSpeed: 4.5
+    Accuracy: 3
+    HealthModifier: 1.2
+  CharacterBaseScriptableList:
+  - {fileID: 11400000, guid: e5274e7d2df71dd498b8d3bb3b66218f, type: 2}
+  - {fileID: 11400000, guid: 4d44b4e198ef14e42ad1e31c3c160241, type: 2}
+  - {fileID: 11400000, guid: 7df210d3391ff274b9bc8391a90b37ca, type: 2}
+  - {fileID: 11400000, guid: dc4d81ed4d3af3b418c813e0cf1675c7, type: 2}
+  - {fileID: 11400000, guid: 53de4797844cc6d43999c71a9db4cc41, type: 2}
+  - {fileID: 11400000, guid: b0948f73513965f4ab42da506bb57951, type: 2}
+  - {fileID: 11400000, guid: 783c40fd9c053dc4cad5e76df19af9e0, type: 2}
+  - {fileID: 11400000, guid: 4b4cc5d02a272174ba947d9bf685defc, type: 2}

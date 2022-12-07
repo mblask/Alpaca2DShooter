@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9590f8ee09418d6408edbbb755873f4f, type: 3}
+  m_Name: BoosterRecipe
+  m_EditorClassIdentifier: 
+  Ingredients:
+  - {fileID: 11400000, guid: 9bc7020aeb16a754f9732dc9697185bf, type: 2}
+  - {fileID: 11400000, guid: c92af50a24538ad4ca5c9c66674ed87e, type: 2}
+  - {fileID: 0}
+  ProductItem: {fileID: 11400000, guid: fe7f209bd2ecd7e4e964ac24c4f2fede, type: 2}
