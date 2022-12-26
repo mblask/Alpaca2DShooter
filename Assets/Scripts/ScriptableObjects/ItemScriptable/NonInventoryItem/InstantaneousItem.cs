@@ -6,8 +6,11 @@ public class InstantaneousItem : NonInventoryItem
     public Vector2 LifeRestored;
     public Vector2 StaminaRestored;
 
-    public override void UseItem()
+    public override bool UseItem()
     {
-        PlayerStats.Instance?.HealCharacter(this);
+        if (PlayerStats.Instance == null)
+            return false;
+
+        return PlayerStats.Instance.HealCharacter(this);
     }
 }

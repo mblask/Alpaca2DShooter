@@ -19,23 +19,27 @@ public class MouseInteraction : MonoBehaviour
 
     private void onLeftMouseClick()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (!Input.GetMouseButtonDown(0))
+            return;
+
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 0.1f);
+        if (hits.Length == 0)
+            return;
+
+
+        foreach (Collider2D collider in hits)
         {
-            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 0.1f);
-            if (hits.Length != 0)
+            IInteractable interactable = collider.GetComponent<IInteractable>();
+            if (interactable == null)
+                continue;
+
+            if (Vector2.Distance(_playerBase.transform.position, transform.position) < _playerDistance)
             {
-                foreach (Collider2D collider in hits)
-                {
-                    IInteractable interactable = collider.GetComponent<IInteractable>();
-                    if (interactable != null)
-                    {
-                        if (Vector2.Distance(_playerBase.transform.position, transform.position) < _playerDistance)
-                            interactable.Interact();
-                        else
-                            FloatingTextSpawner.CreateFloatingTextStatic(_playerBase.transform.position, "Too far away!", Color.white);
-                    }
-                }
+                interactable.Interact();
+                Debug.Log("Interacting");
             }
+            else
+                FloatingTextSpawner.CreateFloatingTextStatic(_playerBase.transform.position, "Too far away!", Color.white);
         }
     }
 

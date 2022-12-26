@@ -42,6 +42,11 @@ public class MouseCursor : MonoBehaviour
         resizeCursor();
     }
 
+    private void OnDisable()
+    {
+        PlayerWeapons.Instance.OnShooting -= onShooting;
+    }
+
     private void onShooting(PlayerWeapons playerWeapons)
     {
         Weapon weapon = playerWeapons.CurrentWeapon;

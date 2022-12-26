@@ -2,11 +2,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AlpacaMyGames;
+using System;
+
+public enum WoundType
+{
+    Head,
+    Legs,
+    Arms,
+}
 
 public class PlayerHitManager : MonoBehaviour
 {
+    private static PlayerHitManager _instance;
+
+    public static PlayerHitManager Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
+
+    public Action OnPlayerWounded;
+    public Action OnPlayerWoundsHealed;
+
     private CameraController _mainCameraController;
     private PostProcessingManager _postProcessingManager;
+
+    private List<WoundType> _woundsList = new List<WoundType>();
+
+    private void Awake()
+    {
+        _instance = this;
+    }
 
     private void Start()
     {
@@ -25,10 +53,15 @@ public class PlayerHitManager : MonoBehaviour
         if (Utilities.ChanceFunc(headShotChance))
         {
             //head hit, activate postprocessing and wobbling
-            _mainCameraController.WobbleCamera(true);
-            _postProcessingManager.ActivatePostProcessing();
+            float headInjuryDuration = 10.0f;
+            _mainCameraController.WobbleCamera(true, headInjuryDuration);
+            _postProcessingManager.ActivatePostProcessing(headInjuryDuration);
 
             FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Head shot!", hitTextColor, 0.5f, 5.0f, 2.0f, false, FloatDirection.Up);
+
+            _woundsList.AddIfNone(WoundType.Head);
+
+            StartCoroutine(removeWoundTypeCoroutine(WoundType.Head, headInjuryDuration));
             //Audio trigger
         }
         else if (Utilities.ChanceFunc(legShotChance))
@@ -38,6 +71,10 @@ public class PlayerHitManager : MonoBehaviour
             float speedBaseMultiplier = 0.6f;
             PlayerStats.TemporarilyModifyStat(StatType.Speed, legInjuryDuration, true, 0.0f, speedBaseMultiplier);
             FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Leg Hit!", hitTextColor, 0.5f, 5.0f, 2.0f, false, FloatDirection.Down);
+
+            _woundsList.AddIfNone(WoundType.Legs);
+
+            StartCoroutine(removeWoundTypeCoroutine(WoundType.Legs, legInjuryDuration));
             //Audio trigger
         }
         else if (Utilities.ChanceFunc(armShotChance))
@@ -47,9 +84,40 @@ public class PlayerHitManager : MonoBehaviour
             float accuracyBaseMultiplier = 0.1f;
             PlayerStats.TemporarilyModifyStat(StatType.Accuracy, armInjuryDuration, true, 0.0f, accuracyBaseMultiplier);
             FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Arm Hit!", hitTextColor, 0.5f, 5.0f, 2.0f, false, FloatDirection.Any);
+
+            _woundsList.AddIfNone(WoundType.Arms);
+
+            StartCoroutine(removeWoundTypeCoroutine(WoundType.Arms, armInjuryDuration));
             //Audio trigger
         }
         else
             return;
+
+        OnPlayerWounded?.Invoke();
+    }
+
+    private IEnumerator removeWoundTypeCoroutine(WoundType woundType, float after)
+    {
+        float timer = 0.0f;
+
+        while (timer < after)
+        {
+            timer += Time.deltaTime;
+
+            yield return null;
+        }
+
+        _woundsList.Remove(woundType);
+        OnPlayerWoundsHealed?.Invoke();
+    }
+
+    public static List<WoundType> GetWoundsListStatic()
+    {
+        return _instance?.getWoundList();
+    }
+
+    private List<WoundType> getWoundList()
+    {
+        return _woundsList;
     }
 }

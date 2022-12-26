@@ -11,12 +11,12 @@ public enum PortalType
 
 public class Portal : MonoBehaviour
 {
+    public static event Action<Portal> OnTriggerLockedPortal;
+
     private const int MIN_ARTEFACTS_REQUIRED = 1;
     private const int MAX_ARTEFACTS_REQUIRED = 2;
 
-    public PortalType PortalType;
-
-    public static event Action<Portal> OnTriggerLockedPortal;
+    private PortalType PortalType;
 
     private int _numOfArtefactsRequired;
     [SerializeField] private List<ArtefactItem> _artefactsRequired = new List<ArtefactItem>();

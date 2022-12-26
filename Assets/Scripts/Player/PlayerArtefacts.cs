@@ -10,14 +10,16 @@ public class PlayerArtefacts : Singleton<PlayerArtefacts>
     [Header("Items - read only")]
     [SerializeField] private List<ArtefactItem> _artefactsCollected = new List<ArtefactItem>();
 
-    public void AddArtefact(ArtefactItem artefact)
+    public bool AddArtefact(ArtefactItem artefact)
     {
         if (artefact == null)
-            return;
+            return false;
 
         _artefactsCollected.Add(artefact);
 
         OnArtefactCollected?.Invoke(_artefactsCollected.Count);
+
+        return true;
     }
 
     public bool CheckRequiredArtefacts(List<ArtefactItem> requiredArtefacts)

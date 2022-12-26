@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AlpacaMyGames;
 
 public class PlayerWeapons : MonoBehaviour
 {
@@ -23,9 +24,10 @@ public class PlayerWeapons : MonoBehaviour
 
     [Header("Items")]
     [SerializeField] private List<Weapon> _weapons = new List<Weapon>();
+    [SerializeField] private List<Weapon> _throwables = new List<Weapon>();
 
     [Header("Shooting settings - Read-only")]
-    [SerializeField] private float _nonShootingDistance = 1.25f;
+    [SerializeField] private float _nonShootingDistance = 1.00f;
     [SerializeField] private float _closeQuarterShooting = 0.75f;
     [SerializeField] private float _shootingOffset = 0.5f;
 
@@ -35,7 +37,6 @@ public class PlayerWeapons : MonoBehaviour
 
     private Transform _shootingSpot;
     private Camera _camera;
-    private ChatBubbleSpawner _chatBubbleSpawner;
     private GameManager _gameManager;
     private PlayerAnimations _playerAnimations;
     private PlayerStats _playerStats;
@@ -51,16 +52,16 @@ public class PlayerWeapons : MonoBehaviour
             return _currentWeapon;
         }
     }
+    private Weapon _currentThrowable;
 
     private bool _weaponEquipped = false;
     private bool _canShoot = true;
     private bool _isShooting = false;
     private bool _canSwitchWeapons = true;
     private bool _canPutWeaponAway = true;
-    private bool _firstTimeSetting = true;
 
     private float _shootingInterval;
-    private bool _intervalWeaponActivated = true;
+    private bool _intervalWeaponActivated = false;
 
     private int _currentAmmo;
     private int _shotsFired;
@@ -78,26 +79,35 @@ public class PlayerWeapons : MonoBehaviour
     private void Start()
     {
         _camera = Camera.main;
-        _chatBubbleSpawner = ChatBubbleSpawner.Instance;
         _gameManager = GameManager.Instance;
         _cameraController = CameraController.Instance;
 
-        NPCStats.OnHit += IncrementShotsHit;
+        NPCStats.OnHit += incrementShotsHit;
 
-        if (_weapons.Count > 0)
-            SetWeapon(0);
+        weaponsStartSetup();
     }
 
     private void OnDisable()
     {
-        NPCStats.OnHit -= IncrementShotsHit;
+        NPCStats.OnHit -= incrementShotsHit;
     }
 
     private void Update()
     {
         _mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition);
-
         weaponHandling();
+        triggerShooting();
+    }
+
+    private void weaponsStartSetup()
+    {
+        if (_weapons.Count > 0)
+            SetWeapon(0);
+
+        if (_throwables.Count > 0)
+            _currentThrowable = _throwables[0];
+        
+        ThrowableImage.UpdateThrowableUIStatic(_currentThrowable);
     }
 
     private void weaponHandling()
@@ -110,7 +120,7 @@ public class PlayerWeapons : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R) && _weaponEquipped)
         {
-            ReloadWeapon();
+            reloadWeapon();
         }
 
         if (Input.GetKeyDown(KeyCode.E) && _canSwitchWeapons)
@@ -123,20 +133,28 @@ public class PlayerWeapons : MonoBehaviour
             switchWeapon(-1);
         }
 
-        if (Input.GetKeyDown(KeyCode.F) && _canPutWeaponAway)
+        if (Input.GetKeyDown(KeyCode.Tab) && _canSwitchWeapons)
         {
-            if (_weapons.Count > 0)
-            {
-                _weaponEquipped = !_weaponEquipped;
-                presentWeapon();
-            }
+            switchThrowables();
         }
 
-        triggerShooting();
+        if (Input.GetKeyDown(KeyCode.F) && _canPutWeaponAway)
+        {
+            if (_weapons.Count == 0)
+                return;
+
+            _weaponEquipped = !_weaponEquipped;
+            presentWeapon();
+        }
     }
 
     private void triggerShooting()
     {
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            useThrowable();
+        }
+
         if (_currentWeapon == null)
             return;
 
@@ -149,21 +167,7 @@ public class PlayerWeapons : MonoBehaviour
             _canSwitchWeapons = false;
             _canPutWeaponAway = false;
 
-            if (_currentWeapon.WeaponItem.Automatic)
-                StartCoroutine(AutoShooting());
-            else
-            {
-                if (_currentWeapon.WeaponItem.ShootInterval > 0.0f)
-                {
-                    if (!_intervalWeaponActivated)
-                    {
-                        _intervalWeaponActivated = ShootWeapon();
-                        _shootingInterval = 0.0f;
-                    }
-                } 
-                else
-                    ShootWeapon();
-            }
+            evaluateWeaponTypesAndShoot();
         }
 
         if (_intervalWeaponActivated)
@@ -182,16 +186,78 @@ public class PlayerWeapons : MonoBehaviour
             _isShooting = false;
             _canSwitchWeapons = true;
             _canPutWeaponAway = true;
-            StopCoroutine(AutoShooting());
+            StopCoroutine(autoShootingCoroutine());
         }
     }
 
-    public IEnumerator AutoShooting()
+    private void evaluateWeaponTypesAndShoot()
+    {
+        if (_currentWeapon.WeaponItem.Automatic)
+            StartCoroutine(autoShootingCoroutine());
+        else
+        {
+            if (_currentWeapon.WeaponItem.ShootInterval > 0.0f)
+            {
+                if (!_intervalWeaponActivated)
+                {
+                    _intervalWeaponActivated = shootOnce();
+                    _shootingInterval = 0.0f;
+                }
+            }
+            else
+                shootOnce();
+        }
+    }
+
+    private void useThrowable()
+    {
+        if (_throwables.Count == 0)
+        {
+            string message = "I have nothing to throw!";
+            FloatingTextSpawner.CreateFloatingTextStatic(transform.position, message, Color.white);
+            return;
+        }
+
+        Vector3 throwPosition = transform.position + 2.0f * (Vector3)Utilities.GetVectorFromAngle(transform.rotation.eulerAngles.z);
+        Mine mine = Instantiate(GameAssets.Instance.Mine, throwPosition, Quaternion.identity, null).GetComponent<Mine>();
+        mine.ArmMine();
+
+        _currentThrowable.TotalAmmo--;
+
+        if (_currentThrowable.TotalAmmo == 0)
+        {
+            _throwables.Remove(_currentThrowable);
+            _currentThrowable = null;
+        }
+
+        ThrowableImage.UpdateThrowableUIStatic(_currentThrowable);
+    }
+
+    private void switchThrowables()
+    {
+        if (_throwables.Count == 0)
+            return;
+
+        if (_currentThrowable == null)
+            return;
+
+        int currentIndex = _throwables.IndexOf(_currentThrowable);
+
+        currentIndex++;
+
+        if (currentIndex >= _throwables.Count)
+            currentIndex = 0;
+
+        _currentThrowable = _throwables[currentIndex];
+
+        ThrowableImage.UpdateThrowableUIStatic(_currentThrowable);
+    }
+
+    private IEnumerator autoShootingCoroutine()
     {
         while (_isShooting)
         {
-            ShootWeapon();
-
+            shootOnce();
             yield return new WaitForSeconds(_shootingInterval);
         }
     }
@@ -251,35 +317,20 @@ public class PlayerWeapons : MonoBehaviour
             return;
 
         if (_currentWeapon != null)
+        {
             _currentWeapon.TotalAmmo += _currentAmmo;
+            _currentAmmo = 0;
+        }
 
         if (_playerStats.PlayerDamage.GetFinalValue() != 0)
-            _playerStats.PlayerDamage.RemoveModifier((_currentWeapon.WeaponItem.WeaponDamage.x + _currentWeapon.WeaponItem.WeaponDamage.y) / 2.0f);
+            _playerStats.PlayerDamage.RemoveModifier(_currentWeapon.WeaponItem.WeaponDamage.Average());
 
         _currentWeapon = _weapons[index];
-
-        int ammoDelta = _currentWeapon.TotalAmmo - _currentWeapon.WeaponItem.MagazineBullets;
-
-        if (ammoDelta >= 0)
-        {
-            _currentAmmo = _currentWeapon.WeaponItem.MagazineBullets;
-            _currentWeapon.TotalAmmo = ammoDelta;
-        }
-        else
-        {
-            _currentAmmo = _currentWeapon.TotalAmmo;
-            _currentWeapon.TotalAmmo = 0;
-        }
-
-        if (_firstTimeSetting)
-        {
-            _currentWeapon.Durability = _currentWeapon.WeaponItem.MaxDurability;
-            _firstTimeSetting = false;
-        }
+        setCurrentWeaponAmmo(_currentWeapon.WeaponItem.MagazineBullets);
 
         _shootingInterval = _currentWeapon.WeaponItem.ShootInterval;
 
-        _playerStats.PlayerDamage.AddModifier((_currentWeapon.WeaponItem.WeaponDamage.x + _currentWeapon.WeaponItem.WeaponDamage.y) / 2.0f);
+        _playerStats.PlayerDamage.AddModifier(_currentWeapon.WeaponItem.WeaponDamage.Average());
 
         OnAmmoPanelUIChanged?.Invoke(_currentAmmo, _currentWeapon.TotalAmmo);
 
@@ -287,16 +338,27 @@ public class PlayerWeapons : MonoBehaviour
             presentWeapon();
     }
 
-    public void IncrementShotsHit()
+    private void setCurrentWeaponAmmo(int ammoNeeded)
+    {
+        int ammoDelta = _currentWeapon.TotalAmmo - ammoNeeded;
+
+        if (ammoDelta > 0)
+        {
+            _currentWeapon.TotalAmmo = ammoDelta;
+            _currentAmmo = _currentWeapon.WeaponItem.MagazineBullets;
+        }
+        else
+        {
+            _currentAmmo += _currentWeapon.TotalAmmo;
+            _currentWeapon.TotalAmmo = 0;
+        }
+    }
+
+    private void incrementShotsHit()
     {
         _shotsHit++;
 
         OnEnemyHit?.Invoke((float)_shotsHit / _shotsFired);
-    }
-
-    public int GetShotsHit()
-    {
-        return _shotsHit;
     }
 
     public float GetAccuracy()
@@ -307,7 +369,7 @@ public class PlayerWeapons : MonoBehaviour
             return (float)_shotsHit / _shotsFired;
     }
 
-    public bool ShootWeapon()
+    private bool shootOnce()
     {
         if (_currentAmmo == 0)
         {
@@ -326,9 +388,9 @@ public class PlayerWeapons : MonoBehaviour
             if (direction == Vector2.zero)
                 return false;
 
-            Transform bulletObject = Instantiate(GameAssets.Instance.BulletPrefab, _shootingSpot.position, Quaternion.identity, null);
+            Transform bulletTransform = Instantiate(GameAssets.Instance.BulletPrefab, _shootingSpot.position, Quaternion.identity, null);
 
-            Bullet bullet = bulletObject.GetComponent<Bullet>();
+            Bullet bullet = bulletTransform.GetComponent<Bullet>();
             bullet.SetupBullet(direction, UnityEngine.Random.Range(_currentWeapon.WeaponItem.WeaponDamage.x, _currentWeapon.WeaponItem.WeaponDamage.y), gameObject.tag);
 
             _shotsFired++;
@@ -373,22 +435,19 @@ public class PlayerWeapons : MonoBehaviour
     private Vector3 getRandomOffset(float shootingOffset, float accuracy)
     {
         Vector2 right = Vector2.right * UnityEngine.Random.Range(-1.0f, 1.0f);
-
         Vector2 up = Vector2.up * UnityEngine.Random.Range(-1.0f, 1.0f);
-
         Vector2 randomOffset = (right + up) * shootingOffset / accuracy;
 
         return randomOffset;
     }
 
-    public void ReloadWeapon()
+    private void reloadWeapon()
     {
         if (_currentWeapon == null)
             return;
 
         string weaponLoadedString = "Weapon fully loaded!";
         string noMoreAmmoString = "No more ammo!";
-
 
         if (_currentAmmo == _currentWeapon.WeaponItem.MagazineBullets)
         {
@@ -403,37 +462,12 @@ public class PlayerWeapons : MonoBehaviour
         }
 
         if (_currentAmmo == 0)
-        {
-            int ammoDelta = _currentWeapon.TotalAmmo - _currentWeapon.WeaponItem.MagazineBullets;
-
-            if (ammoDelta >= 0)
-            {
-                _currentWeapon.TotalAmmo -= _currentWeapon.WeaponItem.MagazineBullets;
-                _currentAmmo = _currentWeapon.WeaponItem.MagazineBullets;
-            }
-            else
-            {
-                _currentAmmo = _currentWeapon.TotalAmmo;
-                _currentWeapon.TotalAmmo = 0;
-            }
-        }
+            setCurrentWeaponAmmo(_currentWeapon.WeaponItem.MagazineBullets);
 
         if (_currentAmmo > 0 && _currentAmmo < _currentWeapon.WeaponItem.MagazineBullets)
         {
             int ammoNeeded = _currentWeapon.WeaponItem.MagazineBullets - _currentAmmo;
-
-            int ammoDelta = _currentWeapon.TotalAmmo - ammoNeeded;
-
-            if (ammoDelta >= 0)
-            {
-                _currentAmmo = _currentWeapon.WeaponItem.MagazineBullets;
-                _currentWeapon.TotalAmmo -= ammoNeeded;
-            }
-            else
-            {
-                _currentAmmo += _currentWeapon.TotalAmmo;
-                _currentWeapon.TotalAmmo = 0;
-            }
+            setCurrentWeaponAmmo(ammoNeeded);
         }
 
         OnReloadingAudio?.Invoke(_currentWeapon.WeaponItem.WeaponReloadAudio);
@@ -454,10 +488,45 @@ public class PlayerWeapons : MonoBehaviour
         shootingPS.Play();
     }
 
-    public void AddWeapon(Weapon weapon)
+    public bool AddThrowable(Weapon weapon)
     {
         if (weapon == null)
-            return;
+            return false;
+
+        for (int i = 0; i < _throwables.Count; i++)
+        {
+            if (weapon.WeaponItem == _throwables[i].WeaponItem)
+            {
+                _throwables[i].TotalAmmo++;
+
+                OnAmmoPanelUIChanged?.Invoke(_currentAmmo, _currentWeapon.TotalAmmo);
+
+                return true;
+            }
+        }
+
+        _throwables.Add(weapon);
+
+        if (_currentThrowable == null)
+            _currentThrowable = weapon;
+
+        ThrowableImage.UpdateThrowableUIStatic(_currentThrowable);
+
+        return true;
+    }
+
+    public bool AddWeapon(Weapon weapon)
+    {
+        if (weapon == null)
+            return false;
+
+        //check strength requirement
+        if (_playerStats.PlayerStrength.GetFinalValue() < weapon.WeaponItem.StrengthRequired)
+        {
+            List<string> stringList = new List<string> { "Not enough strength!", "I cannot use this!", "Too big piece..." };
+            FloatingTextSpawner.CreateFloatingTextStatic(transform.position, stringList.GetRandomElement(), Color.white);
+            return false;
+        }
 
         for (int i = 0; i < _weapons.Count; i++)
         {
@@ -467,7 +536,7 @@ public class PlayerWeapons : MonoBehaviour
 
                 OnAmmoPanelUIChanged?.Invoke(_currentAmmo, _currentWeapon.TotalAmmo);
 
-                return;
+                return true;
             }
         }
 
@@ -479,6 +548,13 @@ public class PlayerWeapons : MonoBehaviour
             OnWeaponChanged?.Invoke(this);
             SetWeapon(0);
         }
+
+        return true;
+    }
+
+    public List<Weapon> GetWeapons()
+    {
+        return _weapons;
     }
 
     public Weapon GetCurrentWeapon()
@@ -486,14 +562,14 @@ public class PlayerWeapons : MonoBehaviour
         return _currentWeapon;
     }
 
-    public int GetCurrentAmmo()
+    public static Weapon GetCurrentThrowableStatic()
     {
-        return _currentAmmo;
+        return _instance?.getCurrentThrowable();
     }
 
-    public bool IsWeaponEquipped()
+    private Weapon getCurrentThrowable()
     {
-        return _weaponEquipped;
+        return _currentThrowable;
     }
 
     private void OnDrawGizmos()

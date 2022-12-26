@@ -34,7 +34,9 @@ public class NPCInteraction : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        _enemyAI.OnInteractWithPlayer(_playerBase.transform);
+        if (!_enemyAI.OnInteractWithPlayer(_playerBase.transform))
+            return;
+
         _conversationSystem.ActivateConversation();
     }
 

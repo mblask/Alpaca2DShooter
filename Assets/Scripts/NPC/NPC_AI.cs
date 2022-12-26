@@ -35,6 +35,7 @@ public class NPC_AI : MonoBehaviour
     [Header("NPC Affiliation")]
     [SerializeField] private NPCType _type;
 
+    private bool _isMoving = false;
     private Vector2 _patrolWaitTimeInterval = new Vector2(0.5f, 2.5f);
     private float _patrolWaitTimer = 0.0f;
     private float _stopDistance = 1.25f;
@@ -105,79 +106,95 @@ public class NPC_AI : MonoBehaviour
         return _type;
     }
 
+    private void npcSaysSomething()
+    {
+        if (!Utilities.ChanceFunc(33))
+            return;
+
+        List<string> messages = new List<string> {
+                "*Hmmph*", "*Grunt*", "*Ahh*", "What a'\n'boring day..."
+            };
+        string randomMessage = messages.GetRandomElement();
+        FloatingTextSpawner.CreateFloatingTextStatic(transform.position, randomMessage, Color.white, 0.8f, 4, 0.5f);
+    }
+
     private void stateMachineProcedure()
     {
         if (!_runStateMachine)
             return;
 
+        float idleDistance = 20.0f;
+
+        float distanceToPlayer = Vector2.Distance(transform.position, _playerController.transform.position);
+
         switch (_state)
         {
             case NPCState.Idle:
-                if (Vector2.Distance(_playerController.transform.position, transform.position) < 40.0f)
-                {
+                if (distanceToPlayer < idleDistance)
                     _state = NPCState.Patrol;
-                }
                 break;
 
             case NPCState.Patrol:
                 moveTo(_targetPosition);
-                if (Vector2.Distance(transform.position, _targetPosition) <= _stopDistance)
-                {
-                    _patrolWaitTimer -= Time.deltaTime;
-
-                    if (_patrolWaitTimer <= 0.0f)
-                    {
-                        if (Utilities.ChanceFunc(33))
-                        {
-                            List<string> messages = new List<string> { "*Hmmph*", "*Grunt*", "*Ahh*", "What a'\n'boring day..." };
-                            string randomMessage = messages.GetRandomElement();
-                            FloatingTextSpawner.CreateFloatingTextStatic(transform.position, randomMessage, Color.white, 0.8f, 4, 0.5f);
-                        }
-
-                        _targetPosition = generatePatrollingPosition();
-                        _patrolWaitTimer = UnityEngine.Random.Range(_patrolWaitTimeInterval.x, _patrolWaitTimeInterval.y);
-                    }
-                }
-
                 findTarget();
+
+                if (distanceToPlayer > idleDistance)
+                    _state = NPCState.Idle;
+
+                float distanceToTarget = Vector2.Distance(transform.position, _targetPosition);
+                if (distanceToTarget > _stopDistance)
+                    break;
+
+                _patrolWaitTimer -= Time.deltaTime;
+
+                if (_patrolWaitTimer <= 0.0f)
+                {
+                    npcSaysSomething();
+
+                    _targetPosition = generatePatrollingPosition();
+                    _patrolWaitTimer = UnityEngine.Random.Range(_patrolWaitTimeInterval.x, _patrolWaitTimeInterval.y);
+                }
 
                 break;
 
             case NPCState.Chase:
 
-                if (_playerStats.IsAlive() && _gameManager.IsGameRunning())
-                {
-                    _shouldChase = Vector2.Distance(transform.position, _playerController.transform.position) > _attackDistance;
-
-                    if (Vector2.Distance(transform.position, _playerController.transform.position) >= _stopDistance && _shouldChase)
-                        moveTo(_playerController.transform.position);
-
-                    _NPCWeapons.PresentWeapon(true);
-
-                    if (Vector2.Distance(transform.position, _playerController.transform.position) <= _attackDistance)
-                    {
-                        rotateEnemyTowards(_playerController.transform.position);
-                        _NPCWeapons.AttackTarget(_playerController.transform);
-                    }
-                    else
-                        _NPCWeapons.StopAttack();
-
-                    if (Vector2.Distance(transform.position, _playerController.transform.position) >= _stopFollowingDistance)
-                    {
-                        _NPCWeapons.PresentWeapon(false);
-                        _state = NPCState.GoBack;
-                    }
-                }
-                else
+                if (!_playerStats.IsAlive() || !_gameManager.IsGameRunning())
                 {
                     _NPCWeapons.StopAttack();
                     _state = NPCState.GoBack;
+                    break;
                 }
+
+                _shouldChase = distanceToPlayer > _attackDistance;
+
+                if (distanceToPlayer >= _stopDistance && _shouldChase)
+                    moveTo(_playerController.transform.position);
+
+                _NPCWeapons.PresentWeapon(true);
+
+                if (distanceToPlayer <= _attackDistance)
+                {
+                    rotateEnemyTowards(_playerController.transform.position);
+                    _NPCWeapons.AttackTarget(_playerController.transform);
+                }
+                else
+                    _NPCWeapons.StopAttack();
+
+                if (distanceToPlayer >= _stopFollowingDistance)
+                {
+                    _NPCWeapons.PresentWeapon(false);
+                    _state = NPCState.GoBack;
+                }
+
                 break;
 
             case NPCState.GoBack:
                 moveTo(_originPosition);
-                if (Vector2.Distance(transform.position, _originPosition) <= _stopDistance)
+                findTarget();
+
+                float distanceToOrigin = Vector2.Distance(transform.position, _originPosition);
+                if (distanceToOrigin <= _stopDistance)
                     _state = NPCState.Patrol;
                 break;
 
@@ -186,18 +203,38 @@ public class NPC_AI : MonoBehaviour
         }
     }
 
-    public void OnInteractWithPlayer(Transform playerTransform)
+    private void findTarget()
     {
-        if (playerTransform == null)
+        if (_gameManager == null || _type.Equals(NPCType.Ally))
             return;
 
-        if (_type.Equals(NPCType.Enemy))
+        if (!_playerStats.IsAlive() || !_gameManager.IsGameRunning())
             return;
+
+        float distanceToPlayer = Vector2.Distance(transform.position, _playerController.transform.position);
+        if (distanceToPlayer <= _viewDistance)
+        {
+            _targetPosition = _playerController.transform.position;
+            _state = NPCState.Chase;
+        }
+        else
+            _state = NPCState.Patrol;
+    }
+
+    public bool OnInteractWithPlayer(Transform playerTransform)
+    {
+        if (playerTransform == null)
+            return false;
+
+        if (_type.Equals(NPCType.Enemy))
+            return false;
 
         //interact with player, turn to him and wait
         _isInteracting = true;
         _targetPosition = playerTransform.position;
         setRunStateMachine(false);
+
+        return true;
     }
 
     private void stopInteractWithPlayer()
@@ -220,11 +257,11 @@ public class NPC_AI : MonoBehaviour
 
     public void ExtendViewAndAttackDistance()
     {
-        float changeFactor = 1.7f;
+        float extendFactor = 1.7f;
 
-        _viewDistance *= changeFactor;
-        _attackDistance *= changeFactor;
-        _stopFollowingDistance *= changeFactor;
+        _viewDistance *= extendFactor;
+        _attackDistance *= extendFactor;
+        _stopFollowingDistance *= extendFactor;
     }
 
     private void resizeViewAndAttackDistance()
@@ -241,28 +278,6 @@ public class NPC_AI : MonoBehaviour
             _stopFollowingDistance -= Time.deltaTime * resizeSpeedFactor;
     }
 
-    private void findTarget()
-    {
-        if (_gameManager == null || _type.Equals(NPCType.Ally))
-            return;
-
-        //if (_type.Equals(NPCType.Ally))
-        //    return;
-
-        if (!_playerStats.IsAlive() || !_gameManager.IsGameRunning())
-        {
-            //state = EnemyState.GoBack;
-            return;
-        }
-
-        if (Vector2.Distance(transform.position, _playerController.transform.position) < _viewDistance)
-        {
-            _targetPosition = _playerController.transform.position;
-            _state = NPCState.Chase;
-        }
-        else
-            _state = NPCState.Patrol;
-    }
 
     public bool ObstaclesInTheWay(Vector3 targetPosition, float distance = 9999.0f)
     {
@@ -274,24 +289,42 @@ public class NPC_AI : MonoBehaviour
 
         if (playerController != null)
             return false;
-        else
-            return true;
+
+        Door door = hits2D[0].collider.GetComponent<Door>();
+
+        if (door != null)
+            return door.IsLocked();
+
+        return true;
     }
 
-    private void moveTo(Vector3 targetPosition)
+    private void moveTo(Vector3 targetPosition, Action actionOnStopped = null)
     {
-        if (targetPosition != default(Vector3))
+        if (targetPosition == default(Vector3))
         {
-            Vector2 direction = targetPosition - transform.position;
-            float distance = direction.magnitude;
-
-            rotateEnemyTowards(targetPosition);
-
-            if (distance > 0.1f)
-                _rigidBody.MovePosition(transform.position + _NPCStats.EnemySpeed.GetFinalValue() * (Vector3)direction.normalized * Time.fixedDeltaTime);
+            _rigidBody.velocity = Vector3.zero;
+            return;
         }
-        else
-            _rigidBody.velocity = Vector2.zero;
+
+        Vector2 direction = targetPosition - transform.position;
+        float distance = direction.magnitude;
+
+        rotateEnemyTowards(targetPosition);
+
+        float rigidbodyStopDistance = 0.1f;
+        if (distance <= rigidbodyStopDistance)
+        {
+            if (_isMoving)
+            {
+                _isMoving = false;
+                actionOnStopped?.Invoke();
+            }
+
+            return;
+        }
+
+        _isMoving = true;
+        _rigidBody.MovePosition(transform.position + _NPCStats.EnemySpeed.GetFinalValue() * (Vector3)direction.normalized * Time.fixedDeltaTime);
     }
 
     private void rotateEnemyTowards(Vector3 target)

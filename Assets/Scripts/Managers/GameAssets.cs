@@ -19,11 +19,15 @@ public class GameAssets : Singleton<GameAssets>
     public const string CHARACTER_TYPE_STRING = "CharacterType";
 
     [Header("UI Prefabs")]
+    public Transform WoundsTextObject;
     public Transform HeadshotPostProcessing;
     public Transform PossibleCraftUI;
     public Transform ItemSlotUIPrefab;
 
     [Header("Object Prefabs")]
+    public Transform Player;
+    public Transform Mine;
+    public Transform DestructionArea;
     public Transform NPCPrefab;
     public Transform ItemTemplate;
     public Transform BulletPrefab;
@@ -37,21 +41,13 @@ public class GameAssets : Singleton<GameAssets>
     public GameObject BloodPS;
     public ParticleSystem ShootingPS;
 
+    [Header("Available Artefacts")]
+    public List<ArtefactItem> AvailableArtefacts;
+
     [Header("Available Weapons")]
     public List<WeaponItem> AvailableWeaponsList;
 
     [Header("Character Base List")]
     public List<CharacterBase> CharacterBaseList;
     public List<CharacterBaseScriptable> CharacterBaseScriptableList;
-
-    //public CharacterBase GetCharacterBase(CharacterBaseType characterBaseType)
-    //{
-    //    foreach (CharacterBase characterBase in CharacterBaseList)
-    //    {
-    //        if (characterBase.Equals(characterBaseType))
-    //            return characterBase;
-    //    }
-    //
-    //    return null;
-    //}
 }

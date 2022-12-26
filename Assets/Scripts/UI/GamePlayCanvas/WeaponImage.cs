@@ -6,24 +6,21 @@ using TMPro;
 
 public class WeaponImage : MonoBehaviour
 {
-    private TextMeshProUGUI _text;
+    private Transform _imageTransform;
     private Image _image;
     private PlayerWeapons _playerWeapons;
 
     private void Awake()
     {
-        _image = GetComponent<Image>();
-        _text = transform.Find("DurabilityText").GetComponent<TextMeshProUGUI>();
+        _imageTransform = transform.Find("Image");
+        _image = _imageTransform.GetComponent<Image>();
     }
 
     private void Start()
     {
         _playerWeapons = PlayerWeapons.Instance;
-
-        //_playerWeapons.OnShooting += PlayerWeapons_UpdateDurabilityText;
+        activateUI(_playerWeapons.GetWeapons().Count > 0);
         _playerWeapons.OnWeaponChanged += PlayerWeapons_OnWeaponsChanged;
-
-        //UpdateDurabilityText(_playerWeapons.GetCurrentWeapon());
     }
 
     public void PlayerWeapons_OnWeaponsChanged(PlayerWeapons playerWeapons)
@@ -31,7 +28,6 @@ public class WeaponImage : MonoBehaviour
         Weapon currentPlayerWeapon = playerWeapons.GetCurrentWeapon();
 
         SetWeaponImage(currentPlayerWeapon);
-        //UpdateDurabilityText(currentPlayerWeapon.Durability);
     }
 
     public void SetWeaponImage(Weapon weapon)
@@ -42,25 +38,8 @@ public class WeaponImage : MonoBehaviour
         _image.sprite = weapon.WeaponItem.ItemSprite;
     }
 
-    //public void PlayerWeapons_UpdateDurabilityText(PlayerWeapons playerWeapons)
-    //{
-    //    UpdateDurabilityText(playerWeapons.GetCurrentWeapon().Durability);
-    //}
-
-    public void UpdateDurabilityText(float value)
+    private void activateUI(bool value)
     {
-        _text.SetText("Dur: " + value.ToString("F0"));
-    }
-
-    public void UpdateDurabilityText(Weapon weapon)
-    {
-        if (weapon == null)
-        {
-            _text.SetText("No weapon");
-        }
-        else
-        {
-            _text.SetText("Dur: " + weapon.Durability.ToString("F0"));
-        }
+        _imageTransform.gameObject.SetActive(value);
     }
 }

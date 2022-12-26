@@ -43,4 +43,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 813a29ad680007544a6f5fee9174e9d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawnRandomly: 1
+  _spawnRandomly: 0
+  _specificWeapon: {fileID: 0}

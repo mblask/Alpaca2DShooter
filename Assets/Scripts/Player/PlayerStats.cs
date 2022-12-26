@@ -10,6 +10,7 @@ public enum StatType
     Damage,
     Accuracy,
     Speed,
+    Strength,
 }
 
 public class PlayerStats : MonoBehaviour, IDamagable
@@ -42,14 +43,14 @@ public class PlayerStats : MonoBehaviour, IDamagable
     private float _staminaTrigger = 0.0f;
 
     [Header("Movement Characteristics")]
-    [SerializeField] private float _sprintBoost = 2.0f;
+    //[SerializeField] private float _sprintBoost = 2.0f;
     [SerializeField] private float _staminaDrainConst = 3.0f;
     [SerializeField] private float _staminaHealConst = 4.0f;
     [SerializeField] private float _staminaTriggerThreshold = 0.1f;
 
     private float _playerFinalSpeed;
-    private bool _playerSpeedDefault = true;
-    private bool _playerSpeedBoosted = false;
+    //private bool _playerSpeedDefault = true;
+    //private bool _playerSpeedBoosted = false;
 
     private GameAssets _gameAssets;
     private CameraController _cameraController;
@@ -170,22 +171,22 @@ public class PlayerStats : MonoBehaviour, IDamagable
     {
         Stat stat = getStatByType(statType);
 
-        if (!stat.GetHandicaped())
+        if (stat.IsHandicaped())
+            return;
+
+        stat.AddModifier(modifier);
+        stat.AddBaseMultiplier(multiplier);
+
+        if (handicapStat)
+            stat.SetHandicaped(true);
+
+        if (statType.Equals(StatType.Speed))
         {
-            stat.AddModifier(modifier);
-            stat.AddBaseMultiplier(multiplier);
-
-            if (handicapStat)
-                stat.SetHandicaped(true);
-
-            if (statType.Equals(StatType.Speed))
-            {
-                _playerFinalSpeed = PlayerSpeed.GetFinalValue();
-                _playerController.SetLegsInjured(true);
-            }
-
-            StartCoroutine(removeStatModifierCoroutine(statType, duration, modifier, multiplier));
+            _playerFinalSpeed = PlayerSpeed.GetFinalValue();
+            _playerController.SetLegsInjured(true);
         }
+
+        StartCoroutine(removeStatModifierCoroutine(statType, duration, modifier, multiplier));
     }
 
     public static void RemoveStatModifierStatic(StatType statType, float modifier, float multiplier)
@@ -216,10 +217,10 @@ public class PlayerStats : MonoBehaviour, IDamagable
         StopCoroutine(nameof(removeStatModifierCoroutine));
     }
 
-    public void HealCharacter(Item item)
+    public bool HealCharacter(Item item)
     {
         if (item == null)
-            return;
+            return false;
 
         if (item is InstantaneousItem)
         {
@@ -228,6 +229,8 @@ public class PlayerStats : MonoBehaviour, IDamagable
             InstantaneousItem instantaneous = item as InstantaneousItem;
 
             healing(instantaneous.LifeRestored, instantaneous.StaminaRestored, Vector2.zero, false);
+
+            return true;
         }
 
         if (item is ConsumableItem)
@@ -237,7 +240,11 @@ public class PlayerStats : MonoBehaviour, IDamagable
             ConsumableItem consumable = item as ConsumableItem;
 
             healing(consumable.LifeRestored, consumable.StaminaRestored, consumable.LimbToughnessDuration, consumable.LimbPatcher);
+
+            return true;
         }
+
+        return false;
     }
 
     private void healing(Vector2 lifeRestoration, Vector2 staminaRestoration, Vector2 limbEnforcement, bool limbPatcher)
@@ -323,6 +330,11 @@ public class PlayerStats : MonoBehaviour, IDamagable
         return CurrentHealth > 0.0f;
     }
 
+    public static Stat GetStatByTypeStatic(StatType statType)
+    {
+        return _instance?.getStatByType(statType);
+    }
+
     private Stat getStatByType(StatType statType)
     {
         switch (statType)
@@ -337,6 +349,8 @@ public class PlayerStats : MonoBehaviour, IDamagable
                 return PlayerAccuracy;
             case StatType.Speed:
                 return PlayerSpeed;
+            case StatType.Strength:
+                return PlayerStrength;
             default:
                 return null;
         }

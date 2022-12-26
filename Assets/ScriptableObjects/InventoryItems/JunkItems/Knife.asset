@@ -16,3 +16,4 @@ MonoBehaviour:
   ItemSprite: {fileID: 21300000, guid: 9b91bcfcd9ae4ad47bcfe8117600fbd2, type: 3}
   ChanceToDrop: 100
   Color: {r: 1, g: 1, b: 1, a: 1}
+  PickupAudio: 7

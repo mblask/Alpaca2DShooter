@@ -62,7 +62,7 @@ public class Stat
         _isHandicaped = value;
     }
 
-    public bool GetHandicaped()
+    public bool IsHandicaped()
     {
         return _isHandicaped;
     }

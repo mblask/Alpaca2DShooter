@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
+using System;
 
 public class ItemSpawner : Singleton<ItemSpawner>
 {
@@ -62,7 +63,7 @@ public class ItemSpawner : Singleton<ItemSpawner>
 
     private void generateItemPool()
     {
-        float randomDropChance = Random.Range(0.0f, 100.0f);
+        float randomDropChance = UnityEngine.Random.Range(0.0f, 100.0f);
 
         foreach (Item item in _availableItems)
             if (item.ChanceToDrop > randomDropChance)
@@ -83,7 +84,7 @@ public class ItemSpawner : Singleton<ItemSpawner>
 
         if (_itemPool.Count > 0)
         {
-            Item randomItem = _itemPool[Random.Range(0, _itemPool.Count)];
+            Item randomItem = _itemPool[UnityEngine.Random.Range(0, _itemPool.Count)];
             SpawnItem(position, randomItem);
 
         }
@@ -93,7 +94,7 @@ public class ItemSpawner : Singleton<ItemSpawner>
 
     private bool shouldDropItem()
     {
-        int randomNumber = Random.Range(0, 100);
+        int randomNumber = UnityEngine.Random.Range(0, 100);
 
         return randomNumber <= EnemyDropRate;
     }
@@ -102,9 +103,9 @@ public class ItemSpawner : Singleton<ItemSpawner>
     {
         while (_spawnedArtefacts.Count < artefactsRequired)
         {
-            int randomIndex = Random.Range(0, _availableArtefacts.Count);
+            int randomIndex = UnityEngine.Random.Range(0, _availableArtefacts.Count);
 
-            Vector2 randomPosition = Vector2.right * Random.Range(0.0f, 20.0f) + Vector2.up * Random.Range(0.0f, 20.0f);
+            Vector2 randomPosition = Vector2.right * UnityEngine.Random.Range(0.0f, 20.0f) + Vector2.up * UnityEngine.Random.Range(0.0f, 20.0f);
 
             Transform spawnedArtefact = SpawnItem(randomPosition, _availableArtefacts[randomIndex]);
 

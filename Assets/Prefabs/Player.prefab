@@ -83,7 +83,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1925253683
   m_SortingLayer: 1
-  m_SortingOrder: 5
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 5c9b925ef7202c941a67114a0e1bb255, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -185,16 +185,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7b477fe9423dfa4b8c177d074cbe27c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _weapons:
-  - WeaponItem: {fileID: 11400000, guid: 8e403aae5daf09c49a7cc32cfef2d5d2, type: 2}
-    Durability: 0
-    TotalAmmo: 20
-  - WeaponItem: {fileID: 11400000, guid: 347dff94e829f684dbc2ea07a9ffb197, type: 2}
-    Durability: 0
-    TotalAmmo: 30
-  - WeaponItem: {fileID: 11400000, guid: 27da57185e6a67d4d9732d5ab8efa4eb, type: 2}
-    Durability: 0
-    TotalAmmo: 30
+  _weapons: []
+  _throwables: []
   _nonShootingDistance: 1
   _closeQuarterShooting: 0.75
   _shootingOffset: 0.5
@@ -222,8 +214,9 @@ MonoBehaviour:
     _baseValue: 1
   PlayerSpeed:
     _baseValue: 5.5
+  PlayerStrength:
+    _baseValue: 0
   CurrentStamina: 0
-  _sprintBoost: 2
   _staminaDrainConst: 10
   _staminaHealConst: 6
   _staminaTriggerThreshold: 0.1

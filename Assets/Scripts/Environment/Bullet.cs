@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Bullet : MonoBehaviour
 {
@@ -39,7 +40,11 @@ public class Bullet : MonoBehaviour
         if (collision.CompareTag(_shooterTag))
             return;
 
-        if (collision.CompareTag(ConstsEnums.ObstacleTag))
+        string obstacleTag = "Obstacle";
+        if (collision.CompareTag(obstacleTag))
+            Destroy(gameObject);
+
+        if (collision.GetComponent<TilemapCollider2D>() != null)
             Destroy(gameObject);
 
         IDamagable damagable = collision.GetComponent<IDamagable>();
@@ -47,15 +52,9 @@ public class Bullet : MonoBehaviour
         if (damagable != null)
         {
             damagable.DamageObject(_bulletDamage);
-            //damagable.GetBulletInfo(this);
             OnBulletHitsCharacter?.Invoke(SFXClip.BulletHitsCharacter);
 
             Destroy(gameObject);
         }
-    }
-
-    public Vector2 GetBulletDirection()
-    {
-        return _bulletDirection;
     }
 }

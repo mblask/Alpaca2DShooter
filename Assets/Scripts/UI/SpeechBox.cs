@@ -75,14 +75,14 @@ public class SpeechBox : MonoBehaviour
 
     private void textScrolling()
     {
-        if (_textMesh != null)
+        if (_textMesh == null)
+            return;
+
+        if (!_writingComplete && _contentTransform.rect.height > _chatBoxHeight)
         {
-            if (!_writingComplete && _contentTransform.rect.height > _chatBoxHeight)
-            {
-                Vector3 contentPosition = _contentTransform.transform.position;
-                contentPosition.y += Time.deltaTime * _scrollingMultiplier / _letterWritingInterval;
-                _contentTransform.transform.position = contentPosition;
-            }
+            Vector3 contentPosition = _contentTransform.transform.position;
+            contentPosition.y += Time.deltaTime * _scrollingMultiplier / _letterWritingInterval;
+            _contentTransform.transform.position = contentPosition;
         }
     }
 
@@ -113,6 +113,25 @@ public class SpeechBox : MonoBehaviour
         _containerTransform.gameObject.SetActive(false);
     }
 
+    public static void TriggerSpeechBoxOnInteractionStatic(string message)
+    {
+        _instance.triggerSpeechBoxOnInteraction(message);
+    }
+
+    private void triggerSpeechBoxOnInteraction(string message)
+    {
+        if (!isActive())
+        {
+            activateSpeechBoxSingle(message);
+            return;
+        }
+
+        if (isWriting())
+            writeCurrentMessageCompletely();
+        else
+            deactivateSpeechBoxSingle();
+    }
+
     public static bool ActivateSpeechBoxSingleStatic(string message)
     {
         return _instance.activateSpeechBoxSingle(message);
@@ -129,5 +148,15 @@ public class SpeechBox : MonoBehaviour
         onBoxActivated();
 
         return _writingComplete;
+    }
+
+    public static bool IsActive()
+    {
+        return _instance.isActive();
+    }
+
+    private bool isActive()
+    {
+        return _containerTransform.gameObject.activeSelf;
     }
 }

@@ -8,8 +8,11 @@ public class ConsumableItem : InventoryItem
     public bool LimbPatcher;
     public Vector2 LimbToughnessDuration;
 
-    public override void UseItem()
+    public override bool UseItem()
     {
-        PlayerStats.Instance?.HealCharacter(this);
+        if (PlayerStats.Instance == null)
+            return false;
+
+        return PlayerStats.Instance.HealCharacter(this);
     }
 }

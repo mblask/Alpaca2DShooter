@@ -21,6 +21,8 @@ public class ItemTooltip : MonoBehaviour
 
     private Transform _container;
     private Animator _animator;
+    private Image _background;
+    private Color _defaultBackgroundColor;
 
     private const string GO_TO_DEFAULT_STRING = "GoToDefault";
     private const string IS_ACTIVE_STRING = "IsActive";
@@ -39,6 +41,9 @@ public class ItemTooltip : MonoBehaviour
 
         _animator = GetComponent<Animator>();
         _container = transform.Find("Container");
+        _background = _container.Find("Background").GetComponent<Image>();
+        _defaultBackgroundColor = _background.color;
+
         _itemName = _container.Find("ItemName").GetComponent<TextMeshProUGUI>();
         _itemStats = _container.Find("ItemStats").GetComponent<TextMeshProUGUI>();
         _itemImage = _container.Find("ItemImage").GetComponent<Image>();
@@ -68,6 +73,7 @@ public class ItemTooltip : MonoBehaviour
 
         _lastItem = item;
         _itemName.SetText(_lastItem.ItemName);
+        _background.color = _defaultBackgroundColor;
         updateStats(_lastItem);
         _itemStats.SetText(_sb.ToString());
         _itemImage.sprite = _lastItem.ItemSprite;
@@ -161,30 +167,48 @@ public class ItemTooltip : MonoBehaviour
             return;
         }
 
-        WeaponItem weaponitem = item as WeaponItem;
+        WeaponItem weaponItem = item as WeaponItem;
 
-        if (weaponitem != null)
+        if (weaponItem != null)
         {
             _sb.Append("Damage: ");
-            _sb.Append(weaponitem.WeaponDamage.x.ToString());
+            _sb.Append(weaponItem.WeaponDamage.x.ToString());
             _sb.Append(" - ");
-            _sb.Append(weaponitem.WeaponDamage.y.ToString());
+            _sb.Append(weaponItem.WeaponDamage.y.ToString());
 
             _sb.AppendLine();
             _sb.Append("Durability: ");
-            _sb.Append(weaponitem.MaxDurability.ToString());
+            _sb.Append(weaponItem.MaxDurability.ToString());
 
             _sb.AppendLine();
             _sb.Append("Mag. Capacity: ");
-            _sb.Append(weaponitem.MagazineBullets.ToString());
+            _sb.Append(weaponItem.MagazineBullets.ToString());
 
-            if (weaponitem.Automatic)
+            if (weaponItem.Automatic)
             {
                 _sb.AppendLine();
                 _sb.Append("Automatic");
             }
 
+            _sb.AppendLine();
+            _sb.Append("Strength: ");
+            _sb.Append(weaponItem.StrengthRequired.ToString());
+
+            requiredStats(weaponItem);
+
             return;
         }
+    }
+
+    private void requiredStats(WeaponItem weapon)
+    {
+        if (weapon == null)
+            return;
+
+        if (PlayerStats.GetStatByTypeStatic(StatType.Strength).GetFinalValue() >= weapon.StrengthRequired)
+            return;
+        
+        float alfa = 0.6f;
+        _background.color = new Color(0.5f, 0.0f, 0.0f, alfa);
     }
 }

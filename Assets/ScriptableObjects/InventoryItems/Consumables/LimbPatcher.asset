@@ -16,7 +16,7 @@ MonoBehaviour:
   ItemSprite: {fileID: 21300000, guid: 7ae963e188669d94fb628728d8599114, type: 3}
   ChanceToDrop: 0
   Color: {r: 1, g: 1, b: 1, a: 1}
-  PickupAudio: 8
+  PickupAudio: 7
   LifeRestored: {x: 10, y: 20}
   StaminaRestored: {x: 5, y: 10}
   LimbPatcher: 1

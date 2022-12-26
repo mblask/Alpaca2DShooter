@@ -16,7 +16,7 @@ TagManager:
   - UI
   - Obstacle
   - Enemy
-  - 
+  - Cursor
   - 
   - 
   - 
@@ -49,6 +49,9 @@ TagManager:
     locked: 0
   - name: Middleground
     uniqueID: 1925253683
+    locked: 0
+  - name: Obstacles
+    uniqueID: 2113682397
     locked: 0
   - name: Foreground
     uniqueID: 3783588679

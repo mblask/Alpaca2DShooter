@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterType: 0
   CharacterAOC: {fileID: 22100000, guid: c35c335cec9bb2945a7d846c5f91db90, type: 2}
-  MovementSpeed: 3.5
+  MovementSpeed: 4
   Accuracy: 3
   HealthModifier: 1.2
   Strength: 2

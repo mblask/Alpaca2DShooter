@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerStaminaSlider : MonoBehaviour
 {
-    public Slider _playerStaminaSlider;
+    private Slider _playerStaminaSlider;
 
     private void Awake()
     {

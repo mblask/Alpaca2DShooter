@@ -21,7 +21,10 @@ public class NPCSpawner : MonoBehaviour
 
     private void spawnNPCs()
     {
-        List<Transform> spawnPositions = _levelManager.GetEnemySpawnPoints();
+        if (_levelManager == null)
+            return;
+
+        List<SpawnPoint> spawnPoints = _levelManager.GetEnemySpawnPoints();
 
         if (_enemySpawnParent == null)
             _enemySpawnParent = new GameObject("EnemyContainer").transform;
@@ -29,19 +32,18 @@ public class NPCSpawner : MonoBehaviour
         if (_enemies == null)
             _enemies = new List<Transform>();
 
-        foreach (Transform spawnPosition in spawnPositions)
+        foreach (SpawnPoint spawnPoint in spawnPoints)
         {
-            if (Utilities.ChanceFunc(75))
+            if (!Utilities.ChanceFunc(75))
+                continue;
+
+            if (Utilities.ChanceFunc(25))
             {
-                if (Utilities.ChanceFunc(25))
-                {
-                    spawnNumberOfNPCs(spawnPosition.position, 2, _enemySpawnParent);
-                }
-                else
-                {
-                    _enemies.Add(spawnNPC(spawnPosition.position, _enemySpawnParent));
-                }
+                spawnNumberOfNPCs(spawnPoint.Location, 2, _enemySpawnParent);
+                continue;
             }
+
+            _enemies.Add(spawnNPC(spawnPoint.Location, _enemySpawnParent));
         }
     }
 

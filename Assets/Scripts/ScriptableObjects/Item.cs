@@ -8,8 +8,9 @@ public class Item : ScriptableObject
     public Color Color;
     public SFXClip PickupAudio;
 
-    public virtual void UseItem()
+    public virtual bool UseItem()
     {
         Debug.Log("Use: " + ItemName);
+        return true;
     }
 }

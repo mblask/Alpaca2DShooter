@@ -20,7 +20,8 @@ public class LevelsManager : Singleton<LevelsManager>
     private List<Portal> _exitPortals;
     private List<int> _usedPortals;
 
-    private List<Transform> _enemySpawnPoints;
+    private List<SpawnPoint> _enemySpawnPoints;
+
 
     private void Start()
     {
@@ -30,13 +31,14 @@ public class LevelsManager : Singleton<LevelsManager>
         _usedPortals = new List<int>();
         _usedArtefactLocations = new List<Transform>();
 
-        _enemySpawnPoints = new List<Transform>(transform.Find("Locations").GetComponentsInChildren<Transform>());
+        SpawnPoint[] spawnPoints = transform.Find("Locations").GetComponentsInChildren<SpawnPoint>();
+        _enemySpawnPoints = new List<SpawnPoint>(spawnPoints);
 
         setSpawnPortalIndices();
         initializeLevelPortals();
     }
 
-    public List<Transform> GetEnemySpawnPoints()
+    public List<SpawnPoint> GetEnemySpawnPoints()
     {
         return _enemySpawnPoints;
     }
@@ -58,6 +60,12 @@ public class LevelsManager : Singleton<LevelsManager>
     {
         List<LevelPortalsList> randomLevels = new List<LevelPortalsList>();
 
+        if (_levelPortals == null)
+            return null;
+
+        if (_levelPortals.Count == 0)
+            return null;
+
         for (int i = 0; i < _maxNumOfLevels; i++)
         {
             int randomLevelIndex = UnityEngine.Random.Range(0, _levelPortals.Count);
@@ -77,6 +85,9 @@ public class LevelsManager : Singleton<LevelsManager>
     private void initializeLevelPortals()
     {
         _randomLevelPortals = initializePoolOfRandomLevels();
+
+        if (_randomLevelPortals == null)
+            return;
 
         int randomStartingLevelIndex = UnityEngine.Random.Range(0, _randomLevelPortals.Count);
 

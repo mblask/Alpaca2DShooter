@@ -104,14 +104,17 @@ public class CameraController : Singleton<CameraController>
         transform.position = originalPosition;
     }
 
-    public void WobbleCamera(bool value)
+    public void WobbleCamera(bool value, float duration = 0.0f)
     {
         _cameraWobble = value;
 
-        if (value)
-        {
-            _wobbleWeight = 1.0f;
-            randomizeWobbleParameters();
-        }
+        if (!value)
+            return;
+
+        if (duration != 0.0f)
+            _wobbleWeightReductionSpeed = 1 / duration;
+
+        _wobbleWeight = 1.0f;
+        randomizeWobbleParameters();
     }
 }

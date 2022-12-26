@@ -25,3 +25,4 @@ MonoBehaviour:
   WeaponDamage: {x: 4, y: 6}
   MagazineBullets: 12
   MaxDurability: 20
+  StrengthRequired: 1

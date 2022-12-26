@@ -11,9 +11,19 @@ public class WeaponItem : NonInventoryItem
     public Vector2 WeaponDamage;
     public int MagazineBullets;
     public float MaxDurability;
+    public bool Throwable;
 
-    public override void UseItem()
+    [Space]
+    public float StrengthRequired;
+
+    public override bool UseItem()
     {
-        PlayerWeapons.Instance?.AddWeapon(new Weapon(this, 20));
+        if (PlayerWeapons.Instance == null)
+            return false;
+
+        if (Throwable)
+            return PlayerWeapons.Instance.AddThrowable(new Weapon(this, 1));
+
+        return PlayerWeapons.Instance.AddWeapon(new Weapon(this, 20));
     }
 }

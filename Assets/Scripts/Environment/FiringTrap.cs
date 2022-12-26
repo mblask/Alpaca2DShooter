@@ -21,8 +21,9 @@ public class FiringTrap : MonoBehaviour, IDamagable
 
     private SpriteRenderer _weaponSpriteRenderer;
 
+    [SerializeField] private bool _isWorking = true;
+
     private float _rotationSpeed = 1.0f;
-    private int _life;
 
     private float _stopwatch;
     private float _searchTime = 0.2f;
@@ -55,12 +56,13 @@ public class FiringTrap : MonoBehaviour, IDamagable
         _weaponSpriteRenderer.sprite = randomWeapon.ItemSprite;
 
         _selectedWeapon = new Weapon(randomWeapon, 0);
-
-        _life = UnityEngine.Random.Range(4, 8);
     }
 
     private void Update()
     {
+        if (!_isWorking)
+            return;
+
         switch (_trapState)
         {
             case FiringTrapState.Search:

@@ -36,8 +36,11 @@ public class PostProcessingManager : MonoBehaviour
             _volume.weight -= Time.deltaTime * _reductionSpeed;
     }
 
-    public void ActivatePostProcessing()
+    public void ActivatePostProcessing(float duration = 0.0f)
     {
         _volume.weight = 1.0f;
+
+        if (duration != 0.0f)
+            _reductionSpeed = 0.2f / duration;
     }
 }
