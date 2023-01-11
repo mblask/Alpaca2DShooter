@@ -40,12 +40,17 @@ public class Bullet : MonoBehaviour
         if (collision.CompareTag(_shooterTag))
             return;
 
-        string obstacleTag = "Obstacle";
-        if (collision.CompareTag(obstacleTag))
-            Destroy(gameObject);
-
         if (collision.GetComponent<TilemapCollider2D>() != null)
+        {
             Destroy(gameObject);
+            return;
+        }
+
+        if (collision.GetComponent<Door>() != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
         IDamagable damagable = collision.GetComponent<IDamagable>();
 

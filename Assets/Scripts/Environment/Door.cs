@@ -12,6 +12,7 @@ public class Door : MonoBehaviour, IInteractable
     [SerializeField] private Color _defaultColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
     [SerializeField] private Color _highlightColor = new Color(0.6f, 1.0f, 0.6f, 1.0f);
     [SerializeField] private bool _isLocked = true;
+    private bool _isClosed = true;
 
     [SerializeField] [TextArea] private string _lockedDoorMessage;
 
@@ -25,6 +26,8 @@ public class Door : MonoBehaviour, IInteractable
     {
         if (_isLocked)
             return;
+
+        _isClosed = false;
 
         float alfa = 0.3f;
 
@@ -84,7 +87,8 @@ public class Door : MonoBehaviour, IInteractable
             return;
         }
 
-        openDoor();
+        if (_isClosed)
+            openDoor();
     }
 
     public void RemoveHighlight()
@@ -95,5 +99,10 @@ public class Door : MonoBehaviour, IInteractable
     public bool IsLocked()
     {
         return _isLocked;
+    }
+
+    public bool IsClosed()
+    {
+        return _isClosed;
     }
 }

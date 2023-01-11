@@ -36,7 +36,7 @@ public class MouseInteraction : MonoBehaviour
             if (Vector2.Distance(_playerBase.transform.position, transform.position) < _playerDistance)
             {
                 interactable.Interact();
-                Debug.Log("Interacting");
+                Debug.Log("Mouse Interaction");
             }
             else
                 FloatingTextSpawner.CreateFloatingTextStatic(_playerBase.transform.position, "Too far away!", Color.white);

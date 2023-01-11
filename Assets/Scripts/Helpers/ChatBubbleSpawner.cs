@@ -17,7 +17,7 @@ public class ChatBubbleSpawner : Singleton<ChatBubbleSpawner>
 
     public void SpawnBubble(Transform parentPosition, string textToDisplay)
     {
-        Transform bubble = Instantiate(_gameAssets.ChatBubble, parentPosition.position, Quaternion.identity, transform);
+        Transform bubble = Instantiate(_gameAssets.NPCPrefab, parentPosition.position, Quaternion.identity, transform);
 
         ChatBubble chatBubble = bubble.GetComponent<ChatBubble>();
 

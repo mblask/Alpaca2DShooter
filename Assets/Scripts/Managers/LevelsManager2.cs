@@ -46,11 +46,11 @@ public class LevelsManager2 : MonoBehaviour
     {
         LevelObject level = getRandomLevelsExcluding(_levels, _usedLevels).GetRandomElement();
 
-        if (level != null)
-        {
-            level.SetupLevel(true);
-            _usedLevels.Add(level);
-        }
+        if (level == null)
+            return null;
+
+        level.SetupLevel(true);
+        _usedLevels.Add(level);
 
         return level;
     }
@@ -61,13 +61,6 @@ public class LevelsManager2 : MonoBehaviour
             return null;
 
         List<LevelObject> leftoverLevels = levels.FindAll(level => !excludedLevels.Contains(level));
-
-        Debug.Log(leftoverLevels.Count);
-
-        foreach (LevelObject level in leftoverLevels)
-        {
-            Debug.Log(level.gameObject.name);
-        }
 
         return leftoverLevels;
     }

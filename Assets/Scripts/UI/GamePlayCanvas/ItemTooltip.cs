@@ -64,7 +64,7 @@ public class ItemTooltip : MonoBehaviour
 
     public static void SetupTooltipStatic(Item item)
     {
-        _instance.setupTooltip(item);
+        _instance?.setupTooltip(item);
     }
 
     private void setupTooltip(Item item)
@@ -84,7 +84,7 @@ public class ItemTooltip : MonoBehaviour
 
     public static void RemoveTooltipStatic()
     {
-        _instance.removeTooltip();
+        _instance?.removeTooltip();
     }
     
     private void removeTooltip()

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 120323465789003286}
   - component: {fileID: -2248076926566283883}
   - component: {fileID: 6684046250787120147}
+  - component: {fileID: -6643315390253511304}
   m_Layer: 0
   m_Name: Door1
   m_TagString: Untagged
@@ -125,5 +126,18 @@ MonoBehaviour:
   _keyItem: {fileID: 0}
   _defaultColor: {r: 1, g: 1, b: 1, a: 1}
   _highlightColor: {r: 0.5801887, g: 1, b: 0.5976336, a: 1}
-  _isLocked: 1
+  _isLocked: 0
   _lockedDoorMessage: 
+--- !u!114 &-6643315390253511304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8345732454402508456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee0ef9b21e980614884871bda53b0460, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spawnChance: 33

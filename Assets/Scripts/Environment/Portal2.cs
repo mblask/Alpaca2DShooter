@@ -26,7 +26,10 @@ public class Portal2 : MonoBehaviour
         LevelObject nextLevel = LevelsManager2.SetupRandomNewLevelStatic();
 
         if (nextLevel == null)
+        {
+            Debug.Log("Victory!");
             return;
+        }
 
         Vector3 nextSpawnPosition = nextLevel.GetSpawnPortalPosition();
         playerBase.transform.position = nextSpawnPosition;

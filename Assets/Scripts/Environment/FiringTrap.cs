@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using AlpacaMyGames;
 
 public enum FiringTrapState
 {
@@ -14,8 +15,6 @@ public class FiringTrap : MonoBehaviour, IDamagable
 {
     public static event Action<SFXClip> OnWeaponShootingAudio;
 
-    [SerializeField] private List<WeaponItem> _weaponList;
-    [SerializeField] private bool _spawnRandomly;
     [SerializeField] private float _searchRadius;
     [SerializeField] private float _trackingRadius;
 
@@ -46,13 +45,7 @@ public class FiringTrap : MonoBehaviour, IDamagable
 
     private void Start()
     {
-        if (_spawnRandomly)
-        {
-            if (0 == UnityEngine.Random.Range(0, 2))
-                Destroy(gameObject);
-        }
-
-        WeaponItem randomWeapon = _weaponList[UnityEngine.Random.Range(0, _weaponList.Count)];
+        WeaponItem randomWeapon = GameAssets.Instance.AvailableWeaponsList.GetRandomElement();
         _weaponSpriteRenderer.sprite = randomWeapon.ItemSprite;
 
         _selectedWeapon = new Weapon(randomWeapon, 0);
@@ -106,11 +99,11 @@ public class FiringTrap : MonoBehaviour, IDamagable
                 if (playerStats == null)
                     continue;
 
-                if (playerStats.IsAlive())
-                {
-                    _target = collider.transform;
-                    _trapState = FiringTrapState.Attack;
-                }
+                if (!playerStats.IsAlive())
+                    continue;
+
+                _target = collider.transform;
+                _trapState = FiringTrapState.Attack;
             }
 
             _stopwatch = 0.0f;

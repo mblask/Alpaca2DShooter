@@ -185,7 +185,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7b477fe9423dfa4b8c177d074cbe27c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _weapons: []
+  _weapons:
+  - WeaponItem: {fileID: 11400000, guid: 8e403aae5daf09c49a7cc32cfef2d5d2, type: 2}
+    Durability: 0
+    TotalAmmo: 30
   _throwables: []
   _nonShootingDistance: 1
   _closeQuarterShooting: 0.75

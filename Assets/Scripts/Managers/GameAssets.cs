@@ -33,7 +33,7 @@ public class GameAssets : Singleton<GameAssets>
     public Transform BulletPrefab;
     public Transform SpawnPortal;
     public Transform ExitPortal;
-    public Transform ChatBubble;
+    public Transform FiringTrap;
     public Transform Blood;
 
     [Header("Particle Systems")]

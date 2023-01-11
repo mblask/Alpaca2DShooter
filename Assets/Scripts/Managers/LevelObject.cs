@@ -7,6 +7,7 @@ public class LevelObject : MonoBehaviour
 {
     private Transform _locationsContainer;
     private List<SpawnPoint> _enemySpawnPoints;
+    private List<SpawnPoint> _trapsSpawnPoints;
     private List<SpawnPoint> _playerSpawnPoints;
     private List<SpawnPoint> _portalSpawnPoints;
     private Transform _spawnPortalTransform;
@@ -17,9 +18,6 @@ public class LevelObject : MonoBehaviour
     private int _maxNumberOfArtefactsRequired = 3;
     private List<ArtefactItem> _requiredArtefacts;
 
-    //where to initialize it???
-    private GameAssets _gameAssets;
-
     private void Awake()
     {
         _locationsContainer = transform.Find("Locations");
@@ -28,6 +26,7 @@ public class LevelObject : MonoBehaviour
             return;
         
         _enemySpawnPoints = new List<SpawnPoint>(_locationsContainer.Find("EnemySpawnPoints").GetComponentsInChildren<SpawnPoint>());
+        _trapsSpawnPoints = Utilities.GetListOfObjectsFromContainer<SpawnPoint>(_locationsContainer, "TrapSpawnPoints");
         _playerSpawnPoints = new List<SpawnPoint>(_locationsContainer.Find("PlayerSpawnPoints").GetComponentsInChildren<SpawnPoint>());
         _portalSpawnPoints = new List<SpawnPoint>(_locationsContainer.Find("PortalSpawnPoints").GetComponentsInChildren<SpawnPoint>());
 
@@ -56,6 +55,7 @@ public class LevelObject : MonoBehaviour
     {
         spawnPortals(levelNeedsSpawnPortal);
         spawnEnemies();
+        spawnTraps();
         setRequiredArtefacts();
     }
 
@@ -160,6 +160,26 @@ public class LevelObject : MonoBehaviour
 
         _enemySpawnPoints.ForEach(spawnPoint => Destroy(spawnPoint.gameObject));
         _playerSpawnPoints.ForEach(spawnPoint => Destroy(spawnPoint.gameObject));
+    }
+
+    private void spawnTraps()
+    {
+        //if spawn points list is null, return
+        if (_trapsSpawnPoints == null)
+            return;
+
+        //if there are no spawn points in the level, return
+        if (_trapsSpawnPoints.Count == 0)
+            return;
+
+        Debug.Log("Setup trap spawning till the end!!");
+
+        //spawn traps at every spawn point; only 33% of traps will initialize themselves
+        foreach (SpawnPoint spawnPoint in _trapsSpawnPoints)
+            Instantiate(GameAssets.Instance.FiringTrap, spawnPoint.Location, Quaternion.identity, _npcContainer);
+
+        //destroy any remaining spawn points in the level
+        _trapsSpawnPoints.ForEach(spawnPoint => Destroy(spawnPoint.gameObject));
     }
 
     public bool ContainsPlayerSpawnPoints()

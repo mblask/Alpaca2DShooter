@@ -64,7 +64,7 @@ MonoBehaviour:
     type: 3}
   ExitPortal: {fileID: 7770807430521580663, guid: 359b80d0b9b99dc48a9578d261c6eba2,
     type: 3}
-  ChatBubble: {fileID: 2580099622416704539, guid: 3c99b6026153d8547b5af33656d073c9,
+  FiringTrap: {fileID: 8156374904455766617, guid: c7e0f79d2074b26478351f521fc646d8,
     type: 3}
   Blood: {fileID: 9144573411589949775, guid: 1208b2fe3d9aed24791cf90e9099a653, type: 3}
   ObjectDestroyPS: {fileID: 6286873006748181700, guid: 09af176826afcd4438fddea34718dade,

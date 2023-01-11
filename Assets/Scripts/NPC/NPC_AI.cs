@@ -88,12 +88,15 @@ public class NPC_AI : MonoBehaviour
         if (_gameManager != null && !_gameManager.IsGameRunning())
             return;
 
+        if (_isInteracting && Vector2.Distance(transform.position, _playerController.transform.position) > _interactionRadius)
+            stopInteractWithPlayer();
+    }
+
+    private void FixedUpdate()
+    {
         stateMachineProcedure();
         if (!_runStateMachine)
             rotateEnemyTowards(_targetPosition);
-
-        if (_isInteracting && Vector2.Distance(transform.position, _playerController.transform.position) > _interactionRadius)
-            stopInteractWithPlayer();
     }
 
     private void LateUpdate()
@@ -135,7 +138,7 @@ public class NPC_AI : MonoBehaviour
                 break;
 
             case NPCState.Patrol:
-                moveTo(_targetPosition);
+                moveTo(_targetPosition, npcSaysSomething);
                 findTarget();
 
                 if (distanceToPlayer > idleDistance)
@@ -149,8 +152,6 @@ public class NPC_AI : MonoBehaviour
 
                 if (_patrolWaitTimer <= 0.0f)
                 {
-                    npcSaysSomething();
-
                     _targetPosition = generatePatrollingPosition();
                     _patrolWaitTimer = UnityEngine.Random.Range(_patrolWaitTimeInterval.x, _patrolWaitTimeInterval.y);
                 }
@@ -293,12 +294,12 @@ public class NPC_AI : MonoBehaviour
         Door door = hits2D[0].collider.GetComponent<Door>();
 
         if (door != null)
-            return door.IsLocked();
+            return door.IsClosed();
 
         return true;
     }
 
-    private void moveTo(Vector3 targetPosition, Action actionOnStopped = null)
+    private void moveTo(Vector3 targetPosition, Action actionOnStopped = null, Action actionOnStarted = null)
     {
         if (targetPosition == default(Vector3))
         {
@@ -323,7 +324,12 @@ public class NPC_AI : MonoBehaviour
             return;
         }
 
-        _isMoving = true;
+        if (!_isMoving)
+        {
+            _isMoving = true;
+            actionOnStarted?.Invoke();
+        }
+
         _rigidBody.MovePosition(transform.position + _NPCStats.EnemySpeed.GetFinalValue() * (Vector3)direction.normalized * Time.fixedDeltaTime);
     }
 
