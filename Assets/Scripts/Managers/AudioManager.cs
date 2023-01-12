@@ -97,6 +97,7 @@ public class AudioManager : Singleton<AudioManager>
         NPCWeapons.OnEnemyShootingAudio += playClip;
         PickupItem.OnItemPickedUpAudio += playClip;
         FiringTrap.OnWeaponShootingAudio += playClip;
+        FiringTrap2.OnShooting += playClip;
 
         if (!_playMusic)
             _musicAudioSource.Stop();
@@ -115,6 +116,7 @@ public class AudioManager : Singleton<AudioManager>
         NPCWeapons.OnEnemyShootingAudio -= playClip;
         PickupItem.OnItemPickedUpAudio -= playClip;
         FiringTrap.OnWeaponShootingAudio -= playClip;
+        FiringTrap2.OnShooting -= playClip;
     }
 
     public float GetMusicVolume()

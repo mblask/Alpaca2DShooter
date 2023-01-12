@@ -160,7 +160,7 @@ public class NPCWeapons : MonoBehaviour
     public void StopAttack()
     {
         _shootTarget = null;
-        StopCoroutine("AutoShooting");
+        StopCoroutine(nameof(AutoShooting));
         _autoShootingCoroutineRunning = false;
     }
 
@@ -224,6 +224,9 @@ public class NPCWeapons : MonoBehaviour
     private void generateShootingParticleSystem()
     {
         Vector3 rotation = new Vector3(-1.0f * _shootingSpot.rotation.eulerAngles.z, 0.0f, 0.0f);
+
+        if (_gameAssets.ShootingPS == null)
+            return;
 
         ParticleSystem shootingPS = Instantiate(_gameAssets.ShootingPS);
         shootingPS.transform.position = _shootingSpot.position;

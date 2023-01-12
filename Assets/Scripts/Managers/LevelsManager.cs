@@ -1,211 +1,93 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AlpacaMyGames;
 
-public class LevelsManager : Singleton<LevelsManager>
+public class LevelsManager : MonoBehaviour
 {
-    public event Action<int> OnArtefactsSet;
+    private static LevelsManager _instance;
 
-    [SerializeField] private int _maxNumOfLevels;
+    public static LevelsManager Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
 
-    [Header("Portals")]
-    [SerializeField] private List<LevelPortalsList> _levelPortals;
-    [SerializeField] private List<LevelPortalsList> _randomLevelPortals;
+    [SerializeField] private int _levelsToPass = 2;
 
-    private List<Transform> _usedArtefactLocations;
+    private List<LevelObject> _levels;
+    private List<LevelObject> _usedLevels = new List<LevelObject>();
 
-    private List<Portal> _spawnPortals;
-    private List<Portal> _exitPortals;
-    private List<int> _usedPortals;
+    private bool _playerSpawned = false;
 
-    private List<SpawnPoint> _enemySpawnPoints;
+    private GameManager _gameManager;
 
+    private void Awake()
+    {
+        _instance = this;
+        _levels = new List<LevelObject>(GetComponentsInChildren<LevelObject>());
+    }
 
     private void Start()
     {
-        _spawnPortals = new List<Portal>();
-        _exitPortals = new List<Portal>();
-
-        _usedPortals = new List<int>();
-        _usedArtefactLocations = new List<Transform>();
-
-        SpawnPoint[] spawnPoints = transform.Find("Locations").GetComponentsInChildren<SpawnPoint>();
-        _enemySpawnPoints = new List<SpawnPoint>(spawnPoints);
-
-        setSpawnPortalIndices();
-        initializeLevelPortals();
+        _gameManager = GameManager.Instance;
+        spawnPlayerRandomly();
     }
 
-    public List<SpawnPoint> GetEnemySpawnPoints()
+    private void spawnPlayerRandomly()
     {
-        return _enemySpawnPoints;
-    }
+        LevelObject randomLevel = _levels.GetRandomElement();
 
-    public int GetTotalNumOfRequiredArtefacts()
-    {
-        int numOfArtefacts = 0;
-
-        foreach (Portal portal in _exitPortals)
-        {
-            if (portal.GetRequiredArtefacts().Count != 0)
-                numOfArtefacts += portal.GetRequiredArtefacts().Count;
-        }
-
-        return numOfArtefacts;
-    }
-
-    private List<LevelPortalsList> initializePoolOfRandomLevels()
-    {
-        List<LevelPortalsList> randomLevels = new List<LevelPortalsList>();
-
-        if (_levelPortals == null)
-            return null;
-
-        if (_levelPortals.Count == 0)
-            return null;
-
-        for (int i = 0; i < _maxNumOfLevels; i++)
-        {
-            int randomLevelIndex = UnityEngine.Random.Range(0, _levelPortals.Count);
-            
-            if (randomLevels.Contains(_levelPortals[randomLevelIndex]))
-            {
-                i--;
-                continue;
-            }
-            else
-                randomLevels.Add(_levelPortals[randomLevelIndex]);
-        }
-
-        return randomLevels;
-    }
-
-    private void initializeLevelPortals()
-    {
-        _randomLevelPortals = initializePoolOfRandomLevels();
-
-        if (_randomLevelPortals == null)
+        if (!randomLevel.ContainsPlayerSpawnPoints())
             return;
 
-        int randomStartingLevelIndex = UnityEngine.Random.Range(0, _randomLevelPortals.Count);
+        randomLevel.SpawnPlayer();
+        randomLevel.SetupLevel(false);
 
-        for (int i = 0; i < _randomLevelPortals.Count; i++)
-        {
-            int randomSpawnIndex = UnityEngine.Random.Range(0, _randomLevelPortals[i].PortalLocations.Count);
-
-            if (randomStartingLevelIndex == i)
-            {
-                PlayerController.Instance.transform.position = _randomLevelPortals[i].PortalLocations[randomSpawnIndex].position;
-            }
-            else
-            {
-                Transform spawnLocation = _randomLevelPortals[i].PortalLocations[randomSpawnIndex];
-                Portal spawnPortal = Instantiate(GameAssets.Instance.SpawnPortal, spawnLocation.position, Quaternion.identity, transform.Find("SpawnPortalsContainer")).GetComponent<Portal>();
-
-                _spawnPortals.Add(spawnPortal);
-            }
-
-            int randomExitIndex = UnityEngine.Random.Range(0, _randomLevelPortals[i].PortalLocations.Count);
-
-            int count = 0;
-            while (count < 10)
-            {
-                randomExitIndex = UnityEngine.Random.Range(0, _randomLevelPortals[i].PortalLocations.Count);
-                if (randomExitIndex != randomSpawnIndex)
-                    break;
-
-                count++;
-            }
-
-            Transform exitLocation = _randomLevelPortals[i].PortalLocations[randomExitIndex];
-            Portal exitPortal = Instantiate(GameAssets.Instance.ExitPortal, exitLocation.position, Quaternion.identity, transform.Find("ExitPortalsContainer")).GetComponent<Portal>();
-
-            bool lockPortal = 1 < UnityEngine.Random.Range(0, 4);
-
-            exitPortal.PortalLocked(lockPortal);
-            exitPortal.SetRequiredArtefacts();
-
-            for (int j = 0; j < exitPortal.GetRequiredArtefacts().Count; j++)
-            {
-                ArtefactItem artefactToSpawn = exitPortal.GetRequiredArtefacts()[j];
-
-                int randomArtefactLocationIndex = UnityEngine.Random.Range(0, exitPortal.GetRequiredArtefacts().Count);
-                Transform artefactLocation = _randomLevelPortals[i].ArtefactLocations[randomArtefactLocationIndex];
-
-                if (_usedArtefactLocations.Contains(artefactLocation))
-                {
-                    j--;
-                    continue;
-                }
-                else
-                {
-                    Transform spawnedArtefact = ItemSpawner.Instance.SpawnItem(artefactLocation.position, artefactToSpawn);
-                    spawnedArtefact.transform.parent = transform.Find("RequiredArtefacts");
-                }
-
-                _usedArtefactLocations.Add(artefactLocation);
-            }
-
-            _exitPortals.Add(exitPortal);
-        }
-
-        OnArtefactsSet?.Invoke(GetTotalNumOfRequiredArtefacts());
+        _usedLevels.Add(randomLevel);
+        _playerSpawned = true;
     }
 
-    public Portal GetRandomPortal()
+    public static LevelObject SetupRandomNewLevelStatic()
     {
-        if (_usedPortals.Count == 0)
-        {
-            int randomPortalIndex = UnityEngine.Random.Range(0, _spawnPortals.Count);
-            _usedPortals.Add(randomPortalIndex);
-
-            return _spawnPortals[randomPortalIndex];
-        }
-        else
-        {
-            int randomPortalIndex = UnityEngine.Random.Range(0, _spawnPortals.Count);
-            int count = 0;
-
-            while (count <= _spawnPortals.Count * 2)
-            {
-                if (_usedPortals.Count == _spawnPortals.Count)
-                    return null;
-
-                randomPortalIndex = UnityEngine.Random.Range(0, _spawnPortals.Count);
-
-                if (!_usedPortals.Contains(randomPortalIndex))
-                {
-                    _usedPortals.Add(randomPortalIndex);
-                    break;
-                }
-
-                count++;
-            }
-
-            return _spawnPortals[randomPortalIndex];
-        }
+        return _instance.setupRandomNewLevel();
     }
 
-    public List<Portal> GetSpawnPortals()
+    private LevelObject setupRandomNewLevel()
     {
-        return _spawnPortals;
-    }
-
-    public List<int> GetUsedPortals()
-    {
-        return _usedPortals;
-    }
-
-    private void setSpawnPortalIndices()
-    {
-        int i = 0;
-
-        foreach (Portal spawnPortal in _spawnPortals)
+        if (_levelsToPass == _usedLevels.Count)
         {
-            spawnPortal.SetPortalIndex(i);
-            i++;
+            Debug.Log("Level finished");
+            Debug.Log("Victory");
+            _gameManager.SetGameRunning(false);
+            return null;
         }
+
+        LevelObject level = getRandomLevelsExcluding(_levels, _usedLevels).GetRandomElement();
+
+        if (level == null)
+        {
+            Debug.Log("Level finished");
+            Debug.Log("Victory");
+            _gameManager.SetGameRunning(false);
+            return null;
+        }
+
+        level.SetupLevel(true);
+        _usedLevels.Add(level);
+
+        return level;
+    }
+
+    private List<LevelObject> getRandomLevelsExcluding(List<LevelObject> levels, List<LevelObject> excludedLevels)
+    {
+        if (levels.Count == excludedLevels.Count)
+            return null;
+
+        List<LevelObject> leftoverLevels = levels.FindAll(level => !excludedLevels.Contains(level));
+
+        return leftoverLevels;
     }
 }

@@ -37,8 +37,8 @@ public class GameAssets : Singleton<GameAssets>
     public Transform Blood;
 
     [Header("Particle Systems")]
-    public GameObject ObjectDestroyPS;
-    public GameObject BloodPS;
+    public ParticleSystem ObjectDestroyPS;
+    public ParticleSystem BloodPS;
     public ParticleSystem ShootingPS;
 
     [Header("Available Artefacts")]

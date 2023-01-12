@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using AlpacaMyGames;
 
+public enum PortalType
+{
+    Spawn,
+    Exit,
+}
+
 public class Portal2 : MonoBehaviour
 {
     [SerializeField] private PortalType _portalType;
@@ -23,13 +29,10 @@ public class Portal2 : MonoBehaviour
 
     private void transferPlayer(PlayerBase playerBase)
     {
-        LevelObject nextLevel = LevelsManager2.SetupRandomNewLevelStatic();
+        LevelObject nextLevel = LevelsManager.SetupRandomNewLevelStatic();
 
         if (nextLevel == null)
-        {
-            Debug.Log("Victory!");
             return;
-        }
 
         Vector3 nextSpawnPosition = nextLevel.GetSpawnPortalPosition();
         playerBase.transform.position = nextSpawnPosition;

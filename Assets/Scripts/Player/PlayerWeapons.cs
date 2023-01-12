@@ -567,6 +567,11 @@ public class PlayerWeapons : MonoBehaviour
         return _instance?.getCurrentThrowable();
     }
 
+    public bool IsArmed()
+    {
+        return _weaponEquipped;
+    }
+
     private Weapon getCurrentThrowable()
     {
         return _currentThrowable;

@@ -16,14 +16,11 @@ public class ArtefactsPanel : MonoBehaviour
 
     private void Start()
     {
-        LevelsManager.Instance.OnArtefactsSet += SetupInitialText;
         PlayerArtefacts.Instance.OnArtefactCollected += UpdateArtefactsText;
     }
 
     private void OnDisable()
     {
-        if (LevelsManager.Instance != null)
-            LevelsManager.Instance.OnArtefactsSet -= SetupInitialText;
         if (PlayerArtefacts.Instance != null)
             PlayerArtefacts.Instance.OnArtefactCollected -= UpdateArtefactsText;
     }

@@ -35,6 +35,8 @@ public class FiringTrap : MonoBehaviour, IDamagable
     private Transform _target;
     private Weapon _selectedWeapon;
 
+    private GameManager _gameManager;
+
     private FiringTrapState _trapState = FiringTrapState.Search;
 
     private void Awake()
@@ -45,6 +47,7 @@ public class FiringTrap : MonoBehaviour, IDamagable
 
     private void Start()
     {
+        _gameManager = GameManager.Instance;
         WeaponItem randomWeapon = GameAssets.Instance.AvailableWeaponsList.GetRandomElement();
         _weaponSpriteRenderer.sprite = randomWeapon.ItemSprite;
 
@@ -53,6 +56,9 @@ public class FiringTrap : MonoBehaviour, IDamagable
 
     private void Update()
     {
+        if (!_gameManager.IsGameRunning())
+            return;
+
         if (!_isWorking)
             return;
 
@@ -128,6 +134,9 @@ public class FiringTrap : MonoBehaviour, IDamagable
 
     private void attackTarget()
     {
+        if (obstacleInTheWay())
+            return;
+
         _timer -= Time.deltaTime;
 
         if (_timer <= 0.0f)
@@ -139,6 +148,34 @@ public class FiringTrap : MonoBehaviour, IDamagable
             else
                 _timer = _selectedWeapon.WeaponItem.ShootInterval;
         }
+    }
+
+    private bool obstacleInTheWay()
+    {
+        if (_target == null)
+            return false;
+
+        Vector3 direction = (_target.position - transform.position).normalized;
+        float offsetFromOrigin = 1.0f;
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position + direction * offsetFromOrigin, direction, 999.0f);
+
+        if (hits == null)
+            return false;
+
+        if (hits.Length == 0)
+            return false;
+
+        PlayerController playerController = hits[0].collider.GetComponent<PlayerController>();
+
+        if (playerController != null)
+            return false;
+
+        Door door = hits[0].collider.GetComponent<Door>();
+
+        if (door != null)
+            return door.IsClosed();
+
+        return true;
     }
 
     private void shoot()
@@ -193,6 +230,9 @@ public class FiringTrap : MonoBehaviour, IDamagable
     private void generateShootingParticleSystem()
     {
         Vector3 rotation = new Vector3(-1.0f * _shootingSpot.rotation.eulerAngles.z, 0.0f, 0.0f);
+
+        if (GameAssets.Instance.ShootingPS == null)
+            return;
 
         ParticleSystem shootingPS = Instantiate(GameAssets.Instance.ShootingPS);
         shootingPS.transform.position = _shootingSpot.position;

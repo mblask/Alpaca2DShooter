@@ -11,7 +11,7 @@ public enum ObjectSturdiness
     Indestructible,
 }
 
-public class ObjectDestroy : MonoBehaviour
+public class ObjectDestroy : MonoBehaviour, IDamagable
 {
     [Header("Object sturdiness")]
     [Tooltip("Affects how many bullets needs to destroy the object.")]
@@ -40,17 +40,17 @@ public class ObjectDestroy : MonoBehaviour
     {
         if (collision.CompareTag(_bulletTagName))
         {
-            HitObject();
+            DamageObject(1);
 
             Destroy(collision.gameObject);
         }
     }
 
-    public void HitObject()
+    public void DamageObject(float damage = 1.0f)
     {
-        _hitCount++;
+        _hitCount -= (int)damage;
 
-        if (_hitCount >= _bulletHitsToDestroy)
+        if (_hitCount <= 0)
         {
             destroyObject();
         }
@@ -79,8 +79,8 @@ public class ObjectDestroy : MonoBehaviour
 
     private void generateParticles()
     {
-        GameObject objectDestroyPS = Instantiate(GameAssets.Instance.ObjectDestroyPS, transform.position, Quaternion.identity);
-        ParticleSystem.MainModule mainModule = objectDestroyPS.GetComponent<ParticleSystem>().main;
+        ParticleSystem objectDestroyPS = Instantiate(GameAssets.Instance.ObjectDestroyPS, transform.position, Quaternion.identity);
+        ParticleSystem.MainModule mainModule = objectDestroyPS.main;
 
         if (UseOriginalSprite)
         {

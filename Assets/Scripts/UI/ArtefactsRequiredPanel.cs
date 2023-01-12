@@ -28,42 +28,12 @@ public class ArtefactsRequiredPanel : MonoBehaviour
     private void Start()
     {
         _playerArtefacts = PlayerArtefacts.Instance;
-        Portal.OnTriggerLockedPortal += SetupPanel;
         HidePanel();
     }
 
-    private void OnDisable()
+    public void SetupPanel()
     {
-        Portal.OnTriggerLockedPortal -= SetupPanel;
-    }
 
-    public void SetupPanel(Portal portal)
-    {
-        if (!_isActive)
-        {
-            foreach (Image image in _artefactImages)
-            {
-                image.gameObject.SetActive(false);
-            }
-
-            List<ArtefactItem> artefactsList = portal.GetRequiredArtefacts();
-
-            for (int i = 0; i < artefactsList.Count; i++)
-            {
-                if (artefactsList[i] == null)
-                    continue;
-
-                if (_playerArtefacts.GetArtefacts().Contains(artefactsList[i]))
-                    continue;
-
-                _artefactImages[i].gameObject.SetActive(true);
-                _artefactImages[i].sprite = artefactsList[i].ItemSprite;
-            }
-
-            ShowPanel();
-
-            Invoke("HidePanel", 3.0f);
-        }
     }
 
     public void ShowPanel()

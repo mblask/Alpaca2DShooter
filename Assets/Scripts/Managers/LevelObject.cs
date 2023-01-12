@@ -49,6 +49,7 @@ public class LevelObject : MonoBehaviour
         float destroySpawnPointsInRadius = 6.0f;
         destroySpawnPointsAround(_portalSpawnPoints, randomSpawnPoint.Location, destroySpawnPointsInRadius);
         destroySpawnPointsAround(_enemySpawnPoints, randomSpawnPoint.Location, destroySpawnPointsInRadius);
+        destroySpawnPointsAround(_trapsSpawnPoints, randomSpawnPoint.Location, destroySpawnPointsInRadius);
     }
 
     public void SetupLevel(bool levelNeedsSpawnPortal)
@@ -171,8 +172,6 @@ public class LevelObject : MonoBehaviour
         //if there are no spawn points in the level, return
         if (_trapsSpawnPoints.Count == 0)
             return;
-
-        Debug.Log("Setup trap spawning till the end!!");
 
         //spawn traps at every spawn point; only 33% of traps will initialize themselves
         foreach (SpawnPoint spawnPoint in _trapsSpawnPoints)

@@ -85,8 +85,14 @@ public class NPC_AI : MonoBehaviour
 
     private void Update()
     {
-        if (_gameManager != null && !_gameManager.IsGameRunning())
+        if (_gameManager != null)
             return;
+
+        if (!_gameManager.IsGameRunning())
+        {
+            _NPCWeapons.StopAttack();
+            return;
+        }
 
         if (_isInteracting && Vector2.Distance(transform.position, _playerController.transform.position) > _interactionRadius)
             stopInteractWithPlayer();
@@ -124,6 +130,9 @@ public class NPC_AI : MonoBehaviour
     private void stateMachineProcedure()
     {
         if (!_runStateMachine)
+            return;
+
+        if (!_gameManager.IsGameRunning())
             return;
 
         float idleDistance = 20.0f;

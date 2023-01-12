@@ -15,6 +15,6 @@ MonoBehaviour:
   ItemName: Lockpick
   ItemSprite: {fileID: -8233504766059196747, guid: 62739e5141ba5274197550cdd9761bf7,
     type: 3}
-  ChanceToDrop: 0
+  ChanceToDrop: 5
   Color: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
   PickupAudio: 7

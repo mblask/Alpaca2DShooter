@@ -5,11 +5,11 @@ using UnityEngine;
 public class MouseInteraction : MonoBehaviour
 {
     private float _playerDistance = 3.0f;
-    private PlayerBase _playerBase;
+    private PlayerWeapons _playerWeapons;
 
     private void Start()
     {
-        _playerBase = PlayerBase.Instance;
+        _playerWeapons = PlayerWeapons.Instance;
     }
 
     private void Update()
@@ -26,20 +26,20 @@ public class MouseInteraction : MonoBehaviour
         if (hits.Length == 0)
             return;
 
-
         foreach (Collider2D collider in hits)
         {
+            IDamagable damagable = collider.GetComponent<IDamagable>();
+            if (damagable != null)
+                continue;
+
             IInteractable interactable = collider.GetComponent<IInteractable>();
             if (interactable == null)
                 continue;
 
-            if (Vector2.Distance(_playerBase.transform.position, transform.position) < _playerDistance)
-            {
+            if (Vector2.Distance(_playerWeapons.transform.position, transform.position) < _playerDistance)
                 interactable.Interact();
-                Debug.Log("Mouse Interaction");
-            }
             else
-                FloatingTextSpawner.CreateFloatingTextStatic(_playerBase.transform.position, "Too far away!", Color.white);
+                FloatingTextSpawner.CreateFloatingTextStatic(_playerWeapons.transform.position, "Too far away!", Color.white);
         }
     }
 

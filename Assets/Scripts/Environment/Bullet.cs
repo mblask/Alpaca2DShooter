@@ -46,7 +46,7 @@ public class Bullet : MonoBehaviour
             return;
         }
 
-        if (collision.GetComponent<Door>() != null)
+        if (collision.GetComponent<Door>() != null && collision.GetComponent<Door>().IsClosed())
         {
             Destroy(gameObject);
             return;

@@ -91,7 +91,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
         CurrentHealth -= value;
         FloatingTextSpawner.CreateFloatingTextStatic(transform.position, value.ToString("F0"), new Color(1.0f, 0.5f, 0.0f));
 
-        GameObject bloodPSObject = Instantiate(_gameAssets.BloodPS, transform.position, Quaternion.identity, null);
+        ParticleSystem bloodPSObject = Instantiate(_gameAssets.BloodPS, transform.position, Quaternion.identity, null);
         Transform bloodTransform = Instantiate(_gameAssets.Blood, transform.position, Quaternion.identity, null);
 
         if (
@@ -99,7 +99,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
             _playerBase.GetCharacterBaseScriptable().CharacterType.Equals(CharacterBaseType.Robot)
             )
         {
-            ParticleSystem.MainModule bloodPSMain = bloodPSObject.GetComponent<ParticleSystem>().main;
+            ParticleSystem.MainModule bloodPSMain = bloodPSObject.main;
             SpriteRenderer bloodSR = bloodTransform.GetComponent<SpriteRenderer>();
 
             Color robotBloodColor = Color.black;

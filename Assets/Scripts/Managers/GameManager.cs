@@ -176,6 +176,11 @@ public class GameManager : Singleton<GameManager>
         return _gameIsRunning;
     }
 
+    public void SetGameRunning(bool value)
+    {
+        _gameIsRunning = value;
+    }
+
     public void UpdateCollectedArtefacts(int value)
     {
         if (value == 0)
