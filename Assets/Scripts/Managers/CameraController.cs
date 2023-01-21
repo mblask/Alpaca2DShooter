@@ -19,7 +19,7 @@ public class CameraController : Singleton<CameraController>
 
     private void Start()
     {
-        _targetToFollow = PlayerController.Instance.transform;
+        _targetToFollow = PlayerController.Instance?.transform;
 
         if (_cameraWobble)
             randomizeWobbleParameters();

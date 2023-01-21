@@ -532,7 +532,8 @@ public class PlayerWeapons : MonoBehaviour
         {
             if (weapon.WeaponItem == _weapons[i].WeaponItem)
             {
-                _weapons[i].TotalAmmo += UnityEngine.Random.Range(0, weapon.TotalAmmo);
+                Vector2Int ammoDropRange = new Vector2Int(10, 30);
+                _weapons[i].TotalAmmo += UnityEngine.Random.Range(ammoDropRange.x, ammoDropRange.y);
 
                 OnAmmoPanelUIChanged?.Invoke(_currentAmmo, _currentWeapon.TotalAmmo);
 

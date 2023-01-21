@@ -24,6 +24,6 @@ public class WeaponItem : NonInventoryItem
         if (Throwable)
             return PlayerWeapons.Instance.AddThrowable(new Weapon(this, 1));
 
-        return PlayerWeapons.Instance.AddWeapon(new Weapon(this, 20));
+        return PlayerWeapons.Instance.AddWeapon(new Weapon(this, 30));
     }
 }

@@ -184,6 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee55cdbf4b1ef7941b8cdb2e46f5892f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _enemyType: 0
   EnemyHealth:
     _baseValue: 15
   EnemySpeed:
@@ -477,6 +478,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7591913070152767330, guid: df3dbef2d737ec74c9cf9e6b7cf2a108,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9039872407475646829, guid: df3dbef2d737ec74c9cf9e6b7cf2a108,
         type: 3}

@@ -8,7 +8,7 @@ public class MainLightingManager : MonoBehaviour
     private static MainLightingManager _instance;
 
     private Light2D _mainLight;
-    private Vector2 _mainLightingStrength = new Vector2(0.1f, 0.8f);
+    private Vector2 _mainLightingStrength = new Vector2(0.1f, 0.5f);
 
     private bool _flickerLight = true;
 

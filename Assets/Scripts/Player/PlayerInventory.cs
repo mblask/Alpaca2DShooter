@@ -2,10 +2,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class PlayerInventory : MonoBehaviour
+public class PlayerInventory : MonoBehaviour, ICrafting
 {
     public Action OnSuccessfulAdd;
     public Action OnItemRemovedFromInventory;
+    public Action OnToggleInventoryUI;
+    public Action OnToggleCraftingUI;
 
     private static PlayerInventory _instance;
     public static PlayerInventory Instance
@@ -19,6 +21,8 @@ public class PlayerInventory : MonoBehaviour
     private const int MAX_NUMBER_OF_ITEMS = 12;
     [SerializeField] private List<Item> _items = new List<Item>();
 
+    private bool _craftingPossible = false;
+
     private ItemSpawner _itemSpawner;
 
     private void Awake()
@@ -29,6 +33,27 @@ public class PlayerInventory : MonoBehaviour
     private void Start()
     {
         _itemSpawner = ItemSpawner.Instance;
+    }
+
+    private void Update()
+    {
+        toggleInventoryUI();
+        toggleCraftingUI();
+    }
+
+    private void toggleInventoryUI()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+            OnToggleInventoryUI?.Invoke();
+    }
+
+    private void toggleCraftingUI()
+    {
+        if (!_craftingPossible)
+            return;
+
+        if (Input.GetKeyDown(KeyCode.C))
+            OnToggleCraftingUI?.Invoke();
     }
 
     public static List<Item> GetItemsStatic()
@@ -116,5 +141,10 @@ public class PlayerInventory : MonoBehaviour
     private List<Item> getItems()
     {
         return _items;
+    }
+
+    public void EnableCrafting(bool value)
+    {
+        _craftingPossible = value;
     }
 }

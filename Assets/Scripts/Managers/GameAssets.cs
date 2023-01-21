@@ -29,6 +29,7 @@ public class GameAssets : Singleton<GameAssets>
     public Transform Mine;
     public Transform DestructionArea;
     public Transform NPCPrefab;
+    public Transform NPCBossPrefab;
     public Transform ItemTemplate;
     public Transform BulletPrefab;
     public Transform SpawnPortal;

@@ -92,8 +92,11 @@ public class AudioManager : Singleton<AudioManager>
     private void Start()
     {
         Bullet.OnBulletHitsCharacter += playClip;
-        PlayerWeapons.Instance.OnShootingAudio += playClip;
-        PlayerWeapons.Instance.OnReloadingAudio += playClip;
+        if (PlayerWeapons.Instance != null)
+        {
+            PlayerWeapons.Instance.OnShootingAudio += playClip;
+            PlayerWeapons.Instance.OnReloadingAudio += playClip;
+        }
         NPCWeapons.OnEnemyShootingAudio += playClip;
         PickupItem.OnItemPickedUpAudio += playClip;
         FiringTrap.OnWeaponShootingAudio += playClip;
@@ -106,13 +109,11 @@ public class AudioManager : Singleton<AudioManager>
     private void OnDisable()
     {
         Bullet.OnBulletHitsCharacter -= playClip;
-
         if (PlayerWeapons.Instance != null)
         {
             PlayerWeapons.Instance.OnShootingAudio -= playClip;
             PlayerWeapons.Instance.OnReloadingAudio -= playClip;
         }
-
         NPCWeapons.OnEnemyShootingAudio -= playClip;
         PickupItem.OnItemPickedUpAudio -= playClip;
         FiringTrap.OnWeaponShootingAudio -= playClip;

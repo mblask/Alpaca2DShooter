@@ -10,6 +10,7 @@ public class NPCBase : MonoBehaviour
 
     private GameAssets _gameAssets;
 
+
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -20,16 +21,11 @@ public class NPCBase : MonoBehaviour
     {
         _gameAssets = GameAssets.Instance;
 
-        //CharacterBase characterBase = generateRandomCharacterBase();
-        //
-        //if (characterBase != null)
-        //{
-        //    _animator.runtimeAnimatorController = characterBase.CharacterAOC;
-        //    _enemyStats.EnemySpeed.SetBaseValue(characterBase.MovementSpeed);
-        //    _enemyStats.EnemyAccuracy.SetBaseValue(characterBase.Accuracy);
-        //    _enemyStats.EnemyHealth.SetBaseValue(_enemyStats.EnemyHealth.GetBaseValue() * characterBase.HealthModifier);
-        //}
+        setCharacterBase();
+    }
 
+    private void setCharacterBase()
+    {
         CharacterBaseScriptable characterBaseScriptable = getRandomCharacterBaseScriptable();
 
         if (characterBaseScriptable != null)
@@ -38,6 +34,7 @@ public class NPCBase : MonoBehaviour
             _enemyStats.EnemySpeed.SetBaseValue(characterBaseScriptable.MovementSpeed);
             _enemyStats.EnemyAccuracy.SetBaseValue(characterBaseScriptable.Accuracy);
             _enemyStats.EnemyHealth.SetBaseValue(_enemyStats.EnemyHealth.GetBaseValue() * characterBaseScriptable.HealthModifier);
+            _enemyStats.ModifyStats();
         }
     }
 

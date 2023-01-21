@@ -15,15 +15,20 @@ public class RandomWeaponSpawnObject : MonoBehaviour
         spawnItem();
     }
 
+    private void spawnRandomly()
+    {
+        if (!_spawnRandomly)
+            return;
+
+        if (Utilities.ChanceFunc(50))
+            Destroy(gameObject);
+    }
+
     private void spawnItem()
     {
         _itemSpawner = ItemSpawner.Instance;
 
-        if (_spawnRandomly)
-        {
-            if (Utilities.ChanceFunc(50))
-                Destroy(gameObject);
-        }
+        spawnRandomly();
 
         if (_specificWeapon == null)
         {

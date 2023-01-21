@@ -64,9 +64,6 @@ public class Door : MonoBehaviour, IInteractable
 
     public void Highlight()
     {
-        if (!_isLocked)
-            return;
-
         _defaultColor = _spriteRenderer.color;
         _spriteRenderer.color = _highlightColor;
     }

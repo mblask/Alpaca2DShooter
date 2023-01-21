@@ -22,24 +22,19 @@ public class InventoryUI : MonoBehaviour
         _gameAssets = GameAssets.Instance;
         initializeItemContainer();
 
+        PlayerInventory.Instance.OnToggleInventoryUI += showInventory;
         PlayerInventory.Instance.OnSuccessfulAdd += initializeItemContainer;
     }
 
     private void OnDisable()
     {
+        PlayerInventory.Instance.OnToggleInventoryUI -= showInventory;
         PlayerInventory.Instance.OnSuccessfulAdd -= initializeItemContainer;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.I))
-            showInventory();
     }
 
     private void showInventory()
     {
-        bool isActive = _container.gameObject.activeSelf;
-        isActive = !isActive;
+        bool isActive = !_container.gameObject.activeSelf;
 
         _container.gameObject.SetActive(isActive);
 

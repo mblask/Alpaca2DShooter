@@ -28,9 +28,9 @@ public class MouseInteraction : MonoBehaviour
 
         foreach (Collider2D collider in hits)
         {
-            IDamagable damagable = collider.GetComponent<IDamagable>();
-            if (damagable != null)
-                continue;
+            //IDamagable damagable = collider.GetComponent<IDamagable>();
+            //if (damagable != null && _playerWeapons.IsArmed())
+            //    continue;
 
             IInteractable interactable = collider.GetComponent<IInteractable>();
             if (interactable == null)

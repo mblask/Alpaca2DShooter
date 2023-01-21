@@ -3,12 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum NPCEnemyType
+{
+    Normal,
+    Boss,
+}
+
 public class NPCStats : MonoBehaviour, IDamagable
 {
     public static event Action OnHit;
     public static event Action<NPCStats> OnEnemyDeath;
 
-    public float CurrentHealth { get; private set; }
+    private float _currentHealth;
+
+    [SerializeField] private NPCEnemyType _enemyType;
 
     [Header("Enemy stats")]
     public Stat EnemyHealth;
@@ -20,7 +28,7 @@ public class NPCStats : MonoBehaviour, IDamagable
 
     private NPC_AI _enemyAI;
 
-    private bool _isDead;
+    private bool _isDead = false;
 
     private void Awake()
     {
@@ -31,7 +39,6 @@ public class NPCStats : MonoBehaviour, IDamagable
     {
         _gameAssets = GameAssets.Instance;
         _enemyAI = GetComponent<NPC_AI>();
-        CurrentHealth = EnemyHealth.GetFinalValue();
     }
 
     private void LateUpdate()
@@ -39,15 +46,29 @@ public class NPCStats : MonoBehaviour, IDamagable
         _enemyHealthCanvas.SetPosition(this.transform);
     }
 
+    public void ModifyStats()
+    {
+        if (!_enemyType.Equals(NPCEnemyType.Boss))
+            return;
+
+        //health, speed, accuracy multipliers
+        float[] multipliers = new float[3] { 8.0f, 2.0f, 3.0f };
+
+        EnemyHealth.AddBaseMultiplier(multipliers[0]);
+        _currentHealth = EnemyHealth.GetFinalValue();
+        EnemySpeed.AddBaseMultiplier(multipliers[1]);
+        EnemyAccuracy.AddBaseMultiplier(multipliers[2]);
+    }
+
     public void DamageObject(float value)
     {
         if (value == 0.0f)
             return;
 
-        CurrentHealth -= value;
+        _currentHealth -= value;
         FloatingTextSpawner.CreateFloatingTextStatic(transform.position, value.ToString("F0"), new Color(1.0f, 0.5f, 0.0f));
 
-        _enemyHealthCanvas.UpdateHealthSlider(CurrentHealth);
+        _enemyHealthCanvas.UpdateHealthSlider(_currentHealth);
 
         Instantiate(_gameAssets.BloodPS, transform.position, Quaternion.identity, null);
         Instantiate(_gameAssets.Blood, transform.position, Quaternion.identity, null);
@@ -59,7 +80,7 @@ public class NPCStats : MonoBehaviour, IDamagable
 
         hitShading();
 
-        if (CurrentHealth <= 0.0f)
+        if (_currentHealth <= 0.0f)
             die();
     }
 
