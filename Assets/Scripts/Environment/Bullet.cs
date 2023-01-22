@@ -53,7 +53,6 @@ public class Bullet : MonoBehaviour
         }
 
         IDamagable damagable = collision.GetComponent<IDamagable>();
-
         if (damagable != null)
         {
             damagable.DamageObject(_bulletDamage);

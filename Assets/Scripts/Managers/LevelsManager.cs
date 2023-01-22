@@ -21,7 +21,6 @@ public class LevelsManager : MonoBehaviour
     private List<LevelObject> _usedLevels = new List<LevelObject>();
 
     private Transform _playerTransform;
-    private PlayerLevelObject _playerLevelObject;
     private Transform _playersLevelSpawnPoint;
     private bool _playerSpawned = false;
 
@@ -40,7 +39,6 @@ public class LevelsManager : MonoBehaviour
     {
         _instance = this;
         _levels = new List<LevelObject>(GetComponentsInChildren<LevelObject>());
-        _playerLevelObject = transform.Find("PlayersLevel").GetComponent<PlayerLevelObject>();
         _playersLevelSpawnPoint = transform.Find("PlayersLevel").Find("Locations").Find("PlayerSpawnPoints").Find("PlayerSpawnPoint");
     }
 
@@ -60,7 +58,6 @@ public class LevelsManager : MonoBehaviour
         if (_playersLevelSpawnPoint == null)
             return;
 
-        _playerLevelObject.SetupLevel(false);
         Instantiate(GameAssets.Instance.Player, _playersLevelSpawnPoint.position, Quaternion.identity, null);
     }
 
@@ -92,40 +89,27 @@ public class LevelsManager : MonoBehaviour
     {
         if (_levelsToPass == _usedLevels.Count)
         {
-            finishLevel();
+            finishLevelGroup();
             return true;
         }
 
         return false;
     }
 
-    private void finishLevel()
+    private void finishLevelGroup()
     {
-        Debug.Log("Level finished");
-        Debug.Log("Victory");
+        Debug.Log("Level group finished");
         _levelsFinished = true;
         _gameManager.SetGameRunning(false);
     }
 
-    private void transferPlayerToPlayersLevel()
-    {
-        Debug.Log("Move player to the player's level!");
-        _playerTransform.position = _playersLevelSpawnPoint.position;
-    }
-
     private LevelObject setupRandomNewLevel()
     {
-        if (passedRequiredLevels())
-        {
-            transferPlayerToPlayersLevel();
-            return null;
-        }
-
         LevelObject level = getRandomLevelsExcluding(_levels, _usedLevels).GetRandomElement();
 
         if (level == null)
         {
-            finishLevel();
+            //finishLevelGroup();
             return null;
         }
 

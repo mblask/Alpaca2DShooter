@@ -67,7 +67,7 @@ public class LevelObject : MonoBehaviour
     public virtual void SetupLevel(bool levelNeedsSpawnPortal)
     {
         spawnPortals(levelNeedsSpawnPortal);
-        spawnEnemies();
+        //spawnEnemies();
         spawnTraps();
         setRequiredArtefacts();
     }
@@ -127,6 +127,9 @@ public class LevelObject : MonoBehaviour
 
         Transform portalTransform = Instantiate(GameAssets.Instance.ExitPortal, randomSpawnPoint.Location, Quaternion.identity, _environmentContainer);
         _portalSpawnPoints.Remove(randomSpawnPoint);
+        
+        float destroySpawnPointsInRadius = 6.0f;
+        destroySpawnPointsAround(_enemySpawnPoints, randomSpawnPoint.Location, destroySpawnPointsInRadius);
         Destroy(randomSpawnPoint.gameObject);
 
         _exitPortal = portalTransform.GetComponent<Portal>();
@@ -140,7 +143,6 @@ public class LevelObject : MonoBehaviour
             
             _portalSpawnPoints.Remove(randomSpawnPoint);
 
-            float destroySpawnPointsInRadius = 6.0f;
             destroySpawnPointsAround(_enemySpawnPoints, randomSpawnPoint.Location, destroySpawnPointsInRadius);
             Destroy(randomSpawnPoint.gameObject);
         }

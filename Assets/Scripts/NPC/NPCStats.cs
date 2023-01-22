@@ -33,6 +33,7 @@ public class NPCStats : MonoBehaviour, IDamagable
     private void Awake()
     {
         _enemyHealthCanvas = transform.Find("CharacterHealthCanvas").GetComponent<NPCHealthCanvas>();
+        _currentHealth = EnemyHealth.GetFinalValue();
     }
 
     private void Start()
@@ -52,12 +53,14 @@ public class NPCStats : MonoBehaviour, IDamagable
             return;
 
         //health, speed, accuracy multipliers
-        float[] multipliers = new float[3] { 8.0f, 2.0f, 3.0f };
+        float healthMultiplier = 8.0f;
+        float speedMultiplier = 2.0f;
+        float accuracyMultiplier = 3.0f;
 
-        EnemyHealth.AddBaseMultiplier(multipliers[0]);
+        EnemyHealth.AddBaseMultiplier(healthMultiplier);
         _currentHealth = EnemyHealth.GetFinalValue();
-        EnemySpeed.AddBaseMultiplier(multipliers[1]);
-        EnemyAccuracy.AddBaseMultiplier(multipliers[2]);
+        EnemySpeed.AddBaseMultiplier(speedMultiplier);
+        EnemyAccuracy.AddBaseMultiplier(accuracyMultiplier);
     }
 
     public void DamageObject(float value)

@@ -15,9 +15,6 @@ public class Portal : MonoBehaviour
     private List<ArtefactItem> _requiredArtefacts;
     private LevelObject _currentLevel;
 
-    private Transform _NPCBossTransform = null;
-    private bool _isBossPortal = false;
-
     private bool _isPlayerLevelPortal = false;
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -35,9 +32,6 @@ public class Portal : MonoBehaviour
 
     private void transferPlayer(PlayerBase playerBase)
     {
-        if (_isBossPortal && _NPCBossTransform != null)
-            return;
-
         if (LevelsManager.levelsFinished)
             return;
 
@@ -59,15 +53,6 @@ public class Portal : MonoBehaviour
     public void SetPortalLevel(LevelObject levelObject)
     {
         _currentLevel = levelObject;
-    }
-
-    public void SetBossPortal(Transform bossTransform)
-    {
-        if (bossTransform == null)
-            return;
-
-        _NPCBossTransform = bossTransform;
-        _isBossPortal = true;
     }
 
     public void SetPlayerLevelPortal(bool value)
