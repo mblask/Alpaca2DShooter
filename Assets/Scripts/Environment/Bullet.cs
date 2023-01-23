@@ -37,20 +37,15 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        //KEEP AN EYE ON THIS VERY UNFORTUNATE CHECKER!!
         if (collision.CompareTag(_shooterTag))
             return;
 
         if (collision.GetComponent<TilemapCollider2D>() != null)
-        {
             Destroy(gameObject);
-            return;
-        }
 
         if (collision.GetComponent<Door>() != null && collision.GetComponent<Door>().IsClosed())
-        {
             Destroy(gameObject);
-            return;
-        }
 
         IDamagable damagable = collision.GetComponent<IDamagable>();
         if (damagable != null)

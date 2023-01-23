@@ -16,30 +16,29 @@ public class LevelsManager : MonoBehaviour
     }
 
     [SerializeField] private int _levelsToPass = 2;
+    [SerializeField] private int _groupsToPass = 2;
 
-    private List<LevelObject> _levels;
-    private List<LevelObject> _usedLevels = new List<LevelObject>();
+    private List<LevelObject> _levelsList;
+    private List<LevelObject> _playedLevelsList = new List<LevelObject>();
+    private List<LevelObject> _bossLevelsList;
+    private LevelObject _playerLevel;
+    private int _numberOfGroupsPlayed = 0;
+    private int _numberOfSingleGroupLevelsUsed = 0;
 
     private Transform _playerTransform;
     private Transform _playersLevelSpawnPoint;
     private bool _playerSpawned = false;
 
-    private GameManager _gameManager;
+    private LevelObject _currentLevel;
 
-    private bool _levelsFinished = false;
-    public static bool levelsFinished
-    {
-        get
-        {
-            return _instance._levelsFinished;
-        }
-    }
+    private GameManager _gameManager;
 
     private void Awake()
     {
         _instance = this;
-        _levels = new List<LevelObject>(GetComponentsInChildren<LevelObject>());
-        _playersLevelSpawnPoint = transform.Find("PlayersLevel").Find("Locations").Find("PlayerSpawnPoints").Find("PlayerSpawnPoint");
+        _levelsList = Utilities.GetListOfObjectsFromContainer<LevelObject>(transform, "Regular");
+        _bossLevelsList = Utilities.GetListOfObjectsFromContainer<LevelObject>(transform, "Boss");
+        _playerLevel = transform.Find("PlayersLevel").GetComponent<LevelObject>();
     }
 
     private void Start()
@@ -55,18 +54,23 @@ public class LevelsManager : MonoBehaviour
         if (_playerSpawned)
             return;
 
-        if (_playersLevelSpawnPoint == null)
+        if (_playerLevel == null)
             return;
 
-        Instantiate(GameAssets.Instance.Player, _playersLevelSpawnPoint.position, Quaternion.identity, null);
+        _playerLevel.SetupLevel(true);
+        _currentLevel = _playerLevel;
+        _playerTransform = Instantiate(GameAssets.Instance.Player, _playerLevel.GetSpawnPortalPosition(), Quaternion.identity, null);
     }
 
     private bool spawnPlayerRandomly()
     {
-        if (_levels.Count == 0)
+        if (_levelsList.Count == 0)
             return false;
 
-        LevelObject randomLevel = _levels.GetRandomElement();
+        if (_playerSpawned)
+            return true;
+
+        LevelObject randomLevel = _levelsList.GetRandomElement();
 
         if (!randomLevel.ContainsPlayerSpawnPoints())
             return false;
@@ -74,49 +78,174 @@ public class LevelsManager : MonoBehaviour
         _playerTransform = randomLevel.SpawnPlayer();
         randomLevel.SetupLevel(false);
 
-        _usedLevels.Add(randomLevel);
+        _currentLevel = randomLevel;
+        _playedLevelsList.Add(randomLevel);
+        
         _playerSpawned = true;
+        
+        _numberOfSingleGroupLevelsUsed++;
+        _numberOfGroupsPlayed++;
 
         return true;
     }
 
-    public static LevelObject SetupRandomNewLevelStatic()
+    private enum completionState
     {
-        return _instance.setupRandomNewLevel();
+        exitingPlayerLevel,
+        groupNotCompleted,
+        groupCompleted,
+        gameCompleted,
     }
 
-    private bool passedRequiredLevels()
+    private completionState checkGroupCompleted()
     {
-        if (_levelsToPass == _usedLevels.Count)
+        if (_currentLevel.GetLevelType().Equals(LevelType.Boss))
+            return completionState.groupCompleted;
+
+        if (_currentLevel.Equals(_playerLevel))
+            return completionState.exitingPlayerLevel;
+
+        if (_numberOfSingleGroupLevelsUsed != _levelsToPass)
+            return completionState.groupNotCompleted;
+
+        if (_numberOfGroupsPlayed == _groupsToPass)
+            return completionState.gameCompleted;
+
+        return completionState.groupCompleted;
+    }
+
+    public static void CheckCompletionStateStatic()
+    {
+        _instance.checkCompletionState();
+    }
+
+    private void checkCompletionState()
+    {
+        switch (checkGroupCompleted())
         {
-            finishLevelGroup();
-            return true;
+            case completionState.exitingPlayerLevel:
+                exitingPlayersLevel();
+                break;
+
+            case completionState.gameCompleted:
+                gameCompleted();
+                break;
+
+            case completionState.groupCompleted:
+                groupCompleted();
+                break;
+
+            case completionState.groupNotCompleted:
+                groupNotCompleted();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private enum onPlayerLevelExit
+    {
+        boss,
+        repeat,
+    }
+
+    private void exitingPlayersLevel()
+    {
+        Debug.Log("Exiting player level!");
+
+        onPlayerLevelExit onPlayerLevelExit = onPlayerLevelExit.boss;
+
+        switch (onPlayerLevelExit)
+        {
+            case onPlayerLevelExit.boss:
+                Debug.Log("Go to boss level!");
+                transferPlayerToBossLevel();
+                break;
+            case onPlayerLevelExit.repeat:
+                Debug.Log("Go repeat levels!");
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void transferPlayerToBossLevel()
+    {
+        LevelObject level = _bossLevelsList.GetRandomElement();
+
+        if (level != null)
+        {
+            if (!level.IsReady())
+                level.SetupLevel();
+            
+            _currentLevel = level;
+            _playerTransform.position = level.GetSpawnPortalPosition();
+        }
+    }
+
+    private void groupNotCompleted()
+    {
+        Debug.Log(completionState.groupNotCompleted);
+        Debug.Log("Transfer player to another level!");
+
+        transferPlayerToAnotherLevel();
+    }
+
+    private void transferPlayerToAnotherLevel()
+    {
+        LevelObject level = getRandomLevelsExcluding(_levelsList, _playedLevelsList).GetRandomElement();
+
+        if (level != null)
+        {
+            level.SetupLevel(true);
+            _playedLevelsList.Add(level);
+            _numberOfSingleGroupLevelsUsed++;
+
+            _playerTransform.position = level.GetSpawnPortalPosition();
+
+            _currentLevel.ClearLevel();
+            _currentLevel = level;
+            Debug.Log("Enter: " + _currentLevel.name);
+        }
+    }
+
+    private void groupCompleted()
+    {
+        Debug.Log(completionState.groupCompleted);
+        if (_currentLevel.GetLevelType().Equals(LevelType.Boss))
+        {
+            _numberOfSingleGroupLevelsUsed = 0;
+            transferPlayerToAnotherLevel();
+            return;
         }
 
-        return false;
+        transferPlayerToPlayerLevel();
+        _numberOfGroupsPlayed++;
+        _numberOfSingleGroupLevelsUsed = 0;
     }
 
-    private void finishLevelGroup()
+    private void transferPlayerToPlayerLevel()
     {
-        Debug.Log("Level group finished");
-        _levelsFinished = true;
-        _gameManager.SetGameRunning(false);
-    }
-
-    private LevelObject setupRandomNewLevel()
-    {
-        LevelObject level = getRandomLevelsExcluding(_levels, _usedLevels).GetRandomElement();
-
-        if (level == null)
+        if (_playerLevel != null)
         {
-            //finishLevelGroup();
-            return null;
+            Debug.Log("Transfer player to player level!");
+
+            if (!_playerLevel.IsReady())
+                _playerLevel.SetupLevel(true);
+
+            _currentLevel = _playerLevel;
+            _playerTransform.position = _playerLevel.GetSpawnPortalPosition();
+            return;
         }
 
-        level.SetupLevel(true);
-        _usedLevels.Add(level);
+        Debug.LogError("No PlayerLevel currently existing!!");
+    }
 
-        return level;
+    private void gameCompleted()
+    {
+        Debug.Log(completionState.gameCompleted);
+        Debug.Log("Game completed!");
     }
 
     private List<LevelObject> getRandomLevelsExcluding(List<LevelObject> levels, List<LevelObject> excludedLevels)

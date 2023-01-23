@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using AlpacaMyGames;
 
+public enum LevelType
+{
+    Normal,
+    Player,
+    Boss,
+}
+
 public class LevelObject : MonoBehaviour
 {
     private Transform _locationsContainer;
@@ -19,6 +26,11 @@ public class LevelObject : MonoBehaviour
     private int _maxNumberOfArtefactsRequired = 3;
     private List<ArtefactItem> _requiredArtefacts;
 
+    [SerializeField] private LevelType _levelType;
+    private bool _isFinished = false;
+
+    private bool _isReady = false;
+
     private void Awake()
     {
         _locationsContainer = transform.Find("Locations");
@@ -33,15 +45,6 @@ public class LevelObject : MonoBehaviour
 
         _environmentContainer = transform.AddNewGameObject("Environment");
         _npcContainer = transform.AddNewGameObject("NPCs");
-    }
-
-    public void ActivateLevelObject(bool value)
-    {
-        if (transform.childCount == 0)
-            return;
-
-        foreach (Transform transform in transform)
-            transform.gameObject.SetActive(value);
     }
 
     public Transform SpawnPlayer()
@@ -64,24 +67,32 @@ public class LevelObject : MonoBehaviour
         return playerTransform;
     }
 
-    public virtual void SetupLevel(bool levelNeedsSpawnPortal)
+    public void SetupLevel(bool levelNeedsSpawnPortal = true)
     {
         spawnPortals(levelNeedsSpawnPortal);
         //spawnEnemies();
         spawnTraps();
         setRequiredArtefacts();
+
+        _isReady = true;
     }
 
     public void ClearLevel()
     {
+        if (_npcContainer == null)
+            return;
+
         Debug.Log("Clear: " + name);
 
         foreach (Transform npc in _npcContainer)
             Destroy(npc.gameObject);
     }
 
-    private void setRequiredArtefacts()
+    protected void setRequiredArtefacts()
     {
+        if (_levelType.Equals(LevelType.Boss) || _levelType.Equals(LevelType.Player))
+            return;
+
         _requiredArtefacts = new List<ArtefactItem>();
 
         for (int i = 0; i < _maxNumberOfArtefactsRequired; i++)
@@ -121,19 +132,22 @@ public class LevelObject : MonoBehaviour
         }
     }
 
-    protected virtual void spawnPortals(bool spawnPortalNeeded = true)
+    protected void spawnPortals(bool spawnPortalNeeded = true)
     {
         SpawnPoint randomSpawnPoint = _portalSpawnPoints.GetRandomElement();
+
+        if (_environmentContainer == null)
+            transform.AddNewGameObject("Environment");
 
         Transform portalTransform = Instantiate(GameAssets.Instance.ExitPortal, randomSpawnPoint.Location, Quaternion.identity, _environmentContainer);
         _portalSpawnPoints.Remove(randomSpawnPoint);
         
         float destroySpawnPointsInRadius = 6.0f;
         destroySpawnPointsAround(_enemySpawnPoints, randomSpawnPoint.Location, destroySpawnPointsInRadius);
+        destroySpawnPointsAround(_trapsSpawnPoints, randomSpawnPoint.Location, destroySpawnPointsInRadius);
         Destroy(randomSpawnPoint.gameObject);
 
         _exitPortal = portalTransform.GetComponent<Portal>();
-        _exitPortal.SetPortalLevel(this);
 
         if (spawnPortalNeeded)
         {
@@ -144,6 +158,7 @@ public class LevelObject : MonoBehaviour
             _portalSpawnPoints.Remove(randomSpawnPoint);
 
             destroySpawnPointsAround(_enemySpawnPoints, randomSpawnPoint.Location, destroySpawnPointsInRadius);
+            destroySpawnPointsAround(_trapsSpawnPoints, randomSpawnPoint.Location, destroySpawnPointsInRadius);
             Destroy(randomSpawnPoint.gameObject);
         }
 
@@ -158,8 +173,11 @@ public class LevelObject : MonoBehaviour
         return _spawnPortalTransform.position;
     }
 
-    protected virtual void spawnEnemies()
+    protected void spawnEnemies()
     {
+        if (_levelType.Equals(LevelType.Player))
+            return;
+
         if (_enemySpawnPoints == null)
             return;
 
@@ -191,8 +209,11 @@ public class LevelObject : MonoBehaviour
         _playerSpawnPoints.ForEach(spawnPoint => Destroy(spawnPoint.gameObject));
     }
 
-    private void spawnTraps()
+    protected void spawnTraps()
     {
+        if (_levelType.Equals(LevelType.Player))
+            return;
+
         //if spawn points list is null, return
         if (_trapsSpawnPoints == null)
             return;
@@ -215,5 +236,25 @@ public class LevelObject : MonoBehaviour
             return _playerSpawnPoints.Count > 0;
 
         return false;
+    }
+
+    public LevelType GetLevelType()
+    {
+        return _levelType;
+    }
+
+    public bool IsReady()
+    {
+        return _isReady;
+    }
+
+    public void SetFinished(bool value)
+    {
+        _isFinished = value;
+    }
+
+    public bool IsFinished()
+    {
+        return _isFinished;
     }
 }
