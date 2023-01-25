@@ -100,7 +100,12 @@ public class LevelsManager : MonoBehaviour
     private completionState checkGroupCompleted()
     {
         if (_currentLevel.GetLevelType().Equals(LevelType.Boss))
+        {
+            if (_numberOfGroupsPlayed == _groupsToPass)
+                return completionState.gameCompleted;
+
             return completionState.groupCompleted;
+        }
 
         if (_currentLevel.Equals(_playerLevel))
             return completionState.exitingPlayerLevel;
@@ -108,10 +113,13 @@ public class LevelsManager : MonoBehaviour
         if (_numberOfSingleGroupLevelsUsed != _levelsToPass)
             return completionState.groupNotCompleted;
 
+        if (_numberOfSingleGroupLevelsUsed == _levelsToPass)
+            return completionState.groupCompleted;
+
         if (_numberOfGroupsPlayed == _groupsToPass)
             return completionState.gameCompleted;
 
-        return completionState.groupCompleted;
+        return completionState.groupNotCompleted;
     }
 
     public static void CheckCompletionStateStatic()
@@ -215,13 +223,12 @@ public class LevelsManager : MonoBehaviour
         Debug.Log(completionState.groupCompleted);
         if (_currentLevel.GetLevelType().Equals(LevelType.Boss))
         {
-            _numberOfSingleGroupLevelsUsed = 0;
+            _numberOfGroupsPlayed++;
             transferPlayerToAnotherLevel();
             return;
         }
 
         transferPlayerToPlayerLevel();
-        _numberOfGroupsPlayed++;
         _numberOfSingleGroupLevelsUsed = 0;
     }
 
