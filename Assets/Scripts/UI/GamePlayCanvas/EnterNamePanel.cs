@@ -26,17 +26,6 @@ public class EnterNamePanel : MonoBehaviour
         _scoreValueText = transform.Find("ScoreValueText").GetComponent<TextMeshProUGUI>();
     }
 
-    private void Start()
-    {
-        GameManager.Instance.OnActivateNamePanel += Instance_OnActivateNamePanel;
-    }
-
-    private void OnDisable()
-    {
-        if (GameManager.Instance != null)
-            GameManager.Instance.OnActivateNamePanel -= Instance_OnActivateNamePanel;
-    }
-
     private void Instance_OnActivateNamePanel(int score, bool isNewHighscore)
     {
         _scoreValueText.SetText("Score: " + score.ToString());

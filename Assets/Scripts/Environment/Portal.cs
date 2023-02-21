@@ -13,9 +13,6 @@ public class Portal : MonoBehaviour
     [SerializeField] private PortalType _portalType;
 
     private List<ArtefactItem> _requiredArtefacts;
-    private LevelObject _currentLevel;
-
-    private bool _isPlayerLevelPortal = false;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -26,37 +23,15 @@ public class Portal : MonoBehaviour
         if (!_portalType.Equals(PortalType.Exit))
             return;
 
-        transferPlayer(playerBase);
-        clearCurrentLevel();
+        LevelsManager.CheckCompletionStateStatic();
     }
 
-    private void transferPlayer(PlayerBase playerBase)
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if (LevelsManager.levelsFinished)
+        PlayerBase playerBase = collision.GetComponent<PlayerBase>();
+        if (playerBase == null)
             return;
 
-        LevelObject nextLevel = LevelsManager.SetupRandomNewLevelStatic();
-
-        if (nextLevel == null)
-            return;
-
-        Vector3 nextSpawnPosition = nextLevel.GetSpawnPortalPosition();
-        playerBase.transform.position = nextSpawnPosition;
-    }
-
-    private void clearCurrentLevel()
-    {
-        if (_currentLevel != null && !_isPlayerLevelPortal)
-            _currentLevel.ClearLevel();
-    }
-
-    public void SetPortalLevel(LevelObject levelObject)
-    {
-        _currentLevel = levelObject;
-    }
-
-    public void SetPlayerLevelPortal(bool value)
-    {
-        _isPlayerLevelPortal = value;
+        Debug.Log("Cancel active UI elements! - How to?");
     }
 }

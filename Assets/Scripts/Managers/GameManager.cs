@@ -9,7 +9,6 @@ public class GameManager : Singleton<GameManager>
 {
     public event Action<float> OnTimeUpdated;
     public event Action<int> OnArtefactsUpdated;
-    public event Action<int, bool> OnActivateNamePanel;
     public event Action<GameEndType, int> OnGameComplete;
     public event Action OnTogglePause;
 
@@ -20,29 +19,22 @@ public class GameManager : Singleton<GameManager>
 
     [SerializeField] private int _enemiesKilled = 0;
 
-    private int _score = 0;
     private bool _gameIsRunning = true;
     private bool _isPaused = false;
 
     private void Start()
     {
-        if (PlayerArtefacts.Instance != null)
-            PlayerArtefacts.Instance.OnArtefactCollected += UpdateCollectedArtefacts;
         if (PlayerStats.Instance != null)
             PlayerStats.Instance.OnPlayerDeath += TriggerFailure;
         NPCStats.OnEnemyDeath += EnemyStats_OnEnemyDeath;
-        EnterNamePanel.OnNameEntered += EnterNamePanel_SaveScore;
     }
 
     private void OnDisable()
     {
-        if (PlayerArtefacts.Instance != null)
-            PlayerArtefacts.Instance.OnArtefactCollected -= UpdateCollectedArtefacts;
         if (PlayerStats.Instance != null)
             PlayerStats.Instance.OnPlayerDeath -= TriggerFailure;
 
         NPCStats.OnEnemyDeath -= EnemyStats_OnEnemyDeath;
-        EnterNamePanel.OnNameEntered -= EnterNamePanel_SaveScore;
     }
 
     private void EnemyStats_OnEnemyDeath(NPCStats enemyStats)
@@ -76,86 +68,12 @@ public class GameManager : Singleton<GameManager>
 
     public void TriggerVictory()
     {
-        if (!_gameIsRunning)
-            return;
-
-        _gameIsRunning = false;
-
-        _score = 0;
-
-        int timeScore = Mathf.FloorToInt(100.0f * Mathf.Exp(50 / _levelTime));
-        int accuracyScore = Mathf.FloorToInt(PlayerWeapons.Instance.GetAccuracy() * 100);
-        int healthScore = Mathf.FloorToInt(PlayerStats.Instance.CurrentHealth);
-        int enemyScore = _enemiesKilled * 30;
-
-        _score = timeScore + accuracyScore + healthScore + enemyScore;
-
-        checkHighscores(_score);
-    }
-
-    private void checkHighscores(int score)
-    {
-        List<Highscore> savedHighscores = SaveManager.Load();
-
-        if (savedHighscores == null)
-        {
-            //Debug.Log("Save first highscore");
-            OnActivateNamePanel?.Invoke(score, true);
-            return;
-        }
-
-        if (savedHighscores.Count > 10)
-        {
-            //check if the score is higher than the lowest score
-            if (score > savedHighscores[savedHighscores.Count - 1].score)
-            {
-                //save the score
-                //Debug.Log("Score higher than the lowest score in the highscore list. Save the score");
-                if (score > savedHighscores[0].score)
-                {
-                    OnActivateNamePanel?.Invoke(score, true);
-                    return;
-                }
-
-                OnActivateNamePanel?.Invoke(score, false);
-                return;
-            }
-
-            //only show the score
-            //Debug.Log("Score lower than the lowest score in the highscore list. Only show the score");
-            OnGameComplete?.Invoke(GameEndType.Success, score);
-            return;
-        }
-
-        //save the score
-        //Debug.Log("Number of saved highscores less than 10. Save the score");
-        if (score > savedHighscores[0].score)
-        {
-            //Debug.Log("New highscore");
-            OnActivateNamePanel?.Invoke(score, true);
-            return;
-        }
-
-        OnActivateNamePanel?.Invoke(score, false);
-        return;
-    }
-
-    public void EnterNamePanel_SaveScore(string scoreName)
-    {
-        if (_score == 0)
-            return;
-
-        Highscore newHighscore = new Highscore{ name = scoreName, score = _score};
-        SaveManager.Save(newHighscore);
+        Debug.Log("GameManager: TriggerVictory");
     }
 
     public void TriggerFailure()
     {
-        if (!_gameIsRunning)
-            return;
-
-        OnGameComplete?.Invoke(GameEndType.Fail, 0);
-        _gameIsRunning = false;
+        Debug.Log("GameManager: TriggerFailure");
     }
 
     public void SetPaused(bool value)
@@ -176,14 +94,6 @@ public class GameManager : Singleton<GameManager>
     public void SetGameRunning(bool value)
     {
         _gameIsRunning = value;
-    }
-
-    public void UpdateCollectedArtefacts(int value)
-    {
-        if (value == 0)
-            return;
-
-        OnArtefactsUpdated?.Invoke(value);
     }
 
     private void resetTimeScale()
