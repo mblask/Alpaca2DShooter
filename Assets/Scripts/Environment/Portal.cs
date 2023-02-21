@@ -25,4 +25,13 @@ public class Portal : MonoBehaviour
 
         LevelsManager.CheckCompletionStateStatic();
     }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        PlayerBase playerBase = collision.GetComponent<PlayerBase>();
+        if (playerBase == null)
+            return;
+
+        Debug.Log("Cancel active UI elements! - How to?");
+    }
 }

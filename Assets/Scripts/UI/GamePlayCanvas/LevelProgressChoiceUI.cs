@@ -12,16 +12,13 @@ public class LevelProgressChoiceUI : MonoBehaviour
     {
         get
         {
-            if (_instance == null)
-                _instance = new LevelProgressChoiceUI();
-
             return _instance;
         }
     }
 
     private Transform _container;
-    private Button _continueButton;
-    private Button _repeatButton;
+    private Button _readyButton;
+    private Button _cancelButton;
 
     private LevelsManager _levelsManager;
 
@@ -30,16 +27,33 @@ public class LevelProgressChoiceUI : MonoBehaviour
         _instance = this;
 
         _container = transform.Find("Container");
-        _continueButton = transform.Find("Container").Find("ContinueButton").GetComponent<Button>();
-        _repeatButton = transform.Find("Container").Find("RepeatButton").GetComponent<Button>();
+        _readyButton = transform.Find("Container").Find("ReadyButton").GetComponent<Button>();
+        _cancelButton = transform.Find("Container").Find("CancelButton").GetComponent<Button>();
     }
 
     private void Start()
     {
         _levelsManager = LevelsManager.Instance;
 
-        _continueButton.onClick.AddListener(continueButton);
-        _repeatButton.onClick.AddListener(repeatButton);
+        _readyButton.onClick.AddListener(readyButton);
+        _cancelButton.onClick.AddListener(cancelButton);
+
+        _levelsManager.OnExitingPlayerLevel += showUI;
+    }
+
+    private void OnDestroy()
+    {
+        _levelsManager.OnExitingPlayerLevel -= showUI;
+    }
+
+    private void showUI()
+    {
+        activateUI(true);
+    }
+
+    private void hideUI()
+    {
+        activateUI(false);
     }
 
     private void activateUI(bool value)
@@ -47,13 +61,14 @@ public class LevelProgressChoiceUI : MonoBehaviour
         _container.gameObject.SetActive(value);
     }
 
-    private void repeatButton()
+    private void cancelButton()
     {
-        Debug.Log("Repeat button");
+        hideUI();
     }
 
-    private void continueButton()
+    private void readyButton()
     {
-        Debug.Log("Continue button");
+        LevelsManager.TransferPlayerToBossLevelStatic();
+        hideUI();
     }
 }

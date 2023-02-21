@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AlpacaMyGames;
+using System;
 
 public class LevelsManager : MonoBehaviour
 {
@@ -15,8 +16,9 @@ public class LevelsManager : MonoBehaviour
         }
     }
 
+    public Action OnExitingPlayerLevel;
+
     [SerializeField] private int _levelsToPass = 2;
-    [SerializeField] private int _groupsToPass = 2;
 
     private List<LevelObject> _levelsList;
     private List<LevelObject> _playedLevelsList = new List<LevelObject>();
@@ -84,7 +86,6 @@ public class LevelsManager : MonoBehaviour
         _playerSpawned = true;
         
         _numberOfSingleGroupLevelsUsed++;
-        _numberOfGroupsPlayed++;
 
         return true;
     }
@@ -94,30 +95,18 @@ public class LevelsManager : MonoBehaviour
         exitingPlayerLevel,
         groupNotCompleted,
         groupCompleted,
-        gameCompleted,
     }
 
     private completionState checkGroupCompleted()
     {
         if (_currentLevel.GetLevelType().Equals(LevelType.Boss))
-        {
-            if (_numberOfGroupsPlayed == _groupsToPass)
-                return completionState.gameCompleted;
-
             return completionState.groupCompleted;
-        }
 
         if (_currentLevel.Equals(_playerLevel))
             return completionState.exitingPlayerLevel;
 
-        if (_numberOfSingleGroupLevelsUsed != _levelsToPass)
-            return completionState.groupNotCompleted;
-
         if (_numberOfSingleGroupLevelsUsed == _levelsToPass)
             return completionState.groupCompleted;
-
-        if (_numberOfGroupsPlayed == _groupsToPass)
-            return completionState.gameCompleted;
 
         return completionState.groupNotCompleted;
     }
@@ -132,11 +121,7 @@ public class LevelsManager : MonoBehaviour
         switch (checkGroupCompleted())
         {
             case completionState.exitingPlayerLevel:
-                exitingPlayersLevel();
-                break;
-
-            case completionState.gameCompleted:
-                gameCompleted();
+                exitingPlayerLevel();
                 break;
 
             case completionState.groupCompleted:
@@ -152,30 +137,14 @@ public class LevelsManager : MonoBehaviour
         }
     }
 
-    private enum onPlayerLevelExit
+    private void exitingPlayerLevel()
     {
-        boss,
-        repeat,
+        OnExitingPlayerLevel?.Invoke();
     }
 
-    private void exitingPlayersLevel()
+    public static void TransferPlayerToBossLevelStatic()
     {
-        Debug.Log("Exiting player level!");
-
-        onPlayerLevelExit onPlayerLevelExit = onPlayerLevelExit.boss;
-
-        switch (onPlayerLevelExit)
-        {
-            case onPlayerLevelExit.boss:
-                Debug.Log("Go to boss level!");
-                transferPlayerToBossLevel();
-                break;
-            case onPlayerLevelExit.repeat:
-                Debug.Log("Go repeat levels!");
-                break;
-            default:
-                break;
-        }
+        _instance.transferPlayerToBossLevel();
     }
 
     private void transferPlayerToBossLevel()
@@ -220,10 +189,12 @@ public class LevelsManager : MonoBehaviour
 
     private void groupCompleted()
     {
+        _numberOfGroupsPlayed++;
+
         Debug.Log(completionState.groupCompleted);
+        Debug.Log($"Number of groups played: {_numberOfGroupsPlayed}");
         if (_currentLevel.GetLevelType().Equals(LevelType.Boss))
         {
-            _numberOfGroupsPlayed++;
             transferPlayerToAnotherLevel();
             return;
         }
@@ -247,12 +218,6 @@ public class LevelsManager : MonoBehaviour
         }
 
         Debug.LogError("No PlayerLevel currently existing!!");
-    }
-
-    private void gameCompleted()
-    {
-        Debug.Log(completionState.gameCompleted);
-        Debug.Log("Game completed!");
     }
 
     private List<LevelObject> getRandomLevelsExcluding(List<LevelObject> levels, List<LevelObject> excludedLevels)

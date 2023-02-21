@@ -44,8 +44,8 @@ public class PlayerStats : MonoBehaviour, IDamagable
 
     [Header("Movement Characteristics")]
     //[SerializeField] private float _sprintBoost = 2.0f;
-    [SerializeField] private float _staminaDrainConst = 3.0f;
-    [SerializeField] private float _staminaHealConst = 4.0f;
+    [SerializeField] private const float _staminaDrainConst = 2.5f;
+    [SerializeField] private const float _staminaHealConst = 4.0f;
     [SerializeField] private float _staminaTriggerThreshold = 0.1f;
 
     private float _playerFinalSpeed;
@@ -313,7 +313,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
             }
         }
 
-        if (_staminaTrigger <= -_staminaTriggerThreshold || _staminaTrigger >= _staminaTriggerThreshold)
+        if (Mathf.Abs(_staminaTrigger) >= _staminaTriggerThreshold)
         {
             OnStaminaUIUpdate?.Invoke(CurrentStamina);
             _staminaTrigger = 0.0f;
