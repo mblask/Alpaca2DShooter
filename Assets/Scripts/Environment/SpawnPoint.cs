@@ -12,6 +12,9 @@ public enum SpawnType
 public class SpawnPoint : MonoBehaviour
 {
     private CircleCollider2D _collider;
+    
+    [Header("Read-only")]
+    [SerializeField] private bool _isActive = true;
 
     private void Awake()
     {
@@ -25,5 +28,15 @@ public class SpawnPoint : MonoBehaviour
         {
             return transform.position;
         }
+    }
+
+    public bool IsActive()
+    {
+        return _isActive;
+    }
+
+    public void SetActive(bool value)
+    {
+        _isActive = value;
     }
 }

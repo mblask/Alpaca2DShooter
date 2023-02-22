@@ -93,6 +93,7 @@ public class LevelsManager : MonoBehaviour
     private enum completionState
     {
         exitingPlayerLevel,
+        exitingBossLevel,
         groupNotCompleted,
         groupCompleted,
     }
@@ -100,7 +101,7 @@ public class LevelsManager : MonoBehaviour
     private completionState checkGroupCompleted()
     {
         if (_currentLevel.GetLevelType().Equals(LevelType.Boss))
-            return completionState.groupCompleted;
+            return completionState.exitingBossLevel;
 
         if (_currentLevel.Equals(_playerLevel))
             return completionState.exitingPlayerLevel;
@@ -120,6 +121,10 @@ public class LevelsManager : MonoBehaviour
     {
         switch (checkGroupCompleted())
         {
+            case completionState.exitingBossLevel:
+                exitingBossLevel();
+                break;
+
             case completionState.exitingPlayerLevel:
                 exitingPlayerLevel();
                 break;
@@ -135,6 +140,12 @@ public class LevelsManager : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    private void exitingBossLevel()
+    {
+        _numberOfSingleGroupLevelsUsed= 0;
+        transferPlayerToAnotherLevel();
     }
 
     private void exitingPlayerLevel()
@@ -218,6 +229,11 @@ public class LevelsManager : MonoBehaviour
         }
 
         Debug.LogError("No PlayerLevel currently existing!!");
+    }
+
+    private List<LevelObject> getUnfinishedLevels(List<LevelObject> levels)
+    {
+        return levels.FindAll(level => !level.IsFinished());
     }
 
     private List<LevelObject> getRandomLevelsExcluding(List<LevelObject> levels, List<LevelObject> excludedLevels)

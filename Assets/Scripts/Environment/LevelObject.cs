@@ -27,7 +27,7 @@ public class LevelObject : MonoBehaviour
     private List<ArtefactItem> _requiredArtefacts;
 
     [SerializeField] private LevelType _levelType;
-    private bool _isFinished = false;
+    [SerializeField] private bool _isFinished = false;
 
     private bool _isReady = false;
 
@@ -55,14 +55,15 @@ public class LevelObject : MonoBehaviour
         if (_playerSpawnPoints.Count == 0)
             return null;
 
-        SpawnPoint randomSpawnPoint = _playerSpawnPoints.GetRandomElement();
+        SpawnPoint randomSpawnPoint = _playerSpawnPoints.FindAll(point => point.IsActive()).GetRandomElement();
         
         Transform playerTransform = Instantiate(GameAssets.Instance.Player, randomSpawnPoint.Location, Quaternion.identity, null);
+        randomSpawnPoint.SetActive(false);
 
-        float destroySpawnPointsInRadius = 6.0f;
-        destroySpawnPointsAround(_portalSpawnPoints, randomSpawnPoint.Location, destroySpawnPointsInRadius);
-        destroySpawnPointsAround(_enemySpawnPoints, randomSpawnPoint.Location, destroySpawnPointsInRadius);
-        destroySpawnPointsAround(_trapsSpawnPoints, randomSpawnPoint.Location, destroySpawnPointsInRadius);
+        float deactivateSpawnPointsInRadius = 6.0f;
+        deactivateSpawnPointsAround(_portalSpawnPoints, randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
+        deactivateSpawnPointsAround(_enemySpawnPoints, randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
+        deactivateSpawnPointsAround(_trapsSpawnPoints, randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
 
         return playerTransform;
     }
@@ -79,6 +80,9 @@ public class LevelObject : MonoBehaviour
 
     public void ClearLevel()
     {
+        _isFinished = true;
+        resetSpawnPoints();
+
         if (_npcContainer == null)
             return;
 
@@ -112,7 +116,7 @@ public class LevelObject : MonoBehaviour
         }
     }
 
-    private void destroySpawnPointsAround(List<SpawnPoint> spawnPoints, Vector3 position, float radius)
+    private void deactivateSpawnPointsAround(List<SpawnPoint> spawnPoints, Vector3 position, float radius)
     {
         if (spawnPoints == null)
             return;
@@ -127,42 +131,40 @@ public class LevelObject : MonoBehaviour
             if (!spawnPoints.Contains(spawnPoint))
                 continue;
 
-            spawnPoints.Remove(spawnPoint);
-            Destroy(spawnPoint.gameObject);
+            spawnPoint.SetActive(false);
         }
     }
 
     protected void spawnPortals(bool spawnPortalNeeded = true)
     {
-        SpawnPoint randomSpawnPoint = _portalSpawnPoints.GetRandomElement();
+        SpawnPoint randomSpawnPoint = _portalSpawnPoints.FindAll(point => point.IsActive()).GetRandomElement();
 
         if (_environmentContainer == null)
             transform.AddNewGameObject("Environment");
 
         Transform portalTransform = Instantiate(GameAssets.Instance.ExitPortal, randomSpawnPoint.Location, Quaternion.identity, _environmentContainer);
-        _portalSpawnPoints.Remove(randomSpawnPoint);
         
-        float destroySpawnPointsInRadius = 6.0f;
-        destroySpawnPointsAround(_enemySpawnPoints, randomSpawnPoint.Location, destroySpawnPointsInRadius);
-        destroySpawnPointsAround(_trapsSpawnPoints, randomSpawnPoint.Location, destroySpawnPointsInRadius);
-        Destroy(randomSpawnPoint.gameObject);
+        float deactivateSpawnPointsInRadius = 6.0f;
+        deactivateSpawnPointsAround(_enemySpawnPoints, randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
+        deactivateSpawnPointsAround(_trapsSpawnPoints, randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
+        
+        randomSpawnPoint.SetActive(false);
 
         _exitPortal = portalTransform.GetComponent<Portal>();
 
         if (spawnPortalNeeded)
         {
-            randomSpawnPoint = _portalSpawnPoints.GetRandomElement();
+            randomSpawnPoint = _portalSpawnPoints.FindAll(point => point.IsActive()).GetRandomElement();
 
             _spawnPortalTransform = Instantiate(GameAssets.Instance.SpawnPortal, randomSpawnPoint.Location, Quaternion.identity, _environmentContainer);
-            
-            _portalSpawnPoints.Remove(randomSpawnPoint);
 
-            destroySpawnPointsAround(_enemySpawnPoints, randomSpawnPoint.Location, destroySpawnPointsInRadius);
-            destroySpawnPointsAround(_trapsSpawnPoints, randomSpawnPoint.Location, destroySpawnPointsInRadius);
-            Destroy(randomSpawnPoint.gameObject);
+            deactivateSpawnPointsAround(_enemySpawnPoints, randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
+            deactivateSpawnPointsAround(_trapsSpawnPoints, randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
+
+            randomSpawnPoint.SetActive(false);
         }
 
-        _portalSpawnPoints.ForEach(spawnPoint => Destroy(spawnPoint.gameObject));
+        _portalSpawnPoints.ForEach(spawnPoint => spawnPoint.SetActive(false));
     }
 
     public Vector3 GetSpawnPortalPosition()
@@ -205,8 +207,8 @@ public class LevelObject : MonoBehaviour
             Instantiate(GameAssets.Instance.NPCPrefab, spawnPoint.Location, Quaternion.identity, _npcContainer);
         }
 
-        _enemySpawnPoints.ForEach(spawnPoint => Destroy(spawnPoint.gameObject));
-        _playerSpawnPoints.ForEach(spawnPoint => Destroy(spawnPoint.gameObject));
+        _enemySpawnPoints.ForEach(spawnPoint => spawnPoint.SetActive(false));
+        _playerSpawnPoints.ForEach(spawnPoint => spawnPoint.SetActive(false));
     }
 
     protected void spawnTraps()
@@ -224,10 +226,23 @@ public class LevelObject : MonoBehaviour
 
         //spawn traps at every spawn point; only 33% of traps will initialize themselves
         foreach (SpawnPoint spawnPoint in _trapsSpawnPoints)
-            Instantiate(GameAssets.Instance.FiringTrap, spawnPoint.Location, Quaternion.identity, _npcContainer);
+        {
+            if (!spawnPoint.IsActive())
+                continue;
 
-        //destroy any remaining spawn points in the level
-        _trapsSpawnPoints.ForEach(spawnPoint => Destroy(spawnPoint.gameObject));
+            Instantiate(GameAssets.Instance.FiringTrap, spawnPoint.Location, Quaternion.identity, _npcContainer);
+        }
+
+        //deactivate any remaining spawn points in the level
+        _trapsSpawnPoints.ForEach(spawnPoint => spawnPoint.SetActive(false));
+    }
+
+    private void resetSpawnPoints()
+    {
+        _enemySpawnPoints.ForEach(point => point.SetActive(true));
+        _playerSpawnPoints.ForEach(point => point.SetActive(true));
+        _portalSpawnPoints.ForEach(point => point.SetActive(true));
+        _trapsSpawnPoints.ForEach(point => point.SetActive(true));
     }
 
     public bool ContainsPlayerSpawnPoints()
