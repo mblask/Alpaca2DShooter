@@ -21,19 +21,15 @@ public class LevelsManager : MonoBehaviour
     [SerializeField] private int _levelsToPass = 2;
 
     private List<LevelObject> _levelsList;
-    private List<LevelObject> _playedLevelsList = new List<LevelObject>();
     private List<LevelObject> _bossLevelsList;
     private LevelObject _playerLevel;
     private int _numberOfGroupsPlayed = 0;
     private int _numberOfSingleGroupLevelsUsed = 0;
 
     private Transform _playerTransform;
-    private Transform _playersLevelSpawnPoint;
     private bool _playerSpawned = false;
 
     private LevelObject _currentLevel;
-
-    private GameManager _gameManager;
 
     private void Awake()
     {
@@ -45,8 +41,6 @@ public class LevelsManager : MonoBehaviour
 
     private void Start()
     {
-        _gameManager = GameManager.Instance;
-
         if (!spawnPlayerRandomly())
             spawnPlayerInPlayersLevel();
     }
@@ -81,10 +75,8 @@ public class LevelsManager : MonoBehaviour
         randomLevel.SetupLevel(false);
 
         _currentLevel = randomLevel;
-        _playedLevelsList.Add(randomLevel);
-        
         _playerSpawned = true;
-        
+
         _numberOfSingleGroupLevelsUsed++;
 
         return true;
@@ -144,7 +136,7 @@ public class LevelsManager : MonoBehaviour
 
     private void exitingBossLevel()
     {
-        _numberOfSingleGroupLevelsUsed= 0;
+        _numberOfSingleGroupLevelsUsed = 0;
         transferPlayerToAnotherLevel();
     }
 
@@ -182,19 +174,18 @@ public class LevelsManager : MonoBehaviour
 
     private void transferPlayerToAnotherLevel()
     {
-        LevelObject level = getRandomLevelsExcluding(_levelsList, _playedLevelsList).GetRandomElement();
+        LevelObject level = getNotPlayedLevels(_levelsList).GetRandomElement();
 
         if (level != null)
         {
             level.SetupLevel(true);
-            _playedLevelsList.Add(level);
             _numberOfSingleGroupLevelsUsed++;
 
             _playerTransform.position = level.GetSpawnPortalPosition();
 
             _currentLevel.ClearLevel();
             _currentLevel = level;
-            Debug.Log("Enter: " + _currentLevel.name);
+            Debug.Log($"Entered: {_currentLevel.name}");
         }
     }
 
@@ -216,33 +207,23 @@ public class LevelsManager : MonoBehaviour
 
     private void transferPlayerToPlayerLevel()
     {
-        if (_playerLevel != null)
+        if (_playerLevel == null)
         {
-            Debug.Log("Transfer player to player level!");
-
-            if (!_playerLevel.IsReady())
-                _playerLevel.SetupLevel(true);
-
-            _currentLevel = _playerLevel;
-            _playerTransform.position = _playerLevel.GetSpawnPortalPosition();
+            Debug.LogError("No PlayerLevel currently existing!!");
             return;
         }
 
-        Debug.LogError("No PlayerLevel currently existing!!");
+        Debug.Log("Transfer player to player level!");
+
+        if (!_playerLevel.IsReady())
+            _playerLevel.SetupLevel(true);
+
+        _currentLevel = _playerLevel;
+        _playerTransform.position = _playerLevel.GetSpawnPortalPosition();
     }
 
-    private List<LevelObject> getUnfinishedLevels(List<LevelObject> levels)
+    private List<LevelObject> getNotPlayedLevels(List<LevelObject> levels)
     {
-        return levels.FindAll(level => !level.IsFinished());
-    }
-
-    private List<LevelObject> getRandomLevelsExcluding(List<LevelObject> levels, List<LevelObject> excludedLevels)
-    {
-        if (levels.Count == excludedLevels.Count)
-            return null;
-
-        List<LevelObject> leftoverLevels = levels.FindAll(level => !excludedLevels.Contains(level));
-
-        return leftoverLevels;
+        return levels.FindAll(level => !level.WasPlayed());
     }
 }

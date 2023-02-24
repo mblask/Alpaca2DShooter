@@ -13,21 +13,21 @@ public enum LevelType
 public class LevelObject : MonoBehaviour
 {
     private Transform _locationsContainer;
-    protected List<SpawnPoint> _enemySpawnPoints;
+    private List<SpawnPoint> _enemySpawnPoints;
     private List<SpawnPoint> _trapsSpawnPoints;
-    protected List<SpawnPoint> _playerSpawnPoints;
+    private List<SpawnPoint> _playerSpawnPoints;
     private List<SpawnPoint> _portalSpawnPoints;
     private Transform _spawnPortalTransform;
-    protected Portal _exitPortal;
+    private Portal _exitPortal;
 
-    protected Transform _environmentContainer;
-    protected Transform _npcContainer;
+    private Transform _environmentContainer;
+    private Transform _npcContainer;
 
     private int _maxNumberOfArtefactsRequired = 3;
     private List<ArtefactItem> _requiredArtefacts;
 
     [SerializeField] private LevelType _levelType;
-    [SerializeField] private bool _isFinished = false;
+    [SerializeField] private bool _wasPlayed = false;
 
     private bool _isReady = false;
 
@@ -76,11 +76,11 @@ public class LevelObject : MonoBehaviour
         setRequiredArtefacts();
 
         _isReady = true;
+        _wasPlayed = true;
     }
 
     public void ClearLevel()
     {
-        _isFinished = true;
         resetSpawnPoints();
 
         if (_npcContainer == null)
@@ -92,7 +92,7 @@ public class LevelObject : MonoBehaviour
             Destroy(npc.gameObject);
     }
 
-    protected void setRequiredArtefacts()
+    private void setRequiredArtefacts()
     {
         if (_levelType.Equals(LevelType.Boss) || _levelType.Equals(LevelType.Player))
             return;
@@ -135,7 +135,7 @@ public class LevelObject : MonoBehaviour
         }
     }
 
-    protected void spawnPortals(bool spawnPortalNeeded = true)
+    private void spawnPortals(bool spawnPortalNeeded = true)
     {
         SpawnPoint randomSpawnPoint = _portalSpawnPoints.FindAll(point => point.IsActive()).GetRandomElement();
 
@@ -175,7 +175,7 @@ public class LevelObject : MonoBehaviour
         return _spawnPortalTransform.position;
     }
 
-    protected void spawnEnemies()
+    private void spawnEnemies()
     {
         if (_levelType.Equals(LevelType.Player))
             return;
@@ -211,7 +211,7 @@ public class LevelObject : MonoBehaviour
         _playerSpawnPoints.ForEach(spawnPoint => spawnPoint.SetActive(false));
     }
 
-    protected void spawnTraps()
+    private void spawnTraps()
     {
         if (_levelType.Equals(LevelType.Player))
             return;
@@ -263,13 +263,13 @@ public class LevelObject : MonoBehaviour
         return _isReady;
     }
 
-    public void SetFinished(bool value)
+    public void SetPlayed(bool value)
     {
-        _isFinished = value;
+        _wasPlayed = value;
     }
 
-    public bool IsFinished()
+    public bool WasPlayed()
     {
-        return _isFinished;
+        return _wasPlayed;
     }
 }
