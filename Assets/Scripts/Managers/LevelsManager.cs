@@ -176,17 +176,22 @@ public class LevelsManager : MonoBehaviour
     {
         LevelObject level = getNotPlayedLevels(_levelsList).GetRandomElement();
 
-        if (level != null)
+        if (level == null)
         {
-            level.SetupLevel(true);
-            _numberOfSingleGroupLevelsUsed++;
-
-            _playerTransform.position = level.GetSpawnPortalPosition();
-
-            _currentLevel.ClearLevel();
-            _currentLevel = level;
-            Debug.Log($"Entered: {_currentLevel.name}");
+            //method for reseting levelobjects and returning a new random one
+            Debug.Log("No available levels. Reset levelObjects and select one.");
+            _levelsList.ForEach(level => level.SetPlayed(false));
+            level = _levelsList.GetRandomElement();
         }
+
+        level.SetupLevel(true);
+        _numberOfSingleGroupLevelsUsed++;
+
+        _playerTransform.position = level.GetSpawnPortalPosition();
+
+        _currentLevel.ClearLevel();
+        _currentLevel = level;
+        Debug.Log($"Entered: {_currentLevel.name}");
     }
 
     private void groupCompleted()

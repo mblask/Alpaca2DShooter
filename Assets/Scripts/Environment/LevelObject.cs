@@ -15,10 +15,11 @@ public class LevelObject : MonoBehaviour
     private Transform _locationsContainer;
     private List<SpawnPoint> _enemySpawnPoints;
     private List<SpawnPoint> _trapsSpawnPoints;
+    private List<Transform> _spawnedTraps = new List<Transform>();
     private List<SpawnPoint> _playerSpawnPoints;
     private List<SpawnPoint> _portalSpawnPoints;
     private Transform _spawnPortalTransform;
-    private Portal _exitPortal;
+    private Transform _exitPortalTransform;
 
     private Transform _environmentContainer;
     private Transform _npcContainer;
@@ -83,6 +84,24 @@ public class LevelObject : MonoBehaviour
     {
         resetSpawnPoints();
 
+        clearNPCs();
+        clearPortals();
+        clearTraps();
+
+        _isReady = false;
+    }
+
+    private void clearPortals()
+    {
+        if (_exitPortalTransform != null)
+            Destroy(_exitPortalTransform.gameObject);
+
+        if (_spawnPortalTransform != null)
+            Destroy(_spawnPortalTransform.gameObject);
+    }
+
+    private void clearNPCs()
+    {
         if (_npcContainer == null)
             return;
 
@@ -90,6 +109,18 @@ public class LevelObject : MonoBehaviour
 
         foreach (Transform npc in _npcContainer)
             Destroy(npc.gameObject);
+    }
+
+    private void clearTraps()
+    {
+        if (_spawnedTraps == null)
+            return;
+
+        if (_spawnedTraps.Count == 0)
+            return;
+
+        foreach (Transform trap in _spawnedTraps)
+            if (trap != null) Destroy(trap.gameObject);
     }
 
     private void setRequiredArtefacts()
@@ -128,9 +159,6 @@ public class LevelObject : MonoBehaviour
             if (spawnPoint == null)
                 continue;
 
-            if (!spawnPoints.Contains(spawnPoint))
-                continue;
-
             spawnPoint.SetActive(false);
         }
     }
@@ -142,15 +170,13 @@ public class LevelObject : MonoBehaviour
         if (_environmentContainer == null)
             transform.AddNewGameObject("Environment");
 
-        Transform portalTransform = Instantiate(GameAssets.Instance.ExitPortal, randomSpawnPoint.Location, Quaternion.identity, _environmentContainer);
+        _exitPortalTransform = Instantiate(GameAssets.Instance.ExitPortal, randomSpawnPoint.Location, Quaternion.identity, _environmentContainer);
         
         float deactivateSpawnPointsInRadius = 6.0f;
         deactivateSpawnPointsAround(_enemySpawnPoints, randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
         deactivateSpawnPointsAround(_trapsSpawnPoints, randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
         
         randomSpawnPoint.SetActive(false);
-
-        _exitPortal = portalTransform.GetComponent<Portal>();
 
         if (spawnPortalNeeded)
         {
@@ -230,7 +256,7 @@ public class LevelObject : MonoBehaviour
             if (!spawnPoint.IsActive())
                 continue;
 
-            Instantiate(GameAssets.Instance.FiringTrap, spawnPoint.Location, Quaternion.identity, _npcContainer);
+            _spawnedTraps.Add(Instantiate(GameAssets.Instance.FiringTrap, spawnPoint.Location, Quaternion.identity, _npcContainer));
         }
 
         //deactivate any remaining spawn points in the level

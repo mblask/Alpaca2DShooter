@@ -32,6 +32,6 @@ public class Portal : MonoBehaviour
         if (playerBase == null)
             return;
 
-        Debug.Log("Cancel active UI elements! - How to?");
+        //Debug.Log("Cancel active UI elements! - How to?");
     }
 }
