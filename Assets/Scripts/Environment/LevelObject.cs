@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AlpacaMyGames;
+using System.Linq;
 
 public enum LevelType
 {
@@ -17,7 +18,7 @@ public class LevelObject : MonoBehaviour
     private List<SpawnPoint> _trapsSpawnPoints;
     private List<Transform> _spawnedTraps = new List<Transform>();
     private List<SpawnPoint> _playerSpawnPoints;
-    private List<SpawnPoint> _portalSpawnPoints;
+    [SerializeField] private List<SpawnPoint> _portalSpawnPoints;
     private Transform _spawnPortalTransform;
     private Transform _exitPortalTransform;
 
@@ -62,9 +63,7 @@ public class LevelObject : MonoBehaviour
         randomSpawnPoint.SetActive(false);
 
         float deactivateSpawnPointsInRadius = 6.0f;
-        deactivateSpawnPointsAround(_portalSpawnPoints, randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
-        deactivateSpawnPointsAround(_enemySpawnPoints, randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
-        deactivateSpawnPointsAround(_trapsSpawnPoints, randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
+        deactivateSpawnPointsAround(randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
 
         return playerTransform;
     }
@@ -72,7 +71,7 @@ public class LevelObject : MonoBehaviour
     public void SetupLevel(bool levelNeedsSpawnPortal = true)
     {
         spawnPortals(levelNeedsSpawnPortal);
-        //spawnEnemies();
+        spawnEnemies();
         spawnTraps();
         setRequiredArtefacts();
 
@@ -84,8 +83,8 @@ public class LevelObject : MonoBehaviour
     {
         resetSpawnPoints();
 
-        clearNPCs();
         clearPortals();
+        clearNPCs();
         clearTraps();
 
         _isReady = false;
@@ -105,7 +104,7 @@ public class LevelObject : MonoBehaviour
         if (_npcContainer == null)
             return;
 
-        Debug.Log("Clear: " + name);
+        Debug.Log($"Clear: {name}");
 
         foreach (Transform npc in _npcContainer)
             Destroy(npc.gameObject);
@@ -147,19 +146,14 @@ public class LevelObject : MonoBehaviour
         }
     }
 
-    private void deactivateSpawnPointsAround(List<SpawnPoint> spawnPoints, Vector3 position, float radius)
+    private void deactivateSpawnPointsAround(Vector3 position, float radius)
     {
-        if (spawnPoints == null)
-            return;
-
         Collider2D[] colliders = Physics2D.OverlapCircleAll(position, radius);
         foreach (Collider2D collider in colliders)
         {
             SpawnPoint spawnPoint = collider.GetComponent<SpawnPoint>();
-            if (spawnPoint == null)
-                continue;
-
-            spawnPoint.SetActive(false);
+            if (spawnPoint != null)
+                spawnPoint.SetActive(false);
         }
     }
 
@@ -173,8 +167,7 @@ public class LevelObject : MonoBehaviour
         _exitPortalTransform = Instantiate(GameAssets.Instance.ExitPortal, randomSpawnPoint.Location, Quaternion.identity, _environmentContainer);
         
         float deactivateSpawnPointsInRadius = 6.0f;
-        deactivateSpawnPointsAround(_enemySpawnPoints, randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
-        deactivateSpawnPointsAround(_trapsSpawnPoints, randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
+        deactivateSpawnPointsAround(randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
         
         randomSpawnPoint.SetActive(false);
 
@@ -184,8 +177,7 @@ public class LevelObject : MonoBehaviour
 
             _spawnPortalTransform = Instantiate(GameAssets.Instance.SpawnPortal, randomSpawnPoint.Location, Quaternion.identity, _environmentContainer);
 
-            deactivateSpawnPointsAround(_enemySpawnPoints, randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
-            deactivateSpawnPointsAround(_trapsSpawnPoints, randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
+            deactivateSpawnPointsAround(randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
 
             randomSpawnPoint.SetActive(false);
         }
@@ -216,6 +208,9 @@ public class LevelObject : MonoBehaviour
         int chanceToSpawnDoubleEnemies = 25;
         foreach (SpawnPoint spawnPoint in _enemySpawnPoints)
         {
+            if (!spawnPoint.IsActive())
+                continue;
+
             if (!Utilities.ChanceFunc(chanceToSpawnEnemy))
                 continue;
 
@@ -265,10 +260,10 @@ public class LevelObject : MonoBehaviour
 
     private void resetSpawnPoints()
     {
-        _enemySpawnPoints.ForEach(point => point.SetActive(true));
-        _playerSpawnPoints.ForEach(point => point.SetActive(true));
         _portalSpawnPoints.ForEach(point => point.SetActive(true));
+        _enemySpawnPoints.ForEach(point => point.SetActive(true));
         _trapsSpawnPoints.ForEach(point => point.SetActive(true));
+        _playerSpawnPoints.ForEach(point => point.SetActive(true));
     }
 
     public bool ContainsPlayerSpawnPoints()

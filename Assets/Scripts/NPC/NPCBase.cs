@@ -8,8 +8,9 @@ public class NPCBase : MonoBehaviour
     private Animator _animator;
     private NPCStats _enemyStats;
 
-    private GameAssets _gameAssets;
+    private CharacterBaseScriptable _npcCharacterBase;
 
+    private GameAssets _gameAssets;
 
     private void Awake()
     {
@@ -26,16 +27,19 @@ public class NPCBase : MonoBehaviour
 
     private void setCharacterBase()
     {
-        CharacterBaseScriptable characterBaseScriptable = getRandomCharacterBaseScriptable();
+        _npcCharacterBase = getRandomCharacterBaseScriptable();
 
-        if (characterBaseScriptable != null)
+        if (_npcCharacterBase == null)
         {
-            _animator.runtimeAnimatorController = characterBaseScriptable.CharacterAOC;
-            _enemyStats.EnemySpeed.SetBaseValue(characterBaseScriptable.MovementSpeed);
-            _enemyStats.EnemyAccuracy.SetBaseValue(characterBaseScriptable.Accuracy);
-            _enemyStats.EnemyHealth.SetBaseValue(_enemyStats.EnemyHealth.GetBaseValue() * characterBaseScriptable.HealthModifier);
-            _enemyStats.ModifyStats();
+            Debug.LogError("There are no scriptable character bases!");
+            return;
         }
+
+        _animator.runtimeAnimatorController = _npcCharacterBase.CharacterAOC;
+        _enemyStats.EnemySpeed.SetBaseValue(_npcCharacterBase.MovementSpeed);
+        _enemyStats.EnemyAccuracy.SetBaseValue(_npcCharacterBase.Accuracy);
+        _enemyStats.EnemyHealth.SetBaseValue(_enemyStats.EnemyHealth.GetBaseValue() * _npcCharacterBase.HealthModifier);
+        _enemyStats.ModifyStats();
     }
 
     private CharacterBaseScriptable getRandomCharacterBaseScriptable()
@@ -50,33 +54,8 @@ public class NPCBase : MonoBehaviour
         return characterBase;
     }
 
-    private CharacterBase generateCharacterBase(int index)
+    public CharacterBaseScriptable GetCharacterBaseScriptable()
     {
-        if (index < 0)
-            return null;
-
-        if (index >= _gameAssets.CharacterBaseList.Count)
-            return null;
-
-        return _gameAssets.CharacterBaseList[index];
-    }
-
-    private CharacterBase generateRandomCharacterBase()
-    {
-        if (_gameAssets == null)
-            return null;
-
-        CharacterBase characterBase;
-
-        do
-        {
-            int randomIndex = Random.Range(0, _gameAssets.CharacterBaseList.Count);
-            characterBase = generateCharacterBase(randomIndex);
-
-            //Debug.Log(characterBase.CharacterAOC.name);
-
-        } while (characterBase == PlayerBase.Instance.GetCharacterBase());
-
-        return characterBase;
+        return _npcCharacterBase;
     }
 }

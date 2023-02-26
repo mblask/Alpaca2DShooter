@@ -94,10 +94,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
         ParticleSystem bloodPSObject = Instantiate(_gameAssets.BloodPS, transform.position, Quaternion.identity, null);
         Transform bloodTransform = Instantiate(_gameAssets.Blood, transform.position, Quaternion.identity, null);
 
-        if (
-            //_playerBase.GetCharacterBase().CharacterType.Equals(CharacterBaseType.Robot)
-            _playerBase.GetCharacterBaseScriptable().CharacterType.Equals(CharacterBaseType.Robot)
-            )
+        if (_playerBase.GetCharacterBaseScriptable().CharacterType.Equals(CharacterBaseType.Robot))
         {
             ParticleSystem.MainModule bloodPSMain = bloodPSObject.main;
             SpriteRenderer bloodSR = bloodTransform.GetComponent<SpriteRenderer>();

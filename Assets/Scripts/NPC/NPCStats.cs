@@ -26,6 +26,7 @@ public class NPCStats : MonoBehaviour, IDamagable
     private GameAssets _gameAssets;
     private NPCHealthCanvas _enemyHealthCanvas;
 
+    private NPCBase _npcBase;
     private NPC_AI _enemyAI;
 
     private bool _isDead = false;
@@ -39,6 +40,7 @@ public class NPCStats : MonoBehaviour, IDamagable
     private void Start()
     {
         _gameAssets = GameAssets.Instance;
+        _npcBase = GetComponent<NPCBase>();
         _enemyAI = GetComponent<NPC_AI>();
     }
 
@@ -73,8 +75,19 @@ public class NPCStats : MonoBehaviour, IDamagable
 
         _enemyHealthCanvas.UpdateHealthSlider(_currentHealth);
 
-        Instantiate(_gameAssets.BloodPS, transform.position, Quaternion.identity, null);
-        Instantiate(_gameAssets.Blood, transform.position, Quaternion.identity, null);
+        ParticleSystem bloodPSObject = Instantiate(_gameAssets.BloodPS, transform.position, Quaternion.identity, null);
+        Transform bloodTransform = Instantiate(_gameAssets.Blood, transform.position, Quaternion.identity, null);
+
+        if (_npcBase.GetCharacterBaseScriptable().CharacterType.Equals(CharacterBaseType.Robot))
+        {
+            ParticleSystem.MainModule bloodPSMain = bloodPSObject.main;
+            SpriteRenderer bloodSR = bloodTransform.GetComponent<SpriteRenderer>();
+
+            Color robotBloodColor = Color.black;
+
+            bloodPSMain.startColor = robotBloodColor;
+            bloodSR.color = robotBloodColor;
+        }
 
         _enemyHealthCanvas.ActivateHealthSlider();
 

@@ -158,7 +158,7 @@ public class LevelsManager : MonoBehaviour
         {
             if (!level.IsReady())
                 level.SetupLevel();
-            
+
             _currentLevel = level;
             _playerTransform.position = level.GetSpawnPortalPosition();
         }
@@ -182,6 +182,7 @@ public class LevelsManager : MonoBehaviour
             Debug.Log("No available levels. Reset levelObjects and select one.");
             _levelsList.ForEach(level => level.SetPlayed(false));
             level = _levelsList.GetRandomElement();
+
         }
 
         level.SetupLevel(true);
@@ -223,6 +224,7 @@ public class LevelsManager : MonoBehaviour
         if (!_playerLevel.IsReady())
             _playerLevel.SetupLevel(true);
 
+        _currentLevel.ClearLevel();
         _currentLevel = _playerLevel;
         _playerTransform.position = _playerLevel.GetSpawnPortalPosition();
     }

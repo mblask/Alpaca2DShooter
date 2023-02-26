@@ -188,7 +188,7 @@ MonoBehaviour:
   _weapons:
   - WeaponItem: {fileID: 11400000, guid: 8e403aae5daf09c49a7cc32cfef2d5d2, type: 2}
     Durability: 0
-    TotalAmmo: 30
+    TotalAmmo: 100
   _throwables: []
   _nonShootingDistance: 1
   _closeQuarterShooting: 0.75
@@ -220,8 +220,6 @@ MonoBehaviour:
   PlayerStrength:
     _baseValue: 0
   CurrentStamina: 0
-  _staminaDrainConst: 10
-  _staminaHealConst: 6
   _staminaTriggerThreshold: 0.1
 --- !u!114 &8196825197066008496
 MonoBehaviour:
