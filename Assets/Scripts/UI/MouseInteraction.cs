@@ -1,15 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class MouseInteraction : MonoBehaviour
 {
     private float _playerDistance = 3.0f;
     private PlayerWeapons _playerWeapons;
 
+    private IPointerOver _pointerOver;
+
     private void Start()
     {
         _playerWeapons = PlayerWeapons.Instance;
+        _pointerOver = new PointerOver();
     }
 
     private void Update()
@@ -28,10 +32,6 @@ public class MouseInteraction : MonoBehaviour
 
         foreach (Collider2D collider in hits)
         {
-            //IDamagable damagable = collider.GetComponent<IDamagable>();
-            //if (damagable != null && _playerWeapons.IsArmed())
-            //    continue;
-
             IInteractable interactable = collider.GetComponent<IInteractable>();
             if (interactable == null)
                 continue;

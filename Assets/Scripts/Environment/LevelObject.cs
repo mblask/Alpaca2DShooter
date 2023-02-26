@@ -71,7 +71,7 @@ public class LevelObject : MonoBehaviour
     public void SetupLevel(bool levelNeedsSpawnPortal = true)
     {
         spawnPortals(levelNeedsSpawnPortal);
-        spawnEnemies();
+        //spawnEnemies();
         spawnTraps();
         setRequiredArtefacts();
 

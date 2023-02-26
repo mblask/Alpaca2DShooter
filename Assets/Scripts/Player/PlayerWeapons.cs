@@ -41,6 +41,7 @@ public class PlayerWeapons : MonoBehaviour
     private PlayerAnimations _playerAnimations;
     private PlayerStats _playerStats;
     private CameraController _cameraController;
+    private IPointerOver _pointerOver;
 
     private Vector2 _mousePosition;
 
@@ -81,6 +82,7 @@ public class PlayerWeapons : MonoBehaviour
         _camera = Camera.main;
         _gameManager = GameManager.Instance;
         _cameraController = CameraController.Instance;
+        _pointerOver = new PointerOver();
 
         NPCStats.OnHit += incrementShotsHit;
 
@@ -119,24 +121,16 @@ public class PlayerWeapons : MonoBehaviour
             return;
 
         if (Input.GetKeyDown(KeyCode.R) && _weaponEquipped)
-        {
             reloadWeapon();
-        }
 
         if (Input.GetKeyDown(KeyCode.E) && _canSwitchWeapons)
-        {
             switchWeapon(1);
-        }
 
         if (Input.GetKeyDown(KeyCode.Q) && _canSwitchWeapons)
-        {
             switchWeapon(-1);
-        }
 
         if (Input.GetKeyDown(KeyCode.Tab) && _canSwitchWeapons)
-        {
             switchThrowables();
-        }
 
         if (Input.GetKeyDown(KeyCode.F) && _canPutWeaponAway)
         {
@@ -151,9 +145,10 @@ public class PlayerWeapons : MonoBehaviour
     private void triggerShooting()
     {
         if (Input.GetKeyDown(KeyCode.G))
-        {
             useThrowable();
-        }
+
+        if (_pointerOver.OverUI())
+            return;
 
         if (_currentWeapon == null)
             return;
