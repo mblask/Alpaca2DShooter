@@ -2,12 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PortalType
-{
-    Spawn,
-    Exit,
-}
-
 public class Portal : MonoBehaviour
 {
     [SerializeField] private PortalType _portalType;

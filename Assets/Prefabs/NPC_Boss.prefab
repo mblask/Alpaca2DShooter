@@ -5064,10 +5064,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyType: 1
   EnemyHealth:
+    _statType: 0
     _baseValue: 15
   EnemySpeed:
+    _statType: 5
     _baseValue: 3.5
   EnemyAccuracy:
+    _statType: 3
+    _baseValue: 0
+  EnemyDefense:
+    _statType: 4
     _baseValue: 0
 --- !u!114 &8874459827295818486
 MonoBehaviour:

@@ -2,29 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ObjectSturdiness
-{
-    Weak,
-    Medium,
-    Strong,
-    Sturdy,
-    Indestructible,
-}
-
 public class ObjectDestroy : MonoBehaviour, IDamagable
 {
     [Header("Object sturdiness")]
     [Tooltip("Affects how many bullets needs to destroy the object.")]
-    public ObjectSturdiness Sturdiness;
+    [SerializeField] private ObjectSturdiness _sturdiness;
 
     [Header("Drop items on destroy")]
     [SerializeField] private bool _dropRandomItem = false;
     [SerializeField] private Item _dropItem;
 
     [Header("Particle system settings")]
-    public bool UseOriginalSprite;
+    [SerializeField] private bool _useOriginalSprite;
     [SerializeField] private Sprite _particleSprite;
     [SerializeField] private Color _particleColor;
+    private IParticleSystemGenerator _particleSystemGenerator;
 
     private int _bulletHitsToDestroy;
     private int _hitCount = 0;
@@ -33,14 +25,15 @@ public class ObjectDestroy : MonoBehaviour, IDamagable
 
     private void Start()
     {
-        _bulletHitsToDestroy = sturdinessToBulletNum(Sturdiness);
+        _bulletHitsToDestroy = sturdinessToBulletNum(_sturdiness);
+        _particleSystemGenerator = new ParticleSystemGenerator(transform, _useOriginalSprite, _particleSprite, _particleColor);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag(_bulletTagName))
         {
-            DamageObject(1);
+            DamageObject();
 
             Destroy(collision.gameObject);
         }
@@ -58,7 +51,7 @@ public class ObjectDestroy : MonoBehaviour, IDamagable
 
     private void destroyObject()
     {
-        generateParticles();
+        _particleSystemGenerator.Generate();
 
         dropItemOnDestroy();
 
@@ -75,29 +68,6 @@ public class ObjectDestroy : MonoBehaviour, IDamagable
 
         if (_dropItem != null)
             ItemSpawner.Instance.SpawnItem(transform.position, _dropItem);
-    }
-
-    private void generateParticles()
-    {
-        ParticleSystem objectDestroyPS = Instantiate(GameAssets.Instance.ObjectDestroyPS, transform.position, Quaternion.identity);
-        ParticleSystem.MainModule mainModule = objectDestroyPS.main;
-
-        if (UseOriginalSprite)
-        {
-            SpriteRenderer objectSpriteRenderer = GetComponent<SpriteRenderer>();
-            objectDestroyPS.GetComponent<ParticleSystem>().textureSheetAnimation.SetSprite(0, objectSpriteRenderer.sprite);
-            mainModule.startColor = objectSpriteRenderer.color;
-        }
-        else
-        {
-            if (_particleSprite == null)
-                return;
-
-            objectDestroyPS.GetComponent<ParticleSystem>().textureSheetAnimation.SetSprite(0, _particleSprite);
-            mainModule.startColor = _particleColor;
-        }
-
-        objectDestroyPS.transform.parent = null;
     }
 
     private int sturdinessToBulletNum(ObjectSturdiness sturdiness)

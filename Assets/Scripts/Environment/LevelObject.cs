@@ -2,14 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AlpacaMyGames;
-using System.Linq;
-
-public enum LevelType
-{
-    Normal,
-    Player,
-    Boss,
-}
 
 public class LevelObject : MonoBehaviour
 {

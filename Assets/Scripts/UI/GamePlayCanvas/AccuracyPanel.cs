@@ -3,12 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class AccuracyPanel : Singleton<AccuracyPanel>
+public class AccuracyPanel : MonoBehaviour
 {
+    private static AccuracyPanel _instance;
+    public static AccuracyPanel Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
+
     private TextMeshProUGUI _accuracyText;
 
-    public override void Awake()
+    public void Awake()
     {
+        _instance = this;
         _accuracyText = transform.Find("AccuracyText").GetComponent<TextMeshProUGUI>();
     }
 

@@ -2,20 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CharacterBaseType
+public class GameAssets : MonoBehaviour
 {
-    Black,
-    Blue,
-    Brown,
-    Old,
-    Robot,
-    Soldier,
-    Survivor,
-    Woman,
-}
+    private static GameAssets _instance;
+    public static GameAssets Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
 
-public class GameAssets : Singleton<GameAssets>
-{
     public const string CHARACTER_TYPE_STRING = "CharacterType";
 
     [Header("UI Prefabs")]
@@ -51,4 +48,9 @@ public class GameAssets : Singleton<GameAssets>
     [Header("Character Base List")]
     public List<CharacterBase> CharacterBaseList;
     public List<CharacterBaseScriptable> CharacterBaseScriptableList;
+
+    private void Awake()
+    {
+        _instance = this;
+    }
 }

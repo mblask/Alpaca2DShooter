@@ -3,12 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerArtefacts : Singleton<PlayerArtefacts>
+public class PlayerArtefacts : MonoBehaviour
 {
+    private static PlayerArtefacts _instance;
+    public static PlayerArtefacts Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
+
     public event Action<int> OnArtefactCollected;
 
     [Header("Items - read only")]
     [SerializeField] private List<ArtefactItem> _artefactsCollected = new List<ArtefactItem>();
+
+    private void Awake()
+    {
+        _instance = this;
+    }
 
     public bool AddArtefact(ArtefactItem artefact)
     {

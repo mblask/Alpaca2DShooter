@@ -3,12 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum NPCEnemyType
-{
-    Normal,
-    Boss,
-}
-
 public class NPCStats : MonoBehaviour, IDamagable
 {
     public static event Action OnHit;
@@ -22,6 +16,9 @@ public class NPCStats : MonoBehaviour, IDamagable
     public Stat EnemyHealth;
     public Stat EnemySpeed;
     public Stat EnemyAccuracy;
+    public Stat EnemyDefense;
+
+    private float _healthRegeneration;
 
     private GameAssets _gameAssets;
     private NPCHealthCanvas _enemyHealthCanvas;
@@ -44,6 +41,11 @@ public class NPCStats : MonoBehaviour, IDamagable
         _enemyAI = GetComponent<NPC_AI>();
     }
 
+    private void Update()
+    {
+        regenerateHealth(_healthRegeneration);
+    }
+
     private void LateUpdate()
     {
         _enemyHealthCanvas.SetPosition(this.transform);
@@ -61,8 +63,17 @@ public class NPCStats : MonoBehaviour, IDamagable
 
         EnemyHealth.AddBaseMultiplier(healthMultiplier);
         _currentHealth = EnemyHealth.GetFinalValue();
+        _healthRegeneration = 1.0f;
         EnemySpeed.AddBaseMultiplier(speedMultiplier);
         EnemyAccuracy.AddBaseMultiplier(accuracyMultiplier);
+    }
+
+    private void regenerateHealth(float value)
+    {
+        if (value == 0)
+            return;
+
+        _currentHealth += value * Time.deltaTime;
     }
 
     public void DamageObject(float value)
@@ -70,7 +81,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         if (value == 0.0f)
             return;
 
-        _currentHealth -= value;
+        _currentHealth -= value * (1.0f - EnemyDefense.GetFinalValue() / 100.0f);
         FloatingTextSpawner.CreateFloatingTextStatic(transform.position, value.ToString("F0"), new Color(1.0f, 0.5f, 0.0f));
 
         _enemyHealthCanvas.UpdateHealthSlider(_currentHealth);

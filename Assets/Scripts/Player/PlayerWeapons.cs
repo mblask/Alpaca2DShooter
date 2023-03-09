@@ -317,15 +317,15 @@ public class PlayerWeapons : MonoBehaviour
             _currentAmmo = 0;
         }
 
-        if (_playerStats.PlayerDamage.GetFinalValue() != 0)
-            _playerStats.PlayerDamage.RemoveModifier(_currentWeapon.WeaponItem.WeaponDamage.Average());
-
         _currentWeapon = _weapons[index];
         setCurrentWeaponAmmo(_currentWeapon.WeaponItem.MagazineBullets);
 
-        _shootingInterval = _currentWeapon.WeaponItem.ShootInterval;
+        _playerStats.PlayerDamage = new Vector2(
+            _currentWeapon.WeaponItem.WeaponDamage.x + (_playerStats.PlayerStrength.GetFinalValue() - 2.0f) / 10.0f,
+            _currentWeapon.WeaponItem.WeaponDamage.y + (_playerStats.PlayerStrength.GetFinalValue() - 2.0f) / 10.0f
+            );
 
-        _playerStats.PlayerDamage.AddModifier(_currentWeapon.WeaponItem.WeaponDamage.Average());
+        _shootingInterval = _currentWeapon.WeaponItem.ShootInterval;
 
         OnAmmoPanelUIChanged?.Invoke(_currentAmmo, _currentWeapon.TotalAmmo);
 
@@ -386,7 +386,11 @@ public class PlayerWeapons : MonoBehaviour
             Transform bulletTransform = Instantiate(GameAssets.Instance.BulletPrefab, _shootingSpot.position, Quaternion.identity, null);
 
             Bullet bullet = bulletTransform.GetComponent<Bullet>();
-            bullet.SetupBullet(direction, UnityEngine.Random.Range(_currentWeapon.WeaponItem.WeaponDamage.x, _currentWeapon.WeaponItem.WeaponDamage.y), gameObject.tag);
+            bullet.SetupBullet(
+                direction,
+                UnityEngine.Random.Range(_playerStats.PlayerDamage.x, _playerStats.PlayerDamage.y),
+                gameObject.tag
+                );
 
             _shotsFired++;
         }

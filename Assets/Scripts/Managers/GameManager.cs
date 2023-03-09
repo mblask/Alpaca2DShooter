@@ -5,8 +5,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : Singleton<GameManager>
+public class GameManager : MonoBehaviour
 {
+    private static GameManager _instance;
+    public static GameManager Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
+
     public event Action<float> OnTimeUpdated;
     public event Action<int> OnArtefactsUpdated;
     public event Action<GameEndType, int> OnGameComplete;
@@ -21,6 +30,11 @@ public class GameManager : Singleton<GameManager>
 
     private bool _gameIsRunning = true;
     private bool _isPaused = false;
+
+    private void Awake()
+    {
+        _instance = this;
+    }
 
     private void Start()
     {

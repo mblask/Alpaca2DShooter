@@ -3,19 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public enum FloatDirection
-{
-    Up,
-    Down,
-    Left,
-    Right,
-    UpRight,
-    UpLeft,
-    DownRight,
-    DownLeft,
-    Any,
-}
-
 public class FloatingTextSpawner : MonoBehaviour
 {
     private static FloatingTextSpawner _instance;

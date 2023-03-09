@@ -4,13 +4,6 @@ using UnityEngine;
 using System;
 using AlpacaMyGames;
 
-public enum FiringTrapState
-{
-    Search,
-    Attack,
-    GoBack,
-}
-
 public class FiringTrap : MonoBehaviour, IDamagable
 {
     public static event Action<SFXClip> OnWeaponShootingAudio;

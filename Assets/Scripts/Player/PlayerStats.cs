@@ -1,17 +1,8 @@
+using AlpacaMyGames;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public enum StatType
-{
-    Health,
-    Stamina,
-    Damage,
-    Accuracy,
-    Speed,
-    Strength,
-}
 
 public class PlayerStats : MonoBehaviour, IDamagable
 {
@@ -28,13 +19,16 @@ public class PlayerStats : MonoBehaviour, IDamagable
     public event Action<float> OnStaminaUIUpdate;
     public event Action OnPlayerDeath;
 
+    public List<Stat> Stats;
+
     [Header("Main Player Stats")]
     public Stat PlayerHealth;
     public Stat PlayerStamina;
-    public Stat PlayerDamage;
-    public Stat PlayerAccuracy;
     public Stat PlayerSpeed;
+    public Stat PlayerAccuracy;
+    public Stat PlayerDefense;
     public Stat PlayerStrength;
+    public Vector2 PlayerDamage = new Vector2();
 
     public float CurrentHealth { get; private set; }
     [Space]
@@ -43,14 +37,11 @@ public class PlayerStats : MonoBehaviour, IDamagable
     private float _staminaTrigger = 0.0f;
 
     [Header("Movement Characteristics")]
-    //[SerializeField] private float _sprintBoost = 2.0f;
     [SerializeField] private const float _staminaDrainConst = 2.5f;
     [SerializeField] private const float _staminaHealConst = 4.0f;
     [SerializeField] private float _staminaTriggerThreshold = 0.1f;
 
     private float _playerFinalSpeed;
-    //private bool _playerSpeedDefault = true;
-    //private bool _playerSpeedBoosted = false;
 
     private GameAssets _gameAssets;
     private CameraController _cameraController;
@@ -73,9 +64,9 @@ public class PlayerStats : MonoBehaviour, IDamagable
         _gameAssets = GameAssets.Instance;
         _cameraController = CameraController.Instance;
 
-        _playerFinalSpeed = PlayerSpeed.GetFinalValue();
         CurrentHealth = PlayerHealth.GetFinalValue();
         CurrentStamina = PlayerStamina.GetFinalValue();
+        _playerFinalSpeed = PlayerSpeed.GetFinalValue();
     }
 
     private void Update()
@@ -88,7 +79,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
         if (value == 0)
             return;
 
-        CurrentHealth -= value;
+        CurrentHealth -= value * (1.0f - PlayerDefense.GetFinalValue() / 100.0f);
         FloatingTextSpawner.CreateFloatingTextStatic(transform.position, value.ToString("F0"), new Color(1.0f, 0.5f, 0.0f));
 
         ParticleSystem bloodPSObject = Instantiate(_gameAssets.BloodPS, transform.position, Quaternion.identity, null);
@@ -340,8 +331,6 @@ public class PlayerStats : MonoBehaviour, IDamagable
                 return PlayerHealth;
             case StatType.Stamina:
                 return PlayerStamina;
-            case StatType.Damage:
-                return PlayerDamage;
             case StatType.Accuracy:
                 return PlayerAccuracy;
             case StatType.Speed:

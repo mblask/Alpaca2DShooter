@@ -2,8 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : Singleton<CameraController>
+public class CameraController : MonoBehaviour
 {
+    private static CameraController _instance;
+    public static CameraController Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
+
     [Header("Camera Follow")]
     private Transform _targetToFollow;
     [SerializeField] [Range(0.1f, 6.0f)] private float _smoothIntensity = 4.0f;
@@ -16,6 +25,11 @@ public class CameraController : Singleton<CameraController>
     private float _yPhaseSpeed;
     private float _xAmplitude;
     private float _xPhaseSpeed;
+
+    private void Awake()
+    {
+        _instance = this;
+    }
 
     private void Start()
     {

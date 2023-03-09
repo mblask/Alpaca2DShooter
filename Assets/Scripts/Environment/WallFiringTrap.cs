@@ -4,7 +4,7 @@ using UnityEngine;
 using AlpacaMyGames;
 using System;
 
-public class FiringTrap2 : MonoBehaviour
+public class WallFiringTrap : MonoBehaviour
 {
     public static Action<SFXClip> OnShooting;
 

@@ -4,8 +4,17 @@ using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 using System;
 
-public class ItemSpawner : Singleton<ItemSpawner>
+public class ItemSpawner : MonoBehaviour
 {
+    private static ItemSpawner _instance;
+    public static ItemSpawner Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
+
     [Range(0.0f, 100.0f)] public float EnemyDropRate = 25.0f;
 
     [SerializeField] private List<Item> _availableItems;
@@ -15,6 +24,11 @@ public class ItemSpawner : Singleton<ItemSpawner>
     private List<Item> _itemPool = new List<Item>();
 
     private GameAssets _gameAssets;
+
+    private void Awake()
+    {
+        _instance = this;
+    }
 
     private void Start()
     {

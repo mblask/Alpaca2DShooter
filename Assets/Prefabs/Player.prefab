@@ -207,18 +207,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5f890b9998b1c54db70444e3c1950e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Stats: []
   PlayerHealth:
+    _statType: 0
     _baseValue: 1000
   PlayerStamina:
+    _statType: 1
     _baseValue: 100
-  PlayerDamage:
-    _baseValue: 0
-  PlayerAccuracy:
-    _baseValue: 1
   PlayerSpeed:
+    _statType: 5
     _baseValue: 5.5
-  PlayerStrength:
+  PlayerAccuracy:
+    _statType: 3
+    _baseValue: 1
+  PlayerDefense:
+    _statType: 4
     _baseValue: 0
+  PlayerStrength:
+    _statType: 6
+    _baseValue: 0
+  PlayerDamage: {x: 0, y: 0}
   CurrentStamina: 0
   _staminaTriggerThreshold: 0.1
 --- !u!114 &8196825197066008496

@@ -2,19 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum AnimationType
+public class PlayerAnimations : MonoBehaviour
 {
-    Idle,
-    Gun,
-    Silencer,
-    Machine,
-    Shotgun,
-    Reload,
-    RemoveWeapon,
-}
+    private static PlayerAnimations _instance;
+    public static PlayerAnimations Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
 
-public class PlayerAnimations : Singleton<PlayerAnimations>
-{
     private const string EQUIP_GUN = "EquipGun";
     private const string EQUIP_SILENCER = "EquipSilencer";
     private const string EQUIP_MACHINE = "EquipMachine";
@@ -26,9 +24,9 @@ public class PlayerAnimations : Singleton<PlayerAnimations>
 
     private AnimationType _currentAnimationType;
 
-    public override void Awake()
+    public void Awake()
     {
-        base.Awake();
+        _instance = this;
 
         _animator = GetComponent<Animator>();
         _currentAnimationType = AnimationType.Idle;

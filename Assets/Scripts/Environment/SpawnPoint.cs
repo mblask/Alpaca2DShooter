@@ -2,12 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum SpawnType
-{
-    NPC,
-    Artefact,
-}
-
 [RequireComponent(typeof(CircleCollider2D))]
 public class SpawnPoint : MonoBehaviour
 {

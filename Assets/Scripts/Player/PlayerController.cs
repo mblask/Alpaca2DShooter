@@ -2,9 +2,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
-public class PlayerController : Singleton<PlayerController>
+public class PlayerController : MonoBehaviour
 {
+    private static PlayerController _instance;
+    public static PlayerController Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
+
     private Camera _camera;
 
     private bool _isRunning = false;
@@ -18,9 +28,9 @@ public class PlayerController : Singleton<PlayerController>
 
     private PlayerStats _playerStats;
 
-    public override void Awake()
+    public void Awake()
     {
-        base.Awake();
+        _instance = this;
 
         _rigidBody = GetComponent<Rigidbody2D>();
     }

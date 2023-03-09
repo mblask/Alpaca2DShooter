@@ -3,14 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class ScoreInfo : Singleton<ScoreInfo>
+public class ScoreInfo : MonoBehaviour
 {
+    private static ScoreInfo _instance;
+    public static ScoreInfo Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
+
     private Transform _containerTransform;
     private TextMeshProUGUI _scoreInfoText;
 
-    public override void Awake()
+    public void Awake()
     {
-        base.Awake();
+        _instance = this;
 
         _containerTransform = transform.Find("Container");
         _scoreInfoText = _containerTransform.Find("Text").GetComponent<TextMeshProUGUI>();

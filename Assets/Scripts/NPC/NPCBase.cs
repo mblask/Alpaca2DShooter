@@ -35,10 +35,13 @@ public class NPCBase : MonoBehaviour
             return;
         }
 
+        float npcHealthModifier = 0.3f;
+
         _animator.runtimeAnimatorController = _npcCharacterBase.CharacterAOC;
         _enemyStats.EnemySpeed.SetBaseValue(_npcCharacterBase.MovementSpeed);
         _enemyStats.EnemyAccuracy.SetBaseValue(_npcCharacterBase.Accuracy);
-        _enemyStats.EnemyHealth.SetBaseValue(_enemyStats.EnemyHealth.GetBaseValue() * _npcCharacterBase.HealthModifier);
+        _enemyStats.EnemyHealth.SetBaseValue(_npcCharacterBase.Health * npcHealthModifier);
+        _enemyStats.EnemyDefense.SetBaseValue(_npcCharacterBase.Defense);
         _enemyStats.ModifyStats();
     }
 

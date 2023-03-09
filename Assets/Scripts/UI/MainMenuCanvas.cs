@@ -5,16 +5,17 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-public enum MainCanvasScreen
+public class MainMenuCanvas : MonoBehaviour
 {
-    Main,
-    Highscore,
-    Character,
-    Loading,
-}
+    private static MainMenuCanvas _instance;
+    public static MainMenuCanvas Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
 
-public class MainMenuCanvas : Singleton<MainMenuCanvas>
-{
     public List<Vector2> Resolutions;
 
     [SerializeField] private Transform HighscoreUIPrefab;
@@ -34,9 +35,9 @@ public class MainMenuCanvas : Singleton<MainMenuCanvas>
     private CanvasScaler _canvasScaler;
     private int _currentResolutionIndex = 0;
 
-    public override void Awake()
+    public void Awake()
     {
-        base.Awake();
+        _instance = this;
 
         _audioSource = Camera.main.GetComponent<AudioSource>();
         _mainMenuTransform = transform.Find("MainMenu");

@@ -4,13 +4,6 @@ using UnityEngine;
 using AlpacaMyGames;
 using System;
 
-public enum WoundType
-{
-    Head,
-    Legs,
-    Arms,
-}
-
 public class PlayerHitManager : MonoBehaviour
 {
     private static PlayerHitManager _instance;

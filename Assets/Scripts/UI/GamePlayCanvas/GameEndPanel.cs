@@ -3,12 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public enum GameEndType
-{
-    Success,
-    Fail,
-}
-
 public class GameEndPanel : MonoBehaviour
 {
     private Transform _containerTransform;

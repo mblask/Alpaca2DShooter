@@ -4,20 +4,6 @@ using UnityEngine;
 using System;
 using AlpacaMyGames;
 
-public enum NPCState
-{
-    Idle,
-    Patrol,
-    Chase,
-    GoBack
-}
-
-public enum NPCType
-{
-    Enemy,
-    Ally,
-}
-
 public class NPC_AI : MonoBehaviour
 {
     public Vector2 PatrollingDistance = new Vector2();

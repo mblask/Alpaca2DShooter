@@ -4,22 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
-public enum SFXClip
+public class AudioManager : MonoBehaviour
 {
-    GunShot,
-    SilencerShot,
-    MachinegunShot,
-    ShotgunShot,
-    GunReload,
-    MachinegunReload,
-    ShotgunReload,
-    ItemPickup,
-    Bandaging,
-    BulletHitsCharacter,
-}
+    private static AudioManager _instance;
+    public static AudioManager Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
 
-public class AudioManager : Singleton<AudioManager>
-{
     private const float VOLUME_DIVISION_CONST = 10.0f;
     private const float VOLUME_ABS_MINIMUM = 8.01f;
     private const float VOLUME_WIDTH = 1.0f;
@@ -79,9 +74,9 @@ public class AudioManager : Singleton<AudioManager>
         }
     }
 
-    public override void Awake()
+    public void Awake()
     {
-        base.Awake();
+        _instance = this;
 
         _audioContainer = transform.Find("AudioContainer").GetComponent<AudioContainer>();
 
@@ -100,7 +95,7 @@ public class AudioManager : Singleton<AudioManager>
         NPCWeapons.OnEnemyShootingAudio += playClip;
         PickupItem.OnItemPickedUpAudio += playClip;
         FiringTrap.OnWeaponShootingAudio += playClip;
-        FiringTrap2.OnShooting += playClip;
+        WallFiringTrap.OnShooting += playClip;
 
         if (!_playMusic)
             _musicAudioSource.Stop();
@@ -117,7 +112,7 @@ public class AudioManager : Singleton<AudioManager>
         NPCWeapons.OnEnemyShootingAudio -= playClip;
         PickupItem.OnItemPickedUpAudio -= playClip;
         FiringTrap.OnWeaponShootingAudio -= playClip;
-        FiringTrap2.OnShooting -= playClip;
+        WallFiringTrap.OnShooting -= playClip;
     }
 
     public float GetMusicVolume()
