@@ -174,11 +174,10 @@ public class LevelsManager : MonoBehaviour
 
     private void transferPlayerToAnotherLevel()
     {
-        LevelObject level = getNotPlayedLevels(_levelsList).GetRandomElement();
+        LevelObject level = getLevelsNotPlayed(_levelsList).GetRandomElement();
 
         if (level == null)
         {
-            //method for reseting levelobjects and returning a new random one
             Debug.Log("No available levels. Reset levelObjects and select one.");
             _levelsList.ForEach(level => level.SetPlayed(false));
             level = _levelsList.GetRandomElement();
@@ -229,7 +228,7 @@ public class LevelsManager : MonoBehaviour
         _playerTransform.position = _playerLevel.GetSpawnPortalPosition();
     }
 
-    private List<LevelObject> getNotPlayedLevels(List<LevelObject> levels)
+    private List<LevelObject> getLevelsNotPlayed(List<LevelObject> levels)
     {
         return levels.FindAll(level => !level.WasPlayed());
     }

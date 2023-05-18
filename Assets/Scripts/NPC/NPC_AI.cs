@@ -134,7 +134,8 @@ public class NPC_AI : MonoBehaviour
 
             case NPCState.Patrol:
                 moveTo(_targetPosition, npcSaysSomething);
-                findTarget();
+                if (findTarget())
+                    break;
 
                 if (distanceToPlayer > idleDistance)
                     _state = NPCState.Idle;
@@ -199,22 +200,26 @@ public class NPC_AI : MonoBehaviour
         }
     }
 
-    private void findTarget()
+    private bool findTarget()
     {
         if (_gameManager == null || _type.Equals(NPCType.Ally))
-            return;
+            return false;
 
         if (!_playerStats.IsAlive() || !_gameManager.IsGameRunning())
-            return;
+            return false;
 
         float distanceToPlayer = Vector2.Distance(transform.position, _playerController.transform.position);
         if (distanceToPlayer <= _viewDistance)
         {
             _targetPosition = _playerController.transform.position;
             _state = NPCState.Chase;
+            return true;
         }
         else
+        {
             _state = NPCState.Patrol;
+            return false;
+        }
     }
 
     public bool OnInteractWithPlayer(Transform playerTransform)

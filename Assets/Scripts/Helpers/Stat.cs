@@ -8,10 +8,16 @@ public class Stat
     [SerializeField] private StatType _statType;
     [SerializeField] private float _baseValue = 0;
     private float _finalValue = 0;
-    private List<float> _modifiers = new List<float>();
-    private List<float> _multipliers = new List<float>();
+    private List<float> _modifiers;
+    private List<float> _multipliers;
 
     private bool _isHandicaped = false;
+
+    public Stat()
+    {
+        _modifiers = new List<float>();
+        _multipliers = new List<float>();
+    }
 
     public Stat(StatType statType, float baseValue)
     {
@@ -36,9 +42,6 @@ public class Stat
 
     public float GetFinalValue()
     {
-        _multipliers = new List<float>();
-        _modifiers = new List<float>();
-
         _finalValue = _baseValue;
         _multipliers.ForEach(x => _finalValue *= x);
         _modifiers.ForEach(x => _finalValue += x);

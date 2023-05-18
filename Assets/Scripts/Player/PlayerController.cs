@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class PlayerController : MonoBehaviour
 {
@@ -31,7 +30,6 @@ public class PlayerController : MonoBehaviour
     public void Awake()
     {
         _instance = this;
-
         _rigidBody = GetComponent<Rigidbody2D>();
     }
 
@@ -64,23 +62,17 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                int itemIndex = 0;
-                Item itemToUse = ConsumableItemsUIMenu.GetConsumableItemsUIStatic()[itemIndex];
-                PlayerInventory.UseConsumableItemStatic(itemToUse);
+                Debug.Log("Use consumable item 1");
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                int itemIndex = 1;
-                Item itemToUse = ConsumableItemsUIMenu.GetConsumableItemsUIStatic()[itemIndex];
-                PlayerInventory.UseConsumableItemStatic(itemToUse);
+                Debug.Log("Use consumable item 2");
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                int itemIndex = 2;
-                Item itemToUse = ConsumableItemsUIMenu.GetConsumableItemsUIStatic()[itemIndex];
-                PlayerInventory.UseConsumableItemStatic(itemToUse);
+                Debug.Log("Use consumable item 3");
             }
         }
 

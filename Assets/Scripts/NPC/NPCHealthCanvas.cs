@@ -28,6 +28,7 @@ public class NPCHealthCanvas : MonoBehaviour
         if (value < 0.0f)
             return;
 
+        _healthSlider.minValue = 0.0f;
         _healthSlider.maxValue = _enemyStats.EnemyHealth.GetFinalValue();
 
         _healthSlider.value = value;

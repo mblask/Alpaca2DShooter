@@ -6,14 +6,14 @@ using UnityEngine.Audio;
 
 public class AudioUI : MonoBehaviour
 {
-    private Slider _musicVolumeSlider;
+    //private Slider _musicVolumeSlider;
     private Slider _sfxVolumeSlider;
 
     private AudioManager _audioManager;
 
     private void Awake()
     {
-        _musicVolumeSlider = transform.Find("Container").Find("MusicSlider").GetComponent<Slider>();
+        //_musicVolumeSlider = transform.Find("Container").Find("MusicSlider").GetComponent<Slider>();
         _sfxVolumeSlider = transform.Find("Container").Find("SFXSlider").GetComponent<Slider>();
     }
 
@@ -25,13 +25,13 @@ public class AudioUI : MonoBehaviour
 
     private void SetupAudioSliders(AudioManager audioManager)
     {
-        setupMusicSlider(audioManager.GetMusicVolume());
+        //setupMusicSlider(audioManager.GetMusicVolume());
         setupSFXSlider(audioManager.GetSFXVolume());
     }
 
     private void setupMusicSlider(float value)
     {
-        _musicVolumeSlider.value = value;
+        //_musicVolumeSlider.value = value;
     }
 
     private void setupSFXSlider(float value)

@@ -16,7 +16,6 @@ public class ObjectDestroy : MonoBehaviour, IDamagable
     [SerializeField] private bool _useOriginalSprite;
     [SerializeField] private Sprite _particleSprite;
     [SerializeField] private Color _particleColor;
-    private IParticleSystemGenerator _particleSystemGenerator;
 
     private int _bulletHitsToDestroy;
     private int _hitCount = 0;
@@ -26,7 +25,6 @@ public class ObjectDestroy : MonoBehaviour, IDamagable
     private void Start()
     {
         _bulletHitsToDestroy = sturdinessToBulletNum(_sturdiness);
-        _particleSystemGenerator = new ParticleSystemGenerator(transform, _useOriginalSprite, _particleSprite, _particleColor);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -51,10 +49,8 @@ public class ObjectDestroy : MonoBehaviour, IDamagable
 
     private void destroyObject()
     {
-        _particleSystemGenerator.Generate();
-
+        generateParticles();
         dropItemOnDestroy();
-
         Destroy(gameObject);
     }
 
@@ -68,6 +64,23 @@ public class ObjectDestroy : MonoBehaviour, IDamagable
 
         if (_dropItem != null)
             ItemSpawner.Instance.SpawnItem(transform.position, _dropItem);
+    }
+
+    private void generateParticles()
+    {
+        ParticleSystem objectDestroyPS = Instantiate(GameAssets.Instance.ObjectDestroyPS, transform.position, Quaternion.identity, null);
+        ParticleSystem.MainModule mainModule = objectDestroyPS.main;
+
+        if (_particleSprite == null)
+        {
+            SpriteRenderer objectSpriteRenderer = GetComponent<SpriteRenderer>();
+            objectDestroyPS.GetComponent<ParticleSystem>().textureSheetAnimation.SetSprite(0, objectSpriteRenderer.sprite);
+            mainModule.startColor = objectSpriteRenderer.color;
+            return;
+        }
+
+        objectDestroyPS.GetComponent<ParticleSystem>().textureSheetAnimation.SetSprite(0, _particleSprite);
+        mainModule.startColor = _particleColor;
     }
 
     private int sturdinessToBulletNum(ObjectSturdiness sturdiness)
