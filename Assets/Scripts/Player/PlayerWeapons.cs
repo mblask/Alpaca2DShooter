@@ -398,6 +398,7 @@ public class PlayerWeapons : MonoBehaviour
         _cameraController?.ShakeCamera(_cameraShakeDuration, _cameraShakeMagnitude);
 
         generateShootingParticleSystem();
+        alertNearbyEnemies();
 
         _currentAmmo--;
 
@@ -410,6 +411,18 @@ public class PlayerWeapons : MonoBehaviour
         OnAmmoPanelUIChanged?.Invoke(_currentAmmo, _currentWeapon.TotalAmmo);
 
         return true;
+    }
+
+    private void alertNearbyEnemies()
+    {
+        float soundRadius = 10.0f;
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, soundRadius);
+        foreach (Collider2D collider in colliders)
+        {
+            NPC_AI npc = collider.GetComponent<NPC_AI>();
+            if (npc != null)
+                npc.AlertNPC(this.transform);
+        }
     }
 
     private Vector2 shootingDirection(Vector3 targetPosition)

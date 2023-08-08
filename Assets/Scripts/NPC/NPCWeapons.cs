@@ -27,6 +27,7 @@ public class NPCWeapons : MonoBehaviour
     [SerializeField] private float _reloadTime = 0.0f;
 
     private Transform _shootTarget;
+    public bool HasShootingTarget => _shootTarget != null;
     private GameAssets _gameAssets;
 
     private void Awake()

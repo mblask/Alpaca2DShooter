@@ -101,7 +101,7 @@ public class NPC_AI : MonoBehaviour
         return _type;
     }
 
-    private void npcSaysSomething()
+    private void npcSaysRandomStuff()
     {
         if (!Utilities.ChanceFunc(33))
             return;
@@ -110,7 +110,18 @@ public class NPC_AI : MonoBehaviour
                 "*Hmmph*", "*Grunt*", "*Ahh*", "What a'\n'boring day..."
             };
         string randomMessage = messages.GetRandomElement();
-        FloatingTextSpawner.CreateFloatingTextStatic(transform.position, randomMessage, Color.white, 0.8f, 4, 0.5f);
+        FloatingTextSpawner
+            .CreateFloatingTextStatic(transform.position, randomMessage, Color.white, destroyAfter: 0.8f, fontSize: 4, floatSpeed: 0.5f);
+    }
+
+    private void npcAlerted()
+    {
+        List<string> messages = new List<string>
+        {
+            "What was that?", "Huh??", "Who is there?", "Was that a shot??"
+        };
+        FloatingTextSpawner
+            .CreateFloatingTextStatic(transform.position, messages.GetRandomElement(), Color.red, destroyAfter: 0.8f, fontSize: 4, floatSpeed: 0.5f);
     }
 
     private void stateMachineProcedure()
@@ -133,7 +144,7 @@ public class NPC_AI : MonoBehaviour
                 break;
 
             case NPCState.Patrol:
-                moveTo(_targetPosition, npcSaysSomething);
+                moveTo(_targetPosition, npcSaysRandomStuff);
                 if (findTarget())
                     break;
 
@@ -220,6 +231,16 @@ public class NPC_AI : MonoBehaviour
             _state = NPCState.Patrol;
             return false;
         }
+    }
+
+    public void AlertNPC(Transform target)
+    {
+        if (_NPCWeapons.HasShootingTarget)
+            return;
+
+        _targetPosition = target.position;
+        ExtendViewAndAttackDistance();
+        npcAlerted();
     }
 
     public bool OnInteractWithPlayer(Transform playerTransform)
