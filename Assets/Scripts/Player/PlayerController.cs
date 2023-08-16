@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -83,11 +80,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_playerStats.IsAlive())
-        {
-            rotatePlayer(_mousePosition);
-            movePlayer(_movement.normalized);
-        }
+        rotatePlayer(_mousePosition);
+        movePlayer(_movement.normalized);
     }
 
     public void DeactivateInput()
@@ -98,6 +92,9 @@ public class PlayerController : MonoBehaviour
 
     private void movePlayer(Vector2 axisMovement)
     {
+        if (!_playerStats.IsAlive())
+            return;
+
         if (axisMovement == null)
             return;
 
@@ -156,6 +153,9 @@ public class PlayerController : MonoBehaviour
 
     private void rotatePlayer(Vector2 targetPosition)
     {
+        if (!_playerStats.IsAlive())
+            return;
+
         Vector2 direction = targetPosition - _rigidBody.position;
 
         float rotationAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
