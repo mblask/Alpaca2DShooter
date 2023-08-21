@@ -17,7 +17,7 @@ public class ItemSpawner : MonoBehaviour
 
     [Range(0.0f, 100.0f)] public float EnemyDropRate = 25.0f;
 
-    [SerializeField] private List<Item> _availableItems;
+    [SerializeField] private List<Item> _availableItems = new List<Item>();
     private List<Transform> _spawnedArtefacts = new List<Transform>();
     [SerializeField] private List<ArtefactItem> _availableArtefacts;
 
@@ -62,6 +62,22 @@ public class ItemSpawner : MonoBehaviour
         {
             spawnedItem.GetComponent<SpriteRenderer>().color = (item as NonInventoryItem).Color;
             spawnedItem.GetComponentInChildren<Light2D>().color = (item as NonInventoryItem).Color;
+
+            if (item is ThrowableItem)
+            {
+                ThrowableItem throwable = item as ThrowableItem;
+                switch (throwable.Type)
+                {
+                    case ThrowableWeaponType.Mine:
+                        //spawnedItem.gameObject.AddComponent<Mine>();
+                        break;
+                    case ThrowableWeaponType.Grenade:
+                        //spawnedItem.gameObject.AddComponent<Grenade>();
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
         if (item is InstantaneousItem)

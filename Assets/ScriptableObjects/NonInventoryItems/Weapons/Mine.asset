@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06cc80d584832de449c6c31af3ecc4c7, type: 3}
+  m_Script: {fileID: 11500000, guid: 20b51595aad84ef44ada3aee087c3202, type: 3}
   m_Name: Mine
   m_EditorClassIdentifier: 
   ItemName: Mine
@@ -22,8 +22,8 @@ MonoBehaviour:
   WeaponReloadAudio: 0
   Automatic: 0
   ShootInterval: 0
-  WeaponDamage: {x: 20, y: 40}
+  WeaponDamage: {x: 20, y: 50}
   MagazineBullets: 0
-  Throwable: 1
-  MaxThrowDistance: 2
   StrengthRequired: 1
+  Type: 0
+  ThrowForce: 10

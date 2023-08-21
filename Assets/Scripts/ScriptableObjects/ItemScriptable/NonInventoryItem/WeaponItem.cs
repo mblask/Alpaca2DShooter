@@ -10,8 +10,6 @@ public class WeaponItem : NonInventoryItem
     public float ShootInterval;
     public Vector2 WeaponDamage;
     public int MagazineBullets;
-    public bool Throwable;
-    public float MaxThrowDistance;
 
     [Space]
     public float StrengthRequired;
@@ -20,9 +18,6 @@ public class WeaponItem : NonInventoryItem
     {
         if (PlayerWeapons.Instance == null)
             return false;
-
-        if (Throwable)
-            return PlayerWeapons.Instance.AddThrowable(new Weapon(this, 1));
 
         return PlayerWeapons.Instance.AddWeapon(new Weapon(this, 30));
     }

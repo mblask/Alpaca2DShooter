@@ -24,6 +24,7 @@ public class GameAssets : MonoBehaviour
     [Header("Object Prefabs")]
     public Transform Player;
     public Transform Mine;
+    public Transform Grenade;
     public Transform DestructionArea;
     public Transform NPCPrefab;
     public Transform NPCBossPrefab;

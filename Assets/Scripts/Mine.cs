@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Mine : MonoBehaviour
 {
-    private SpriteRenderer _sRenderer;
+    private SpriteRenderer _spriteRenderer;
 
     [SerializeField] private bool _armed = false;
     [SerializeField] private WeaponItem _mine;
@@ -16,8 +14,8 @@ public class Mine : MonoBehaviour
 
     private void Awake()
     {
-        _sRenderer = GetComponent<SpriteRenderer>();
-        _sRenderer.color = _nonArmedColor;
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _spriteRenderer.color = _nonArmedColor;
     }
 
     private void Start()
@@ -29,7 +27,7 @@ public class Mine : MonoBehaviour
 
     private void startSetup(bool isArmed)
     {
-        _sRenderer.color = isArmed ? _armedColor : _nonArmedColor;
+        _spriteRenderer.color = isArmed ? _armedColor : _nonArmedColor;
         PickupItem pickupItem = GetComponent<PickupItem>();
         if (pickupItem != null)
             pickupItem.SetPickable(!isArmed);
@@ -38,7 +36,7 @@ public class Mine : MonoBehaviour
     public void ArmMine()
     {
         _armed = true;
-        _sRenderer.color = _armedColor;
+        _spriteRenderer.color = _armedColor;
 
         PickupItem pickupItem = GetComponent<PickupItem>();
         if (pickupItem != null)

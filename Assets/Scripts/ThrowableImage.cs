@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -20,12 +18,12 @@ public class ThrowableImage : MonoBehaviour
         _text = _container.Find("AmountText").GetComponent<TextMeshProUGUI>();
     }
 
-    public static void UpdateThrowableUIStatic(Weapon throwable)
+    public static void UpdateThrowableUIStatic(ThrowableWeapon throwable)
     {
         _instance?.updateThrowableUI(throwable);
     }
 
-    private void updateThrowableUI(Weapon throwable)
+    private void updateThrowableUI(ThrowableWeapon throwable)
     {
         if (throwable == null || throwable.TotalAmmo == 0)
         {
@@ -34,7 +32,7 @@ public class ThrowableImage : MonoBehaviour
             return;
         }
 
-        _image.sprite = throwable.WeaponItem.ItemSprite;
+        _image.sprite = throwable.ThrowableItem.ItemSprite;
         _image.enabled = true;
         _text.SetText(throwable.TotalAmmo.ToString());
     }

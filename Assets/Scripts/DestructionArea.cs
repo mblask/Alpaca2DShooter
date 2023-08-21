@@ -51,6 +51,11 @@ public class DestructionArea : MonoBehaviour
         }
     }
 
+    public void SetDestructionRadius(float destructionRadius)
+    {
+        _destructionRadius = destructionRadius;
+    }
+
     public void SetDamage(Vector2 damageVector)
     {
         _damage = damageVector;

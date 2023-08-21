@@ -24,7 +24,7 @@ public class PlayerWeapons : MonoBehaviour
 
     [Header("Items")]
     [SerializeField] private List<Weapon> _weapons = new List<Weapon>();
-    [SerializeField] private List<Weapon> _throwables = new List<Weapon>();
+    [SerializeField] private List<ThrowableWeapon> _throwables = new List<ThrowableWeapon>();
 
     [Header("Shooting settings - Read-only")]
     [SerializeField] private float _nonShootingDistance = 1.00f;
@@ -53,7 +53,7 @@ public class PlayerWeapons : MonoBehaviour
             return _currentWeapon;
         }
     }
-    private Weapon _currentThrowable;
+    private ThrowableWeapon _currentThrowable;
 
     private bool _weaponEquipped = false;
     private bool _canShoot = true;
@@ -213,19 +213,46 @@ public class PlayerWeapons : MonoBehaviour
             return;
         }
 
-        Vector3 throwPosition = transform.position + 2.0f * (Vector3)Utilities.GetVectorFromAngle(transform.rotation.eulerAngles.z);
-        Mine mine = Instantiate(GameAssets.Instance.Mine, throwPosition, Quaternion.identity, null).GetComponent<Mine>();
-        mine.ArmMine();
+        Vector3 forceVector = _currentThrowable.ThrowableItem.ThrowForce * 
+            (Vector3)Utilities.GetVectorFromAngle(transform.rotation.eulerAngles.z);
+        Vector3 throwPosition = transform.position + forceVector;
+
+        Transform throwableTransform;
+        switch (_currentThrowable.ThrowableItem.Type)
+        {
+            case ThrowableWeaponType.Mine:
+                throwableTransform = Instantiate(GameAssets.Instance.Mine, throwPosition, Quaternion.identity, null);
+                Mine mine = throwableTransform.GetComponent<Mine>();
+                mine.ArmMine();
+                break;
+            case ThrowableWeaponType.Grenade:
+                throwableTransform = 
+                    Instantiate(GameAssets.Instance.Grenade, transform.position, Quaternion.identity, null);
+                Grenade grenade = throwableTransform.GetComponent<Grenade>();
+                grenade.ArmGrenade();
+                grenade.ThrowGrenade(forceVector);
+                break;
+            default:
+                return;
+        }
 
         _currentThrowable.TotalAmmo--;
 
         if (_currentThrowable.TotalAmmo == 0)
         {
             _throwables.Remove(_currentThrowable);
-            _currentThrowable = null;
-        }
 
-        ThrowableImage.UpdateThrowableUIStatic(_currentThrowable);
+            if (_throwables.Count > 0)
+            {
+                _currentThrowable = _throwables[0];
+                ThrowableImage.UpdateThrowableUIStatic(_currentThrowable);
+            }
+            else
+            {
+                _currentThrowable = null;
+                ThrowableImage.UpdateThrowableUIStatic(_currentThrowable);
+            }
+        }
     }
 
     private void switchThrowables()
@@ -500,14 +527,14 @@ public class PlayerWeapons : MonoBehaviour
         shootingPS.Play();
     }
 
-    public bool AddThrowable(Weapon weapon)
+    public bool AddThrowable(ThrowableWeapon weapon)
     {
         if (weapon == null)
             return false;
 
         for (int i = 0; i < _throwables.Count; i++)
         {
-            if (weapon.WeaponItem == _throwables[i].WeaponItem)
+            if (weapon.ThrowableItem == _throwables[i].ThrowableItem)
             {
                 _throwables[i].TotalAmmo++;
 
@@ -575,7 +602,7 @@ public class PlayerWeapons : MonoBehaviour
         return _currentWeapon;
     }
 
-    public static Weapon GetCurrentThrowableStatic()
+    public static ThrowableWeapon GetCurrentThrowableStatic()
     {
         return _instance?.getCurrentThrowable();
     }
@@ -585,7 +612,7 @@ public class PlayerWeapons : MonoBehaviour
         return _weaponEquipped;
     }
 
-    private Weapon getCurrentThrowable()
+    private ThrowableWeapon getCurrentThrowable()
     {
         return _currentThrowable;
     }
