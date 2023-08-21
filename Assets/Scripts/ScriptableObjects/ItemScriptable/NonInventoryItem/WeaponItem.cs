@@ -10,8 +10,8 @@ public class WeaponItem : NonInventoryItem
     public float ShootInterval;
     public Vector2 WeaponDamage;
     public int MagazineBullets;
-    public float MaxDurability;
     public bool Throwable;
+    public float MaxThrowDistance;
 
     [Space]
     public float StrengthRequired;

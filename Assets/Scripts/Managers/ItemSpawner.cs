@@ -58,6 +58,12 @@ public class ItemSpawner : MonoBehaviour
             spawnedItem.GetComponentInChildren<Light2D>().intensity = 0.0f;
         }
 
+        if (item is NonInventoryItem)
+        {
+            spawnedItem.GetComponent<SpriteRenderer>().color = (item as NonInventoryItem).Color;
+            spawnedItem.GetComponentInChildren<Light2D>().color = (item as NonInventoryItem).Color;
+        }
+
         if (item is InstantaneousItem)
         {
             spawnedItem.GetComponent<SpriteRenderer>().color = (item as InstantaneousItem).Color;

@@ -24,6 +24,6 @@ MonoBehaviour:
   ShootInterval: 0
   WeaponDamage: {x: 20, y: 40}
   MagazineBullets: 0
-  MaxDurability: 0
   Throwable: 1
+  MaxThrowDistance: 2
   StrengthRequired: 1

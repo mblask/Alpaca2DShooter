@@ -176,13 +176,12 @@ public class ItemTooltip : MonoBehaviour
             _sb.Append(" - ");
             _sb.Append(weaponItem.WeaponDamage.y.ToString());
 
-            _sb.AppendLine();
-            _sb.Append("Durability: ");
-            _sb.Append(weaponItem.MaxDurability.ToString());
-
-            _sb.AppendLine();
-            _sb.Append("Mag. Capacity: ");
-            _sb.Append(weaponItem.MagazineBullets.ToString());
+            if (weaponItem.MagazineBullets > 0)
+            {
+                _sb.AppendLine();
+                _sb.Append("Mag. Capacity: ");
+                _sb.Append(weaponItem.MagazineBullets.ToString());
+            }
 
             if (weaponItem.Automatic)
             {
@@ -190,9 +189,12 @@ public class ItemTooltip : MonoBehaviour
                 _sb.Append("Automatic");
             }
 
-            _sb.AppendLine();
-            _sb.Append("Strength: ");
-            _sb.Append(weaponItem.StrengthRequired.ToString());
+            if (weaponItem.StrengthRequired > 0)
+            {
+                _sb.AppendLine();
+                _sb.Append("Strength: ");
+                _sb.Append(weaponItem.StrengthRequired.ToString());
+            }
 
             requiredStats(weaponItem);
 

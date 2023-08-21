@@ -10,14 +10,12 @@ public class Weapon
     public Weapon(WeaponItem weaponItem, int ammo)
     {
         WeaponItem = weaponItem;
-        Durability = weaponItem.MaxDurability;
         TotalAmmo = ammo;
     }
 
     public Weapon(Weapon weapon)
     {
         WeaponItem = weapon.WeaponItem;
-        Durability = weapon.Durability;
         TotalAmmo = weapon.TotalAmmo;
     }
 }

@@ -10,4 +10,6 @@ public enum SFXClip
     ItemPickup,
     Bandaging,
     BulletHitsCharacter,
+    GrenadeThrow,
+    None = 99999
 }

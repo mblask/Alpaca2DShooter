@@ -87,6 +87,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e8a7754bc5105c74696fd95bff87f112, type: 2}
   - {fileID: 11400000, guid: 347dff94e829f684dbc2ea07a9ffb197, type: 2}
   - {fileID: 11400000, guid: 27da57185e6a67d4d9732d5ab8efa4eb, type: 2}
+  - {fileID: 11400000, guid: e754ecfd8c9b31245b23b0e488bb05bd, type: 2}
   CharacterBaseList:
   - CharacterType: 0
     CharacterAOC: {fileID: 22100000, guid: c35c335cec9bb2945a7d846c5f91db90, type: 2}
