@@ -6,10 +6,10 @@ public class RotateObject : MonoBehaviour
 
     private void Update()
     {
-        Rotate2DBody();
+        rotate2DBody();
     }
 
-    private void Rotate2DBody()
+    private void rotate2DBody()
     {
         if (RotationSpeed == 0.0f)
             return;

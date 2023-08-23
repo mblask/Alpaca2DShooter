@@ -106,22 +106,16 @@ public class NPC_AI : MonoBehaviour
         if (!Utilities.ChanceFunc(33))
             return;
 
-        List<string> messages = new List<string> {
-                "*Hmmph*", "*Grunt*", "*Ahh*", "What a'\n'boring day..."
-            };
-        string randomMessage = messages.GetRandomElement();
+        string randomMessage = Constants.NPC_RANDOM_MESSAGES.GetRandomElement();
         FloatingTextSpawner
             .CreateFloatingTextStatic(transform.position, randomMessage, Color.white, destroyAfter: 0.8f, fontSize: 4, floatSpeed: 0.5f);
     }
 
     private void npcAlerted()
     {
-        List<string> messages = new List<string>
-        {
-            "What was that?", "Huh??", "Who is there?", "Was that a shot??"
-        };
+        string randomAlert = Constants.NPC_ALERT_MESSAGES.GetRandomElement();
         FloatingTextSpawner
-            .CreateFloatingTextStatic(transform.position, messages.GetRandomElement(), Color.red, destroyAfter: 0.8f, fontSize: 4, floatSpeed: 0.5f);
+            .CreateFloatingTextStatic(transform.position, randomAlert, Color.red, destroyAfter: 0.8f, fontSize: 4, floatSpeed: 0.5f);
     }
 
     private void stateMachineProcedure()
@@ -362,9 +356,9 @@ public class NPC_AI : MonoBehaviour
         Vector2 direction = (target - transform.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-        Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+        Quaternion quaternion = Quaternion.AngleAxis(angle, Vector3.forward);
 
-        transform.rotation = Quaternion.Lerp(transform.rotation, q, 0.3f);
+        transform.rotation = Quaternion.Lerp(transform.rotation, quaternion, 0.3f);
     }
 
     private Vector3 generatePatrollingPosition()

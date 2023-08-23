@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class Grenade : MonoBehaviour
 {
-    [SerializeField] private ThrowableItem _grenade;
+    [SerializeField] private ThrowableItem _item;
+    public ThrowableItem ThrowableItem => _item;
+
     private Rigidbody2D _rigidbody;
     private Collider2D _collider;
     private SpriteRenderer _spriteRenderer;
@@ -19,10 +21,11 @@ public class Grenade : MonoBehaviour
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+        _rigidbody.gravityScale = 0.0f;
+        _rigidbody.mass = 5.0f;
         _collider = GetComponent<Collider2D>();
         _collider.isTrigger = !_armed;
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _spriteRenderer.color = _grenade.Color;
     }
 
     private void Start()
@@ -48,6 +51,12 @@ public class Grenade : MonoBehaviour
             explode();
     }
 
+    public void SetItem(ThrowableItem throwableItem)
+    {
+        _item = throwableItem;
+        _spriteRenderer.color = _item.Color;
+    }
+
     public void ArmGrenade()
     {
         _armed = true;
@@ -67,7 +76,7 @@ public class Grenade : MonoBehaviour
     {
         DestructionArea destructionArea = Instantiate(_gameAssets.DestructionArea, transform.position, Quaternion.identity, null).GetComponent<DestructionArea>();
         destructionArea.SetDestructionRadius(_explosionRadius);
-        destructionArea.SetDamage(_grenade.WeaponDamage);
+        destructionArea.SetDamage(_item.WeaponDamage);
         
         Destroy(gameObject);
     }

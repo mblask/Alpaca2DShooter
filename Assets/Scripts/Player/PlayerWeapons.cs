@@ -22,10 +22,6 @@ public class PlayerWeapons : MonoBehaviour
         }
     }
 
-    [Header("Items")]
-    [SerializeField] private List<Weapon> _weapons = new List<Weapon>();
-    [SerializeField] private List<ThrowableWeapon> _throwables = new List<ThrowableWeapon>();
-
     [Header("Shooting settings - Read-only")]
     [SerializeField] private float _nonShootingDistance = 1.00f;
     [SerializeField] private float _closeQuarterShooting = 0.75f;
@@ -34,6 +30,10 @@ public class PlayerWeapons : MonoBehaviour
     [Header("Camera shake - Read-only")]
     [SerializeField] private float _cameraShakeDuration = 0.05f;
     [SerializeField] private float _cameraShakeMagnitude = 0.1f;
+
+    [Header("Items")]
+    [SerializeField] private List<Weapon> _weapons = new List<Weapon>();
+    [SerializeField] private List<ThrowableWeapon> _throwables = new List<ThrowableWeapon>();
 
     private Transform _shootingSpot;
     private Camera _camera;
@@ -213,9 +213,10 @@ public class PlayerWeapons : MonoBehaviour
             return;
         }
 
-        Vector3 forceVector = _currentThrowable.ThrowableItem.ThrowForce * 
-            (Vector3)Utilities.GetVectorFromAngle(transform.rotation.eulerAngles.z);
-        Vector3 throwPosition = transform.position + forceVector;
+        Vector3 vectorFromViewAngle = (Vector3)Utilities.GetVectorFromAngle(transform.rotation.eulerAngles.z);
+
+        Vector3 forceVector = _currentThrowable.ThrowableItem.ThrowForce * vectorFromViewAngle;
+        Vector3 throwPosition = transform.position + 1.5f * vectorFromViewAngle;
 
         Transform throwableTransform;
         switch (_currentThrowable.ThrowableItem.Type)
@@ -224,6 +225,7 @@ public class PlayerWeapons : MonoBehaviour
                 throwableTransform = Instantiate(GameAssets.Instance.Mine, throwPosition, Quaternion.identity, null);
                 Mine mine = throwableTransform.GetComponent<Mine>();
                 mine.ArmMine();
+                mine.ThrowMine(forceVector);
                 break;
             case ThrowableWeaponType.Grenade:
                 throwableTransform = 
@@ -514,6 +516,28 @@ public class PlayerWeapons : MonoBehaviour
 
         _playerAnimations.PlayAnimation(AnimationType.Reload);
         presentWeapon();
+    }
+
+    public static bool AddAmmoStatic(AmmoItem ammo)
+    {
+        return _instance.addAmmo(ammo);
+    }
+
+    private bool addAmmo(AmmoItem ammo)
+    {
+        foreach (Weapon weapon in _weapons)
+        {
+            if (weapon.WeaponItem.AmmoType == ammo.AmmoType)
+            {
+                Debug.Log($"Add {ammo.Amount} of {ammo.ItemName}");
+                weapon.TotalAmmo += ammo.Amount;
+                OnAmmoPanelUIChanged?.Invoke(_currentAmmo, _currentWeapon.TotalAmmo);
+                PlayerInventory.DeleteItemFromInventoryStatic(ammo);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void generateShootingParticleSystem()

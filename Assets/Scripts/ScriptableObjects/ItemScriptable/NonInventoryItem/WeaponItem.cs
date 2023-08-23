@@ -3,6 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Weapon Item", menuName = "Scriptable Objects / Non Inventory Item / Weapon", order = 0)]
 public class WeaponItem : NonInventoryItem
 {
+    [Header("Weapon characteristics")]
     public AnimationType Trigger;
     public SFXClip WeaponShootAudio;
     public SFXClip WeaponReloadAudio;
@@ -10,6 +11,7 @@ public class WeaponItem : NonInventoryItem
     public float ShootInterval;
     public Vector2 WeaponDamage;
     public int MagazineBullets;
+    public AmmoType AmmoType;
 
     [Space]
     public float StrengthRequired;

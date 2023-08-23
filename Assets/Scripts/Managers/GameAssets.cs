@@ -46,6 +46,9 @@ public class GameAssets : MonoBehaviour
     [Header("Available Weapons")]
     public List<WeaponItem> AvailableWeaponsList;
 
+    [Header("Available Ammo")]
+    public List<AmmoItem> AvailableAmmoItems;
+
     [Header("Character Base List")]
     public List<CharacterBase> CharacterBaseList;
     public List<CharacterBaseScriptable> CharacterBaseScriptableList;

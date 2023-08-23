@@ -200,6 +200,15 @@ public class ItemTooltip : MonoBehaviour
 
             return;
         }
+
+        JunkItem junkItem = item as JunkItem;
+        if (junkItem != null)
+        {
+            _sb.AppendLine();
+            _sb.AppendLine("Junk item");
+
+            return;
+        }
     }
 
     private void requiredStats(WeaponItem weapon)

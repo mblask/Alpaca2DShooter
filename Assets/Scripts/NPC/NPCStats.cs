@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class NPCStats : MonoBehaviour, IDamagable
@@ -82,6 +81,8 @@ public class NPCStats : MonoBehaviour, IDamagable
             return;
 
         _currentHealth -= value * (1.0f - EnemyDefense.GetFinalValue() / 100.0f);
+        Debug.Log(value);
+        Debug.Log(value * (1.0f - EnemyDefense.GetFinalValue() / 100.0f));
         FloatingTextSpawner.CreateFloatingTextStatic(transform.position, value.ToString("F0"), new Color(1.0f, 0.5f, 0.0f));
 
         _enemyHealthCanvas.UpdateHealthSlider(_currentHealth);

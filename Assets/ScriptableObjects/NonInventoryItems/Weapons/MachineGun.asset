@@ -24,5 +24,5 @@ MonoBehaviour:
   ShootInterval: 0.15
   WeaponDamage: {x: 3, y: 5}
   MagazineBullets: 28
-  MaxDurability: 30
+  AmmoType: 2
   StrengthRequired: 2

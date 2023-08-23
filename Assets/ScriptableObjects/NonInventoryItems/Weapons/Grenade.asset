@@ -24,6 +24,7 @@ MonoBehaviour:
   ShootInterval: 1
   WeaponDamage: {x: 20, y: 40}
   MagazineBullets: 0
+  AmmoType: 1
   StrengthRequired: 1
   Type: 1
   ThrowForce: 50

@@ -44,17 +44,11 @@ public class CraftingUI : MonoBehaviour
 
     private void craftItem()
     {
-        if (_recipeToCraft == null)
+        if (!CraftingManager.CraftItemStatic(_recipeToCraft))
             return;
 
-        foreach (Item item in _recipeToCraft.Ingredients)
-            PlayerInventory.DeleteItemFromInventoryStatic(item);
-
-        PlayerInventory.AddToInventoryStatic(_recipeToCraft.ProductItem);
-
         clearCraftingSlots();
-
-        showPossibleCraftsScreen(true && CraftingManager.GetPossibleCraftsStatic().Count > 0);
+        showPossibleCraftsScreen(CraftingManager.GetPossibleCraftsStatic().Count > 0);
     }
 
     public static void PopulateCraftingSlots(CraftingRecipe recipe)

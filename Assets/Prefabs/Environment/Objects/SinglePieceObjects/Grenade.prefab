@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e2dd3ce2cbf8ec4bb253a9509f60a8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _grenade: {fileID: 11400000, guid: 2210de6b7f3d8334aa0950329a352fca, type: 2}
+  _item: {fileID: 11400000, guid: 2210de6b7f3d8334aa0950329a352fca, type: 2}
 --- !u!114 &7982243217662600968
 MonoBehaviour:
   m_ObjectHideFlags: 0

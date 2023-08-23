@@ -1,10 +1,17 @@
+using System.Collections.Generic;
+
 public static class Constants
 {
-    public const string PlayerTag = "Player";
-    public const string EnemyTag = "Enemy";
-    public const string ObstacleTag = "Obstacle";
+    //Tags
+    public const string ENEMY_TAG = "Enemy";
 
-    public const string WeaponFullyLoaded = "Weapon fully loaded!";
-    public const string OutOfAmmo = "I am out of ammo!";
-    public const string NoMoreAmmo = "I have no more ammo!";
+    //NPC AI
+    public static readonly List<string> NPC_RANDOM_MESSAGES = new List<string>
+    {
+        "*Hmmph*", "*Grunt*", "*Ahh*", "What a'\n'boring day..."
+    };
+    public static readonly List<string> NPC_ALERT_MESSAGES = new List<string>
+    {
+        "What was that?", "Huh??", "Who is there?", "Was that a shot??"
+    };
 }

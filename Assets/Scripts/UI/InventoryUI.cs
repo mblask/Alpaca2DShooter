@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -20,16 +18,16 @@ public class InventoryUI : MonoBehaviour
     private void Start()
     {
         _gameAssets = GameAssets.Instance;
-        initializeItemContainer();
+        UpdateItemContainer();
 
         PlayerInventory.Instance.OnToggleInventoryUI += showInventory;
-        PlayerInventory.Instance.OnSuccessfulAdd += initializeItemContainer;
+        PlayerInventory.Instance.OnSuccessfulAdd += UpdateItemContainer;
     }
 
     private void OnDisable()
     {
         PlayerInventory.Instance.OnToggleInventoryUI -= showInventory;
-        PlayerInventory.Instance.OnSuccessfulAdd -= initializeItemContainer;
+        PlayerInventory.Instance.OnSuccessfulAdd -= UpdateItemContainer;
     }
 
     private void showInventory()
@@ -37,11 +35,11 @@ public class InventoryUI : MonoBehaviour
         bool isActive = !_container.gameObject.activeSelf;
 
         _container.gameObject.SetActive(isActive);
-
-        initializeItemContainer();
+        
+        UpdateItemContainer();
     }
 
-    private void initializeItemContainer()
+    public void UpdateItemContainer()
     {
         if (!_container.gameObject.activeSelf)
             return;

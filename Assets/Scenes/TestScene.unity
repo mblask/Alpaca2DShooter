@@ -185,11 +185,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7346663964101727334, guid: 49a39b89380eae64d83a7baf168ebd97,
-        type: 3}
-      propertyPath: _armed
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7346663964101727337, guid: 49a39b89380eae64d83a7baf168ebd97,
         type: 3}
       propertyPath: m_Name
@@ -1783,12 +1778,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3702992166257012821, guid: 074e57c9197b09142a2b648a75dd72fd,
-        type: 3}
-      propertyPath: Grenade
-      value: 
-      objectReference: {fileID: 7912929506115796245, guid: 643c779ef38aa844fb42b9e8baa3b744,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 074e57c9197b09142a2b648a75dd72fd, type: 3}
 --- !u!1001 &2565813178709003421

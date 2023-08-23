@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
-using System;
 
 public class ItemSpawner : MonoBehaviour
 {
@@ -52,44 +50,37 @@ public class ItemSpawner : MonoBehaviour
         Transform spawnedItem = Instantiate(_gameAssets.ItemTemplate, position, Quaternion.identity, null);
         spawnedItem.GetComponent<PickupItem>().SetItem(item);
 
-        if (item is InventoryItem)
+        switch (item)
         {
-            spawnedItem.GetComponent<RotateObject>().RotationSpeed = 0.0f;
-            spawnedItem.GetComponentInChildren<Light2D>().intensity = 0.0f;
-        }
+            case InventoryItem inventoryItem:
+                spawnedItem.GetComponent<RotateObject>().RotationSpeed = 0.0f;
+                spawnedItem.GetComponentInChildren<Light2D>().intensity = 0.0f;
+                break;
+            case NonInventoryItem nonInventoryItem:
+                spawnedItem.GetComponent<SpriteRenderer>().color = (item as NonInventoryItem).Color;
+                spawnedItem.GetComponentInChildren<Light2D>().color = (item as NonInventoryItem).Color;
 
-        if (item is NonInventoryItem)
-        {
-            spawnedItem.GetComponent<SpriteRenderer>().color = (item as NonInventoryItem).Color;
-            spawnedItem.GetComponentInChildren<Light2D>().color = (item as NonInventoryItem).Color;
-
-            if (item is ThrowableItem)
-            {
-                ThrowableItem throwable = item as ThrowableItem;
-                switch (throwable.Type)
+                if (item is ThrowableItem)
                 {
-                    case ThrowableWeaponType.Mine:
-                        //spawnedItem.gameObject.AddComponent<Mine>();
-                        break;
-                    case ThrowableWeaponType.Grenade:
-                        //spawnedItem.gameObject.AddComponent<Grenade>();
-                        break;
-                    default:
-                        break;
+                    ThrowableItem throwable = item as ThrowableItem;
+                    spawnedItem.gameObject.AddComponent<Rigidbody2D>();
+                    switch (throwable.Type)
+                    {
+                        case ThrowableWeaponType.Mine:
+                            spawnedItem.gameObject.AddComponent<Mine>();
+                            spawnedItem.GetComponent<Mine>().SetItem(throwable);
+                            break;
+                        case ThrowableWeaponType.Grenade:
+                            spawnedItem.gameObject.AddComponent<Grenade>();
+                            spawnedItem.GetComponent<Grenade>().SetItem(throwable);
+                            break;
+                        default:
+                            break;
+                    }
                 }
-            }
-        }
-
-        if (item is InstantaneousItem)
-        {
-            spawnedItem.GetComponent<SpriteRenderer>().color = (item as InstantaneousItem).Color;
-            spawnedItem.GetComponentInChildren<Light2D>().color = (item as InstantaneousItem).Color;
-        }
-
-        if (item is ArtefactItem)
-        {
-            spawnedItem.GetComponent<SpriteRenderer>().color = (item as ArtefactItem).Color;
-            spawnedItem.GetComponentInChildren<Light2D>().color = (item as ArtefactItem).Color;
+                break;
+            default:
+                break;
         }
 
         spawnedItem.name = item.ItemName;
@@ -102,8 +93,9 @@ public class ItemSpawner : MonoBehaviour
         float randomDropChance = UnityEngine.Random.Range(0.0f, 100.0f);
 
         foreach (Item item in _availableItems)
-            if (item.ChanceToDrop > randomDropChance)
-                _itemPool.Add(item);
+            if (item != null)
+                if (item.ChanceToDrop > randomDropChance)
+                    _itemPool.Add(item);
     }
 
     private void clearItemPool()

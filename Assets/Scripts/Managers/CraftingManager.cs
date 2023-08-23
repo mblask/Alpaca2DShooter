@@ -12,6 +12,22 @@ public class CraftingManager : MonoBehaviour
         _instance = this;
     }
 
+    public static bool CraftItemStatic(CraftingRecipe craftingRecipe)
+    {
+        return _instance.craftItem(craftingRecipe);
+    }
+
+    public bool craftItem(CraftingRecipe craftingRecipe)
+    {
+        if (craftingRecipe == null)
+            return false;
+
+        foreach (Item item in craftingRecipe.Ingredients)
+            PlayerInventory.DeleteItemFromInventoryStatic(item);
+
+        return PlayerInventory.AddToInventoryStatic(craftingRecipe.ProductItem);
+    }
+
     public static List<CraftingRecipe> GetPossibleCraftsStatic()
     {
         List<Item> items = PlayerInventory.GetItemsStatic();

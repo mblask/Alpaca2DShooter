@@ -28,7 +28,7 @@ public class Bullet : MonoBehaviour
 
         if (shooterTag.Equals(""))
         {
-            _shooterTag = Constants.EnemyTag;
+            _shooterTag = Constants.ENEMY_TAG;
             return;
         }
 

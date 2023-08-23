@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,9 +6,11 @@ public class ItemSlotUI : MonoBehaviour
     private Item _item;
     private Image _itemImage;
     private AlpacaButtonUI _itemButton;
+    private InventoryUI _inventoryUI;
 
     private void Awake()
     {
+        _inventoryUI = GetComponentInParent<InventoryUI>();
         _itemImage = transform.Find("Image").GetComponent<Image>();
         _itemButton = transform.Find("Image").GetComponent<AlpacaButtonUI>();
     }
@@ -33,7 +33,8 @@ public class ItemSlotUI : MonoBehaviour
     {
         if (_item != null)
         {
-            _item.UseItem();
+            if (_item.UseItem())
+                _inventoryUI.UpdateItemContainer();
         }
     }
 

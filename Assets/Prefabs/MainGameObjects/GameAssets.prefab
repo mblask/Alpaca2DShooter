@@ -53,6 +53,7 @@ MonoBehaviour:
     type: 3}
   Player: {fileID: 8196825197066008456, guid: 1aec6afb1600a224fa2c488498512929, type: 3}
   Mine: {fileID: 7346663964101727333, guid: 49a39b89380eae64d83a7baf168ebd97, type: 3}
+  Grenade: {fileID: 7912929506115796245, guid: 643c779ef38aa844fb42b9e8baa3b744, type: 3}
   DestructionArea: {fileID: 8609378906264422291, guid: 84d9d9856c74c274bb1521ff3cb71c44,
     type: 3}
   NPCPrefab: {fileID: 17813973010984863, guid: 52a1892016b466d4594d0e836d32924b, type: 3}
@@ -87,6 +88,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e8a7754bc5105c74696fd95bff87f112, type: 2}
   - {fileID: 11400000, guid: 347dff94e829f684dbc2ea07a9ffb197, type: 2}
   - {fileID: 11400000, guid: 27da57185e6a67d4d9732d5ab8efa4eb, type: 2}
+  AvailableAmmoItems:
+  - {fileID: 11400000, guid: c0bb4237c9fd0b849a55738186624d30, type: 2}
+  - {fileID: 11400000, guid: e0c0946cb00471a4a8ffdbce76aafff5, type: 2}
+  - {fileID: 11400000, guid: 3d96132ade87a474080c898b28603881, type: 2}
   CharacterBaseList:
   - CharacterType: 0
     CharacterAOC: {fileID: 22100000, guid: c35c335cec9bb2945a7d846c5f91db90, type: 2}
