@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -44,6 +43,9 @@ public class CraftingUI : MonoBehaviour
 
     private void craftItem()
     {
+        if (_recipeToCraft == null)
+            return;
+
         if (!CraftingManager.CraftItemStatic(_recipeToCraft))
             return;
 
@@ -74,8 +76,8 @@ public class CraftingUI : MonoBehaviour
 
         for (int i = 0; i < _ingredientSlotUIList.Count; i++)
         {
-            if (recipe.Ingredients[i] != null)
-                _ingredientSlotUIList[i].AddItemToSlot(recipe.Ingredients[i]);
+            if (recipe.CraftingIngredients[i].Item != null)
+                _ingredientSlotUIList[i].AddItemToSlot(recipe.CraftingIngredients[i].Item);
         }
     
         if (recipe.ProductItem != null)

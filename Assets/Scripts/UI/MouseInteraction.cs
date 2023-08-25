@@ -15,14 +15,20 @@ public class MouseInteraction : MonoBehaviour
 
     private void Update()
     {
-        onLeftMouseClick();
+        onLeftMouseDown();
     }
 
-    private void onLeftMouseClick()
+    private void onLeftMouseDown()
     {
         if (!Input.GetMouseButtonDown(0))
             return;
 
+        checkInteractables();
+        _playerWeapons.TriggerShooting();
+    }
+
+    private void checkInteractables()
+    {
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 0.1f);
         if (hits.Length == 0)
             return;
@@ -34,9 +40,19 @@ public class MouseInteraction : MonoBehaviour
                 continue;
 
             if (Vector2.Distance(_playerWeapons.transform.position, transform.position) < _playerDistance)
+            {
+                //Disable shooting and interact
+                Debug.Log("In range");
                 interactable.Interact();
+            }
             else
-                FloatingTextSpawner.CreateFloatingTextStatic(_playerWeapons.transform.position, "Too far away!", Color.white);
+            {
+                //If box shoot and destroy it for loot
+                //else too far away for interaction
+                Debug.Log("Out of range");
+                if (collider.GetComponent<Box>() == null)
+                    FloatingTextSpawner.CreateFloatingTextStatic(_playerWeapons.transform.position, "Too far away!", Color.white);
+            }
         }
     }
 

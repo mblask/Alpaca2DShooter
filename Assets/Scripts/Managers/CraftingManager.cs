@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,8 +21,12 @@ public class CraftingManager : MonoBehaviour
         if (craftingRecipe == null)
             return false;
 
-        foreach (Item item in craftingRecipe.Ingredients)
-            PlayerInventory.DeleteItemFromInventoryStatic(item);
+        foreach (CraftingIngredient ingredient in craftingRecipe.CraftingIngredients)
+            if (ingredient.DestroyedOnCrafting)
+                PlayerInventory.DeleteItemFromInventoryStatic(ingredient.Item);
+
+        if (craftingRecipe.ProductItem is AmmoItem)
+            return PlayerWeapons.AddAmmoStatic(craftingRecipe.ProductItem as AmmoItem);
 
         return PlayerInventory.AddToInventoryStatic(craftingRecipe.ProductItem);
     }
@@ -32,15 +35,15 @@ public class CraftingManager : MonoBehaviour
     {
         List<Item> items = PlayerInventory.GetItemsStatic();
 
-        return _instance.numberOfPossibleCrafts(items);
+        return _instance.getPossibleCrafts(items);
     }
 
     public static List<CraftingRecipe> GetPossibleCraftsStatic(List<Item> items)
     {
-        return _instance.numberOfPossibleCrafts(items);
+        return _instance.getPossibleCrafts(items);
     }
 
-    private List<CraftingRecipe> numberOfPossibleCrafts(List<Item> items)
+    private List<CraftingRecipe> getPossibleCrafts(List<Item> items)
     {
         List<CraftingRecipe> possibleCrafts = new List<CraftingRecipe>();
 
@@ -54,9 +57,9 @@ public class CraftingManager : MonoBehaviour
 
             bool ingredientsValid = false;
 
-            foreach (Item item in recipe.Ingredients)
+            foreach (CraftingIngredient ingredient in recipe.CraftingIngredients)
             {
-                if (item == null || (item != null && items.Contains(item)))
+                if (ingredient.Item == null || (ingredient.Item != null && items.Contains(ingredient.Item)))
                     ingredientsValid = true;
                 else
                 {

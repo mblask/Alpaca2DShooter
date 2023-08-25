@@ -1,6 +1,4 @@
 using System.Text;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -206,6 +204,7 @@ public class ItemTooltip : MonoBehaviour
         {
             _sb.AppendLine();
             _sb.AppendLine("Junk item");
+            _sb.AppendLine("Used in crafting");
 
             return;
         }

@@ -14,6 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Ingredients:
   - {fileID: 11400000, guid: c92af50a24538ad4ca5c9c66674ed87e, type: 2}
+  - {fileID: 11400000, guid: 4fc2ea3ea9b24ed4fb6e5949c14d74e2, type: 2}
   - {fileID: 11400000, guid: da573ce269e01f543a8b54f80c3db4e3, type: 2}
-  - {fileID: 11400000, guid: da573ce269e01f543a8b54f80c3db4e3, type: 2}
+  CraftingIngredients:
+  - Item: {fileID: 11400000, guid: c92af50a24538ad4ca5c9c66674ed87e, type: 2}
+    DestroyedOnCrafting: 0
+  - Item: {fileID: 11400000, guid: 4fc2ea3ea9b24ed4fb6e5949c14d74e2, type: 2}
+    DestroyedOnCrafting: 0
+  - Item: {fileID: 11400000, guid: da573ce269e01f543a8b54f80c3db4e3, type: 2}
+    DestroyedOnCrafting: 1
   ProductItem: {fileID: 11400000, guid: c0bb4237c9fd0b849a55738186624d30, type: 2}

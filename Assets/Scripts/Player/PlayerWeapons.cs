@@ -98,7 +98,7 @@ public class PlayerWeapons : MonoBehaviour
     {
         _mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition);
         weaponHandling();
-        triggerShooting();
+        TriggerShooting();
     }
 
     private void weaponsStartSetup()
@@ -142,7 +142,7 @@ public class PlayerWeapons : MonoBehaviour
         }
     }
 
-    private void triggerShooting()
+    public void TriggerShooting()
     {
         if (Input.GetKeyDown(KeyCode.G))
             useThrowable();
@@ -527,14 +527,14 @@ public class PlayerWeapons : MonoBehaviour
     {
         foreach (Weapon weapon in _weapons)
         {
-            if (weapon.WeaponItem.AmmoType == ammo.AmmoType)
-            {
-                Debug.Log($"Add {ammo.Amount} of {ammo.ItemName}");
-                weapon.TotalAmmo += ammo.Amount;
+            if (weapon.WeaponItem.AmmoType != ammo.AmmoType)
+                continue;
+
+            weapon.TotalAmmo += ammo.Amount;
+            if (_currentWeapon == weapon)
                 OnAmmoPanelUIChanged?.Invoke(_currentAmmo, _currentWeapon.TotalAmmo);
-                PlayerInventory.DeleteItemFromInventoryStatic(ammo);
-                return true;
-            }
+            PlayerInventory.DeleteItemFromInventoryStatic(ammo);
+            return true;
         }
 
         return false;

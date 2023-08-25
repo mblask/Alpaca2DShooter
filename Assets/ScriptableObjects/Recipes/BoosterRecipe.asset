@@ -16,4 +16,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9bc7020aeb16a754f9732dc9697185bf, type: 2}
   - {fileID: 11400000, guid: c92af50a24538ad4ca5c9c66674ed87e, type: 2}
   - {fileID: 0}
+  CraftingIngredients:
+  - Item: {fileID: 11400000, guid: 9bc7020aeb16a754f9732dc9697185bf, type: 2}
+    DestroyedOnCrafting: 1
+  - Item: {fileID: 11400000, guid: c92af50a24538ad4ca5c9c66674ed87e, type: 2}
+    DestroyedOnCrafting: 0
+  - Item: {fileID: 0}
+    DestroyedOnCrafting: 0
   ProductItem: {fileID: 11400000, guid: fe7f209bd2ecd7e4e964ac24c4f2fede, type: 2}
