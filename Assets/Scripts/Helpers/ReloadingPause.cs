@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ReloadingPause : StateMachineBehaviour
@@ -8,8 +6,7 @@ public class ReloadingPause : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo ateInfo, int layerIndex)
     {
         PlayerWeapons.Instance.StopCoroutine("AutoShooting");
-        PlayerWeapons.EnableShootingStatic(false);
-        //PlayerController.Instance.EnableShooting(false);
+        PlayerWeapons.Instance.EnableShooting(false);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -21,8 +18,7 @@ public class ReloadingPause : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo ateInfo, int layerIndex)
     {
-        PlayerWeapons.EnableShootingStatic(true);
-        //PlayerController.Instance.EnableShooting(true);    
+        PlayerWeapons.Instance.EnableShooting(true);
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

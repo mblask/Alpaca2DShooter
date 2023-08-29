@@ -16,6 +16,7 @@ public class MouseInteraction : MonoBehaviour
     private void Update()
     {
         onLeftMouseDown();
+        onLeftMousUp();
     }
 
     private void onLeftMouseDown()
@@ -24,15 +25,21 @@ public class MouseInteraction : MonoBehaviour
             return;
 
         checkInteractables();
-        _playerWeapons.TriggerShooting();
+        _playerWeapons.LeftClickDown();
+    }
+
+    private void onLeftMousUp()
+    {
+        if (!Input.GetMouseButtonUp(0))
+            return;
+
+        _playerWeapons.LeftClickUp();
+        _playerWeapons.EnableShooting(true);
     }
 
     private void checkInteractables()
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 0.1f);
-        if (hits.Length == 0)
-            return;
-
         foreach (Collider2D collider in hits)
         {
             IInteractable interactable = collider.GetComponent<IInteractable>();
@@ -41,19 +48,35 @@ public class MouseInteraction : MonoBehaviour
 
             if (Vector2.Distance(_playerWeapons.transform.position, transform.position) < _playerDistance)
             {
-                //Disable shooting and interact
-                Debug.Log("In range");
+                colliderClose(collider);
                 interactable.Interact();
             }
             else
             {
-                //If box shoot and destroy it for loot
-                //else too far away for interaction
-                Debug.Log("Out of range");
-                if (collider.GetComponent<Box>() == null)
-                    FloatingTextSpawner.CreateFloatingTextStatic(_playerWeapons.transform.position, "Too far away!", Color.white);
+                colliderFar(collider);
             }
         }
+    }
+
+    private void colliderClose(Collider2D collider)
+    {
+        _playerWeapons.EnableShooting(false);
+
+        if (collider.GetComponent<NPC_AI>() != null)
+            _playerWeapons.EnableShooting(true);
+    }
+
+    private void colliderFar(Collider2D collider)
+    {
+        _playerWeapons.EnableShooting(false);
+
+        if (collider.GetComponent<Box>() != null)
+            _playerWeapons.EnableShooting(true);
+
+        if (collider.GetComponent<NPC_AI>() != null)
+            _playerWeapons.EnableShooting(true);
+
+        FloatingTextSpawner.CreateFloatingTextStatic(_playerWeapons.transform.position, "Too far away!", Color.white);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -61,16 +84,9 @@ public class MouseInteraction : MonoBehaviour
         IInteractable interactable = collision.GetComponent<IInteractable>();
 
         if (interactable != null)
-        {
-            NPC_AI npcAI = collision.transform.GetComponent<NPC_AI>();
-            if (npcAI == null || (npcAI != null && npcAI.GetNPCType().Equals(NPCType.Ally)))
-                PlayerWeapons.EnableShootingStatic(false);
-
             interactable.Highlight();
-        }
 
         PickupItem pickupItem = collision.GetComponent<PickupItem>();
-        
         if (pickupItem != null)
             ItemTooltip.SetupTooltipStatic(pickupItem.GetItem());
     }
@@ -80,13 +96,9 @@ public class MouseInteraction : MonoBehaviour
         IInteractable interactable = collision.GetComponent<IInteractable>();
 
         if (interactable != null)
-        {
-            PlayerWeapons.EnableShootingStatic(true);
             interactable.RemoveHighlight();
-        }
 
         PickupItem pickupItem = collision.GetComponent<PickupItem>();
-        
         if (pickupItem != null)
             ItemTooltip.RemoveTooltipStatic();
     }

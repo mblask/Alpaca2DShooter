@@ -193,6 +193,8 @@ MonoBehaviour:
   _weapons:
   - WeaponItem: {fileID: 11400000, guid: 8e403aae5daf09c49a7cc32cfef2d5d2, type: 2}
     TotalAmmo: 100
+  - WeaponItem: {fileID: 11400000, guid: 347dff94e829f684dbc2ea07a9ffb197, type: 2}
+    TotalAmmo: 200
   _throwables: []
 --- !u!114 &8196825197066008503
 MonoBehaviour:

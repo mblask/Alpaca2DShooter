@@ -97,8 +97,7 @@ public class PlayerWeapons : MonoBehaviour
     private void Update()
     {
         _mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition);
-        weaponHandling();
-        TriggerShooting();
+        keyboardInput();
     }
 
     private void weaponsStartSetup()
@@ -112,7 +111,7 @@ public class PlayerWeapons : MonoBehaviour
         ThrowableImage.UpdateThrowableUIStatic(_currentThrowable);
     }
 
-    private void weaponHandling()
+    private void keyboardInput()
     {
         if (_playerStats == null || _gameManager == null)
             return;
@@ -140,13 +139,13 @@ public class PlayerWeapons : MonoBehaviour
             _weaponEquipped = !_weaponEquipped;
             presentWeapon();
         }
-    }
 
-    public void TriggerShooting()
-    {
         if (Input.GetKeyDown(KeyCode.G))
             useThrowable();
+    }
 
+    public void LeftClickDown()
+    {
         if (_pointerOver.OverUI())
             return;
 
@@ -175,7 +174,10 @@ public class PlayerWeapons : MonoBehaviour
                 _shootingInterval = 0.0f;
             }
         }
+    }
 
+    public void LeftClickUp()
+    {
         if (Input.GetMouseButtonUp(0))
         {
             _isShooting = false;
@@ -286,12 +288,7 @@ public class PlayerWeapons : MonoBehaviour
         }
     }
 
-    public static void EnableShootingStatic(bool value = true)
-    {
-        _instance.enableShooting(value);
-    }
-
-    private void enableShooting(bool value = true)
+    public void EnableShooting(bool value)
     {
         _canShoot = value;
     }
