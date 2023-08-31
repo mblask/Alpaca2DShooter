@@ -16,7 +16,7 @@ public class MouseInteraction : MonoBehaviour
     private void Update()
     {
         onLeftMouseDown();
-        onLeftMousUp();
+        onLeftMouseUp();
     }
 
     private void onLeftMouseDown()
@@ -28,7 +28,7 @@ public class MouseInteraction : MonoBehaviour
         _playerWeapons.LeftClickDown();
     }
 
-    private void onLeftMousUp()
+    private void onLeftMouseUp()
     {
         if (!Input.GetMouseButtonUp(0))
             return;

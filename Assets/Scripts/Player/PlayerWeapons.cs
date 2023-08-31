@@ -63,6 +63,7 @@ public class PlayerWeapons : MonoBehaviour
 
     private float _shootingInterval;
     private bool _intervalWeaponActivated = false;
+    private bool _isReloading = false;
 
     private int _currentAmmo;
     private int _shotsFired;
@@ -98,6 +99,7 @@ public class PlayerWeapons : MonoBehaviour
     {
         _mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition);
         keyboardInput();
+        intervalWeaponProcedure();
     }
 
     private void weaponsStartSetup()
@@ -155,7 +157,7 @@ public class PlayerWeapons : MonoBehaviour
         if (!_weaponEquipped)
             return;
 
-        if (Input.GetMouseButtonDown(0) && _canShoot)
+        if (!_isReloading)
         {
             _isShooting = true;
             _canSwitchWeapons = false;
@@ -163,47 +165,49 @@ public class PlayerWeapons : MonoBehaviour
 
             evaluateWeaponTypesAndShoot();
         }
-
-        if (_intervalWeaponActivated)
-        {
-            _shootingInterval += Time.deltaTime;
-
-            if (_shootingInterval >= _currentWeapon.WeaponItem.ShootInterval)
-            {
-                _intervalWeaponActivated = false;
-                _shootingInterval = 0.0f;
-            }
-        }
     }
 
     public void LeftClickUp()
     {
-        if (Input.GetMouseButtonUp(0))
+        _isShooting = false;
+        _canSwitchWeapons = true;
+        _canPutWeaponAway = true;
+        StopCoroutine(autoShootingCoroutine());
+    }
+
+    private void intervalWeaponProcedure()
+    {
+        if (!_intervalWeaponActivated)
+            return;
+
+        _shootingInterval += Time.deltaTime;
+
+        if (_shootingInterval >= _currentWeapon.WeaponItem.ShootInterval)
         {
-            _isShooting = false;
-            _canSwitchWeapons = true;
-            _canPutWeaponAway = true;
-            StopCoroutine(autoShootingCoroutine());
+            _intervalWeaponActivated = false;
+            _shootingInterval = 0.0f;
         }
     }
 
     private void evaluateWeaponTypesAndShoot()
     {
         if (_currentWeapon.WeaponItem.Automatic)
-            StartCoroutine(autoShootingCoroutine());
-        else
         {
-            if (_currentWeapon.WeaponItem.ShootInterval > 0.0f)
-            {
-                if (!_intervalWeaponActivated)
-                {
-                    _intervalWeaponActivated = shootOnce();
-                    _shootingInterval = 0.0f;
-                }
-            }
-            else
-                shootOnce();
+            StartCoroutine(autoShootingCoroutine());
+            return;
         }
+
+        if (_currentWeapon.WeaponItem.ShootInterval <= 0.0f)
+        {
+            shootOnce();
+            return;
+        }
+
+        if (_intervalWeaponActivated)
+            return;
+
+        _intervalWeaponActivated = shootOnce();
+        _shootingInterval = 0.0f;
     }
 
     private void useThrowable()
@@ -281,7 +285,7 @@ public class PlayerWeapons : MonoBehaviour
 
     private IEnumerator autoShootingCoroutine()
     {
-        while (_isShooting)
+        while (_isShooting && !_isReloading)
         {
             shootOnce();
             yield return new WaitForSeconds(_shootingInterval);
@@ -291,6 +295,11 @@ public class PlayerWeapons : MonoBehaviour
     public void EnableShooting(bool value)
     {
         _canShoot = value;
+    }
+
+    public void SetReloading(bool value)
+    {
+        _isReloading = value;
     }
 
     private void presentWeapon()
@@ -398,9 +407,7 @@ public class PlayerWeapons : MonoBehaviour
             return false;
         }
 
-        int bulletAmount = 1;
-        if (_currentWeapon.WeaponItem.Trigger.Equals(AnimationType.Shotgun))
-            bulletAmount = 5;
+        int bulletAmount = _currentWeapon.WeaponItem.Trigger.Equals(AnimationType.Shotgun) ? 5 : 1;
 
         for (int i = 0; i < bulletAmount; i++)
         {
@@ -412,14 +419,11 @@ public class PlayerWeapons : MonoBehaviour
             Transform bulletTransform = Instantiate(GameAssets.Instance.BulletPrefab, _shootingSpot.position, Quaternion.identity, null);
 
             Bullet bullet = bulletTransform.GetComponent<Bullet>();
-            bullet.SetupBullet(
-                direction,
-                UnityEngine.Random.Range(_playerStats.PlayerDamage.x, _playerStats.PlayerDamage.y),
-                gameObject.tag
-                );
-
-            _shotsFired++;
+            bullet
+                .SetupBullet(direction, UnityEngine.Random.Range(_playerStats.PlayerDamage.x, _playerStats.PlayerDamage.y), gameObject.tag);
         }
+        
+        _shotsFired++;
 
         _cameraController?.ShakeCamera(_cameraShakeDuration, _cameraShakeMagnitude);
 
