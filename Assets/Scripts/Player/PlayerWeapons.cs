@@ -419,8 +419,7 @@ public class PlayerWeapons : MonoBehaviour
             Transform bulletTransform = Instantiate(GameAssets.Instance.BulletPrefab, _shootingSpot.position, Quaternion.identity, null);
 
             Bullet bullet = bulletTransform.GetComponent<Bullet>();
-            bullet
-                .SetupBullet(direction, UnityEngine.Random.Range(_playerStats.PlayerDamage.x, _playerStats.PlayerDamage.y), gameObject.tag);
+            bullet.SetupBullet(direction, _playerStats.PlayerDamage.GetRandom(), gameObject.tag);
         }
         
         _shotsFired++;
