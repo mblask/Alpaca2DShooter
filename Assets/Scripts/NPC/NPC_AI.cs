@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 using AlpacaMyGames;
@@ -57,7 +55,7 @@ public class NPC_AI : MonoBehaviour
         _originPosition = transform.position;
         _targetPosition = generatePatrollingPosition();
 
-        resetInitialDistances();
+        UpdateDistancesAccordingToLighting();
 
         _state = NPCState.Idle;
     }
@@ -99,6 +97,19 @@ public class NPC_AI : MonoBehaviour
     public NPCType GetNPCType()
     {
         return _type;
+    }
+
+    public void UpdateDistancesAccordingToLighting()
+    {
+        resetInitialDistances();
+
+        Vector2 factorInterval = new Vector2(0.6f, 1.0f);
+        float factor = factorInterval.x + 
+            MainLightingManager.GlobalIntensity / MainLightingManager.MaxIntensity * (factorInterval.y - factorInterval.x);
+
+        _attackDistance *= factor;
+        _viewDistance *= factor;
+        _stopFollowingDistance *= factor;
     }
 
     private void npcSaysRandomStuff()

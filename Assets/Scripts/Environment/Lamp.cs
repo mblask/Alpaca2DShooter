@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 using AlpacaMyGames;
 
-public class Lamp : MonoBehaviour, IInteractable, IDamagable
+public class Lamp : SwitchableObject, IInteractable, IDamagable
 {
     private SpriteRenderer _spriteRenderer;
     private Light2D _light;
@@ -34,10 +32,24 @@ public class Lamp : MonoBehaviour, IInteractable, IDamagable
         _light.intensity = _isOn ? _defaultIntensity : 0.0f;
     }
 
-    private void triggerLamp()
+    public override void TurnOn()
+    {
+        _isOn = true;
+        _light.intensity = _defaultIntensity;
+    }
+
+    public override void TurnOff()
+    {
+        _isOn = true;
+        _light.intensity = 0.0f;
+    }
+
+    public override bool Toggle()
     {
         _isOn = !_isOn;
-        _light.intensity = _isOn ? _defaultIntensity : 0.0f;
+        _light.intensity = !_isOn ? _defaultIntensity : 0.0f;
+
+        return _isOn;
     }
 
     public void Highlight()
@@ -53,7 +65,7 @@ public class Lamp : MonoBehaviour, IInteractable, IDamagable
         if (_isBroken)
             return;
 
-        triggerLamp();
+        Toggle();
     }
 
     public void RemoveHighlight()

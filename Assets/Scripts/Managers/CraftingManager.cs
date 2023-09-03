@@ -16,7 +16,7 @@ public class CraftingManager : MonoBehaviour
         return _instance.craftItem(craftingRecipe);
     }
 
-    public bool craftItem(CraftingRecipe craftingRecipe)
+    private bool craftItem(CraftingRecipe craftingRecipe)
     {
         if (craftingRecipe == null)
             return false;

@@ -1,11 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
+using AlpacaMyGames;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
-public class TV : MonoBehaviour
+public class TV : SwitchableObject
 {
     private Light2D _tvPointLight;
+
+    private bool _isOn = false;
+    private bool _isBroken = false;
 
     private void Awake()
     {
@@ -16,15 +18,34 @@ public class TV : MonoBehaviour
     {
         _tvPointLight = GetComponentInChildren<Light2D>();
 
-        activateTV(1 == Random.Range(0, 2));
+        _isOn = Utilities.ChanceFunc(50);
+        Toggle();
     }
 
-    private void activateTV(bool value)
+    public override void TurnOn()
     {
-        if (value)
-            _tvPointLight.intensity = 1.0f;
-        else
-            _tvPointLight.intensity = 0.0f;
+        if (_isBroken)
+            return;
+
+        _isOn = true;
+        _tvPointLight.intensity = 1.0f;
+    }
+
+    public override void TurnOff()
+    {
+        _isOn = false;
+        _tvPointLight.intensity = 0.0f;
+    }
+
+    public override bool Toggle()
+    {
+        if (_isBroken)
+            return false;
+
+        _isOn = !_isOn;
+        _tvPointLight.intensity = _isOn ? 1.0f : 0.0f;
+
+        return _isOn;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -32,7 +53,11 @@ public class TV : MonoBehaviour
         Bullet bullet = collision.GetComponent<Bullet>();
 
         if (bullet != null)
-            activateTV(false);
+        {
+            _isOn = false;
+            _isBroken = true;
+            _tvPointLight.intensity = 0.0f;
+        }
 
         Destroy(collision.gameObject);
     }
