@@ -34,20 +34,28 @@ public class Lamp : SwitchableObject, IInteractable, IDamagable
 
     public override void TurnOn()
     {
+        if (_isBroken)
+            return;
+
         _isOn = true;
         _light.intensity = _defaultIntensity;
     }
 
     public override void TurnOff()
     {
-        _isOn = true;
+        _isOn = false;
         _light.intensity = 0.0f;
+    }
+
+    public override void Disable(bool value)
+    {
+        _isBroken = value;
     }
 
     public override bool Toggle()
     {
         _isOn = !_isOn;
-        _light.intensity = !_isOn ? _defaultIntensity : 0.0f;
+        _light.intensity = _isOn ? _defaultIntensity : 0.0f;
 
         return _isOn;
     }

@@ -8,6 +8,11 @@ public class ElectricityGenerator : MonoBehaviour, IDamagable
 
     [SerializeField] private List<SwitchableObject> _switchables = new List<SwitchableObject>();
 
+    public void AddSwitchables(SwitchableObject switchable)
+    {
+        _switchables.Add(switchable);
+    }
+
     public void DamageObject(float value)
     {
         if (_isBroken)
@@ -25,6 +30,9 @@ public class ElectricityGenerator : MonoBehaviour, IDamagable
     private void turnOffAttachedSwitchableObjects()
     {
         foreach (SwitchableObject switchable in _switchables)
+        {
             switchable.TurnOff();
+            switchable.Disable(true);
+        }
     }
 }

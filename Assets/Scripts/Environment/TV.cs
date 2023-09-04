@@ -37,6 +37,11 @@ public class TV : SwitchableObject
         _tvPointLight.intensity = 0.0f;
     }
 
+    public override void Disable(bool value)
+    {
+        _isBroken = value;
+    }
+
     public override bool Toggle()
     {
         if (_isBroken)
