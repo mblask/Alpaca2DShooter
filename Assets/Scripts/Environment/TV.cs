@@ -6,9 +6,6 @@ public class TV : SwitchableObject
 {
     private Light2D _tvPointLight;
 
-    private bool _isOn = false;
-    private bool _isBroken = false;
-
     private void Awake()
     {
         _tvPointLight = GetComponentInChildren<Light2D>();
@@ -18,39 +15,45 @@ public class TV : SwitchableObject
     {
         _tvPointLight = GetComponentInChildren<Light2D>();
 
-        _isOn = Utilities.ChanceFunc(50);
+        IsOn = Utilities.ChanceFunc(50);
         Toggle();
     }
 
     public override void TurnOn()
     {
-        if (_isBroken)
+        if (IsBroken)
             return;
 
-        _isOn = true;
+        if (!HasElectricity)
+            return;
+
+        IsOn = true;
         _tvPointLight.intensity = 1.0f;
     }
 
     public override void TurnOff()
     {
-        _isOn = false;
+        IsOn = false;
         _tvPointLight.intensity = 0.0f;
     }
 
-    public override void Disable(bool value)
+    public override void ElectricityAvailable(bool value)
     {
-        _isBroken = value;
+        HasElectricity = value;
     }
 
     public override bool Toggle()
     {
-        if (_isBroken)
+        if (IsBroken)
             return false;
 
-        _isOn = !_isOn;
-        _tvPointLight.intensity = _isOn ? 1.0f : 0.0f;
+        if (HasElectricity)
+            return false;
 
-        return _isOn;
+        IsOn = !IsOn;
+        _tvPointLight.intensity = IsOn ? 1.0f : 0.0f;
+
+        return IsOn;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -59,8 +62,8 @@ public class TV : SwitchableObject
 
         if (bullet != null)
         {
-            _isOn = false;
-            _isBroken = true;
+            IsOn = false;
+            IsBroken = true;
             _tvPointLight.intensity = 0.0f;
         }
 

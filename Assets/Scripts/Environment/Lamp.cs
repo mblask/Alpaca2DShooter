@@ -8,8 +8,6 @@ public class Lamp : SwitchableObject, IInteractable, IDamagable
     private Light2D _light;
 
     private float _defaultIntensity;
-    private bool _isBroken = false;
-    [SerializeField] private bool _isOn = false;
 
     [SerializeField] private Color _defaultColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
     [SerializeField] private Color _highlightColor = new Color(0.6f, 1.0f, 0.6f, 1.0f);
@@ -28,49 +26,55 @@ public class Lamp : SwitchableObject, IInteractable, IDamagable
 
     private void randomWorkingLamp()
     {
-        _isOn = Utilities.ChanceFunc(50);
-        _light.intensity = _isOn ? _defaultIntensity : 0.0f;
+        IsOn = Utilities.ChanceFunc(50);
+        _light.intensity = IsOn ? _defaultIntensity : 0.0f;
     }
 
     public override void TurnOn()
     {
-        if (_isBroken)
+        if (IsBroken)
             return;
 
-        _isOn = true;
+        if (!HasElectricity)
+            return;
+
+        IsOn = true;
         _light.intensity = _defaultIntensity;
     }
 
     public override void TurnOff()
     {
-        _isOn = false;
+        IsOn = false;
         _light.intensity = 0.0f;
     }
 
-    public override void Disable(bool value)
+    public override void ElectricityAvailable(bool value)
     {
-        _isBroken = value;
+        HasElectricity = value;
     }
 
     public override bool Toggle()
     {
-        _isOn = !_isOn;
-        _light.intensity = _isOn ? _defaultIntensity : 0.0f;
+        if (IsBroken)
+            return false;
 
-        return _isOn;
+        if (!HasElectricity)
+            return false;
+
+        IsOn = !IsOn;
+        _light.intensity = IsOn ? _defaultIntensity : 0.0f;
+
+        return IsOn;
     }
 
     public void Highlight()
     {
-        if (_isBroken)
-            return;
-
         _spriteRenderer.color = _highlightColor;
     }
 
     public void Interact()
     {
-        if (_isBroken)
+        if (IsBroken)
             return;
 
         Toggle();
@@ -78,16 +82,13 @@ public class Lamp : SwitchableObject, IInteractable, IDamagable
 
     public void RemoveHighlight()
     {
-        if (_isBroken)
-            return;
-
         _spriteRenderer.color = _defaultColor;
     }
 
     public void DamageObject(float value)
     {
-        _isBroken = true;
-        _isOn = false;
+        IsBroken = true;
+        IsOn = false;
         _light.intensity = 0.0f;
     }
 }
