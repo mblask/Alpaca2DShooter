@@ -157,14 +157,17 @@ public class PlayerWeapons : MonoBehaviour
         if (!_weaponEquipped)
             return;
 
-        if (!_isReloading)
-        {
-            _isShooting = true;
-            _canSwitchWeapons = false;
-            _canPutWeaponAway = false;
+        if (_isReloading)
+            return;
 
-            evaluateWeaponTypesAndShoot();
-        }
+        if (!_canShoot)
+            return;
+
+        _isShooting = true;
+        _canSwitchWeapons = false;
+        _canPutWeaponAway = false;
+
+        evaluateWeaponTypesAndShoot();
     }
 
     public void LeftClickUp()

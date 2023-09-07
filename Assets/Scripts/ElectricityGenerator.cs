@@ -8,6 +8,11 @@ public class ElectricityGenerator : MonoBehaviour, IDamagable
 
     [SerializeField] private List<SwitchableObject> _switchables = new List<SwitchableObject>();
 
+    private void Start()
+    {
+        _switchables.TrimExcess();
+    }
+
     public void AddSwitchables(SwitchableObject switchable)
     {
         _switchables.Add(switchable);

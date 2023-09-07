@@ -180,7 +180,7 @@ public class LevelObject : MonoBehaviour
     public Vector3 GetSpawnPortalPosition()
     {
         if (_spawnPortalTransform == null)
-            return default(Vector3);
+            return default;
 
         return _spawnPortalTransform.position;
     }
