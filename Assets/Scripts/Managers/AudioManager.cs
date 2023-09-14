@@ -1,6 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using AlpacaMyGames;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -14,10 +12,6 @@ public class AudioManager : MonoBehaviour
             return _instance;
         }
     }
-
-    private const float VOLUME_DIVISION_CONST = 10.0f;
-    private const float VOLUME_ABS_MINIMUM = 8.01f;
-    private const float VOLUME_WIDTH = 1.0f;
 
     [SerializeField] private AudioMixer _mainAudioMixer;
 
@@ -86,33 +80,8 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        Bullet.OnBulletHitsCharacter += playClip;
-        if (PlayerWeapons.Instance != null)
-        {
-            PlayerWeapons.Instance.OnShootingAudio += playClip;
-            PlayerWeapons.Instance.OnReloadingAudio += playClip;
-        }
-        NPCWeapons.OnEnemyShootingAudio += playClip;
-        PickupItem.OnItemPickedUpAudio += playClip;
-        FiringTrap.OnWeaponShootingAudio += playClip;
-        WallFiringTrap.OnShooting += playClip;
-
         if (!_playMusic)
             _musicAudioSource.Stop();
-    }
-
-    private void OnDisable()
-    {
-        Bullet.OnBulletHitsCharacter -= playClip;
-        if (PlayerWeapons.Instance != null)
-        {
-            PlayerWeapons.Instance.OnShootingAudio -= playClip;
-            PlayerWeapons.Instance.OnReloadingAudio -= playClip;
-        }
-        NPCWeapons.OnEnemyShootingAudio -= playClip;
-        PickupItem.OnItemPickedUpAudio -= playClip;
-        FiringTrap.OnWeaponShootingAudio -= playClip;
-        WallFiringTrap.OnShooting -= playClip;
     }
 
     public float GetMusicVolume()
@@ -128,7 +97,7 @@ public class AudioManager : MonoBehaviour
         return sfxVolume;
     }
 
-    private void playClip(SFXClip audioClip)
+    public void PlayClip(SFXClip audioClip)
     {
         AudioClip clipToPlay;
 
@@ -162,7 +131,7 @@ public class AudioManager : MonoBehaviour
                 clipToPlay = _audioContainer.Bandaging;
                 break;
             case SFXClip.BulletHitsCharacter:
-                clipToPlay = _audioContainer.BulletHitsCharacter[UnityEngine.Random.Range(0, _audioContainer.BulletHitsCharacter.Count)];
+                clipToPlay = _audioContainer.BulletHitsCharacter.GetRandomElement();
                 break;
             default:
                 clipToPlay = null;

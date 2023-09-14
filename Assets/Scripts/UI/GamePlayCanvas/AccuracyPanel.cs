@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -23,19 +21,11 @@ public class AccuracyPanel : MonoBehaviour
     }
 
     private void Start()
-    {
-        PlayerWeapons.Instance.OnEnemyHit += SetupAccuracyText;
-        
+    {        
         SetupAccuracyText(0.0f);
     }
 
-    private void OnDisable()
-    {
-        if (PlayerWeapons.Instance != null)
-            PlayerWeapons.Instance.OnEnemyHit -= SetupAccuracyText;
-    }
-
-    private void SetupAccuracyText(float accuracy)
+    public void SetupAccuracyText(float accuracy)
     {
         accuracy *= 100.0f;
         _accuracyText.SetText(accuracy.ToString("F0") + "%");

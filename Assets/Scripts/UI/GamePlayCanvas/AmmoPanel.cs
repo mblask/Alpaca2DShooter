@@ -1,30 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class AmmoPanel : MonoBehaviour
 {
+    private static AmmoPanel _instance;
+    public static AmmoPanel Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
+
     private TextMeshProUGUI _ammoText;
-    private PlayerWeapons _playerWeapons;
 
     private void Awake()
     {
+        _instance = this;
         _ammoText = transform.GetComponentInChildren<TextMeshProUGUI>();
-    }
-
-    private void Start()
-    {
-        _playerWeapons = PlayerWeapons.Instance;
-
-        _playerWeapons.OnAmmoPanelUIChanged += UpdateAmmoText;
-    }
-
-    private void OnDisable()
-    {
-        if (_playerWeapons != null)
-            _playerWeapons.OnAmmoPanelUIChanged -= UpdateAmmoText;
     }
 
     public void UpdateAmmoText(int value, int total)

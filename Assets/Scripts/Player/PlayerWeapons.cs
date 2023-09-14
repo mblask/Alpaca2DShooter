@@ -6,13 +6,6 @@ using AlpacaMyGames;
 
 public class PlayerWeapons : MonoBehaviour
 {
-    public event Action<int, int> OnAmmoPanelUIChanged;
-    public event Action<PlayerWeapons> OnWeaponChanged;
-    public event Action<PlayerWeapons> OnShooting;
-    public event Action<SFXClip> OnShootingAudio;
-    public event Action<SFXClip> OnReloadingAudio;
-    public event Action<float> OnEnemyHit;
-
     private static PlayerWeapons _instance;
     public static PlayerWeapons Instance
     {
@@ -69,6 +62,12 @@ public class PlayerWeapons : MonoBehaviour
     private int _shotsFired;
     private int _shotsHit;
 
+    private WeaponImage _weaponImage;
+    private AmmoPanel _ammoPanel;
+    private AccuracyPanel _accuracyPanel;
+    private MouseCursor _mouseCursor;
+    private AudioManager _audioManager;
+
     public void Awake()
     {
         _instance = this;
@@ -85,14 +84,13 @@ public class PlayerWeapons : MonoBehaviour
         _cameraController = CameraController.Instance;
         _pointerOver = new PointerOver();
 
-        NPCStats.OnHit += incrementShotsHit;
+        _weaponImage = WeaponImage.Instance;
+        _ammoPanel = AmmoPanel.Instance;
+        _accuracyPanel = AccuracyPanel.Instance;
+        _mouseCursor = MouseCursor.Instance;
+        _audioManager = AudioManager.Instance;
 
         weaponsStartSetup();
-    }
-
-    private void OnDisable()
-    {
-        NPCStats.OnHit -= incrementShotsHit;
     }
 
     private void Update()
@@ -340,8 +338,7 @@ public class PlayerWeapons : MonoBehaviour
         }
 
         SetWeapon(currentIndex);
-
-        OnWeaponChanged?.Invoke(this);
+        _weaponImage.SetWeaponImage(_currentWeapon);
     }
 
     public void SetWeapon(int index = 0)
@@ -365,7 +362,7 @@ public class PlayerWeapons : MonoBehaviour
 
         _shootingInterval = _currentWeapon.WeaponItem.ShootInterval;
 
-        OnAmmoPanelUIChanged?.Invoke(_currentAmmo, _currentWeapon.TotalAmmo);
+        _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
 
         if (_weaponEquipped)
             presentWeapon();
@@ -387,11 +384,10 @@ public class PlayerWeapons : MonoBehaviour
         }
     }
 
-    private void incrementShotsHit()
+    public void IncrementShotsHit()
     {
         _shotsHit++;
-
-        OnEnemyHit?.Invoke((float)_shotsHit / _shotsFired);
+        _accuracyPanel?.SetupAccuracyText((float)_shotsHit / _shotsFired);
     }
 
     public float GetAccuracy()
@@ -437,10 +433,10 @@ public class PlayerWeapons : MonoBehaviour
         if (_currentAmmo < 0)
             _currentAmmo = 0;
 
-        OnShooting?.Invoke(this);
-        OnShootingAudio?.Invoke(_currentWeapon.WeaponItem.WeaponShootAudio);
+        _mouseCursor.OnShooting(_currentWeapon);
+        _audioManager.PlayClip(_currentWeapon.WeaponItem.WeaponShootAudio);
 
-        OnAmmoPanelUIChanged?.Invoke(_currentAmmo, _currentWeapon.TotalAmmo);
+        _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
 
         return true;
     }
@@ -514,8 +510,8 @@ public class PlayerWeapons : MonoBehaviour
             setCurrentWeaponAmmo(ammoNeeded);
         }
 
-        OnReloadingAudio?.Invoke(_currentWeapon.WeaponItem.WeaponReloadAudio);
-        OnAmmoPanelUIChanged?.Invoke(_currentAmmo, _currentWeapon.TotalAmmo);
+        _audioManager.PlayClip(_currentWeapon.WeaponItem.WeaponReloadAudio);
+        _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
 
         _playerAnimations.PlayAnimation(AnimationType.Reload);
         presentWeapon();
@@ -535,7 +531,8 @@ public class PlayerWeapons : MonoBehaviour
 
             weapon.TotalAmmo += ammo.Amount;
             if (_currentWeapon == weapon)
-                OnAmmoPanelUIChanged?.Invoke(_currentAmmo, _currentWeapon.TotalAmmo);
+                _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
+
             PlayerInventory.DeleteItemFromInventoryStatic(ammo);
             return true;
         }
@@ -564,8 +561,7 @@ public class PlayerWeapons : MonoBehaviour
             if (weapon.ThrowableItem == _throwables[i].ThrowableItem)
             {
                 _throwables[i].TotalAmmo++;
-
-                OnAmmoPanelUIChanged?.Invoke(_currentAmmo, _currentWeapon.TotalAmmo);
+                _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
 
                 return true;
             }
@@ -601,7 +597,7 @@ public class PlayerWeapons : MonoBehaviour
                 Vector2Int ammoDropRange = new Vector2Int(10, 30);
                 _weapons[i].TotalAmmo += UnityEngine.Random.Range(ammoDropRange.x, ammoDropRange.y);
 
-                OnAmmoPanelUIChanged?.Invoke(_currentAmmo, _currentWeapon.TotalAmmo);
+                _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
 
                 return true;
             }
@@ -612,7 +608,7 @@ public class PlayerWeapons : MonoBehaviour
         if (_currentWeapon == null)
         {
             _currentWeapon = weapon;
-            OnWeaponChanged?.Invoke(this);
+            _weaponImage.SetWeaponImage(_currentWeapon);
             SetWeapon(0);
         }
 

@@ -1,17 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public class WeaponImage : MonoBehaviour
 {
+    private static WeaponImage _instance;
+    public static WeaponImage Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
+
     private Transform _imageTransform;
     private Image _image;
     private PlayerWeapons _playerWeapons;
 
     private void Awake()
     {
+        _instance = this;
         _imageTransform = transform.Find("Image");
         _image = _imageTransform.GetComponent<Image>();
     }
@@ -20,7 +28,6 @@ public class WeaponImage : MonoBehaviour
     {
         _playerWeapons = PlayerWeapons.Instance;
         activateUI(_playerWeapons.GetWeapons().Count > 0);
-        _playerWeapons.OnWeaponChanged += PlayerWeapons_OnWeaponsChanged;
     }
 
     public void PlayerWeapons_OnWeaponsChanged(PlayerWeapons playerWeapons)

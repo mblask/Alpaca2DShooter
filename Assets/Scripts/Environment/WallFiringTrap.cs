@@ -6,8 +6,6 @@ using System;
 
 public class WallFiringTrap : MonoBehaviour
 {
-    public static Action<SFXClip> OnShooting;
-
     private List<ShootingSpot> _shootingSpots;
 
     private Vector2 _damageInterval = new Vector2(3.0f, 6.0f);
@@ -20,6 +18,7 @@ public class WallFiringTrap : MonoBehaviour
     private float _timer = 0.2f;
 
     private GameManager _gameManager;
+    private AudioManager _audioManager;
 
     private void Awake()
     {
@@ -29,6 +28,7 @@ public class WallFiringTrap : MonoBehaviour
     private void Start()
     {
         _gameManager = GameManager.Instance;
+        _audioManager = AudioManager.Instance;
     }
 
     private void Update()
@@ -66,7 +66,7 @@ public class WallFiringTrap : MonoBehaviour
         Bullet bullet = Instantiate(GameAssets.Instance.BulletPrefab, position, Quaternion.identity, null).GetComponent<Bullet>();
         bullet.SetupBullet(Utilities.GetVectorFromAngle(transform.rotation.eulerAngles.z + 90), UnityEngine.Random.Range(_damageInterval.x, _damageInterval.y), _trapTag);
         generateShootingParticles(position);
-        OnShooting?.Invoke(SFXClip.GunShot);
+        _audioManager.PlayClip(SFXClip.GunShot);
     }
 
     private void generateShootingParticles(Vector2 position)

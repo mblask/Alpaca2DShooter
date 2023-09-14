@@ -1,11 +1,8 @@
-using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class Bullet : MonoBehaviour
 {
-    public static event Action<SFXClip> OnBulletHitsCharacter;
-
     private float _bulletSpeed = 25.0f;
     private float _destroyAfter = 2.0f;
 
@@ -14,9 +11,13 @@ public class Bullet : MonoBehaviour
     private float _bulletDamage;
     private string _shooterTag;
 
-    private void Start()
+    private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+    }
+
+    private void Start()
+    {
         _rigidbody.velocity = _bulletSpeed * _bulletDirection;
         Destroy(gameObject, _destroyAfter);
     }
@@ -51,7 +52,7 @@ public class Bullet : MonoBehaviour
         if (damagable != null)
         {
             damagable.DamageObject(_bulletDamage);
-            OnBulletHitsCharacter?.Invoke(SFXClip.BulletHitsCharacter);
+            AudioManager.Instance.PlayClip(SFXClip.BulletHitsCharacter);
 
             Destroy(gameObject);
         }

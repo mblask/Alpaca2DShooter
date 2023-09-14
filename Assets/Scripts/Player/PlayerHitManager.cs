@@ -16,13 +16,12 @@ public class PlayerHitManager : MonoBehaviour
         }
     }
 
-    public Action OnPlayerWounded;
-    public Action OnPlayerWoundsHealed;
-
     private CameraController _mainCameraController;
     private PostProcessingManager _postProcessingManager;
 
     private List<WoundType> _woundsList = new List<WoundType>();
+
+    private WoundedUI _woundedUI;
 
     private void Awake()
     {
@@ -33,6 +32,7 @@ public class PlayerHitManager : MonoBehaviour
     {
         _mainCameraController = Camera.main.GetComponent<CameraController>();
         _postProcessingManager = PostProcessingManager.Instance;
+        _woundedUI = WoundedUI.Instance;
     }
 
     public void CheckHit()
@@ -86,7 +86,7 @@ public class PlayerHitManager : MonoBehaviour
         else
             return;
 
-        OnPlayerWounded?.Invoke();
+        _woundedUI.ActivateUI();
     }
 
     private IEnumerator removeWoundTypeCoroutine(WoundType woundType, float after)
@@ -101,7 +101,7 @@ public class PlayerHitManager : MonoBehaviour
         }
 
         _woundsList.Remove(woundType);
-        OnPlayerWoundsHealed?.Invoke();
+        _woundedUI.ActivateUI();
     }
 
     public static List<WoundType> GetWoundsListStatic()

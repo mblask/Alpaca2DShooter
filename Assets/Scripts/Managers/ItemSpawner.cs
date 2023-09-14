@@ -1,3 +1,4 @@
+using AlpacaMyGames;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
@@ -31,18 +32,6 @@ public class ItemSpawner : MonoBehaviour
     private void Start()
     {
         _gameAssets = GameAssets.Instance;
-
-        NPCStats.OnEnemyDeath += EnemyStats_OnEnemyDeath;
-    }
-
-    private void OnDisable()
-    {
-        NPCStats.OnEnemyDeath -= EnemyStats_OnEnemyDeath;
-    }
-
-    private void EnemyStats_OnEnemyDeath(NPCStats enemyStats)
-    {
-        SpawnRandomItemAt(enemyStats.transform.position);
     }
 
     public Transform SpawnItem(Vector3 position, Item item)
@@ -90,7 +79,7 @@ public class ItemSpawner : MonoBehaviour
 
     private void generateItemPool()
     {
-        float randomDropChance = UnityEngine.Random.Range(0.0f, 100.0f);
+        float randomDropChance = Random.Range(0.0f, 100.0f);
 
         foreach (Item item in _availableItems)
             if (item != null)
@@ -112,7 +101,7 @@ public class ItemSpawner : MonoBehaviour
 
         if (_itemPool.Count > 0)
         {
-            Item randomItem = _itemPool[UnityEngine.Random.Range(0, _itemPool.Count)];
+            Item randomItem = _itemPool.GetRandomElement();
             SpawnItem(position, randomItem);
 
         }
@@ -122,7 +111,7 @@ public class ItemSpawner : MonoBehaviour
 
     private bool shouldDropItem()
     {
-        int randomNumber = UnityEngine.Random.Range(0, 100);
+        int randomNumber = Random.Range(0, 100);
 
         return randomNumber <= EnemyDropRate;
     }
@@ -131,9 +120,10 @@ public class ItemSpawner : MonoBehaviour
     {
         while (_spawnedArtefacts.Count < artefactsRequired)
         {
-            int randomIndex = UnityEngine.Random.Range(0, _availableArtefacts.Count);
+            int randomIndex = Random.Range(0, _availableArtefacts.Count);
 
-            Vector2 randomPosition = Vector2.right * UnityEngine.Random.Range(0.0f, 20.0f) + Vector2.up * UnityEngine.Random.Range(0.0f, 20.0f);
+            Vector2 randomPosition = 
+                Vector2.right * Random.Range(0.0f, 20.0f) + Vector2.up * Random.Range(0.0f, 20.0f);
 
             Transform spawnedArtefact = SpawnItem(randomPosition, _availableArtefacts[randomIndex]);
 

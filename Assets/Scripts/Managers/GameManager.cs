@@ -37,20 +37,12 @@ public class GameManager : MonoBehaviour
     {
         if (PlayerStats.Instance != null)
             PlayerStats.Instance.OnPlayerDeath += TriggerFailure;
-        NPCStats.OnEnemyDeath += EnemyStats_OnEnemyDeath;
     }
 
     private void OnDisable()
     {
         if (PlayerStats.Instance != null)
             PlayerStats.Instance.OnPlayerDeath -= TriggerFailure;
-
-        NPCStats.OnEnemyDeath -= EnemyStats_OnEnemyDeath;
-    }
-
-    private void EnemyStats_OnEnemyDeath(NPCStats enemyStats)
-    {
-        _enemiesKilled++;
     }
 
     private void Update()
@@ -62,6 +54,11 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Escape))
                 OnTogglePause?.Invoke();
         }
+    }
+
+    public void IncrementEnemiesKilled()
+    {
+        _enemiesKilled++;
     }
 
     private void timeManager()

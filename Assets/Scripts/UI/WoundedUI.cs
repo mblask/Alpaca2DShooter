@@ -1,10 +1,18 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 public class WoundedUI : MonoBehaviour
 {
+    private static WoundedUI _instance;
+    public static WoundedUI Instance
+    {
+        get
+        {
+            return _instance;
+        }
+    }
+
     private Transform _container;
     private Transform _woundsContainer;
 
@@ -12,6 +20,7 @@ public class WoundedUI : MonoBehaviour
 
     private void Awake()
     {
+        _instance = this;
         _container = transform.Find("Container");
         _woundsContainer = _container.Find("WoundsContainer");
     }
@@ -19,19 +28,9 @@ public class WoundedUI : MonoBehaviour
     private void Start()
     {
         _gameAssets = GameAssets.Instance;
-
-        PlayerHitManager.Instance.OnPlayerWounded += activateUI;
-        PlayerHitManager.Instance.OnPlayerWoundsHealed += activateUI;
     }
 
-    private void OnDisable()
-    {
-
-        PlayerHitManager.Instance.OnPlayerWounded -= activateUI;
-        PlayerHitManager.Instance.OnPlayerWoundsHealed -= activateUI;
-    }
-
-    private void activateUI()
+    public void ActivateUI()
     {
         if (addWounds())
         {

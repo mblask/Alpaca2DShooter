@@ -1,13 +1,8 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using AlpacaMyGames;
 
 public class NPCWeapons : MonoBehaviour
 {
-    public static event Action<SFXClip> OnEnemyShootingAudio;
-
     private Transform _shootingSpot;
     private Animator _animator;
     private NPC_AI _npcAI;
@@ -28,7 +23,9 @@ public class NPCWeapons : MonoBehaviour
 
     private Transform _shootTarget;
     public bool HasShootingTarget => _shootTarget != null;
+    
     private GameAssets _gameAssets;
+    private AudioManager _audioManager;
 
     private void Awake()
     {
@@ -40,6 +37,7 @@ public class NPCWeapons : MonoBehaviour
     private void Start()
     {
         _gameAssets = GameAssets.Instance;
+        _audioManager = AudioManager.Instance;
         chooseEnemysWeapon();
     }
 
@@ -185,7 +183,7 @@ public class NPCWeapons : MonoBehaviour
 
         generateShootingParticleSystem();
 
-        OnEnemyShootingAudio?.Invoke(_selectedWeapon.WeaponShootAudio);
+        _audioManager.PlayClip(_selectedWeapon.WeaponShootAudio);
     }
 
     public IEnumerator AutoShooting()

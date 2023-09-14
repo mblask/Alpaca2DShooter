@@ -1,13 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
 using AlpacaMyGames;
 
 public class FiringTrap : MonoBehaviour, IDamagable
 {
-    public static event Action<SFXClip> OnWeaponShootingAudio;
-
     [SerializeField] private float _searchRadius;
     [SerializeField] private float _trackingRadius;
 
@@ -29,6 +24,7 @@ public class FiringTrap : MonoBehaviour, IDamagable
     private Weapon _selectedWeapon;
 
     private GameManager _gameManager;
+    private AudioManager _audioManager;
 
     private FiringTrapState _trapState = FiringTrapState.Search;
 
@@ -41,6 +37,7 @@ public class FiringTrap : MonoBehaviour, IDamagable
     private void Start()
     {
         _gameManager = GameManager.Instance;
+        _audioManager = AudioManager.Instance;
         WeaponItem randomWeapon = GameAssets.Instance.AvailableWeaponsList.GetRandomElement();
         _weaponSpriteRenderer.sprite = randomWeapon.ItemSprite;
 
@@ -191,7 +188,7 @@ public class FiringTrap : MonoBehaviour, IDamagable
 
         generateShootingParticleSystem();
 
-        OnWeaponShootingAudio?.Invoke(_selectedWeapon.WeaponItem.WeaponShootAudio);
+        _audioManager.PlayClip(_selectedWeapon.WeaponItem.WeaponShootAudio);
     }
 
     private Vector2 shootingDirection(Vector3 target)

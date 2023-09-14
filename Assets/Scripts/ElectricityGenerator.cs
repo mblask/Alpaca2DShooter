@@ -36,8 +36,8 @@ public class ElectricityGenerator : MonoBehaviour, IDamagable
     {
         foreach (SwitchableObject switchable in _switchables)
         {
-            switchable.TurnOff();
             switchable.ElectricityAvailable(false);
+            switchable.TurnOff();
         }
     }
 }

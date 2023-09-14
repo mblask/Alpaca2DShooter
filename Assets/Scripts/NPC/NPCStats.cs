@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class NPCStats : MonoBehaviour, IDamagable
 {
-    public static event Action OnHit;
-    public static event Action<NPCStats> OnEnemyDeath;
-
     private float _currentHealth;
 
     [SerializeField] private NPCEnemyType _enemyType;
@@ -20,6 +17,10 @@ public class NPCStats : MonoBehaviour, IDamagable
     private float _healthRegeneration;
 
     private GameAssets _gameAssets;
+    private GameManager _gameManager;
+    private ItemSpawner _itemSpawner;
+    private PlayerWeapons _playerWeapons;
+    private ConversationSystem _conversationSystem;
     private NPCHealthCanvas _enemyHealthCanvas;
 
     private NPCBase _npcBase;
@@ -36,6 +37,10 @@ public class NPCStats : MonoBehaviour, IDamagable
     private void Start()
     {
         _gameAssets = GameAssets.Instance;
+        _itemSpawner = ItemSpawner.Instance;
+        _gameManager = GameManager.Instance;
+        _playerWeapons = PlayerWeapons.Instance;
+        _conversationSystem = GetComponent<ConversationSystem>();
         _npcBase = GetComponent<NPCBase>();
         _enemyAI = GetComponent<NPC_AI>();
     }
@@ -102,7 +107,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         _enemyHealthCanvas.ActivateHealthSlider();
 
         _enemyAI.ExtendViewAndAttackDistance();
-        OnHit?.Invoke();
+        _playerWeapons.IncrementShotsHit();
 
         hitShading();
 
@@ -144,7 +149,9 @@ public class NPCStats : MonoBehaviour, IDamagable
         if (!_isDead)
         {
             _isDead = true;
-            OnEnemyDeath?.Invoke(this);
+            _gameManager.IncrementEnemiesKilled();
+            _itemSpawner.SpawnRandomItemAt(transform.position);
+            _conversationSystem.DeactivateSpeechBoxOnNPCDeath();
             Destroy(gameObject);
         }
     }

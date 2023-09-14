@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,19 +8,9 @@ public class ConversationSystem : MonoBehaviour
 
     private bool _isConversing = false;
 
-    private void OnEnable()
+    public void DeactivateSpeechBoxOnNPCDeath()
     {
-        NPCStats.OnEnemyDeath += DeactivateSpeechBoxOnNPCDeath;
-    }
-
-    private void OnDisable()
-    {
-        NPCStats.OnEnemyDeath -= DeactivateSpeechBoxOnNPCDeath;
-    }
-
-    private void DeactivateSpeechBoxOnNPCDeath(NPCStats NPCStats)
-    {
-        if (NPCStats.gameObject.Equals(this.gameObject) && _isConversing)
+        if (_isConversing)
             SpeechBox.DeactivateSpeechBoxSingleStatic();
     }
 

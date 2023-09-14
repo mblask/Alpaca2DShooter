@@ -30,9 +30,6 @@ public class MouseCursor : MonoBehaviour
     {
         _camera = Camera.main;
         transform.localScale = Vector3.one * _startingCrosshairScale;
-
-        if (PlayerWeapons.Instance != null)
-            PlayerWeapons.Instance.OnShooting += onShooting;
     }
 
     private void LateUpdate()
@@ -41,15 +38,8 @@ public class MouseCursor : MonoBehaviour
         resizeCursor();
     }
 
-    private void OnDisable()
+    public void OnShooting(Weapon weapon)
     {
-        if (PlayerWeapons.Instance != null)
-            PlayerWeapons.Instance.OnShooting -= onShooting;
-    }
-
-    private void onShooting(PlayerWeapons playerWeapons)
-    {
-        Weapon weapon = playerWeapons.CurrentWeapon;
         float cursorResizeFactor = 1.0f;
 
         switch (weapon.WeaponItem.ItemName)

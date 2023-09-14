@@ -1,15 +1,14 @@
-using System;
 using UnityEngine;
 
 public class PickupItem : MonoBehaviour
 {
-    public static event Action<SFXClip> OnItemPickedUpAudio;
-
     private SpriteRenderer _spriteRenderer;
     
     [SerializeField] private Item _item;
 
     private bool _isPickable = true;
+
+    private AudioManager _audioManager;
 
     private void Awake()
     {
@@ -18,6 +17,8 @@ public class PickupItem : MonoBehaviour
 
     private void Start()
     {
+        _audioManager = AudioManager.Instance;
+
         if (_item != null)
             _spriteRenderer.sprite = _item.ItemSprite;
     }
@@ -48,7 +49,7 @@ public class PickupItem : MonoBehaviour
 
         ItemTooltip.RemoveTooltipStatic();
 
-        OnItemPickedUpAudio?.Invoke(_item.PickupAudio);
+        _audioManager.PlayClip(_item.PickupAudio);
         Destroy(gameObject);
     }
 
