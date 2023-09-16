@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AlpacaMyGames;
-using System;
 
 public class LevelsManager : MonoBehaviour
 {
@@ -15,9 +14,9 @@ public class LevelsManager : MonoBehaviour
         }
     }
 
-    public Action OnExitingPlayerLevel;
-
     [SerializeField] private int _levelsToPass = 2;
+    private int _bossLevel = 0;
+    public int BossLevel => _bossLevel;
 
     private List<LevelObject> _levelsList;
     private List<LevelObject> _bossLevelsList;
@@ -30,6 +29,8 @@ public class LevelsManager : MonoBehaviour
 
     private LevelObject _currentLevel;
 
+    private LevelProgressChoiceUI _levelProgressChoiceUI;
+
     private void Awake()
     {
         _instance = this;
@@ -40,6 +41,8 @@ public class LevelsManager : MonoBehaviour
 
     private void Start()
     {
+        _levelProgressChoiceUI = LevelProgressChoiceUI.Instance;
+
         if (!spawnPlayerRandomly())
             spawnPlayerInPlayersLevel();
     }
@@ -141,7 +144,7 @@ public class LevelsManager : MonoBehaviour
 
     private void exitingPlayerLevel()
     {
-        OnExitingPlayerLevel?.Invoke();
+        _levelProgressChoiceUI.ShowUI();
     }
 
     public static void TransferPlayerToBossLevelStatic()
@@ -151,16 +154,21 @@ public class LevelsManager : MonoBehaviour
 
     private void transferPlayerToBossLevel()
     {
-        LevelObject level = _bossLevelsList.GetRandomElement();
+        LevelObject level = _bossLevelsList
+            .FindAll(level => !level.WasPlayed()).GetRandomElement();
 
-        if (level != null)
+        if (level == null)
         {
-            if (!level.IsReady())
-                level.SetupLevel();
-
-            _currentLevel = level;
-            _playerTransform.position = level.GetSpawnPortalPosition();
+            exitingBossLevel();
+            return;
         }
+
+        _bossLevel++;
+        if (!level.IsReady())
+            level.SetupLevel();
+
+        _currentLevel = level;
+        _playerTransform.position = level.GetSpawnPortalPosition();
     }
 
     private void groupNotCompleted()
@@ -180,7 +188,6 @@ public class LevelsManager : MonoBehaviour
             Debug.Log("No available levels. Reset levelObjects and select one.");
             _levelsList.ForEach(level => level.SetPlayed(false));
             level = _levelsList.GetRandomElement();
-
         }
 
         level.SetupLevel(true);

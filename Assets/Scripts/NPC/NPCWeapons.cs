@@ -1,5 +1,7 @@
+using AlpacaMyGames;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class NPCWeapons : MonoBehaviour
 {
@@ -15,6 +17,10 @@ public class NPCWeapons : MonoBehaviour
     private float _autoWeaponTimer = 0.0f;
     private Vector2 _enemyShootingInterval = new Vector2(0.2f, 0.6f);
     private bool _autoShootingCoroutineRunning = false;
+
+    [SerializeField] private ThrowableItem _throwable;
+    private float _throwableTimer = 0.0f;
+    private Vector2 _throwableInterval = new Vector2(0.4f, 0.8f);
 
     [Header("Weapons, read-only")]
     [SerializeField] private WeaponItem _selectedWeapon;
@@ -118,7 +124,7 @@ public class NPCWeapons : MonoBehaviour
                     }
 
                     //When either started or stopped auto shooting, reset the timer
-                    _autoWeaponTimer = UnityEngine.Random.Range(_enemyShootingInterval.x, _enemyShootingInterval.y);
+                    _autoWeaponTimer = Random.Range(_enemyShootingInterval.x, _enemyShootingInterval.y);
                 }
             }
             else
@@ -140,7 +146,7 @@ public class NPCWeapons : MonoBehaviour
             }
 
             //Reset timer when a shot is made
-            _timer = UnityEngine.Random.Range(_enemyShootingInterval.x, _enemyShootingInterval.y);
+            _timer = Random.Range(_enemyShootingInterval.x, _enemyShootingInterval.y);
         }
 
         //Reloading interval
@@ -161,6 +167,24 @@ public class NPCWeapons : MonoBehaviour
         _shootTarget = null;
         StopCoroutine(nameof(AutoShooting));
         _autoShootingCoroutineRunning = false;
+    }
+
+    public void ThrowThrowable(Transform target)
+    {
+        _shootTarget = target;
+
+        if (_npcAI.ObstaclesInTheWay(_shootTarget.position))
+            return;
+
+        Grenade grenade =
+            Instantiate(_gameAssets.Grenade, transform.position, Quaternion.identity, null)
+            .GetComponent<Grenade>();
+
+        grenade.SetItem(_throwable);
+        grenade.ArmGrenade();
+
+        Vector3 throwDirection = (Vector3)Utilities.GetVectorFromAngle(transform.rotation.eulerAngles.z);
+        grenade.ThrowGrenade(_throwable.ThrowForce * throwDirection);
     }
 
     private void shoot()

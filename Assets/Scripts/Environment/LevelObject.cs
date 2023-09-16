@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AlpacaMyGames;
@@ -6,10 +5,10 @@ using AlpacaMyGames;
 public class LevelObject : MonoBehaviour
 {
     private Transform _locationsContainer;
-    private List<SpawnPoint> _enemySpawnPoints;
-    private List<SpawnPoint> _trapsSpawnPoints;
+    private List<SpawnPoint> _enemySpawnPoints = new List<SpawnPoint>();
+    private List<SpawnPoint> _trapsSpawnPoints = new List<SpawnPoint>();
     private List<Transform> _spawnedTraps = new List<Transform>();
-    private List<SpawnPoint> _playerSpawnPoints;
+    private List<SpawnPoint> _playerSpawnPoints = new List<SpawnPoint>();
     [SerializeField] private List<SpawnPoint> _portalSpawnPoints;
     private Transform _spawnPortalTransform;
     private Transform _exitPortalTransform;
@@ -22,6 +21,8 @@ public class LevelObject : MonoBehaviour
 
     [SerializeField] private LevelType _levelType;
     [SerializeField] private bool _wasPlayed = false;
+
+    private bool _bossSpawned = false;
 
     private bool _isReady = false;
 
@@ -159,6 +160,9 @@ public class LevelObject : MonoBehaviour
         _exitPortalTransform = Instantiate(GameAssets.Instance.ExitPortal, randomSpawnPoint.Location, Quaternion.identity, _environmentContainer);
         
         float deactivateSpawnPointsInRadius = 6.0f;
+        if (_levelType.Equals(LevelType.Boss))
+            deactivateSpawnPointsInRadius *= 0.5f;
+        
         deactivateSpawnPointsAround(randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
         
         randomSpawnPoint.SetActive(false);
@@ -195,6 +199,23 @@ public class LevelObject : MonoBehaviour
 
         if (_enemySpawnPoints.Count == 0)
             return;
+
+        if (_levelType.Equals(LevelType.Boss))
+        {
+            int bossLevel = LevelsManager.Instance.BossLevel;
+            foreach (SpawnPoint spawnPoint in _enemySpawnPoints)
+            {
+                if (_bossSpawned)
+                    continue;
+
+                if (!spawnPoint.IsActive())
+                    continue;
+
+                Transform boss = GameAssets.Instance.GetBossById(bossLevel);
+                Instantiate(boss, spawnPoint.transform.position, Quaternion.identity, _npcContainer);
+                _bossSpawned = true;
+            }
+        }
 
         int chanceToSpawnEnemy = 75;
         int chanceToSpawnDoubleEnemies = 25;

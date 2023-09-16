@@ -43,6 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6eb1684c6366e554991647db792e84a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BossTransforms:
+  - {fileID: 8874459827295818493, guid: 00436e50d1abf6948aaf6150d38bcacb, type: 3}
+  - {fileID: 8874459827295818493, guid: 0514b1d798f0de340b2eaa5682d54a3b, type: 3}
   WoundsTextObject: {fileID: 1717593013482268369, guid: 3d5f70199d20a4c4abe31b3ec58164d7,
     type: 3}
   HeadshotPostProcessing: {fileID: 1595008553273350601, guid: dbdb2c719e4938b4ca544c79df83c4bf,

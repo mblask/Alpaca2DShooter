@@ -1,7 +1,7 @@
 using UnityEngine;
 using AlpacaMyGames;
 
-public class FiringTrap : MonoBehaviour, IDamagable
+public class FiringTrap : Hackable, IDamagable
 {
     [SerializeField] private float _searchRadius;
     [SerializeField] private float _trackingRadius;
@@ -9,6 +9,7 @@ public class FiringTrap : MonoBehaviour, IDamagable
     private SpriteRenderer _weaponSpriteRenderer;
 
     [SerializeField] private bool _isWorking = true;
+    private NPCType _allegiance = NPCType.Enemy;
 
     private float _rotationSpeed = 1.0f;
 
@@ -52,11 +53,14 @@ public class FiringTrap : MonoBehaviour, IDamagable
         if (!_isWorking)
             return;
 
+        if (_target == null)
+            _trapState = FiringTrapState.Search;
+
         switch (_trapState)
         {
             case FiringTrapState.Search:
                 rotation2DTransform();
-                searchForPlayer();
+                searchForTarget();
                 break;
             case FiringTrapState.Attack:
                 trackTarget();
@@ -74,6 +78,14 @@ public class FiringTrap : MonoBehaviour, IDamagable
         //Particle System and/or Light up object
     }
 
+    public override void Hack()
+    {
+        _allegiance = _allegiance.Equals(NPCType.Enemy) ? 
+            NPCType.Ally : NPCType.Enemy;
+
+        _trapState = FiringTrapState.Search;
+    }
+
     private void rotation2DTransform()
     {
         Vector3 rotationIncrement = Vector3.forward * _rotationSpeed * Mathf.Rad2Deg * Time.deltaTime;
@@ -81,29 +93,58 @@ public class FiringTrap : MonoBehaviour, IDamagable
         transform.rotation = Quaternion.Euler(finalRotation);
     }
 
-    private void searchForPlayer()
+    private void searchForTarget()
     {
         _stopwatch += Time.deltaTime;
 
-        if (_stopwatch >= _searchTime)
+        if (_stopwatch < _searchTime)
+            return;
+
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, _searchRadius);
+        foreach (Collider2D collider in colliders)
         {
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, _searchRadius);
-            foreach (Collider2D collider in colliders)
-            {
-                PlayerStats playerStats = collider.gameObject.GetComponent<PlayerStats>();
-
-                if (playerStats == null)
+            if (_allegiance.Equals(NPCType.Enemy))
+                if (!grabPlayer(collider))
                     continue;
 
-                if (!playerStats.IsAlive())
+            if (_allegiance.Equals(NPCType.Ally))
+                if (!grabEnemy(collider))
                     continue;
-
-                _target = collider.transform;
-                _trapState = FiringTrapState.Attack;
-            }
-
-            _stopwatch = 0.0f;
         }
+
+        _stopwatch = 0.0f;
+    }
+
+    private bool grabPlayer(Collider2D collider)
+    {
+        PlayerStats playerStats = collider.gameObject.GetComponent<PlayerStats>();
+
+        if (playerStats == null)
+            return false;
+
+        if (!playerStats.IsAlive())
+            return false;
+
+        _target = collider.transform;
+        _trapState = FiringTrapState.Attack;
+
+        return true;
+    }
+
+    private bool grabEnemy(Collider2D collider)
+    {
+        NPCStats npcStats = collider.gameObject.GetComponent<NPCStats>();
+
+        if (npcStats == null)
+            return false;
+
+        if (!npcStats.IsAlive())
+            return false;
+
+        _target = collider.transform;
+        _trapState = FiringTrapState.Attack;
+
+        return true;
     }
 
     private void trackTarget()
@@ -183,7 +224,7 @@ public class FiringTrap : MonoBehaviour, IDamagable
             Transform bulletTransform = Instantiate(GameAssets.Instance.BulletPrefab, _shootingSpot.position, Quaternion.identity, null);
             Bullet bullet = bulletTransform.GetComponent<Bullet>();
 
-            bullet.SetupBullet(direction, UnityEngine.Random.Range(_selectedWeapon.WeaponItem.WeaponDamage.x, _selectedWeapon.WeaponItem.WeaponDamage.y), gameObject.tag);
+            bullet.SetupBullet(direction, _selectedWeapon.WeaponItem.WeaponDamage.GetRandom(), gameObject.tag);
         }
 
         generateShootingParticleSystem();

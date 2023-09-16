@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,6 +6,8 @@ public class NPCStats : MonoBehaviour, IDamagable
     private float _currentHealth;
 
     [SerializeField] private NPCEnemyType _enemyType;
+    [SerializeField] private int _bossId;
+    public int BossId => _bossId;
 
     [Header("Enemy stats")]
     public Stat EnemyHealth;
@@ -113,6 +114,11 @@ public class NPCStats : MonoBehaviour, IDamagable
 
         if (_currentHealth <= 0.0f)
             die();
+    }
+
+    public bool IsAlive()
+    {
+        return _currentHealth > 0.0f;
     }
 
     private void hitShading()

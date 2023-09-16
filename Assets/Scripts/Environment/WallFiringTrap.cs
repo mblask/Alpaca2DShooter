@@ -1,12 +1,12 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AlpacaMyGames;
-using System;
 
-public class WallFiringTrap : MonoBehaviour
+public class WallFiringTrap : Hackable
 {
     private List<ShootingSpot> _shootingSpots;
+
+    private NPCType _allegiance = NPCType.Enemy;
 
     private Vector2 _damageInterval = new Vector2(3.0f, 6.0f);
     private string _trapTag = "Enemy";
@@ -36,6 +36,12 @@ public class WallFiringTrap : MonoBehaviour
         shoot();
     }
 
+    public override void Hack()
+    {
+        _allegiance = _allegiance.Equals(NPCType.Enemy) ?
+            NPCType.Ally : NPCType.Enemy;
+    }
+
     private void shoot()
     {
         if (!_gameManager.IsGameRunning())
@@ -63,8 +69,10 @@ public class WallFiringTrap : MonoBehaviour
 
     private void shootOnceFrom(Vector2 position)
     {
-        Bullet bullet = Instantiate(GameAssets.Instance.BulletPrefab, position, Quaternion.identity, null).GetComponent<Bullet>();
-        bullet.SetupBullet(Utilities.GetVectorFromAngle(transform.rotation.eulerAngles.z + 90), UnityEngine.Random.Range(_damageInterval.x, _damageInterval.y), _trapTag);
+        Bullet bullet = Instantiate(GameAssets.Instance.BulletPrefab, position, Quaternion.identity, null)
+            .GetComponent<Bullet>();
+        bullet.SetupBullet(Utilities.GetVectorFromAngle(transform.rotation.eulerAngles.z + 90), 
+            _damageInterval.GetRandom(), gameObject.tag);
         generateShootingParticles(position);
         _audioManager.PlayClip(SFXClip.GunShot);
     }
@@ -74,26 +82,53 @@ public class WallFiringTrap : MonoBehaviour
         if (GameAssets.Instance.ShootingPS == null)
             return;
 
-        ParticleSystem particleSystem = Instantiate(GameAssets.Instance.ShootingPS, position, Quaternion.identity, null);
+        ParticleSystem particleSystem = 
+            Instantiate(GameAssets.Instance.ShootingPS, position, Quaternion.identity, null);
         particleSystem.Play();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        PlayerController playerController = collision.GetComponent<PlayerController>();
-        if (playerController == null)
-            return;
+        if (_allegiance.Equals(NPCType.Enemy))
+            if (!searchPlayer(collision))
+                return;
+
+        if (_allegiance.Equals(NPCType.Ally))
+            if (!searchEnemy(collision))
+                return;
 
         _isShooting = true;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        PlayerController playerController = collision.GetComponent<PlayerController>();
-        if (playerController == null)
-            return;
+        if (_allegiance.Equals(NPCType.Enemy))
+            if (!searchPlayer(collision))
+                return;
+
+        if (_allegiance.Equals(NPCType.Ally))
+            if (!searchEnemy(collision))
+                return;
 
         _timer = _defaultStartTime;
         _isShooting = false;
+    }
+
+    private bool searchPlayer(Collider2D collider)
+    {
+        PlayerController playerController = collider.GetComponent<PlayerController>();
+        if (playerController == null)
+            return false;
+
+        return true;
+    }
+
+    private bool searchEnemy(Collider2D collider)
+    {
+        NPCStats npcStats = collider.GetComponent<NPCStats>();
+        if (npcStats == null)
+            return false;
+
+        return true;
     }
 }

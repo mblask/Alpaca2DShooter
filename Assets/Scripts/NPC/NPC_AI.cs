@@ -137,6 +137,9 @@ public class NPC_AI : MonoBehaviour
         if (!_gameManager.IsGameRunning())
             return;
 
+        if (_playerController == null)
+            return;
+
         float idleDistance = 20.0f;
 
         float distanceToPlayer = Vector2.Distance(transform.position, _playerController.transform.position);

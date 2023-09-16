@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameAssets : MonoBehaviour
@@ -14,6 +14,9 @@ public class GameAssets : MonoBehaviour
     }
 
     public const string CHARACTER_TYPE_STRING = "CharacterType";
+
+    [Header("Bosses")]
+    public List<Transform> BossTransforms;
 
     [Header("UI Prefabs")]
     public Transform WoundsTextObject;
@@ -56,5 +59,12 @@ public class GameAssets : MonoBehaviour
     private void Awake()
     {
         _instance = this;
+    }
+
+    public Transform GetBossById(int id)
+    {
+        return BossTransforms
+            .Where(transform => transform.GetComponent<NPCStats>().BossId == id)
+            .FirstOrDefault();
     }
 }

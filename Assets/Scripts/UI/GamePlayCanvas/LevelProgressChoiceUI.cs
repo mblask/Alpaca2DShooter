@@ -34,16 +34,9 @@ public class LevelProgressChoiceUI : MonoBehaviour
 
         _readyButton.onClick.AddListener(readyButton);
         _cancelButton.onClick.AddListener(cancelButton);
-
-        _levelsManager.OnExitingPlayerLevel += showUI;
     }
 
-    private void OnDestroy()
-    {
-        _levelsManager.OnExitingPlayerLevel -= showUI;
-    }
-
-    private void showUI()
+    public void ShowUI()
     {
         activateUI(true);
     }

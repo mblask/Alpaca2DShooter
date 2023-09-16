@@ -92,6 +92,7 @@ public class PlayerInventory : MonoBehaviour, ICrafting
             return true;
         }
 
+        FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Invenory full", Color.white);
         return false;
     }
 
