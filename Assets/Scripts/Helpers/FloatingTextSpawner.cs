@@ -79,7 +79,7 @@ public class FloatingTextSingle : MonoBehaviour
     {
         transform.position += _floatDirection * _floatSpeed * Time.deltaTime;
 
-        Vector3 scaleDecreaseFactor = 0.2f * new Vector3(1.0f, 1.0f, 0.0f);
+        Vector3 scaleDecreaseFactor = 0.1f * new Vector3(1.0f, 1.0f, 0.0f);
         Vector3 scale = transform.localScale - scaleDecreaseFactor * Time.deltaTime;
         transform.localScale = scale;
 
@@ -96,28 +96,28 @@ public class FloatingTextSingle : MonoBehaviour
         switch (direction)
         {
             case FloatDirection.Up:
-                _floatDirection = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(0.0f, 1.0f));
+                _floatDirection = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(0.5f, 1.0f));
                 break;
             case FloatDirection.Down:
-                _floatDirection = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 0.0f));
+                _floatDirection = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, -0.5f));
                 break;
             case FloatDirection.Left:
-                _floatDirection = new Vector3(Random.Range(-1.0f, 0.0f), Random.Range(-1.0f, 1.0f));
+                _floatDirection = new Vector3(Random.Range(-1.0f, -0.5f), Random.Range(-1.0f, 1.0f));
                 break;
             case FloatDirection.Right:
-                _floatDirection = new Vector3(Random.Range(0.0f, 1.0f), Random.Range(-1.0f, 1.0f));
+                _floatDirection = new Vector3(Random.Range(0.5f, 1.0f), Random.Range(-1.0f, 1.0f));
                 break;
             case FloatDirection.UpRight:
-                _floatDirection = new Vector3(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
+                _floatDirection = new Vector3(Random.Range(0.5f, 1.0f), Random.Range(0.5f, 1.0f));
                 break;
             case FloatDirection.UpLeft:
-                _floatDirection = new Vector3(Random.Range(-1.0f, 0.0f), Random.Range(0.0f, 1.0f));
+                _floatDirection = new Vector3(Random.Range(-1.0f, -0.5f), Random.Range(0.5f, 1.0f));
                 break;
             case FloatDirection.DownRight:
-                _floatDirection = new Vector3(Random.Range(0.0f, 1.0f), Random.Range(-1.0f, 0.0f));
+                _floatDirection = new Vector3(Random.Range(0.5f, 1.0f), Random.Range(-1.0f, -0.5f));
                 break;
             case FloatDirection.DownLeft:
-                _floatDirection = new Vector3(Random.Range(-1.0f, 0.0f), Random.Range(-1.0f, 0.0f));
+                _floatDirection = new Vector3(Random.Range(-1.0f, -0.5f), Random.Range(-1.0f, -0.5f));
                 break;
             case FloatDirection.Any:
                 _floatDirection = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));

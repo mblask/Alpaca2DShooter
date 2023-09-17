@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -38,10 +37,13 @@ public class PlayerBase : MonoBehaviour
 
         _playerAnimations.SetPlayerAOC(characterBase.CharacterAOC);
         _playerStats.PlayerAccuracy.SetBaseValue(characterBase.Accuracy);
-        _playerStats.PlayerSpeed.SetBaseValue(_playerStats.PlayerSpeed.GetBaseValue() + characterBase.MovementSpeed / 5.0f);
-        _playerStats.PlayerHealth.SetBaseValue(_playerStats.PlayerHealth.GetBaseValue() * characterBase.HealthModifier);
+        _playerStats.PlayerSpeed
+            .SetBaseValue(_playerStats.PlayerSpeed.GetBaseValue() + characterBase.MovementSpeed / 5.0f);
+        _playerStats.PlayerHealth
+            .SetBaseValue(_playerStats.PlayerHealth.GetBaseValue() * characterBase.HealthModifier);
         _playerStats.PlayerDefense.SetBaseValue(characterBase.Defense);
         _playerStats.PlayerStrength.SetBaseValue(characterBase.Strength);
+        _playerStats.HackingSpeed = characterBase.HackingSpeed;
 
         _playerStats.Stats = new List<Stat>()
         {

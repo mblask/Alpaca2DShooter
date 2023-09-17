@@ -185,6 +185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyType: 0
+  _bossId: 0
   EnemyHealth:
     _statType: 0
     _baseValue: 15
@@ -226,6 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c69202ffdea6e4f40891b2d2d2a020de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _throwable: {fileID: 0}
   _selectedWeapon: {fileID: 11400000, guid: 347dff94e829f684dbc2ea07a9ffb197, type: 2}
   _reloadTime: 0
 --- !u!114 &17813973010984849

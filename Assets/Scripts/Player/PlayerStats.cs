@@ -29,6 +29,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
     public Stat PlayerDefense;
     public Stat PlayerStrength;
     public Vector2 PlayerDamage = new Vector2();
+    public float HackingSpeed;
 
     public float CurrentHealth { get; private set; }
     [Space]
