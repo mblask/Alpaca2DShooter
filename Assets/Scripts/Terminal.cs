@@ -57,7 +57,7 @@ public class Terminal : MonoBehaviour, IInteractable
     private bool checkPlayerTooFar()
     {
         float distance = Vector2.Distance(_playerStats.transform.position, transform.position);
-        return distance >= MouseInteraction.INTERACTION_DISTANCE;
+        return distance >= Constants.SHORT_INTERACTION_DISTANCE;
     }
 
     private void stopHacking()
@@ -73,7 +73,7 @@ public class Terminal : MonoBehaviour, IInteractable
     public void Interact()
     {
         _hackingInProgress = true;
-        _hackingSpeed = _playerStats.HackingSpeed;
+        _hackingSpeed = _playerStats.HackingSpeed.GetFinalValue();
         _hackables.AddRange(transform.parent.GetComponentsInChildren<Hackable>());
         _hackables.AddRange(transform.parent.parent.Find("NPCs").GetComponentsInChildren<Hackable>());
     }

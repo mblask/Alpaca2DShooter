@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AlpacaMyGames;
-using System;
 
 public class PlayerHitManager : MonoBehaviour
 {
@@ -21,6 +20,7 @@ public class PlayerHitManager : MonoBehaviour
 
     private List<WoundType> _woundsList = new List<WoundType>();
 
+    private PlayerStats _playerStats;
     private WoundedUI _woundedUI;
 
     private void Awake()
@@ -32,6 +32,7 @@ public class PlayerHitManager : MonoBehaviour
     {
         _mainCameraController = Camera.main.GetComponent<CameraController>();
         _postProcessingManager = PostProcessingManager.Instance;
+        _playerStats = PlayerStats.Instance;
         _woundedUI = WoundedUI.Instance;
     }
 
@@ -39,9 +40,9 @@ public class PlayerHitManager : MonoBehaviour
     {
         Color hitTextColor = Color.red;
 
-        float headShotChance = 1.0f;
-        float legShotChance = 3.0f;
-        float armShotChance = 5.0f;
+        float headShotChance = 1.0f * (1 - _playerStats.LimbToughness.GetFinalValue());
+        float legShotChance = 3.0f * (1 - _playerStats.LimbToughness.GetFinalValue());
+        float armShotChance = 5.0f * (1 - _playerStats.LimbToughness.GetFinalValue());
 
         if (Utilities.ChanceFunc(headShotChance))
         {
@@ -62,7 +63,14 @@ public class PlayerHitManager : MonoBehaviour
             //leg hit, decrease movement speed
             float legInjuryDuration = 8.0f;
             float speedBaseMultiplier = 0.6f;
-            PlayerStats.TemporarilyModifyStat(StatType.Speed, legInjuryDuration, true, 0.0f, speedBaseMultiplier);
+            PlayerStats.TemporarilyModifyStat(new StatModifyingData
+            {
+                StatAffected = StatType.Speed,
+                Duration = legInjuryDuration,
+                StatHandicaped = true,
+                StatModifier = 0.0f,
+                StatMultiplier = speedBaseMultiplier
+            });
             FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Leg Hit!", hitTextColor, 0.5f, 5.0f, 2.0f, false, FloatDirection.Down);
 
             _woundsList.AddIfNone(WoundType.Legs);
@@ -75,7 +83,13 @@ public class PlayerHitManager : MonoBehaviour
             //arm hit, decrease accuracy
             float armInjuryDuration = 10.0f;
             float accuracyBaseMultiplier = 0.1f;
-            PlayerStats.TemporarilyModifyStat(StatType.Accuracy, armInjuryDuration, true, 0.0f, accuracyBaseMultiplier);
+            PlayerStats.TemporarilyModifyStat(new StatModifyingData {
+                StatAffected = StatType.Accuracy, 
+                Duration = armInjuryDuration, 
+                StatHandicaped = true, 
+                StatModifier = 0.0f, 
+                StatMultiplier = accuracyBaseMultiplier 
+            });
             FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Arm Hit!", hitTextColor, 0.5f, 5.0f, 2.0f, false, FloatDirection.Any);
 
             _woundsList.AddIfNone(WoundType.Arms);
@@ -101,6 +115,12 @@ public class PlayerHitManager : MonoBehaviour
         }
 
         _woundsList.Remove(woundType);
+        _woundedUI.ActivateUI();
+    }
+
+    public void RemoveAllWounds()
+    {
+        _woundsList.Clear();
         _woundedUI.ActivateUI();
     }
 

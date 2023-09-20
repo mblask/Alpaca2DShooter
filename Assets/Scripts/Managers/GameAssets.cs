@@ -43,6 +43,9 @@ public class GameAssets : MonoBehaviour
     public ParticleSystem BloodPS;
     public ParticleSystem ShootingPS;
 
+    [Header("Consumables")]
+    public List<ConsumableItem> Consumables;
+
     [Header("Available Artefacts")]
     public List<ArtefactItem> AvailableArtefacts;
 
@@ -66,5 +69,10 @@ public class GameAssets : MonoBehaviour
         return BossTransforms
             .Where(transform => transform.GetComponent<NPCStats>().BossId == id)
             .FirstOrDefault();
+    }
+
+    public ConsumableItem GetConsumableByType(ConsumableType type)
+    {
+        return Consumables.Find(consumable => consumable.ConsumableType.Equals(type));
     }
 }

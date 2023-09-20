@@ -59,17 +59,20 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                Debug.Log("Use consumable item 1");
+                Debug.Log("Use " + ConsumableType.HerbalBooster.ToString());
+                PlayerInventory.Instance.UseConsumable(ConsumableType.HerbalBooster);
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                Debug.Log("Use consumable item 2");
+                Debug.Log("Use " + ConsumableType.LimbProtector.ToString());
+                PlayerInventory.Instance.UseConsumable(ConsumableType.LimbPatcher);
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                Debug.Log("Use consumable item 3");
+                Debug.Log("Use " + ConsumableType.LimbProtector.ToString());
+                PlayerInventory.Instance.UseConsumable(ConsumableType.LimbProtector);
             }
         }
 

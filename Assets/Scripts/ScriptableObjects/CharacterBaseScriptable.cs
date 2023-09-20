@@ -15,4 +15,5 @@ public class CharacterBaseScriptable : ScriptableObject
     public float Defense;
     public int Strength;
     public float HackingSpeed;
+    public float LimbToughness;
 }

@@ -6,6 +6,11 @@ public static class Constants
     //Tags
     public const string ENEMY_TAG = "Enemy";
 
+    //Interaction
+    public const float SHORT_INTERACTION_DISTANCE = 2.0f;
+    public const float INTERACTION_DISTANCE = 3.0f;
+
+    //Colors
     public static readonly Color HIGHLIGHT_COLOR = new Color(0.6f, 1.0f, 0.6f, 1.0f);
     public static readonly Color DEFAULT_COLOR = Color.white;
 

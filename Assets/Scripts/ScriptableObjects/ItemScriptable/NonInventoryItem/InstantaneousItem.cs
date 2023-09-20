@@ -11,6 +11,6 @@ public class InstantaneousItem : NonInventoryItem
         if (PlayerStats.Instance == null)
             return false;
 
-        return PlayerStats.Instance.HealCharacter(this);
+        return PlayerStats.Instance.UseItem(this);
     }
 }

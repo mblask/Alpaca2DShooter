@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class MouseInteraction : MonoBehaviour
 {
-    public const float INTERACTION_DISTANCE = 3.0f;
     private PlayerWeapons _playerWeapons;
 
     private IPointerOver _pointerOver;
@@ -46,7 +45,7 @@ public class MouseInteraction : MonoBehaviour
             if (interactable == null)
                 continue;
 
-            if (Vector2.Distance(_playerWeapons.transform.position, transform.position) < INTERACTION_DISTANCE)
+            if (Vector2.Distance(_playerWeapons.transform.position, transform.position) < Constants.INTERACTION_DISTANCE)
             {
                 colliderClose(collider);
                 interactable.Interact();

@@ -7,4 +7,6 @@ public enum StatType
     Defense,
     Speed,
     Strength,
+    LimbToughness,
+    HackingSpeed
 }

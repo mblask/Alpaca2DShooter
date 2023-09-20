@@ -43,7 +43,8 @@ public class PlayerBase : MonoBehaviour
             .SetBaseValue(_playerStats.PlayerHealth.GetBaseValue() * characterBase.HealthModifier);
         _playerStats.PlayerDefense.SetBaseValue(characterBase.Defense);
         _playerStats.PlayerStrength.SetBaseValue(characterBase.Strength);
-        _playerStats.HackingSpeed = characterBase.HackingSpeed;
+        _playerStats.HackingSpeed.SetBaseValue(characterBase.HackingSpeed);
+        _playerStats.LimbToughness.SetBaseValue(characterBase.LimbToughness);
 
         _playerStats.Stats = new List<Stat>()
         {
@@ -52,7 +53,9 @@ public class PlayerBase : MonoBehaviour
             new Stat(StatType.Strength, characterBase.Strength),
             new Stat(StatType.Speed, characterBase.MovementSpeed),
             new Stat(StatType.Accuracy, characterBase.Accuracy),
-            new Stat(StatType.Defense, characterBase.Defense)
+            new Stat(StatType.Defense, characterBase.Defense),
+            new Stat(StatType.LimbToughness, characterBase.LimbToughness),
+            new Stat(StatType.HackingSpeed, characterBase.HackingSpeed)
         };
     }
 

@@ -22,3 +22,4 @@ MonoBehaviour:
   Defense: 10
   Strength: 2
   HackingSpeed: 1
+  LimbToughness: 5

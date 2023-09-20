@@ -131,4 +131,9 @@ public class CameraController : MonoBehaviour
         _wobbleWeight = 1.0f;
         randomizeWobbleParameters();
     }
+
+    public void StopCameraWobble()
+    {
+        _cameraWobble = false;
+    }
 }

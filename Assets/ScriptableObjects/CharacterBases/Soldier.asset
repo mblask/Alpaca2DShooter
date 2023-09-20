@@ -21,4 +21,5 @@ MonoBehaviour:
   Accuracy: 7
   Defense: 10
   Strength: 3
-  Damage: {x: 0, y: 0}
+  HackingSpeed: 1
+  LimbToughness: 5

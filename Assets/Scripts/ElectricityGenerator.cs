@@ -10,12 +10,7 @@ public class ElectricityGenerator : MonoBehaviour, IDamagable
 
     private void Start()
     {
-        _switchables.TrimExcess();
-    }
-
-    public void AddSwitchables(SwitchableObject switchable)
-    {
-        _switchables.Add(switchable);
+        _switchables.AddRange(transform.parent.GetComponentsInChildren<SwitchableObject>());
     }
 
     public void DamageObject(float value)
@@ -34,8 +29,12 @@ public class ElectricityGenerator : MonoBehaviour, IDamagable
 
     private void turnOffAttachedSwitchableObjects()
     {
+        _switchables.TrimExcess();
         foreach (SwitchableObject switchable in _switchables)
         {
+            if (switchable == null)
+                continue;
+
             switchable.ElectricityAvailable(false);
             switchable.TurnOff();
         }

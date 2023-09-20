@@ -61,20 +61,13 @@ public class PlayerInventory : MonoBehaviour, ICrafting
         return _instance.getItems();
     }
 
-    public static void UseConsumableItemStatic(Item item)
+    public void UseConsumable(ConsumableType type)
     {
-        _instance?.useConsumableItem(item);
-    }
+        ConsumableItem consumable = GameAssets.Instance.GetConsumableByType(type);
+        if (!_items.Contains(consumable))
+            return;
 
-    private void useConsumableItem(Item item)
-    {
-        int itemIndex = _items.IndexOf(item);
-
-        if (itemIndex >= 0)
-        {
-            ConsumableItem consumable = _items[itemIndex] as ConsumableItem;
-            consumable.UseItem();
-        }
+        consumable.UseItem();
     }
 
     public static bool AddToInventoryStatic(Item item)

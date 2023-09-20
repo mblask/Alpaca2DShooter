@@ -78,6 +78,10 @@ MonoBehaviour:
   BloodPS: {fileID: 8495303254531532346, guid: 8f46ec2d9399963429da0758697b32e6, type: 3}
   ShootingPS: {fileID: 7398117331316292049, guid: e4ef56d0a8011f345957ddcfe7e489d7,
     type: 3}
+  Consumables:
+  - {fileID: 11400000, guid: fe7f209bd2ecd7e4e964ac24c4f2fede, type: 2}
+  - {fileID: 11400000, guid: 309cc1aefcd98da4e9f2709029948105, type: 2}
+  - {fileID: 11400000, guid: 4ce150cc01079ae4fb80ade66c4265b1, type: 2}
   AvailableArtefacts:
   - {fileID: 11400000, guid: 937eab12cfd96fd4a8036be3e6a87ed7, type: 2}
   - {fileID: 11400000, guid: a321c9cf27b8d2d45a59a974e951dc01, type: 2}

@@ -29,7 +29,10 @@ public class PlayerStats : MonoBehaviour, IDamagable
     public Stat PlayerDefense;
     public Stat PlayerStrength;
     public Vector2 PlayerDamage = new Vector2();
-    public float HackingSpeed;
+    public Stat LimbToughness;
+    public Stat HackingSpeed;
+    
+    private List<StatModifyingData> _injuries = new List<StatModifyingData>();
 
     public float CurrentHealth { get; private set; }
     [Space]
@@ -50,6 +53,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
     private PlayerBase _playerBase;
     private PlayerController _playerController;
     private PlayerHitManager _playerHitManager;
+    private PostProcessingManager _postProcessingManager;
 
     public void Awake()
     {
@@ -64,6 +68,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
     {
         _gameAssets = GameAssets.Instance;
         _cameraController = CameraController.Instance;
+        _postProcessingManager = PostProcessingManager.Instance;
 
         CurrentHealth = PlayerHealth.GetFinalValue();
         CurrentStamina = PlayerStamina.GetFinalValue();
@@ -151,31 +156,42 @@ public class PlayerStats : MonoBehaviour, IDamagable
         OnHealthUIUpdate?.Invoke(CurrentHealth);
     }
 
-    public static void TemporarilyModifyStat(StatType statType, float duration, bool handicapStat = true, float modifier = 0.0f, float multiplier = 1.0f)
+    public static void TemporarilyModifyStat(StatModifyingData injuryData)
     {
-        _instance?.temporarilyModifyStat(statType, duration, handicapStat, modifier, multiplier);
+        _instance?.temporarilyModifyStat(injuryData);
     }
 
-    private void temporarilyModifyStat(StatType statType, float duration, bool handicapStat, float modifier, float multiplier)
+    private void temporarilyModifyStat(StatModifyingData injuryData)
     {
-        Stat stat = getStatByType(statType);
+        Stat stat = getStatByType(injuryData.StatAffected);
 
         if (stat.IsHandicaped())
             return;
 
-        stat.AddModifier(modifier);
-        stat.AddBaseMultiplier(multiplier);
+        if (injuryData.IsInjury)
+            _injuries.Add(injuryData);
 
-        if (handicapStat)
+        stat.AddModifier(injuryData.StatModifier);
+        stat.AddBaseMultiplier(injuryData.StatMultiplier);
+
+        if (injuryData.StatHandicaped)
             stat.SetHandicaped(true);
 
-        if (statType.Equals(StatType.Speed))
+        if (injuryData.StatAffected.Equals(StatType.Speed))
         {
             _playerFinalSpeed = PlayerSpeed.GetFinalValue();
             _playerController.SetLegsInjured(true);
         }
 
-        StartCoroutine(removeStatModifierCoroutine(statType, duration, modifier, multiplier));
+        StartCoroutine(removeStatModifierCoroutine(injuryData.StatAffected, injuryData.Duration, injuryData.StatModifier, injuryData.StatMultiplier));
+    }
+
+    public void RemoveAllInjuries()
+    {
+        foreach (StatModifyingData data in _injuries)
+        {
+            removeStatModifier(data.StatAffected, data.StatModifier, data.StatMultiplier);
+        }
     }
 
     public static void RemoveStatModifierStatic(StatType statType, float modifier, float multiplier)
@@ -206,17 +222,14 @@ public class PlayerStats : MonoBehaviour, IDamagable
         StopCoroutine(nameof(removeStatModifierCoroutine));
     }
 
-    public bool HealCharacter(Item item)
+    public bool UseItem(Item item)
     {
         if (item == null)
             return false;
 
         if (item is InstantaneousItem)
         {
-            Debug.Log("Use instantaneous item!");
-
             InstantaneousItem instantaneous = item as InstantaneousItem;
-
             healing(instantaneous.LifeRestored, instantaneous.StaminaRestored, Vector2.zero, false);
 
             return true;
@@ -224,10 +237,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
 
         if (item is ConsumableItem)
         {
-            Debug.Log("Use consumable item!");
-
             ConsumableItem consumable = item as ConsumableItem;
-
             healing(consumable.LifeRestored, consumable.StaminaRestored, consumable.LimbToughnessDuration, consumable.LimbPatcher);
 
             return true;
@@ -240,7 +250,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
     {
         if (lifeRestoration.magnitude > 0.0f)
         {
-            CurrentHealth += UnityEngine.Random.Range(lifeRestoration.x, lifeRestoration.y);
+            CurrentHealth += lifeRestoration.GetRandom();
 
             if (CurrentHealth > PlayerHealth.GetFinalValue())
                 CurrentHealth = PlayerHealth.GetFinalValue();
@@ -250,7 +260,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
 
         if (staminaRestoration.magnitude > 0.0f)
         {
-            CurrentStamina += UnityEngine.Random.Range(staminaRestoration.x, staminaRestoration.y);
+            CurrentStamina += staminaRestoration.GetRandom();
 
             if (CurrentStamina > PlayerStamina.GetFinalValue())
                 CurrentStamina = PlayerStamina.GetFinalValue();
@@ -261,11 +271,25 @@ public class PlayerStats : MonoBehaviour, IDamagable
         if (limbEnforcement.x > 0.0f)
         {
             Debug.Log("Enforce limbs!");
+            temporarilyModifyStat(new StatModifyingData
+            {
+                StatAffected = StatType.LimbToughness,
+                Duration = limbEnforcement.y,
+                StatHandicaped = false,
+                StatModifier = limbEnforcement.x,
+                IsInjury = false
+            });
+
+            Debug.Log(LimbToughness.GetFinalValue());
         }
 
         if (limbPatcher)
         {
             Debug.Log("Patch limbs!");
+            RemoveAllInjuries();
+            _postProcessingManager.ResetPostProcessing();
+            _cameraController.StopCameraWobble();
+            _playerHitManager.RemoveAllWounds();
         }
     }
 
@@ -338,6 +362,10 @@ public class PlayerStats : MonoBehaviour, IDamagable
                 return PlayerSpeed;
             case StatType.Strength:
                 return PlayerStrength;
+            case StatType.HackingSpeed:
+                return HackingSpeed;
+            case StatType.LimbToughness:
+                return LimbToughness;
             default:
                 return null;
         }

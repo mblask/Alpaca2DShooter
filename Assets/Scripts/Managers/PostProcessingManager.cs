@@ -43,4 +43,9 @@ public class PostProcessingManager : MonoBehaviour
         if (duration != 0.0f)
             _reductionSpeed = 0.2f / duration;
     }
+
+    public void ResetPostProcessing()
+    {
+        _volume.weight = 0.0f;
+    }
 }

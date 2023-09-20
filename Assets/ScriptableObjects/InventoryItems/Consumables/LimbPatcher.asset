@@ -17,6 +17,7 @@ MonoBehaviour:
   ChanceToDrop: 0
   Color: {r: 1, g: 1, b: 1, a: 1}
   PickupAudio: 7
+  ConsumableType: 1
   LifeRestored: {x: 10, y: 20}
   StaminaRestored: {x: 5, y: 10}
   LimbPatcher: 1
