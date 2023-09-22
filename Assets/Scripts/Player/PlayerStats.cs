@@ -34,9 +34,31 @@ public class PlayerStats : MonoBehaviour, IDamagable
     
     private List<StatModifyingData> _injuries = new List<StatModifyingData>();
 
-    public float CurrentHealth { get; private set; }
-    [Space]
-    public float CurrentStamina;
+    public float CurrentHealth
+    {
+        get
+        {
+            return PlayerHealth.GetCurrentValue();
+        }
+
+        set
+        {
+            PlayerHealth.SetCurrentValue(value);
+        }
+    }
+    //[Space]
+    public float CurrentStamina
+    {
+        get
+        {
+            return PlayerStamina.GetCurrentValue();
+        }
+
+        set
+        {
+            PlayerStamina.SetCurrentValue(value);
+        }
+    }
 
     private float _staminaTrigger = 0.0f;
 

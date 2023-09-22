@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterType: 5
   CharacterAOC: {fileID: 22100000, guid: 751c269919c9a794f9bcbde5732099e6, type: 2}
-  Health: 130
+  Health: 100
   HealthModifier: 1.3
   Stamina: 140
   MovementSpeed: 4.5

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterType: 7
   CharacterAOC: {fileID: 22100000, guid: 2c87d373423663f46a30afb601ed7185, type: 2}
-  Health: 120
+  Health: 100
   HealthModifier: 1.2
   Stamina: 130
   MovementSpeed: 4.5
@@ -22,3 +22,4 @@ MonoBehaviour:
   Defense: 7
   Strength: 2
   HackingSpeed: 2
+  LimbToughness: 0

@@ -3,7 +3,17 @@ using UnityEngine;
 
 public class NPCStats : MonoBehaviour, IDamagable
 {
-    private float _currentHealth;
+    private float _currentHealth
+    {
+        get
+        {
+            return EnemyHealth.GetCurrentValue();
+        }
+        set
+        {
+            EnemyHealth.SetCurrentValue(value);
+        }
+    }
 
     [SerializeField] private NPCEnemyType _enemyType;
     [SerializeField] private int _bossId;

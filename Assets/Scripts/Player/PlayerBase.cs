@@ -38,9 +38,10 @@ public class PlayerBase : MonoBehaviour
         _playerAnimations.SetPlayerAOC(characterBase.CharacterAOC);
         _playerStats.PlayerAccuracy.SetBaseValue(characterBase.Accuracy);
         _playerStats.PlayerSpeed
-            .SetBaseValue(_playerStats.PlayerSpeed.GetBaseValue() + characterBase.MovementSpeed / 5.0f);
+            .SetBaseValue(characterBase.MovementSpeed * 1.2f);
         _playerStats.PlayerHealth
-            .SetBaseValue(_playerStats.PlayerHealth.GetBaseValue() * characterBase.HealthModifier);
+            .SetBaseValue(1000);
+        _playerStats.PlayerStamina.SetBaseValue(characterBase.Stamina);
         _playerStats.PlayerDefense.SetBaseValue(characterBase.Defense);
         _playerStats.PlayerStrength.SetBaseValue(characterBase.Strength);
         _playerStats.HackingSpeed.SetBaseValue(characterBase.HackingSpeed);

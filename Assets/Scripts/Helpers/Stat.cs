@@ -5,8 +5,9 @@ using UnityEngine;
 public class Stat
 {
     [SerializeField] private StatType _statType;
-    [SerializeField] private float _baseValue = 0;
+    private float _baseValue = 0;
     private float _finalValue = 0;
+    [SerializeField] private float _currentValue;
     private List<float> _modifiers;
     private List<float> _multipliers;
 
@@ -20,7 +21,7 @@ public class Stat
 
     public Stat(StatType statType, float baseValue)
     {
-        _statType= statType;
+        _statType = statType;
         _baseValue = baseValue;
     }
 
@@ -37,6 +38,7 @@ public class Stat
     public void SetBaseValue(float value)
     {
         _baseValue = value;
+        _currentValue = value;
     }
 
     public float GetFinalValue()
@@ -46,6 +48,16 @@ public class Stat
         _modifiers.ForEach(x => _finalValue += x);
 
         return _finalValue;
+    }
+
+    public float GetCurrentValue()
+    {
+        return _currentValue;
+    }
+
+    public void SetCurrentValue(float value)
+    {
+        _currentValue = value;
     }
 
     public void AddModifier(float modifier)
