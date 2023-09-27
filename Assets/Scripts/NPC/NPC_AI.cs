@@ -243,11 +243,12 @@ public class NPC_AI : MonoBehaviour
 
     public void AlertNPC(Transform target)
     {
+        ExtendViewAndAttackDistance();
+
         if (_NPCWeapons.HasShootingTarget)
             return;
 
         _targetPosition = target.position;
-        ExtendViewAndAttackDistance();
         npcAlerted();
     }
 
@@ -289,9 +290,9 @@ public class NPC_AI : MonoBehaviour
     {
         float extendFactor = 1.7f;
 
-        _viewDistance *= extendFactor;
-        _attackDistance *= extendFactor;
-        _stopFollowingDistance *= extendFactor;
+        _viewDistance = _initialViewDistance * extendFactor;
+        _attackDistance = _initialAttackDistance * extendFactor;
+        _stopFollowingDistance = _initialStopFollowingDistance * extendFactor;
     }
 
     private void resizeViewAndAttackDistance()

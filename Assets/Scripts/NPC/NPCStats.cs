@@ -3,18 +3,6 @@ using UnityEngine;
 
 public class NPCStats : MonoBehaviour, IDamagable
 {
-    private float _currentHealth
-    {
-        get
-        {
-            return EnemyHealth.GetCurrentValue();
-        }
-        set
-        {
-            EnemyHealth.SetCurrentValue(value);
-        }
-    }
-
     [SerializeField] private NPCEnemyType _enemyType;
     [SerializeField] private int _bossId;
     public int BossId => _bossId;
@@ -42,7 +30,6 @@ public class NPCStats : MonoBehaviour, IDamagable
     private void Awake()
     {
         _enemyHealthCanvas = transform.Find("CharacterHealthCanvas").GetComponent<NPCHealthCanvas>();
-        _currentHealth = EnemyHealth.GetFinalValue();
     }
 
     private void Start()
@@ -73,14 +60,13 @@ public class NPCStats : MonoBehaviour, IDamagable
 
         //health, speed, accuracy multipliers
         float healthMultiplier = 8.0f;
-        float speedMultiplier = 2.0f;
         float accuracyMultiplier = 3.0f;
 
         EnemyHealth.AddBaseMultiplier(healthMultiplier);
-        _currentHealth = EnemyHealth.GetFinalValue();
+        EnemyHealth.SetCurrentToFinalValue();
         _healthRegeneration = 1.0f;
-        EnemySpeed.AddBaseMultiplier(speedMultiplier);
         EnemyAccuracy.AddBaseMultiplier(accuracyMultiplier);
+        EnemyAccuracy.SetCurrentToFinalValue();
     }
 
     private void regenerateHealth(float value)
@@ -88,7 +74,10 @@ public class NPCStats : MonoBehaviour, IDamagable
         if (value == 0)
             return;
 
-        _currentHealth += value * Time.deltaTime;
+        if (EnemyHealth.GetCurrentValue() <= EnemyHealth.GetFinalValue())
+            return;
+
+        EnemyHealth.UpdateCurrentValue(value * Time.deltaTime);
     }
 
     public void DamageObject(float value)
@@ -96,10 +85,10 @@ public class NPCStats : MonoBehaviour, IDamagable
         if (value == 0.0f)
             return;
 
-        _currentHealth -= value * (1.0f - EnemyDefense.GetFinalValue() / 100.0f);
+        EnemyHealth.UpdateCurrentValue(-value * (1.0f - EnemyDefense.GetFinalValue() / 100.0f));
         FloatingTextSpawner.CreateFloatingTextStatic(transform.position, value.ToString("F0"), new Color(1.0f, 0.5f, 0.0f));
 
-        _enemyHealthCanvas.UpdateHealthSlider(_currentHealth);
+        _enemyHealthCanvas.UpdateHealthSlider(EnemyHealth.GetCurrentValue());
 
         ParticleSystem bloodPSObject = Instantiate(_gameAssets.BloodPS, transform.position, Quaternion.identity, null);
         Transform bloodTransform = Instantiate(_gameAssets.Blood, transform.position, Quaternion.identity, null);
@@ -122,13 +111,13 @@ public class NPCStats : MonoBehaviour, IDamagable
 
         hitShading();
 
-        if (_currentHealth <= 0.0f)
+        if (EnemyHealth.GetCurrentValue() <= 0.0f)
             die();
     }
 
     public bool IsAlive()
     {
-        return _currentHealth > 0.0f;
+        return EnemyHealth.GetCurrentValue() > 0.0f;
     }
 
     private void hitShading()

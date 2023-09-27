@@ -127,7 +127,7 @@ public class PlayerController : MonoBehaviour
 
         float runningSpeedMultiplier = 1.5f;
 
-        _canRun = _playerStats.CurrentStamina > 0.0f;
+        _canRun = _playerStats.PlayerStamina.GetCurrentValue() > 0.0f;
         
         if (!_canRun && _isRunning)
         {

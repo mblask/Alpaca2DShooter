@@ -41,6 +41,11 @@ public class Stat
         _currentValue = value;
     }
 
+    public void SetCurrentToFinalValue()
+    {
+        _currentValue = GetFinalValue();
+    }
+
     public float GetFinalValue()
     {
         _finalValue = _baseValue;
@@ -53,6 +58,11 @@ public class Stat
     public float GetCurrentValue()
     {
         return _currentValue;
+    }
+
+    public void UpdateCurrentValue(float value)
+    {
+        _currentValue += value;
     }
 
     public void SetCurrentValue(float value)

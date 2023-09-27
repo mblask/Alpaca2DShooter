@@ -101,8 +101,3 @@ public class Terminal : MonoBehaviour, IInteractable
         _spriteRenderer.color = Constants.DEFAULT_COLOR;
     }
 }
-
-public abstract class Hackable : MonoBehaviour
-{
-    public abstract void Hack();
-}

@@ -4,12 +4,9 @@ public class MouseInteraction : MonoBehaviour
 {
     private PlayerWeapons _playerWeapons;
 
-    private IPointerOver _pointerOver;
-
     private void Start()
     {
         _playerWeapons = PlayerWeapons.Instance;
-        _pointerOver = new PointerOver();
     }
 
     private void Update()

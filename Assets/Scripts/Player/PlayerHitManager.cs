@@ -82,7 +82,7 @@ public class PlayerHitManager : MonoBehaviour
         {
             //arm hit, decrease accuracy
             float armInjuryDuration = 10.0f;
-            float accuracyBaseMultiplier = 0.1f;
+            float accuracyBaseMultiplier = 0.3f;
             PlayerStats.TemporarilyModifyStat(new StatModifyingData {
                 StatAffected = StatType.Accuracy, 
                 Duration = armInjuryDuration, 
