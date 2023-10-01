@@ -1,5 +1,6 @@
 using UnityEngine;
 using AlpacaMyGames;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 public class FiringTrap : Hackable, IDamagable
 {
@@ -196,10 +197,20 @@ public class FiringTrap : Hackable, IDamagable
         if (hits.Length == 0)
             return false;
 
-        PlayerController playerController = hits[0].collider.GetComponent<PlayerController>();
+        if (_allegiance.Equals(NPCType.Enemy))
+        {
+            PlayerController playerController = hits[0].collider.GetComponent<PlayerController>();
 
-        if (playerController != null)
-            return false;
+            if (playerController != null)
+                return false;
+        }
+        else
+        {
+            NPCBase nPCBase = hits[0].collider.GetComponent<NPCBase>();
+
+            if (nPCBase != null)
+                return false;
+        }
 
         Door door = hits[0].collider.GetComponent<Door>();
 
