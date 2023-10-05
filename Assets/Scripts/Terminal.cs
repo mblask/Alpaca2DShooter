@@ -76,6 +76,13 @@ public class Terminal : MonoBehaviour, IInteractable
         _hackingSpeed = _playerStats.HackingSpeed.GetFinalValue();
         _hackables.AddRange(transform.parent.GetComponentsInChildren<Hackable>());
         _hackables.AddRange(transform.parent.parent.Find("NPCs").GetComponentsInChildren<Hackable>());
+
+        if (_hackables.Count == 0)
+        {
+            _hackingInProgress = false;
+            FloatingTextSpawner.CreateFloatingTextStatic
+                (transform.position, "No traps around", Color.white, 1.0f, 4.0f, 0.5f);
+        }
     }
 
     public void UseTerminal()

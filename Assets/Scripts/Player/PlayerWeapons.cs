@@ -51,6 +51,7 @@ public class PlayerWeapons : MonoBehaviour
     private bool _weaponEquipped = false;
     private bool _canShoot = true;
     private bool _isShooting = false;
+    private bool _isAutoShooting = false;
     private bool _canSwitchWeapons = true;
     private bool _canPutWeaponAway = true;
 
@@ -97,6 +98,7 @@ public class PlayerWeapons : MonoBehaviour
     {
         _mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition);
         keyboardInput();
+        autoShooting();
         intervalWeaponProcedure();
     }
 
@@ -165,15 +167,47 @@ public class PlayerWeapons : MonoBehaviour
         _canSwitchWeapons = false;
         _canPutWeaponAway = false;
 
-        evaluateWeaponTypesAndShoot();
+        evaluateWeaponAndShoot();
     }
 
-    public void LeftClickUp()
+    private void evaluateWeaponAndShoot()
     {
-        _isShooting = false;
-        _canSwitchWeapons = true;
-        _canPutWeaponAway = true;
-        StopCoroutine(autoShootingCoroutine());
+        if (_currentWeapon.WeaponItem.ShootInterval == 0)
+        {
+            shootOnce();
+            return;
+        }
+
+        if (_intervalWeaponActivated)
+            return;
+
+        if (_currentWeapon.WeaponItem.Automatic)
+        {
+            _isAutoShooting = true;
+            return;
+        }
+
+        if (!_currentWeapon.WeaponItem.Automatic)
+        {
+            _intervalWeaponActivated = shootOnce();
+            _shootingInterval = 0.0f;
+            return;
+        }
+    }
+
+    private void autoShooting()
+    {
+        if (!_isAutoShooting || _isReloading)
+            return;
+
+        _shootingInterval += Time.deltaTime;
+
+        if (_shootingInterval >= _currentWeapon.WeaponItem.ShootInterval)
+        {
+            shootOnce();
+            _intervalWeaponActivated = false;
+            _shootingInterval = 0.0f;
+        }
     }
 
     private void intervalWeaponProcedure()
@@ -190,25 +224,12 @@ public class PlayerWeapons : MonoBehaviour
         }
     }
 
-    private void evaluateWeaponTypesAndShoot()
+    public void LeftClickUp()
     {
-        if (_currentWeapon.WeaponItem.Automatic)
-        {
-            StartCoroutine(autoShootingCoroutine());
-            return;
-        }
-
-        if (_currentWeapon.WeaponItem.ShootInterval <= 0.0f)
-        {
-            shootOnce();
-            return;
-        }
-
-        if (_intervalWeaponActivated)
-            return;
-
-        _intervalWeaponActivated = shootOnce();
-        _shootingInterval = 0.0f;
+        _isShooting = false;
+        _isAutoShooting = false;
+        _canSwitchWeapons = true;
+        _canPutWeaponAway = true;
     }
 
     private void useThrowable()
@@ -282,15 +303,6 @@ public class PlayerWeapons : MonoBehaviour
         _currentThrowable = _throwables[currentIndex];
 
         ThrowableImage.UpdateThrowableUIStatic(_currentThrowable);
-    }
-
-    private IEnumerator autoShootingCoroutine()
-    {
-        while (_isShooting && !_isReloading)
-        {
-            shootOnce();
-            yield return new WaitForSeconds(_shootingInterval);
-        }
     }
 
     public void EnableShooting(bool value)
