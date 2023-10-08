@@ -24,6 +24,14 @@ public class NPC_AI2 : MonoBehaviour
     private const float PATROL_RADIUS = 3.0f;
     private const float STOP_DISTANCE = 0.1f;
 
+    private float _attackDistance = 0.0f;
+    private float _viewDistance = 0.0f;
+    private float _stopFollowingDistance = 0.0f;
+
+    private const float DEFAULT_ATTACK_DISTANCE = 6.0f;
+    private const float DEFAULT_VIEW_DISTANCE = 8.0f;
+    private const float DEFAULT_STOP_FOLLOWING_DISTANCE = 9.0f;
+
     private NPCStats _npcStats;
 
     private void Awake()
@@ -61,12 +69,14 @@ public class NPC_AI2 : MonoBehaviour
         {
             _idleTimer = UnityEngine.Random.Range(0.0f, MAX_IDLE_TIME);
             _state = NpcState.Patrol;
+            getNextWaypoint();
         }
     }
 
     private void patrolState()
     {
-        moveTo(_waypoint, () => _state = NpcState.Idle);
+        moveTo(_waypoint);
+        rotateTowards(_waypoint);
     }
 
     private void chaseState()
@@ -76,6 +86,26 @@ public class NPC_AI2 : MonoBehaviour
 
     private void getNextWaypoint()
     {
+        if (obstaclesInTheWay(transform.position + Vector3.up * PATROL_RADIUS))
+        {
+            Debug.Log("Obstacle to the top");
+        }
+
+        if (obstaclesInTheWay(transform.position - Vector3.up * PATROL_RADIUS))
+        {
+            Debug.Log("Obstacle to the bottom");
+        }
+
+        if (obstaclesInTheWay(transform.position + Vector3.right * PATROL_RADIUS))
+        {
+            Debug.Log("Obstacle to the right");
+        }
+
+        if (obstaclesInTheWay(transform.position - Vector3.right * PATROL_RADIUS))
+        {
+            Debug.Log("Obstacle to the left");
+        }
+
         Vector2 positionIncrement = Utilities.GetRandomVector2(PATROL_RADIUS);
         _waypoint = _originalPosition + positionIncrement;
     }
@@ -101,7 +131,20 @@ public class NPC_AI2 : MonoBehaviour
         if (Vector2.Distance((Vector2)transform.position, position) < STOP_DISTANCE)
         {
             onArrival?.Invoke();
-            getNextWaypoint();
+            _state = NpcState.Idle;
         }
+    }
+
+    private void rotateTowards(Vector3 target)
+    {
+        if (target == null)
+            return;
+
+        Vector2 direction = (target - transform.position).normalized;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        Quaternion quaternion = Quaternion.AngleAxis(angle, Vector3.forward);
+
+        transform.rotation = Quaternion.Lerp(transform.rotation, quaternion, 0.3f);
     }
 }
