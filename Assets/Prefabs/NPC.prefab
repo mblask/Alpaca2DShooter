@@ -105,7 +105,7 @@ Animator:
   m_GameObject: {fileID: 17813973010984851}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: d69bcb1edae53c54b8d32cb42def5134, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -211,6 +211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1f18d5dd3faf8049bad82f9865851eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _npcAllegiance: 0
 --- !u!114 &17813973010984852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,7 +228,7 @@ MonoBehaviour:
   _initialAttackDistance: 6
   _initialViewDistance: 8
   _initialStopFollowingDistance: 9
-  _type: 0
+  _allegiance: 0
 --- !u!114 &17813973010984853
 MonoBehaviour:
   m_ObjectHideFlags: 0
