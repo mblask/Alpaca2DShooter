@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DestructionArea : MonoBehaviour
+public class AreaOfEffect : MonoBehaviour
 {
     private float _destructionRadius = 5.0f;
     private float _destructionSpeed = 30.0f;

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8609378906264422290}
   - component: {fileID: 8609378906264422289}
   m_Layer: 0
-  m_Name: DestructionArea
+  m_Name: AreaOfEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

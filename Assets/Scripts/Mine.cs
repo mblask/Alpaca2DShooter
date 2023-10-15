@@ -79,7 +79,7 @@ public class Mine : MonoBehaviour
         if (!_armed)
             return;
 
-        DestructionArea destructionArea = Instantiate(_gameAssets.DestructionArea, transform.position, Quaternion.identity, null).GetComponent<DestructionArea>();
+        AreaOfEffect destructionArea = Instantiate(_gameAssets.DestructionArea, transform.position, Quaternion.identity, null).GetComponent<AreaOfEffect>();
         destructionArea.SetDamage(_item.WeaponDamage);
 
         Destroy(gameObject);
