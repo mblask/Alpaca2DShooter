@@ -11,6 +11,7 @@ public class WallFiringTrap : Hackable
     private Vector2 _damageInterval = new Vector2(3.0f, 6.0f);
     private string _trapTag = "Enemy";
 
+    private bool _turnedOn = true;
     private bool _isShooting = false;
 
     private float _shootingInterval = 0.3f;
@@ -33,6 +34,9 @@ public class WallFiringTrap : Hackable
 
     private void Update()
     {
+        if (!_turnedOn)
+            return;
+
         shoot();
     }
 
@@ -40,6 +44,11 @@ public class WallFiringTrap : Hackable
     {
         _allegiance = _allegiance.Equals(NPCAllegiance.Enemy) ?
             NPCAllegiance.Ally : NPCAllegiance.Enemy;
+    }
+
+    public override void TurnOnOff()
+    {
+        _turnedOn = !_turnedOn;
     }
 
     private void shoot()

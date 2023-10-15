@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Terminal : MonoBehaviour, IInteractable
@@ -7,6 +8,8 @@ public class Terminal : MonoBehaviour, IInteractable
     private TerminalCanvas _terminalCanvas;
 
     [SerializeField] private List<Hackable> _hackables = new List<Hackable>();
+    [SerializeField] private Portal _exitPortal;
+    private ExitPortalPosition _exitPortalPosition;
 
     private bool _hackingInProgress = false;
     private float _hackingSpeed = 1.0f;
@@ -24,6 +27,7 @@ public class Terminal : MonoBehaviour, IInteractable
     private void Start()
     {
         _playerStats = PlayerStats.Instance;
+        _exitPortalPosition = ExitPortalPosition.Instance;
     }
 
     private void Update()
@@ -50,7 +54,8 @@ public class Terminal : MonoBehaviour, IInteractable
         if (_stopwatch >= _hackingTime)
         {
             _hackingInProgress = false;
-            UseTerminal();
+            Hack();
+            ShowExitPortal();
         }
     }
 
@@ -76,6 +81,8 @@ public class Terminal : MonoBehaviour, IInteractable
         _hackingSpeed = _playerStats.HackingSpeed.GetFinalValue();
         _hackables.AddRange(transform.parent.GetComponentsInChildren<Hackable>());
         _hackables.AddRange(transform.parent.parent.Find("NPCs").GetComponentsInChildren<Hackable>());
+        _exitPortal = transform.parent.GetComponentsInChildren<Portal>()
+            .Where(portal => portal.PortalType.Equals(PortalType.Exit)).First();
 
         if (_hackables.Count == 0)
         {
@@ -85,7 +92,12 @@ public class Terminal : MonoBehaviour, IInteractable
         }
     }
 
-    public void UseTerminal()
+    public void ShowExitPortal()
+    {
+        _exitPortalPosition.SetExitPortalPosition(_exitPortal.transform);
+    }
+
+    public void Hack()
     {
         foreach (Hackable hackable in _hackables)
         {
@@ -93,6 +105,17 @@ public class Terminal : MonoBehaviour, IInteractable
                 continue;
 
             hackable.Hack();
+        }
+    }
+
+    public void TurnOnOff()
+    {
+        foreach (Hackable hackable in _hackables)
+        {
+            if (hackable == null)
+                continue;
+
+            hackable.TurnOnOff();
         }
     }
 

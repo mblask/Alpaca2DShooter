@@ -1,6 +1,5 @@
 using UnityEngine;
 using AlpacaMyGames;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 public class FiringTrap : Hackable, IDamagable
 {
@@ -10,6 +9,7 @@ public class FiringTrap : Hackable, IDamagable
     private SpriteRenderer _weaponSpriteRenderer;
 
     [SerializeField] private bool _isWorking = true;
+    private bool _turnedOn = true;
     private NPCAllegiance _allegiance = NPCAllegiance.Enemy;
 
     private float _rotationSpeed = 1.0f;
@@ -54,6 +54,9 @@ public class FiringTrap : Hackable, IDamagable
         if (!_isWorking)
             return;
 
+        if (!_turnedOn)
+            return;
+
         if (_target == null)
             _trapState = FiringTrapState.Search;
 
@@ -85,6 +88,11 @@ public class FiringTrap : Hackable, IDamagable
             NPCAllegiance.Ally : NPCAllegiance.Enemy;
 
         _trapState = FiringTrapState.Search;
+    }
+
+    public override void TurnOnOff()
+    {
+        _turnedOn = !_turnedOn;
     }
 
     private void rotation2DTransform()
