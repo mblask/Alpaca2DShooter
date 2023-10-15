@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ElectricityGenerator : MonoBehaviour, IDamagable
@@ -10,7 +11,8 @@ public class ElectricityGenerator : MonoBehaviour, IDamagable
 
     private void Start()
     {
-        _switchables.AddRange(transform.parent.GetComponentsInChildren<SwitchableObject>());
+        _switchables.AddRange(transform.parent != null ? 
+            transform.parent.GetComponentsInParent<SwitchableObject>().ToList() : new List<SwitchableObject>());
     }
 
     public void DamageObject(float value)

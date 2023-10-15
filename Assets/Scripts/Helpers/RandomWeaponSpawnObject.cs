@@ -32,7 +32,7 @@ public class RandomWeaponSpawnObject : MonoBehaviour
 
         if (_specificWeapon == null)
         {
-            List<WeaponItem> weapons = GameAssets.Instance.AvailableWeaponsList;
+            List<WeaponItem> weapons = GameAssets.Instance.WeaponsList;
 
             Transform weaponObject = _itemSpawner?.SpawnItem(transform.position, weapons.GetRandomElement());
             weaponObject.transform.parent = transform.parent;

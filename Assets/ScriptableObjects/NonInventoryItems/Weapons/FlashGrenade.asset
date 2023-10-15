@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20b51595aad84ef44ada3aee087c3202, type: 3}
-  m_Name: Grenade
+  m_Name: FlashGrenade
   m_EditorClassIdentifier: 
-  ItemName: Grenade
-  ItemSprite: {fileID: 21300000, guid: 4e5f04296697feb44b30ca5bef21e737, type: 3}
+  ItemName: Flash Grenade
+  ItemSprite: {fileID: 21300000, guid: ab3ced75439e9a340b4e2f6291094748, type: 3}
   ChanceToDrop: 5
-  Color: {r: 0.07450981, g: 0.23529412, b: 0.078431375, a: 1}
+  Color: {r: 0.25490198, g: 0.3764706, b: 0.28627452, a: 1}
   PickupAudio: 7
   Trigger: 0
   WeaponShootAudio: 10
   WeaponReloadAudio: 99999
   Automatic: 0
   ShootInterval: 1
-  WeaponDamage: {x: 20, y: 40}
+  WeaponDamage: {x: 0, y: 0}
   MagazineBullets: 0
   AmmoType: 0
   StrengthRequired: 1
-  Type: 1
-  ThrowForce: 50
+  Type: 2
+  ThrowForce: 60

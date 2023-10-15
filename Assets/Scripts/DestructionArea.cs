@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,9 +7,12 @@ public class DestructionArea : MonoBehaviour
     private float _destructionSpeed = 30.0f;
     private Vector2 _damage = new Vector2(20.0f, 40.0f);
 
+    private AreaOfEffectType _areaOfEffectType;
+
     private float _scaleIncrement = 0.0f;
 
-    private List<IDamagable> damagableList = new List<IDamagable>();
+    private List<IDamagable> _damagableList = new List<IDamagable>();
+    private List<IBlindable> _blindableList = new List<IBlindable>();
 
     private void Update()
     {
@@ -27,11 +29,38 @@ public class DestructionArea : MonoBehaviour
             return;
         
         searchForDamagables();
+        searchForBlindable();
         _scaleIncrement = 0.0f;
+    }
+
+    private void searchForBlindable()
+    {
+        if (!_areaOfEffectType.Equals(AreaOfEffectType.Blinding))
+            return;
+
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, transform.localScale.x);
+        if (hits.Length == 0)
+            return;
+
+        foreach (Collider2D hit in hits)
+        {
+            IBlindable blindable = hit.gameObject.GetComponent<IBlindable>();
+            if (blindable == null)
+                continue;
+
+            if (_blindableList.Contains(blindable))
+                continue;
+
+            _blindableList.Add(blindable);
+            blindable.Blind();
+        }
     }
 
     private void searchForDamagables()
     {
+        if (!_areaOfEffectType.Equals(AreaOfEffectType.Damaging))
+            return;
+
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, transform.localScale.x);
         if (hits.Length == 0)
             return;
@@ -42,13 +71,18 @@ public class DestructionArea : MonoBehaviour
             if (damagable == null)
                 continue;
 
-            if (damagableList.Contains(damagable))
+            if (_damagableList.Contains(damagable))
                 continue;
 
-            damagableList.Add(damagable);
+            _damagableList.Add(damagable);
             float damage = Random.Range(_damage.x, _damage.y) / Mathf.Pow(transform.localScale.x, 2);
             damagable.DamageObject(damage);
         }
+    }
+
+    public void SetAreaType(AreaOfEffectType type)
+    {
+        _areaOfEffectType = type;
     }
 
     public void SetDestructionRadius(float destructionRadius)

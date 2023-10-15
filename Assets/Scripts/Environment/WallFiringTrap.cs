@@ -6,7 +6,7 @@ public class WallFiringTrap : Hackable
 {
     private List<ShootingSpot> _shootingSpots;
 
-    private NPCType _allegiance = NPCType.Enemy;
+    private NPCAllegiance _allegiance = NPCAllegiance.Enemy;
 
     private Vector2 _damageInterval = new Vector2(3.0f, 6.0f);
     private string _trapTag = "Enemy";
@@ -38,8 +38,8 @@ public class WallFiringTrap : Hackable
 
     public override void Hack()
     {
-        _allegiance = _allegiance.Equals(NPCType.Enemy) ?
-            NPCType.Ally : NPCType.Enemy;
+        _allegiance = _allegiance.Equals(NPCAllegiance.Enemy) ?
+            NPCAllegiance.Ally : NPCAllegiance.Enemy;
     }
 
     private void shoot()
@@ -89,11 +89,11 @@ public class WallFiringTrap : Hackable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (_allegiance.Equals(NPCType.Enemy))
+        if (_allegiance.Equals(NPCAllegiance.Enemy))
             if (!searchPlayer(collision))
                 return;
 
-        if (_allegiance.Equals(NPCType.Ally))
+        if (_allegiance.Equals(NPCAllegiance.Ally))
             if (!searchEnemy(collision))
                 return;
 
@@ -102,11 +102,11 @@ public class WallFiringTrap : Hackable
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (_allegiance.Equals(NPCType.Enemy))
+        if (_allegiance.Equals(NPCAllegiance.Enemy))
             if (!searchPlayer(collision))
                 return;
 
-        if (_allegiance.Equals(NPCType.Ally))
+        if (_allegiance.Equals(NPCAllegiance.Ally))
             if (!searchEnemy(collision))
                 return;
 

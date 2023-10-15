@@ -17,7 +17,7 @@ public class NPC_AI : MonoBehaviour
 
     private NPCState _state;
     [Header("NPC Affiliation")]
-    [SerializeField] private NPCType _type;
+    [SerializeField] private NPCAllegiance _allegiance;
 
     private bool _isMoving = false;
     private Vector2 _patrolWaitTimeInterval = new Vector2(0.5f, 2.5f);
@@ -94,9 +94,9 @@ public class NPC_AI : MonoBehaviour
         resizeViewAndAttackDistance();
     }
 
-    public NPCType GetNPCType()
+    public NPCAllegiance GetNPCType()
     {
-        return _type;
+        return _allegiance;
     }
 
     public void UpdateDistancesAccordingToLighting()
@@ -221,7 +221,7 @@ public class NPC_AI : MonoBehaviour
 
     private bool findTarget()
     {
-        if (_gameManager == null || _type.Equals(NPCType.Ally))
+        if (_gameManager == null || _allegiance.Equals(NPCAllegiance.Ally))
             return false;
 
         if (!_playerStats.IsAlive() || !_gameManager.IsGameRunning())
@@ -257,7 +257,7 @@ public class NPC_AI : MonoBehaviour
         if (playerTransform == null)
             return false;
 
-        if (_type.Equals(NPCType.Enemy))
+        if (_allegiance.Equals(NPCAllegiance.Enemy))
             return false;
 
         //interact with player, turn to him and wait
@@ -270,7 +270,7 @@ public class NPC_AI : MonoBehaviour
 
     private void stopInteractWithPlayer()
     {
-        if (_type.Equals(NPCType.Enemy))
+        if (_allegiance.Equals(NPCAllegiance.Enemy))
             return;
 
         //stop interacting and return to normal routine

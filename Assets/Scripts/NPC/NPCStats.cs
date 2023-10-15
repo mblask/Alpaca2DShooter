@@ -4,6 +4,7 @@ using UnityEngine;
 public class NPCStats : MonoBehaviour, IDamagable
 {
     [SerializeField] private NPCEnemyType _enemyType;
+    public NPCEnemyType EnemyType => _enemyType;
     [SerializeField] private int _bossId;
     public int BossId => _bossId;
 
@@ -24,6 +25,7 @@ public class NPCStats : MonoBehaviour, IDamagable
 
     private NPCBase _npcBase;
     private NPC_AI _enemyAI;
+    private NPC_AI2 _enemyAI2;
 
     private bool _isDead = false;
 
@@ -41,6 +43,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         _conversationSystem = GetComponent<ConversationSystem>();
         _npcBase = GetComponent<NPCBase>();
         _enemyAI = GetComponent<NPC_AI>();
+        _enemyAI2 = GetComponent<NPC_AI2>();
     }
 
     private void Update()
@@ -107,6 +110,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         _enemyHealthCanvas.ActivateHealthSlider();
 
         _enemyAI.ExtendViewAndAttackDistance();
+        _enemyAI2.ExtendAwareness();
         _playerWeapons.IncrementShotsHit();
 
         hitShading();

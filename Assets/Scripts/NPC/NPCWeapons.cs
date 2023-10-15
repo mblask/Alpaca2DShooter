@@ -1,13 +1,13 @@
 using AlpacaMyGames;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class NPCWeapons : MonoBehaviour
 {
     private Transform _shootingSpot;
     private Animator _animator;
     private NPC_AI _npcAI;
+    private NPC_AI2 _npcAI2;
 
     private string _removeWeaponTriggerName = "RemoveWeapon";
 
@@ -38,6 +38,7 @@ public class NPCWeapons : MonoBehaviour
         _animator = GetComponent<Animator>();
         _shootingSpot = transform.Find("ShootingSpot");
         _npcAI = GetComponent<NPC_AI>();
+        _npcAI2 = GetComponent<NPC_AI2>();
     }
 
     private void Start()
@@ -57,22 +58,22 @@ public class NPCWeapons : MonoBehaviour
         if (randomWeaponIndex < 4)
         {
             //Gun - 4/12 chance to spawn (0, 1, 2, 3)
-            _selectedWeapon = GameAssets.Instance.AvailableWeaponsList[0];
+            _selectedWeapon = GameAssets.Instance.WeaponsList[0];
         }
         else if (randomWeaponIndex >= 4 && randomWeaponIndex < 8)
         {
             //Silencer - 4/12 chance to spawn (4, 5, 6, 7)
-            _selectedWeapon = GameAssets.Instance.AvailableWeaponsList[1];
+            _selectedWeapon = GameAssets.Instance.WeaponsList[1];
         }
         else if (randomWeaponIndex >= 8 && randomWeaponIndex < 10)
         {
             //Machine gun - 2/12 chance to spawn (8, 9)
-            _selectedWeapon = GameAssets.Instance.AvailableWeaponsList[2];
+            _selectedWeapon = GameAssets.Instance.WeaponsList[2];
         }
         else
         {
             //Shotgun - 2/12 chance to spawn (10, 11)
-            _selectedWeapon = GameAssets.Instance.AvailableWeaponsList[3];
+            _selectedWeapon = GameAssets.Instance.WeaponsList[3];
         }
     }
 
@@ -99,7 +100,8 @@ public class NPCWeapons : MonoBehaviour
             return;
         }
 
-        if (_npcAI.ObstaclesInTheWay(_shootTarget.position))
+        //if (_npcAI.ObstaclesInTheWay(_shootTarget.position))
+        if (_npcAI2.ObstaclesInTheWayRaycast(_shootTarget.position))
             return;
 
         _timer -= Time.deltaTime;
@@ -173,7 +175,8 @@ public class NPCWeapons : MonoBehaviour
     {
         _shootTarget = target;
 
-        if (_npcAI.ObstaclesInTheWay(_shootTarget.position))
+        //if (_npcAI.ObstaclesInTheWay(_shootTarget.position))
+        if (_npcAI2.ObstaclesInTheWayRaycast(_shootTarget.position))
             return;
 
         Grenade grenade =

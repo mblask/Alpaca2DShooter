@@ -1,10 +1,11 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Throwable Weapon", menuName = "Scriptable Objects / Non Inventory Item / Throwable", order = 0)]
-public class ThrowableItem : WeaponItem
+public class ThrowableItem : NonInventoryItem
 {
     [Header("Throwable characteristics")]
     public ThrowableWeaponType Type;
+    public Vector2 WeaponDamage;
     public float ThrowForce;
 
     public override bool UseItem()

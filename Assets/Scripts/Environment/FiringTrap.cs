@@ -10,7 +10,7 @@ public class FiringTrap : Hackable, IDamagable
     private SpriteRenderer _weaponSpriteRenderer;
 
     [SerializeField] private bool _isWorking = true;
-    private NPCType _allegiance = NPCType.Enemy;
+    private NPCAllegiance _allegiance = NPCAllegiance.Enemy;
 
     private float _rotationSpeed = 1.0f;
 
@@ -40,7 +40,7 @@ public class FiringTrap : Hackable, IDamagable
     {
         _gameManager = GameManager.Instance;
         _audioManager = AudioManager.Instance;
-        WeaponItem randomWeapon = GameAssets.Instance.AvailableWeaponsList.GetRandomElement();
+        WeaponItem randomWeapon = GameAssets.Instance.WeaponsList.GetRandomElement();
         _weaponSpriteRenderer.sprite = randomWeapon.ItemSprite;
 
         _selectedWeapon = new Weapon(randomWeapon, 0);
@@ -81,8 +81,8 @@ public class FiringTrap : Hackable, IDamagable
 
     public override void Hack()
     {
-        _allegiance = _allegiance.Equals(NPCType.Enemy) ? 
-            NPCType.Ally : NPCType.Enemy;
+        _allegiance = _allegiance.Equals(NPCAllegiance.Enemy) ? 
+            NPCAllegiance.Ally : NPCAllegiance.Enemy;
 
         _trapState = FiringTrapState.Search;
     }
@@ -104,11 +104,11 @@ public class FiringTrap : Hackable, IDamagable
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, _searchRadius);
         foreach (Collider2D collider in colliders)
         {
-            if (_allegiance.Equals(NPCType.Enemy))
+            if (_allegiance.Equals(NPCAllegiance.Enemy))
                 if (!grabPlayer(collider))
                     continue;
 
-            if (_allegiance.Equals(NPCType.Ally))
+            if (_allegiance.Equals(NPCAllegiance.Ally))
                 if (!grabEnemy(collider))
                     continue;
         }
@@ -197,7 +197,7 @@ public class FiringTrap : Hackable, IDamagable
         if (hits.Length == 0)
             return false;
 
-        if (_allegiance.Equals(NPCType.Enemy))
+        if (_allegiance.Equals(NPCAllegiance.Enemy))
         {
             PlayerController playerController = hits[0].collider.GetComponent<PlayerController>();
 

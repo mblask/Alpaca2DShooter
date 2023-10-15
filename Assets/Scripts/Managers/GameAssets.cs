@@ -25,18 +25,23 @@ public class GameAssets : MonoBehaviour
     public Transform ItemSlotUIPrefab;
 
     [Header("Object Prefabs")]
-    public Transform Player;
-    public Transform Mine;
-    public Transform Grenade;
     public Transform DestructionArea;
-    public Transform NPCPrefab;
-    public Transform NPCBossPrefab;
     public Transform ItemTemplate;
     public Transform BulletPrefab;
     public Transform SpawnPortal;
     public Transform ExitPortal;
     public Transform FiringTrap;
     public Transform Blood;
+
+    [Header("Character Prefabs")]
+    public Transform Player;
+    public Transform NPCPrefab;
+    public Transform NPCBossPrefab;
+
+    [Header("Throwable Prefabs")]
+    public Transform Mine;
+    public Transform Grenade;
+    public Transform FlashGrenade;
 
     [Header("Particle Systems")]
     public ParticleSystem ObjectDestroyPS;
@@ -50,7 +55,10 @@ public class GameAssets : MonoBehaviour
     public List<ArtefactItem> AvailableArtefacts;
 
     [Header("Available Weapons")]
-    public List<WeaponItem> AvailableWeaponsList;
+    public List<WeaponItem> WeaponsList;
+
+    [Header("Available Throwable Weapons")]
+    public List<ThrowableItem> ThrowablesList;
 
     [Header("Available Ammo")]
     public List<AmmoItem> AvailableAmmoItems;
@@ -74,5 +82,10 @@ public class GameAssets : MonoBehaviour
     public ConsumableItem GetConsumableByType(ConsumableType type)
     {
         return Consumables.Find(consumable => consumable.ConsumableType.Equals(type));
+    }
+
+    public ThrowableItem GetThrowableByType(ThrowableWeaponType type)
+    {
+        return ThrowablesList.Find(throwable => throwable.Type.Equals(type));
     }
 }

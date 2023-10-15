@@ -13,7 +13,7 @@ public class WeaponItem : NonInventoryItem
     public int MagazineBullets;
     public AmmoType AmmoType;
 
-    [Space]
+    [Header("Required to use")]
     public float StrengthRequired;
 
     public override bool UseItem()

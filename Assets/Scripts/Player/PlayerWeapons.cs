@@ -262,6 +262,13 @@ public class PlayerWeapons : MonoBehaviour
                 grenade.ArmGrenade();
                 grenade.ThrowGrenade(forceVector);
                 break;
+            case ThrowableWeaponType.FlashGrenade:
+                throwableTransform =
+                    Instantiate(GameAssets.Instance.FlashGrenade, transform.position, Quaternion.identity, null);
+                FlashGrenade flashGrenade = throwableTransform.GetComponent<FlashGrenade>();
+                flashGrenade.ArmGrenade();
+                flashGrenade.ThrowGrenade(forceVector);
+                break;
             default:
                 return;
         }
@@ -462,6 +469,10 @@ public class PlayerWeapons : MonoBehaviour
             NPC_AI npc = collider.GetComponent<NPC_AI>();
             if (npc != null)
                 npc.AlertNPC(this.transform);
+
+            NPC_AI2 npc2 = collider.GetComponent<NPC_AI2>();
+            if (npc2 != null)
+                npc2.AlertNPC();
         }
     }
 
