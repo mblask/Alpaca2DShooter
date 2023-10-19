@@ -11,12 +11,16 @@ public class Terminal : MonoBehaviour, IInteractable
     [SerializeField] private Portal _exitPortal;
     private ExitPortalPosition _exitPortalPosition;
 
+    private bool _isHacked = false;
     private bool _hackingInProgress = false;
     private float _hackingSpeed = 1.0f;
     private float _hackingTime = 3.0f;
     private float _stopwatch = 0.0f;
 
+    private bool _isInteracting = false;
+
     private PlayerStats _playerStats;
+    private TerminalUI _terminalUI;
 
     private void Awake()
     {
@@ -27,16 +31,33 @@ public class Terminal : MonoBehaviour, IInteractable
     private void Start()
     {
         _playerStats = PlayerStats.Instance;
+        _terminalUI = TerminalUI.Instance;
         _exitPortalPosition = ExitPortalPosition.Instance;
     }
 
     private void Update()
     {
-        hackProcedure();
+        breakingInProcedure();
+        isInInteractionRange();
     }
 
-    private void hackProcedure()
+    private void isInInteractionRange()
     {
+        if (!_isInteracting)
+            return;
+
+        if (!checkPlayerTooFar())
+            return;
+
+        _isInteracting = false;
+        _terminalUI.ActivateUI(false);
+    }
+
+    private void breakingInProcedure()
+    {
+        if (_isHacked)
+            return;
+
         if (!_hackingInProgress)
             return;
 
@@ -54,9 +75,15 @@ public class Terminal : MonoBehaviour, IInteractable
         if (_stopwatch >= _hackingTime)
         {
             _hackingInProgress = false;
-            Hack();
-            ShowExitPortal();
+            _isHacked = true;
+            openTerminal();
         }
+    }
+
+    private void openTerminal()
+    {
+        _terminalUI.SetTerminal(this);
+        _terminalUI.ActivateUI(true);
     }
 
     private bool checkPlayerTooFar()
@@ -77,19 +104,33 @@ public class Terminal : MonoBehaviour, IInteractable
 
     public void Interact()
     {
+        _isInteracting = true;
+
+        isNotHacked();
+        isHacked();
+    }
+
+    private void isHacked()
+    {
+        if (!_isHacked)
+            return;
+        
+        openTerminal();
+    }
+
+    private void isNotHacked()
+    {
+        if (_isHacked)
+            return;
+
         _hackingInProgress = true;
         _hackingSpeed = _playerStats.HackingSpeed.GetFinalValue();
-        _hackables.AddRange(transform.parent.GetComponentsInChildren<Hackable>());
-        _hackables.AddRange(transform.parent.parent.Find("NPCs").GetComponentsInChildren<Hackable>());
-        _exitPortal = transform.parent.GetComponentsInChildren<Portal>()
+        _hackables.AddRange
+            (transform.parent?.GetComponentsInChildren<Hackable>() ?? new Hackable[0]);
+        _hackables.AddRange
+            (transform.parent?.parent?.Find("NPCs").GetComponentsInChildren<Hackable>() ?? new Hackable[0]);
+        _exitPortal = transform.parent?.GetComponentsInChildren<Portal>()
             .Where(portal => portal.PortalType.Equals(PortalType.Exit)).First();
-
-        if (_hackables.Count == 0)
-        {
-            _hackingInProgress = false;
-            FloatingTextSpawner.CreateFloatingTextStatic
-                (transform.position, "No traps around", Color.white, 1.0f, 4.0f, 0.5f);
-        }
     }
 
     public void ShowExitPortal()

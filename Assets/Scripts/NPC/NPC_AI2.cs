@@ -19,6 +19,7 @@ public class NPC_AI2 : MonoBehaviour, IBlindable
     private NpcState _state = NpcState.Patrol;
     private Vector2 _originalPosition;
     private Vector2 _waypoint;
+    private List<Vector2> _getBackWaypoints = new List<Vector2>();
 
     private float _idleTimer = 0.0f;
 
@@ -100,7 +101,7 @@ public class NPC_AI2 : MonoBehaviour, IBlindable
 
     private void patrolState()
     {
-        moveTo(_waypoint);
+        moveTo(_waypoint, () => _state = NpcState.Idle);
         rotateTowards(_waypoint);
 
         if (_npcAllegiance.Equals(NPCAllegiance.Ally))
@@ -271,7 +272,6 @@ public class NPC_AI2 : MonoBehaviour, IBlindable
         if (Vector2.Distance((Vector2)transform.position, position) < STOP_DISTANCE)
         {
             onArrival?.Invoke();
-            _state = NpcState.Idle;
         }
     }
 
