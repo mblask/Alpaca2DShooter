@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -6,7 +5,7 @@ using TMPro;
 public class FloatingTextSpawner : MonoBehaviour
 {
     private static FloatingTextSpawner _instance;
-    private List<FloatingTextSingle> _floatingTextObjectsList;
+    [SerializeField] private List<FloatingTextSingle> _floatingTextObjectsList;
 
     private void Awake()
     {
@@ -18,7 +17,7 @@ public class FloatingTextSpawner : MonoBehaviour
     {
         for (int i = 0; i < _floatingTextObjectsList.Count; i++)
         {
-            if (_floatingTextObjectsList[i].Update())
+            if (_floatingTextObjectsList[i].UpdateText())
             {
                 Destroy(_floatingTextObjectsList[i].gameObject);
                 _floatingTextObjectsList.RemoveAt(i);
@@ -27,20 +26,23 @@ public class FloatingTextSpawner : MonoBehaviour
         }
     }
 
-    public static void CreateFloatingTextStatic(Vector3 spawnPosition, string textToWrite, Color fontColor, float destroyAfter = 0.7f, float fontSize = 4.0f, float floatSpeed = 1.0f, bool dontSpawnWhenOthersExist = false, FloatDirection floatDirection = FloatDirection.UpRight)
+    public static FloatingTextSingle CreateFloatingTextStatic(Vector3 spawnPosition, string textToWrite, Color fontColor, float destroyAfter = 0.7f, float fontSize = 4.0f, float floatSpeed = 1.0f, bool storeInSpawner = true, FloatDirection floatDirection = FloatDirection.UpRight)
     {
         if (_instance == null)
             Debug.LogError("There is no Floating Text object in the scene!");
 
-        _instance?.createFloatingTextMesh(spawnPosition, textToWrite, fontColor, destroyAfter, fontSize, floatSpeed, floatDirection);
+        return _instance?.createFloatingTextMesh(spawnPosition, textToWrite, fontColor, destroyAfter, fontSize, floatSpeed, storeInSpawner, floatDirection);
     }
 
-    private void createFloatingTextMesh(Vector3 spawnLocation, string textToWrite, Color fontColor, float destroyAfter, float fontSize, float floatSpeed, FloatDirection floatDirection)
+    private FloatingTextSingle createFloatingTextMesh(Vector3 spawnLocation, string textToWrite, Color fontColor, float destroyAfter, float fontSize, float floatSpeed, bool storeInSpawner, FloatDirection floatDirection)
     {
         GameObject floatingTextObject = new GameObject("FloatingTextObject", typeof(FloatingTextSingle));
         FloatingTextSingle floatingText = floatingTextObject.GetComponent<FloatingTextSingle>();
         floatingText.Setup(spawnLocation, textToWrite, fontColor, fontSize, destroyAfter, floatSpeed , floatDirection);
-        _floatingTextObjectsList.Add(floatingText);
+        if (storeInSpawner)
+            _floatingTextObjectsList.Add(floatingText);
+
+        return floatingText;
     }
 }
 
@@ -75,11 +77,11 @@ public class FloatingTextSingle : MonoBehaviour
         _textMesh.sortingOrder = 50;
     }
 
-    public bool Update()
+    public bool UpdateText()
     {
         transform.position += _floatDirection * _floatSpeed * Time.deltaTime;
 
-        Vector3 scaleDecreaseFactor = 0.1f * new Vector3(1.0f, 1.0f, 0.0f);
+        Vector3 scaleDecreaseFactor = 0.1f * new Vector3(1.0f, 1.0f, 0.0f) / _destroyAfterTimer;
         Vector3 scale = transform.localScale - scaleDecreaseFactor * Time.deltaTime;
         transform.localScale = scale;
 
