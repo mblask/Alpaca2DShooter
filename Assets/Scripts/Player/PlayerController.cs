@@ -24,8 +24,6 @@ public class PlayerController : MonoBehaviour
 
     private PlayerStats _playerStats;
 
-    [SerializeField] private AStarPathfinding _pathfinding;
-
     public void Awake()
     {
         _instance = this;
@@ -39,10 +37,6 @@ public class PlayerController : MonoBehaviour
 
         if (GameManager.Instance != null)
             GameManager.Instance.OnGameComplete += GameManager_OnGameComplete;
-
-        _pathfinding = new AStarPathfinding();
-        _pathfinding.GenerateGrid(transform.position, 1.0f, 10, 10);
-        _pathfinding.Find(0, 0, 9, 9);
     }
 
     private void OnDisable()
@@ -58,8 +52,6 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        _pathfinding.Show();
-
         if (_inputActive)
         {
             _movement.x = Input.GetAxisRaw("Horizontal");

@@ -1,169 +1,128 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
-public class Grid<T> where T : new()
+public class Grid<T>
 {
-    public Vector3 Origin { get; }
-    public float CellSize { get; }
-    public int Columns { get; }
-    public int Rows { get; }
+    private int _columns;
+    private int _rows;
+    private float _cellSize;
+    private Vector3 _origin;
 
-    [SerializeField] private List<T> _elements = new List<T>();
+    private T[,] _grid;
+    private FloatingTextSingle[,] _gridText;
 
-    private List<FloatingTextSingle> _gridText = new List<FloatingTextSingle>();
-
-    public Grid(Vector3 origin, float cellSize, int columns, int rows)
+    public Grid(int columns, int rows, float cellSize, Vector3 origin)
     {
-        Origin = origin;
-        CellSize = cellSize;
-        Columns = columns;
-        Rows = rows;
+        _columns = columns;
+        _rows = rows;
+        _cellSize = cellSize;
 
-        _elements = new List<T>();
-        for (int i = 0; i < Rows; i++)
+        _grid = new T[columns, rows];
+
+        _origin = origin;
+    }
+
+    public void SetOrigin(Vector3 origin)
+    {
+        _origin = origin;
+    }
+
+    public void Show()
+    {
+        clearGridText();
+        float duration = 3.0f;
+        float fontSize = 3.0f;
+        for (int column = 0; column < _grid.GetLength(0); column++)
         {
-            for (int j = 0; j < Columns; j++)
+            for (int row = 0; row < _grid.GetLength(1); row++)
             {
-                _elements.Add(new T());
+                Vector3 position = GetWorldPosition(column, row) + new Vector3(_cellSize, _cellSize) * 0.5f;
+                _gridText[column, row] = FloatingTextSpawnerStatic
+                    .Create(position, _grid[column, row].ToString(), Color.white, duration, fontSize);
+                Debug.DrawLine(GetWorldPosition(column, row), GetWorldPosition(column, row + 1), Color.white, duration);
+                Debug.DrawLine(GetWorldPosition(column, row), GetWorldPosition(column + 1, row), Color.white, duration);
             }
         }
+        
+        Debug.DrawLine(GetWorldPosition(0, _rows), GetWorldPosition(_columns, _rows), Color.white, duration);
+        Debug.DrawLine(GetWorldPosition(_columns, 0), GetWorldPosition(_columns, _rows), Color.white, duration);
     }
 
-    public Grid(Vector3 origin, Vector3 target, float cellSize)
+    private void clearGridText()
     {
-        Origin = origin;
-        CellSize = cellSize;
-        Columns = Mathf.FloorToInt(Mathf.Abs(target.x - origin.x) / cellSize) * 3;
-        Rows = Mathf.FloorToInt(Mathf.Abs(target.y - origin.y) / cellSize) * 3;
+        if (_gridText != null)
+            foreach (FloatingTextSingle floatingText in _gridText)
+                Object.Destroy(floatingText.gameObject);
 
-        _elements = new List<T>();
-        for (int i = 0; i < Rows; i++)
+        _gridText = new FloatingTextSingle[_columns, _rows];
+    }
+
+    private bool validateGridPosition(int column, int row)
+    {
+        return column >= 0 && column < _columns && row >= 0 && row < _rows;
+    }
+
+    private bool validateGridPosition(Vector2Int xy)
+    {
+        return validateGridPosition(xy.x, xy.y);
+    }
+
+    public Vector3 GetWorldPosition(int column, int row)
+    {
+        return new Vector3(column, row) * _cellSize + _origin;
+    }
+
+    public Vector2Int GetGridPositionFromWorld(Vector3 position)
+    {
+        return new Vector2Int
         {
-            for (int j = 0; j < Columns; j++)
-            {
-                _elements.Add(new T());
-            }
-        }
+            x = Mathf.FloorToInt((position.x - _origin.x) / _cellSize),
+            y = Mathf.FloorToInt((position.y - _origin.y) / _cellSize),
+        };
     }
 
-    public void FillGrid(T value)
+    public T GetValue(int column, int row)
     {
-        for (int i = 0; i < Rows; i++)
-        {
-            for (int j = 0; j < Columns; j++)
-            {
-                _elements[getGridIndex(i, j)] = value;
-            }
-        }
-    }
-
-    public void DrawGrid(DrawSettings settings)
-    {
-        int duration = 99;
-        for (int i = 0; i < Rows; i++)
-        {
-            for (int j = 0; j < Columns; j++)
-            {
-                Vector3 horizontal1 = Origin + new Vector3(j, i) * CellSize - new Vector3(Columns / 2.0f, Rows / 2.0f);
-                Vector3 horizontal2 = Origin + new Vector3(j, i + 1) * CellSize - new Vector3(Columns / 2.0f, Rows / 2.0f);
-                Debug.DrawLine(horizontal1, horizontal2, settings.Color, duration);
-
-                Vector3 vertical1 = Origin + new Vector3(j, i) * CellSize - new Vector3(Columns / 2.0f, Rows / 2.0f);
-                Vector3 vertical2 = Origin + new Vector3(j + 1, i) * CellSize - new Vector3(Columns / 2.0f, Rows / 2.0f);
-                Debug.DrawLine(vertical1, vertical2, settings.Color, duration);
-            }
-        }
-
-        Debug.DrawLine
-            (Origin + new Vector3(0, Rows) * CellSize - new Vector3(Columns / 2.0f, Rows / 2.0f), Origin + new Vector3(Columns, Rows) * CellSize - new Vector3(Columns / 2.0f, Rows / 2.0f), settings.Color, duration);
-        Debug.DrawLine
-            (Origin + new Vector3(Columns, 0) * CellSize - new Vector3(Columns / 2.0f, Rows / 2.0f), Origin + new Vector3(Columns, Rows) * CellSize - new Vector3(Columns / 2.0f, Rows / 2.0f), settings.Color, duration);
-
-        for (int i = 0; i < Rows; i++)
-        {
-            for (int j = 0; j < Columns; j++)
-            {
-                Vector2 position = Origin + new Vector3(j, i) * CellSize - new Vector3(Columns / 2.0f, Rows / 2.0f) + Vector3.one * CellSize * 0.5f;
-                _gridText.Add(FloatingTextSpawner.CreateFloatingTextStatic
-                    (position, _elements[getGridIndex(j, i)].ToString(), settings.Color, duration, settings.FontSize, 0.0f, false));
-            }
-        }
-    }
-
-    public void ClearGrid()
-    {
-        foreach (FloatingTextSingle floatingText in _gridText)
-            UnityEngine.Object.Destroy(floatingText.gameObject);
-
-        _gridText.Clear();
-    }
-
-    public void DrawGrid()
-    {
-        DrawGrid(new DrawSettings { Color = Color.white, FontSize = 4.0f });
-    }
-
-    private int getGridIndex(int i, int j)
-    {
-        return i + j * Columns;
-    }
-
-    public Vector2Int GetGridPositionFromWorldPosition(Vector2 worldPosition)
-    {
-        int i = Mathf.FloorToInt((worldPosition.x - Origin.x) / CellSize + Columns * 0.5f);
-        int j = Mathf.FloorToInt((worldPosition.y - Origin.y) / CellSize + Rows * 0.5f);
-
-        return new Vector2Int(i, j);
-    }
-
-    public Vector2 GetWorldPositionFromGridPosition(int i, int j)
-    {
-        float x = Origin.x + (i - (Columns - 1) * 0.5f) * CellSize;
-        float y = Origin.y + (j - (Rows - 1) * 0.5f) * CellSize;
-
-        return new Vector2(x, y);
-    }
-
-    private bool validatePosition(int i, int j)
-    {
-        return i >= 0 && i < Columns && j >= 0 && j < Rows;
-    }
-
-    public T GetValue(int i, int j)
-    {
-        if (!validatePosition(i, j))
+        if (!validateGridPosition(column, row))
             return default;
 
-        return _elements[getGridIndex(i, j)];
+        return _grid[column, row];
     }
 
-    public T GetValue(Vector2Int gridPosition)
+    public T GetValue(Vector3 worldPosition)
     {
-        if (!validatePosition(gridPosition.x, gridPosition.y))
+        Vector2Int xy = GetGridPositionFromWorld(worldPosition);
+        Debug.Log(xy);
+        if (!validateGridPosition(xy))
             return default;
 
-        return _elements[getGridIndex(gridPosition.x, gridPosition.y)];
+        return _grid[xy.x, xy.y];
     }
 
-    public T GetValueFromWorld(Vector2 worldPosition)
+    public void SetValue(int column, int row, T value)
     {
-        Vector2Int indices = GetGridPositionFromWorldPosition(worldPosition);
-        return GetValue(indices.x, indices.y);
-    }
-
-    public void SetValue(int i, int j, T value)
-    {
-        if (i < 0 || i >= Columns || j < 0 || j >= Rows)
+        if (!validateGridPosition(column, row))
             return;
 
-        _elements[getGridIndex(i, j)] = value;
+        _grid[column, row] = value;
     }
 
-    public void SetValueFromWorld(Vector2 worldPosition, T value)
+    public void SetValue(Vector3 worldPosition, T value)
     {
-        Vector2Int indices = GetGridPositionFromWorldPosition(worldPosition);
-        SetValue(indices.x, indices.y, value);
+        Vector2Int xy = GetGridPositionFromWorld(worldPosition);
+        if (!validateGridPosition(xy))
+            return;
+
+        _grid[xy.x, xy.y] = value;
+        _gridText[xy.x, xy.y].SetText(value.ToString());
+    }
+
+    public int GetRows()
+    {
+        return _rows;
+    }
+
+    public int GetColumns()
+    {
+        return _columns;
     }
 }

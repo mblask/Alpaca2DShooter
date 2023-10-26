@@ -51,7 +51,7 @@ public class PlayerHitManager : MonoBehaviour
             _mainCameraController.WobbleCamera(true, headInjuryDuration);
             _postProcessingManager.ActivatePostProcessing(headInjuryDuration);
 
-            FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Head shot!", hitTextColor, 0.5f, 5.0f, 2.0f, false, FloatDirection.Up);
+            FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Head shot!", hitTextColor, 0.5f, 5.0f, 2.0f, true, FloatDirection.Up);
 
             _woundsList.AddIfNone(WoundType.Head);
 
@@ -71,7 +71,7 @@ public class PlayerHitManager : MonoBehaviour
                 StatModifier = 0.0f,
                 StatMultiplier = speedBaseMultiplier
             });
-            FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Leg Hit!", hitTextColor, 0.5f, 5.0f, 2.0f, false, FloatDirection.Down);
+            FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Leg Hit!", hitTextColor, 0.5f, 5.0f, 2.0f, true, FloatDirection.Down);
 
             _woundsList.AddIfNone(WoundType.Legs);
 
@@ -90,7 +90,7 @@ public class PlayerHitManager : MonoBehaviour
                 StatModifier = 0.0f, 
                 StatMultiplier = accuracyBaseMultiplier 
             });
-            FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Arm Hit!", hitTextColor, 0.5f, 5.0f, 2.0f, false, FloatDirection.Any);
+            FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Arm Hit!", hitTextColor, 0.5f, 5.0f, 2.0f, true, FloatDirection.Any);
 
             _woundsList.AddIfNone(WoundType.Arms);
 

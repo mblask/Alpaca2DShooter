@@ -2,6 +2,7 @@ using AlpacaMyGames;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -19,7 +20,6 @@ public class NPC_AI2 : MonoBehaviour, IBlindable
     private NpcState _state = NpcState.Patrol;
     private Vector2 _originalPosition;
     private Vector2 _waypoint;
-    private List<Vector2> _getBackWaypoints = new List<Vector2>();
 
     private float _idleTimer = 0.0f;
 
@@ -44,6 +44,10 @@ public class NPC_AI2 : MonoBehaviour, IBlindable
     private NPCWeapons _npcWeapons;
     private PlayerStats _playerStats;
 
+    private Pathfinding _pathfinding;
+    private bool _pathFound = false;
+    private List<Vector2> _walkPoints;
+
     private void Awake()
     {
         _npcStats = GetComponent<NPCStats>();
@@ -61,6 +65,8 @@ public class NPC_AI2 : MonoBehaviour, IBlindable
         _playerStats = PlayerStats.Instance;
         _originalPosition = transform.position;
         _waypoint = transform.position;
+        _pathfinding = new Pathfinding(15, 15, 0.75f, transform.position);
+        _walkPoints = new List<Vector2>();
     }
 
     public void Update()
@@ -142,18 +148,43 @@ public class NPC_AI2 : MonoBehaviour, IBlindable
             _npcWeapons.StopAttack();
             _npcWeapons.PresentWeapon(false);
             _state = NpcState.Idle;
+
+            if (_pathFound)
+            {
+                _pathFound = false;
+                _walkPoints = new List<Vector2>();
+            }
         }
 
         if (distanceToPlayer <= _stopFollowingDistance && distanceToPlayer > _attackDistance)
         {
             //follow player
-            moveTo(_playerStats.transform.position);
+            if (!_pathFound)
+            {
+                Vector3 directionVector = _playerStats.transform.position - transform.position;
+                _pathfinding.Find(transform.position, _playerStats.transform.position);
+                _walkPoints = _pathfinding.GetWorldPoints();
+                //_pathfinding.Show();
+                //Utilities.DrawLineSegment(_walkPoints);
+
+                _pathFound = _walkPoints.Count > 0;
+                Debug.Log("Path found: " + (_walkPoints.Count > 0));
+            }
+
+            moveThroughWaypoints(() => { _pathFound = false; });
         }
         
         if (distanceToPlayer <= _attackDistance)
         {
             //attack
-            _npcWeapons.AttackTarget(_playerStats.transform);
+            if (_pathFound)
+            {
+                _pathFound = false;
+                _walkPoints = new List<Vector2>();
+            }
+
+            if (!ObstaclesInTheWayRaycast(_playerStats.transform.position))
+                _npcWeapons.AttackTarget(_playerStats.transform);
         }
     }
 
@@ -249,11 +280,14 @@ public class NPC_AI2 : MonoBehaviour, IBlindable
             if (hit.transform.GetComponent<TilemapCollider2D>() != null)
                 return true;
 
-            Door door = hit.transform.GetComponent<Door>();
-            if (door != null && door.IsClosed())
+            if (hit.transform.GetComponent<SwitchableObject>() != null)
                 return true;
 
             if (hit.transform.GetComponent<NPCBase>() != null && hit.transform != transform)
+                return true;
+
+            Door door = hit.transform.GetComponent<Door>();
+            if (door != null && door.IsClosed())
                 return true;
         }
 
@@ -272,6 +306,30 @@ public class NPC_AI2 : MonoBehaviour, IBlindable
         if (Vector2.Distance((Vector2)transform.position, position) < STOP_DISTANCE)
         {
             onArrival?.Invoke();
+        }
+    }
+
+    private void moveThroughWaypoints(Action onArrival = null)
+    {
+        if (_walkPoints.Count == 0)
+            return;
+
+        Vector3 walkPoint = _walkPoints[0];
+        Vector3 direction = walkPoint - transform.position;
+        direction.Normalize();
+
+        Vector3 positionIncrement = _npcStats.EnemySpeed.GetCurrentValue() * direction * Time.deltaTime;
+        transform.position += positionIncrement;
+
+        if (Vector3.Distance(transform.position, _walkPoints[0]) < STOP_DISTANCE)
+        {
+            _walkPoints.RemoveAt(0);
+
+            if (_walkPoints.Count == 0)
+            {
+                _walkPoints.Clear();
+                onArrival?.Invoke();
+            }
         }
     }
 

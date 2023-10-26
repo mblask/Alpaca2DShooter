@@ -2,6 +2,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+public class FloatingTextSpawnerStatic
+{
+    public static FloatingTextSingle Create(Vector3 spawnPosition, string textToWrite, Color fontColor, float destroyAfter = 1.0f, float fontSize = 4.0f, float floatSpeed = 1.0f, FloatDirection floatDirection = FloatDirection.UpRight)
+    {
+        GameObject floatingTextObject = new GameObject("FloatingTextObject", typeof(FloatingTextSingle));
+        FloatingTextSingle floatingText = floatingTextObject.GetComponent<FloatingTextSingle>();
+        floatingText.Setup(spawnPosition, textToWrite, fontColor, fontSize, destroyAfter, floatSpeed, floatDirection);
+
+        return floatingText;
+    }
+}
+
 public class FloatingTextSpawner : MonoBehaviour
 {
     private static FloatingTextSpawner _instance;
@@ -31,14 +43,14 @@ public class FloatingTextSpawner : MonoBehaviour
         if (_instance == null)
             Debug.LogError("There is no Floating Text object in the scene!");
 
-        return _instance?.createFloatingTextMesh(spawnPosition, textToWrite, fontColor, destroyAfter, fontSize, floatSpeed, storeInSpawner, floatDirection);
+        return _instance.createFloatingTextMesh(spawnPosition, textToWrite, fontColor, destroyAfter, fontSize, floatSpeed, storeInSpawner, floatDirection);
     }
 
     private FloatingTextSingle createFloatingTextMesh(Vector3 spawnLocation, string textToWrite, Color fontColor, float destroyAfter, float fontSize, float floatSpeed, bool storeInSpawner, FloatDirection floatDirection)
     {
         GameObject floatingTextObject = new GameObject("FloatingTextObject", typeof(FloatingTextSingle));
         FloatingTextSingle floatingText = floatingTextObject.GetComponent<FloatingTextSingle>();
-        floatingText.Setup(spawnLocation, textToWrite, fontColor, fontSize, destroyAfter, floatSpeed , floatDirection);
+        floatingText.Setup(spawnLocation, textToWrite, fontColor, fontSize, destroyAfter, floatSpeed, floatDirection);
         if (storeInSpawner)
             _floatingTextObjectsList.Add(floatingText);
 
@@ -91,6 +103,11 @@ public class FloatingTextSingle : MonoBehaviour
             return true;
 
         return false;
+    }
+
+    public void SetText(string text)
+    {
+        _textMesh.text = text;
     }
 
     private void setFloatDirection(FloatDirection direction)

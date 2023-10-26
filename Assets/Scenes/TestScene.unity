@@ -2417,7 +2417,7 @@ PrefabInstance:
     - target: {fileID: 4650867336500752246, guid: 52a1892016b466d4594d0e836d32924b,
         type: 3}
       propertyPath: _npcAllegiance
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52a1892016b466d4594d0e836d32924b, type: 3}
