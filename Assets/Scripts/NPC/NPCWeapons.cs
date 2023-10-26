@@ -101,7 +101,7 @@ public class NPCWeapons : MonoBehaviour
         }
 
         //if (_npcAI.ObstaclesInTheWay(_shootTarget.position))
-        if (_npcAI2.ObstaclesInTheWayRaycast(_shootTarget.position))
+        if (_npcAI2.ObstaclesInRaycast(_shootTarget.position))
             return;
 
         _timer -= Time.deltaTime;
@@ -176,7 +176,7 @@ public class NPCWeapons : MonoBehaviour
         _shootTarget = target;
 
         //if (_npcAI.ObstaclesInTheWay(_shootTarget.position))
-        if (_npcAI2.ObstaclesInTheWayRaycast(_shootTarget.position))
+        if (_npcAI2.ObstaclesInRaycast(_shootTarget.position))
             return;
 
         Grenade grenade =

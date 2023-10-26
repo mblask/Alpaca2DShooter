@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Door : MonoBehaviour, IInteractable
+public class Door : Box2dCollider, IInteractable
 {
     private SpriteRenderer _spriteRenderer;
     private BoxCollider2D _boxCollider;
@@ -38,8 +38,6 @@ public class Door : MonoBehaviour, IInteractable
         _defaultColor = newDefaultColor;
 
         _boxCollider.isTrigger = true;
-
-        //Audio
     }
 
     private void unlockAndOpenDoor()
@@ -57,7 +55,6 @@ public class Door : MonoBehaviour, IInteractable
         _isLocked = false;
 
         openDoor();
-        //Audio
     }
 
     public void Highlight()
@@ -68,14 +65,6 @@ public class Door : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        /*
-        string interactText = "Interacting with door";
-        float textDestroyAfter = 0.7f;
-        float fontSize = 4.0f;
-        float textSpeed = 0.2f;
-        FloatingTextSpawner.CreateFloatingTextStatic(transform.position, interactText, Color.white, textDestroyAfter, fontSize, textSpeed);
-        */
-
         if (_isLocked)
         {
             unlockAndOpenDoor();

@@ -174,6 +174,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7657339929506963198}
   - component: {fileID: 6734717013836907497}
+  - component: {fileID: -9117646538886793799}
   - component: {fileID: 6934176146875341856}
   m_Layer: 0
   m_Name: Table
@@ -224,6 +225,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3.6200066, y: 1.6046181}
   m_EdgeRadius: 0
+--- !u!114 &-9117646538886793799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5881522990986535407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64df73ef4027a94488c4dec86fb616f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6934176146875341856
 MonoBehaviour:
   m_ObjectHideFlags: 0

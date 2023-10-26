@@ -20,27 +20,34 @@ public class Pathfinding
         int columns = Mathf.Abs(Mathf.FloorToInt((start.x - end.x) / cellSize)) + 5;
         int rows = Mathf.Abs(Mathf.FloorToInt((start.y - end.y) / cellSize)) + 5;
 
-        _grid = new Grid<PathNode>(columns, rows, cellSize, Vector3.zero);
+        _grid = new Grid<PathNode>(columns, rows, cellSize, Vector3.zero, 
+            (int column, int row) => new PathNode(column, row));
         _cellSize = cellSize;
         _worldPoints = new List<Vector2>();
 
-        generateGrid(columns, rows);
+        calculateAllNeighbors();
 
         CalculateOrigin(start, end);
     }
 
     public Pathfinding(int columns, int rows, float cellSize, Vector3 origin)
     {
-        _grid = new Grid<PathNode>(columns, rows, cellSize, origin);
+        _grid = new Grid<PathNode>(columns, rows, cellSize, origin,
+            (int column, int row) => new PathNode(column, row));
         _cellSize = cellSize;
         _worldPoints = new List<Vector2>();
 
-        generateGrid(columns, rows);
+        calculateAllNeighbors();
     }
 
-    public void CheckForObstacles(PathNode node)
+    public void Show()
     {
-        node.IsObstacle = false;
+        _grid.Show();
+    }
+
+    public void ObstaclesInPathNode(PathNode node)
+    {
+        node.SetObstacle(false);
         Vector3 position = _grid.GetWorldPosition(node.Column, node.Row);
         Collider2D[] hits = Physics2D.OverlapBoxAll(position, new Vector2(_cellSize, _cellSize), 0.0f);
         if (hits.Length == 0)
@@ -52,29 +59,11 @@ public class Pathfinding
                 continue;
 
             if (hit.GetComponent<TilemapCollider2D>() != null)
-                node.IsObstacle = true;
+                node.SetObstacle(true);
 
-            if (hit.GetComponent<SwitchableObject>() != null)
-                node.IsObstacle = true;
-
-            if (hit.GetComponent<ElectricityGenerator>() != null)
-                node.IsObstacle = true;
-
-            if (hit.GetComponent<Terminal>() != null)
-                node.IsObstacle = true;
-
-            if (hit.GetComponent<Lamp>() != null)
-                node.IsObstacle = true;
-
-            Door door = hit.GetComponent<Door>();
-            if (door != null && door.IsClosed())
-                node.IsObstacle = true;
+            if (hit.GetComponent<BaseCollider>() != null)
+                node.SetObstacle(true);
         }
-    }
-
-    public void SetOrigin(Vector3 origin)
-    {
-        _grid.SetOrigin(origin);
     }
 
     public void CalculateOrigin(Vector3 start, Vector3 end)
@@ -91,26 +80,12 @@ public class Pathfinding
             else
                 origin = new Vector2(end.x, end.y);
 
-        SetOrigin(origin);
+        _grid.SetOrigin(origin);
     }
 
-    private void generateGrid(int columns, int rows)
+    public PathNode GetPathNode(Vector3 worldPosition)
     {
-        for (int row = 0; row < rows; row++)
-        {
-            for (int column = 0; column < columns; column++)
-            {
-                _grid.SetValue(column, row, new PathNode(column, row));
-            }
-        }
-
-        for (int row = 0; row < rows; row++)
-        {
-            for (int column = 0; column < columns; column++)
-            {
-                calculateNeighbors(_grid.GetValue(column, row));
-            }
-        }
+        return _grid.GetValue(worldPosition);
     }
 
     public List<Vector2> GetWorldPoints()
@@ -167,9 +142,9 @@ public class Pathfinding
                 if (_closedList.Contains(neighbor))
                     continue;
 
-                CheckForObstacles(neighbor);
+                ObstaclesInPathNode(neighbor);
 
-                if (neighbor.IsObstacle)
+                if (neighbor.IsObstacle())
                     continue;
 
                 int tentativeG = current.Gcost + calculateDistance(current, neighbor);
@@ -187,11 +162,6 @@ public class Pathfinding
         }
 
         return new List<PathNode>();
-    }
-
-    public PathNode GetPath(Vector3 worldPosition)
-    {
-        return _grid.GetValue(worldPosition);
     }
 
     private void constructWorldPoints(List<PathNode> path)
@@ -222,6 +192,17 @@ public class Pathfinding
         constructWorldPoints(finalPath);
 
         return finalPath;
+    }
+
+    private void calculateAllNeighbors()
+    {
+        for (int row = 0; row < _grid.GetRows(); row++)
+        {
+            for (int column = 0; column < _grid.GetColumns(); column++)
+            {
+                calculateNeighbors(_grid.GetValue(column, row));
+            }
+        }
     }
 
     private void calculateNeighbors(PathNode node)
@@ -255,10 +236,5 @@ public class Pathfinding
         int dRow = Mathf.Abs(start.Row - end.Row);
         int remaining = Mathf.Abs(dRow - dColumn);
         return DIAGONAL_COST * Mathf.Min(dRow, dColumn) + STRAIGHT_COST * remaining;
-    }
-
-    public void Show()
-    {
-        _grid.Show();
     }
 }

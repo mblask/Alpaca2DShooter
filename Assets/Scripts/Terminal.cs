@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Terminal : MonoBehaviour, IInteractable
+public class Terminal : Box2dCollider, IInteractable
 {
     private SpriteRenderer _spriteRenderer;
     private TerminalCanvas _terminalCanvas;

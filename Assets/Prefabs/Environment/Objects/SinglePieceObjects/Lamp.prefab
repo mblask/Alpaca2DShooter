@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2531182306509162380}
   - component: {fileID: 2531182306509162381}
   - component: {fileID: 2531182306509162419}
+  - component: {fileID: 5747313977311406252}
   - component: {fileID: 2531182306509162416}
   - component: {fileID: -3455300383966373262}
   m_Layer: 0
@@ -102,6 +103,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &5747313977311406252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2531182306509162417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b612a90e9ffee643b50faefd9c2f651, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2531182306509162416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,7 +127,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee5662acd3c7bc64eae9d10a143a2d19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isOn: 1
+  <IsOn>k__BackingField: 0
+  <IsBroken>k__BackingField: 0
+  <HasElectricity>k__BackingField: 1
   _defaultColor: {r: 1, g: 1, b: 1, a: 1}
   _highlightColor: {r: 0.6, g: 1, b: 0.6, a: 1}
 --- !u!114 &-3455300383966373262

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5893479049268657948}
   - component: {fileID: 1917111650657156527}
   - component: {fileID: -5477266296742126892}
+  - component: {fileID: 913257790608619030}
   - component: {fileID: -619430150542014054}
   - component: {fileID: -5225449380337574668}
   - component: {fileID: 4805747773209407761}
@@ -139,6 +140,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.8
+--- !u!114 &913257790608619030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2652101938681381980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b612a90e9ffee643b50faefd9c2f651, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-619430150542014054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,10 +176,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a04949772eea4ff4b82cfea4abc06498, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sturdiness: 0
+  _sturdiness: 0
   _dropRandomItem: 0
   _dropItem: {fileID: 0}
-  UseOriginalSprite: 1
+  _useOriginalSprite: 0
   _particleSprite: {fileID: 0}
   _particleColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &4805747773209407761

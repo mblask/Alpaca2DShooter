@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 8001025903054501521}
   - component: {fileID: 2227405972383606359}
   - component: {fileID: 2268679137708457319}
-  - component: {fileID: 3267039708666377046}
+  - component: {fileID: 418667879233318044}
   - component: {fileID: 346888350268230781}
+  - component: {fileID: 3267039708666377046}
   m_Layer: 0
   m_Name: TV
   m_TagString: Untagged
@@ -112,6 +113,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.6597642, y: 1.0826927}
   m_EdgeRadius: 0
+--- !u!114 &418667879233318044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1134622996350494555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64df73ef4027a94488c4dec86fb616f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &346888350268230781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1134622996350494555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6003f9484d2d63a49afbc5d04fb442d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsOn>k__BackingField: 0
+  <IsBroken>k__BackingField: 0
+  <HasElectricity>k__BackingField: 1
 --- !u!114 &3267039708666377046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,21 +160,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 659408039f1a220498dafe81da2e6dc6, type: 3}
   - {fileID: 21300000, guid: e2e73eec0e18f5c469e56f82ca40d8d8, type: 3}
   - {fileID: 21300000, guid: f65bcdc0ef194df4ab5fea3a44173052, type: 3}
---- !u!114 &346888350268230781
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1134622996350494555}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6003f9484d2d63a49afbc5d04fb442d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <IsOn>k__BackingField: 0
-  <IsBroken>k__BackingField: 0
-  <HasElectricity>k__BackingField: 1
 --- !u!1 &6382147410148989220
 GameObject:
   m_ObjectHideFlags: 0

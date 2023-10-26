@@ -116,7 +116,7 @@ public class NPC_AI2 : MonoBehaviour, IBlindable
         float distanceToPlayer = Vector2.Distance(transform.position, _playerStats.transform.position);
         if (distanceToPlayer < _viewDistance)
         {
-            if (ObstaclesInTheWayRaycast(_playerStats.transform.position))
+            if (ObstaclesInRaycast(_playerStats.transform.position))
                 return;
 
             _state = NpcState.Chase;
@@ -168,7 +168,6 @@ public class NPC_AI2 : MonoBehaviour, IBlindable
                 //Utilities.DrawLineSegment(_walkPoints);
 
                 _pathFound = _walkPoints.Count > 0;
-                Debug.Log("Path found: " + (_walkPoints.Count > 0));
             }
 
             moveThroughWaypoints(() => { _pathFound = false; });
@@ -183,7 +182,7 @@ public class NPC_AI2 : MonoBehaviour, IBlindable
                 _walkPoints = new List<Vector2>();
             }
 
-            if (!ObstaclesInTheWayRaycast(_playerStats.transform.position))
+            if (!ObstaclesInRaycast(_playerStats.transform.position))
                 _npcWeapons.AttackTarget(_playerStats.transform);
         }
     }
@@ -262,14 +261,14 @@ public class NPC_AI2 : MonoBehaviour, IBlindable
         Vector2 positionIncrement = Utilities.GetRandomVector2(_patrolRadius);
         _waypoint = _originalPosition + positionIncrement;
 
-        if (ObstaclesInTheWayRaycast(_waypoint))
+        if (ObstaclesInRaycast(_waypoint))
         {
             Vector2 direction = _waypoint - (Vector2)transform.position;
             _waypoint += direction.normalized.InvertVector();
         }
     }
 
-    public bool ObstaclesInTheWayRaycast(Vector2 targetPosition)
+    public bool ObstaclesInRaycast(Vector2 targetPosition)
     {
         Vector2 direction = targetPosition - (Vector2)transform.position;
         List<RaycastHit2D> hits = 
@@ -277,17 +276,13 @@ public class NPC_AI2 : MonoBehaviour, IBlindable
 
         foreach (RaycastHit2D hit in hits)
         {
+            if (hit.collider.isTrigger)
+                continue;
+
             if (hit.transform.GetComponent<TilemapCollider2D>() != null)
                 return true;
 
-            if (hit.transform.GetComponent<SwitchableObject>() != null)
-                return true;
-
-            if (hit.transform.GetComponent<NPCBase>() != null && hit.transform != transform)
-                return true;
-
-            Door door = hit.transform.GetComponent<Door>();
-            if (door != null && door.IsClosed())
+            if (hit.transform.GetComponent<BaseCollider>() != null)
                 return true;
         }
 

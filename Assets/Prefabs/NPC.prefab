@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 7771110574548271403}
   - component: {fileID: 2302085652859294874}
   - component: {fileID: 4650867336500752246}
-  - component: {fileID: 17813973010984852}
   - component: {fileID: 17813973010984853}
   - component: {fileID: 17813973010984849}
   - component: {fileID: 17813973010984850}
@@ -212,23 +211,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _npcAllegiance: 0
---- !u!114 &17813973010984852
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 17813973010984851}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3248e5895e6eea4caa6c6596ace0726, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PatrollingDistance: {x: 3, y: 5}
-  _initialAttackDistance: 6
-  _initialViewDistance: 8
-  _initialStopFollowingDistance: 9
-  _allegiance: 0
 --- !u!114 &17813973010984853
 MonoBehaviour:
   m_ObjectHideFlags: 0

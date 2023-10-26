@@ -4892,7 +4892,7 @@ GameObject:
   - component: {fileID: 3560616791064837435}
   - component: {fileID: 1211367572513094729}
   - component: {fileID: 7270363628272429560}
-  - component: {fileID: 8874459827295818486}
+  - component: {fileID: 745628188273060504}
   - component: {fileID: 8874459827295818487}
   - component: {fileID: 8874459827295818483}
   - component: {fileID: 8874459827295818480}
@@ -5066,17 +5066,17 @@ MonoBehaviour:
   _bossId: 1
   EnemyHealth:
     _statType: 0
-    _baseValue: 30
+    _currentValue: 0
   EnemySpeed:
     _statType: 5
-    _baseValue: 4
+    _currentValue: 0
   EnemyAccuracy:
     _statType: 3
-    _baseValue: 2
+    _currentValue: 0
   EnemyDefense:
     _statType: 4
-    _baseValue: 5
---- !u!114 &8874459827295818486
+    _currentValue: 0
+--- !u!114 &745628188273060504
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5085,14 +5085,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8874459827295818481}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3248e5895e6eea4caa6c6596ace0726, type: 3}
+  m_Script: {fileID: 11500000, guid: b1f18d5dd3faf8049bad82f9865851eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PatrollingDistance: {x: 3, y: 5}
-  _initialAttackDistance: 7
-  _initialViewDistance: 9
-  _initialStopFollowingDistance: 10
-  _type: 0
+  _npcAllegiance: 0
 --- !u!114 &8874459827295818487
 MonoBehaviour:
   m_ObjectHideFlags: 0

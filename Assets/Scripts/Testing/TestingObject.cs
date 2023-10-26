@@ -33,7 +33,7 @@ public class TestingObject : MonoBehaviour
         if (Input.GetMouseButtonUp(1))
         {
             Vector3 mousePosition = Utilities.GetMouseWorldLocation();
-            _pathfinding.GetPath(mousePosition).ToggleObstacle();
+            _pathfinding.GetPathNode(mousePosition).ToggleObstacle();
             _pathfinding.Show();
         }
     }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Grid<T>
@@ -10,7 +11,7 @@ public class Grid<T>
     private T[,] _grid;
     private FloatingTextSingle[,] _gridText;
 
-    public Grid(int columns, int rows, float cellSize, Vector3 origin)
+    public Grid(int columns, int rows, float cellSize, Vector3 origin, Func<int, int, T> generateGridObject = null)
     {
         _columns = columns;
         _rows = rows;
@@ -19,6 +20,17 @@ public class Grid<T>
         _grid = new T[columns, rows];
 
         _origin = origin;
+
+        if (generateGridObject == null)
+            return;
+
+        for (int column = 0; column < _grid.GetLength(0); column++)
+        {
+            for (int row = 0; row < _grid.GetLength(1); row++)
+            {
+                _grid[column, row] = generateGridObject(column, row);
+            }
+        }
     }
 
     public void SetOrigin(Vector3 origin)
@@ -51,7 +63,7 @@ public class Grid<T>
     {
         if (_gridText != null)
             foreach (FloatingTextSingle floatingText in _gridText)
-                Object.Destroy(floatingText.gameObject);
+                UnityEngine.Object.Destroy(floatingText.gameObject);
 
         _gridText = new FloatingTextSingle[_columns, _rows];
     }

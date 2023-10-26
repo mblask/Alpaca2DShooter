@@ -5,7 +5,7 @@ public class PathNode
     public int Column;
     public int Row;
 
-    public bool IsObstacle;
+    private bool _isObstacle;
 
     public int Gcost;
     public int HCost;
@@ -19,7 +19,7 @@ public class PathNode
         Column = column;
         Row = row;
 
-        IsObstacle = false;
+        _isObstacle = false;
 
         PreviousNode = null;
         _neighbors = new List<PathNode>();
@@ -27,7 +27,17 @@ public class PathNode
 
     public void ToggleObstacle()
     {
-        IsObstacle = !IsObstacle;
+        _isObstacle = !_isObstacle;
+    }
+
+    public void SetObstacle(bool value)
+    {
+        _isObstacle = value;
+    }
+
+    public bool IsObstacle()
+    {
+        return _isObstacle;
     }
 
     public void AddNeighbor(PathNode node)
@@ -47,7 +57,7 @@ public class PathNode
 
     public override string ToString()
     {
-        if (IsObstacle)
+        if (_isObstacle)
             return "=";
 
         return Column + "," + Row;
