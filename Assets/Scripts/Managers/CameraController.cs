@@ -1,6 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class CameraController : MonoBehaviour
 {
@@ -13,22 +14,30 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    private Camera _camera;
+    private Color _defaultBackgroundColor;
+
     [Header("Camera Follow")]
     private Transform _targetToFollow;
     [SerializeField] [Range(0.1f, 6.0f)] private float _smoothIntensity = 4.0f;
 
     [Header("Camera Wobble")]
     [SerializeField] [Tooltip("Camera wobble deactivates smooth follow")] private bool _cameraWobble;
-    [SerializeField] [Range(0.0f, 1.0f)]private float _wobbleWeight = 1.0f;
+    [SerializeField] [Range(0.0f, 1.0f)] private float _wobbleWeight = 1.0f;
     [SerializeField] private float _wobbleWeightReductionSpeed = 0.1f;
     private float _yAmplitude;
     private float _yPhaseSpeed;
     private float _xAmplitude;
     private float _xPhaseSpeed;
 
+    private bool _goneBlack = false;
+    private float _goneBlackTimer = 0.0f;
+
     private void Awake()
     {
         _instance = this;
+        _camera = GetComponent<Camera>();
+        _defaultBackgroundColor = _camera.backgroundColor;
     }
 
     private void Start()
@@ -42,6 +51,10 @@ public class CameraController : MonoBehaviour
     private void LateUpdate()
     {
         smoothFollow();
+        goneBlackProcedure();
+
+        if (Input.GetKeyDown(KeyCode.P))
+            GoBlack(0.2f);
     }
 
     private void smoothFollow()
@@ -71,6 +84,50 @@ public class CameraController : MonoBehaviour
         else
         {
             transform.position = Vector3.Lerp(transform.position, targetPosition, _smoothIntensity * Time.deltaTime);
+        }
+    }
+
+    private void goneBlackProcedure()
+    {
+        if (!_goneBlack)
+            return;
+
+        _goneBlackTimer -= Time.deltaTime;
+        if (_goneBlackTimer > 0.0f)
+            return;
+
+        _goneBlack = false;
+        GoNormal();
+    }
+
+    public void GoBlack(float duration = 0.1f)
+    {
+        _goneBlack = true;
+        _goneBlackTimer = duration;
+        _camera.backgroundColor = Color.black;
+        _camera.cullingMask = 0;
+        Debug.Log(LayerMask.GetMask()); //nothing
+        Debug.Log(LayerMask.LayerToName(0)); //default
+    }
+
+    public void GoNormal()
+    {
+        _camera.backgroundColor = _defaultBackgroundColor;
+        _camera.cullingMask = -1;
+    }
+
+    public void ToggleBlackout()
+    {
+        switch (_camera.cullingMask)
+        {
+            case 0:
+                _camera.backgroundColor = _defaultBackgroundColor;
+                _camera.cullingMask = 1;
+                break;
+            case 1:
+                _camera.backgroundColor = Color.black;
+                _camera.cullingMask = 0;
+                break;
         }
     }
 

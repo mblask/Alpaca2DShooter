@@ -197,7 +197,9 @@ MonoBehaviour:
     TotalAmmo: 200
   - WeaponItem: {fileID: 11400000, guid: 27da57185e6a67d4d9732d5ab8efa4eb, type: 2}
     TotalAmmo: 200
-  _throwables: []
+  _throwables:
+  - ThrowableItem: {fileID: 11400000, guid: fdcfedac81c46364898eacd816cdc14f, type: 2}
+    TotalAmmo: 1
 --- !u!114 &8196825197066008503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,30 +215,29 @@ MonoBehaviour:
   Stats: []
   PlayerHealth:
     _statType: 0
-    _baseValue: 1000
+    _currentValue: 0
   PlayerStamina:
     _statType: 1
-    _baseValue: 100
+    _currentValue: 0
   PlayerSpeed:
     _statType: 5
-    _baseValue: 5.5
+    _currentValue: 0
   PlayerAccuracy:
     _statType: 3
-    _baseValue: 1
+    _currentValue: 0
   PlayerDefense:
     _statType: 4
-    _baseValue: 0
+    _currentValue: 0
   PlayerStrength:
     _statType: 6
-    _baseValue: 0
+    _currentValue: 0
   PlayerDamage: {x: 0, y: 0}
   LimbToughness:
     _statType: 7
-    _baseValue: 0
+    _currentValue: 0
   HackingSpeed:
     _statType: 8
-    _baseValue: 0
-  CurrentStamina: 0
+    _currentValue: 0
   _staminaTriggerThreshold: 0.1
 --- !u!114 &8196825197066008496
 MonoBehaviour:

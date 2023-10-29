@@ -24,8 +24,7 @@ public class NPCStats : MonoBehaviour, IDamagable
     private NPCHealthCanvas _enemyHealthCanvas;
 
     private NPCBase _npcBase;
-    private NPC_AI _enemyAI;
-    private NPC_AI2 _enemyAI2;
+    private NPC_AI _enemyAI2;
 
     private bool _isDead = false;
 
@@ -42,8 +41,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         _playerWeapons = PlayerWeapons.Instance;
         _conversationSystem = GetComponent<ConversationSystem>();
         _npcBase = GetComponent<NPCBase>();
-        _enemyAI = GetComponent<NPC_AI>();
-        _enemyAI2 = GetComponent<NPC_AI2>();
+        _enemyAI2 = GetComponent<NPC_AI>();
     }
 
     private void Update()
@@ -109,7 +107,7 @@ public class NPCStats : MonoBehaviour, IDamagable
 
         _enemyHealthCanvas.ActivateHealthSlider();
 
-        _enemyAI.ExtendViewAndAttackDistance();
+        //_enemyAI.ExtendViewAndAttackDistance();
         _enemyAI2.ExtendAwareness();
         _playerWeapons.IncrementShotsHit();
 

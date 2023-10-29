@@ -17,6 +17,7 @@ public abstract class AbstractGranade : MonoBehaviour
     protected float _thresholdVelocity = 0.05f;
 
     protected GameAssets _gameAssets;
+    protected CameraController _camera;
 
     private void Awake()
     {
@@ -31,6 +32,7 @@ public abstract class AbstractGranade : MonoBehaviour
     private void Start()
     {
         _gameAssets = GameAssets.Instance;
+        _camera = CameraController.Instance;
     }
 
     private void Update()

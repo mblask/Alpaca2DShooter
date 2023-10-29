@@ -434,7 +434,8 @@ public class PlayerWeapons : MonoBehaviour
             if (direction == Vector2.zero)
                 return false;
 
-            Transform bulletTransform = Instantiate(GameAssets.Instance.BulletPrefab, _shootingSpot.position, Quaternion.identity, null);
+            Transform bulletTransform = 
+                Instantiate(GameAssets.Instance.BulletPrefab, _shootingSpot.position, Quaternion.identity, null);
 
             Bullet bullet = bulletTransform.GetComponent<Bullet>();
             bullet.SetupBullet(direction, _playerStats.PlayerDamage.GetRandom(), gameObject.tag);
@@ -462,15 +463,11 @@ public class PlayerWeapons : MonoBehaviour
 
     private void alertNearbyEnemies()
     {
-        float soundRadius = 10.0f;
+        float soundRadius = 8.0f;
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, soundRadius);
         foreach (Collider2D collider in colliders)
         {
-            NPC_AI npc = collider.GetComponent<NPC_AI>();
-            if (npc != null)
-                npc.AlertNPC(this.transform);
-
-            NPC_AI2 npc2 = collider.GetComponent<NPC_AI2>();
+            NPC_AI npc2 = collider.GetComponent<NPC_AI>();
             if (npc2 != null)
                 npc2.AlertNPC();
         }
@@ -485,14 +482,10 @@ public class PlayerWeapons : MonoBehaviour
         if (distanceFromGameObject < _nonShootingDistance)
             return Vector2.zero;
 
-        Vector2 direction = new Vector2();
-
         if (distanceFromShootingSpot < _closeQuarterShooting)
-            direction = (targetPosition + getRandomOffset(_shootingOffset, _playerStats.PlayerAccuracy.GetFinalValue()) - transform.position).normalized;
+            return (targetPosition + getRandomOffset(_shootingOffset, _playerStats.PlayerAccuracy.GetFinalValue()) - transform.position).normalized;
         else
-            direction = (targetPosition + getRandomOffset(_shootingOffset, _playerStats.PlayerAccuracy.GetFinalValue()) - _shootingSpot.position).normalized;
-
-        return direction;
+            return (targetPosition + getRandomOffset(_shootingOffset, _playerStats.PlayerAccuracy.GetFinalValue()) - _shootingSpot.position).normalized;
     }
 
     private Vector3 getRandomOffset(float shootingOffset, float accuracy)
