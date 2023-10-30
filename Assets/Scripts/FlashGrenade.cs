@@ -9,9 +9,6 @@ public class FlashGrenade : AbstractGranade
         destructionArea.SetAreaType(AreaOfEffectType.Blinding);
         destructionArea.SetDamage(Vector2.zero);
 
-        float playerCloseEyesForSeconds = 0.3f;
-        _camera.GoBlack(playerCloseEyesForSeconds);
-
         Destroy(gameObject);
     }
 }

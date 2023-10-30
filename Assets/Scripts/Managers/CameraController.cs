@@ -1,7 +1,5 @@
 using System.Collections;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class CameraController : MonoBehaviour
 {
@@ -52,9 +50,6 @@ public class CameraController : MonoBehaviour
     {
         smoothFollow();
         goneBlackProcedure();
-
-        if (Input.GetKeyDown(KeyCode.P))
-            GoBlack(0.2f);
     }
 
     private void smoothFollow()
@@ -106,8 +101,6 @@ public class CameraController : MonoBehaviour
         _goneBlackTimer = duration;
         _camera.backgroundColor = Color.black;
         _camera.cullingMask = 0;
-        Debug.Log(LayerMask.GetMask()); //nothing
-        Debug.Log(LayerMask.LayerToName(0)); //default
     }
 
     public void GoNormal()
@@ -133,7 +126,10 @@ public class CameraController : MonoBehaviour
 
     private Vector2 cameraWobble()
     {
-        Vector2 position = _yAmplitude * Vector2.up * Mathf.Sin(Time.time * _yPhaseSpeed) + _xAmplitude * Vector2.right * Mathf.Cos(Time.time * _xPhaseSpeed) + _yAmplitude * Vector2.left * Mathf.Sin(Time.time * _xPhaseSpeed) * Mathf.Cos(Time.time * _xPhaseSpeed);
+        Vector2 position = 
+            _yAmplitude * Vector2.up * Mathf.Sin(Time.time * _yPhaseSpeed) + 
+            _xAmplitude * Vector2.right * Mathf.Cos(Time.time * _xPhaseSpeed) + 
+            _yAmplitude * Vector2.left * Mathf.Sin(Time.time * _xPhaseSpeed) * Mathf.Cos(Time.time * _xPhaseSpeed);
         
         return position;
     }

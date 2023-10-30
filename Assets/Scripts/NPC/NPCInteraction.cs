@@ -9,12 +9,13 @@ public class NPCInteraction : MonoBehaviour, IInteractable
     [SerializeField] private Color _defaultColor = Color.white;
 
     private SpriteRenderer _renderer;
-    private ConversationSystem _conversationSystem;
+
+    private NPC_AI _npcAi;
 
     private void Awake()
     {
         _renderer = GetComponent<SpriteRenderer>();
-        _conversationSystem = GetComponent<ConversationSystem>();
+        _npcAi = GetComponent<NPC_AI>();
     }
 
     public void Highlight()
@@ -24,7 +25,8 @@ public class NPCInteraction : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        _conversationSystem.ActivateConversation();
+        if (_npcAi.GetAllegiance().Equals(NPCAllegiance.Enemy))
+            return;
     }
 
     public void RemoveHighlight()

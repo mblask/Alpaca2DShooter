@@ -92,6 +92,11 @@ public class NPC_AI : MonoBehaviour, IBlindable
         normalizeAwareness();
     }
 
+    public NPCAllegiance GetAllegiance()
+    {
+        return _npcAllegiance;
+    }
+
     private void idleState()
     {
         _idleTimer -= Time.deltaTime;
@@ -163,8 +168,6 @@ public class NPC_AI : MonoBehaviour, IBlindable
                 Vector3 directionVector = _playerStats.transform.position - transform.position;
                 _pathfinding.Find(transform.position, _playerStats.transform.position);
                 _walkPoints = _pathfinding.GetWorldPoints();
-                //_pathfinding.Show();
-                //Utilities.DrawLineSegment(_walkPoints);
 
                 _pathFound = _walkPoints.Count > 0;
             }
@@ -183,6 +186,8 @@ public class NPC_AI : MonoBehaviour, IBlindable
 
             if (!ObstaclesInRaycast(_playerStats.transform.position))
                 _npcWeapons.AttackTarget(_playerStats.transform);
+            else
+                _npcWeapons.StopAttack();
         }
     }
 

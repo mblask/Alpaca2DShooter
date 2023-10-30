@@ -1,5 +1,6 @@
 using UnityEngine;
 using AlpacaMyGames;
+using UnityEngine.Tilemaps;
 
 public class FiringTrap : Hackable, IDamagable
 {
@@ -112,13 +113,11 @@ public class FiringTrap : Hackable, IDamagable
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, _searchRadius);
         foreach (Collider2D collider in colliders)
         {
-            if (_allegiance.Equals(NPCAllegiance.Enemy))
-                if (!grabPlayer(collider))
-                    continue;
+            if (_allegiance.Equals(NPCAllegiance.Enemy) && !grabPlayer(collider))
+                continue;
 
-            if (_allegiance.Equals(NPCAllegiance.Ally))
-                if (!grabEnemy(collider))
-                    continue;
+            if (_allegiance.Equals(NPCAllegiance.Ally) && !grabEnemy(collider))
+                continue;
         }
 
         _stopwatch = 0.0f;
@@ -132,6 +131,9 @@ public class FiringTrap : Hackable, IDamagable
             return false;
 
         if (!playerStats.IsAlive())
+            return false;
+
+        if (obstacleInTheWay(playerStats.transform))
             return false;
 
         _target = collider.transform;
@@ -148,6 +150,9 @@ public class FiringTrap : Hackable, IDamagable
             return false;
 
         if (!npcStats.IsAlive())
+            return false;
+
+        if (obstacleInTheWay(npcStats.transform))
             return false;
 
         _target = collider.transform;
@@ -174,7 +179,7 @@ public class FiringTrap : Hackable, IDamagable
 
     private void attackTarget()
     {
-        if (obstacleInTheWay())
+        if (obstacleInTheWay(_target))
             return;
 
         _timer -= Time.deltaTime;
@@ -190,12 +195,12 @@ public class FiringTrap : Hackable, IDamagable
         }
     }
 
-    private bool obstacleInTheWay()
+    private bool obstacleInTheWay(Transform target)
     {
-        if (_target == null)
+        if (target == null)
             return false;
 
-        Vector3 direction = (_target.position - transform.position).normalized;
+        Vector3 direction = (target.position - transform.position).normalized;
         float offsetFromOrigin = 1.0f;
         RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position + direction * offsetFromOrigin, direction, 999.0f);
 
@@ -205,27 +210,25 @@ public class FiringTrap : Hackable, IDamagable
         if (hits.Length == 0)
             return false;
 
-        if (_allegiance.Equals(NPCAllegiance.Enemy))
+        foreach (RaycastHit2D hit in hits)
         {
-            PlayerController playerController = hits[0].collider.GetComponent<PlayerController>();
+            if (hit.collider.isTrigger)
+                continue;
+            
+            if (hit.collider.GetComponent<TilemapCollider2D>() != null)
+                return true;
 
-            if (playerController != null)
+            if (_allegiance.Equals(NPCAllegiance.Enemy) && hit.collider.GetComponent<PlayerController>() != null)
                 return false;
-        }
-        else
-        {
-            NPCBase nPCBase = hits[0].collider.GetComponent<NPCBase>();
 
-            if (nPCBase != null)
+            if (_allegiance.Equals(NPCAllegiance.Ally) && hit.collider.GetComponent<NPCBase>() != null)
                 return false;
+
+            if (hit.collider.GetComponent<BaseCollider>() != null)
+                return true;
         }
 
-        Door door = hits[0].collider.GetComponent<Door>();
-
-        if (door != null)
-            return door.IsClosed();
-
-        return true;
+        return false;
     }
 
     private void shoot()

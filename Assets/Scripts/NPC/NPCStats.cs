@@ -20,7 +20,6 @@ public class NPCStats : MonoBehaviour, IDamagable
     private GameManager _gameManager;
     private ItemSpawner _itemSpawner;
     private PlayerWeapons _playerWeapons;
-    private ConversationSystem _conversationSystem;
     private NPCHealthCanvas _enemyHealthCanvas;
 
     private NPCBase _npcBase;
@@ -39,7 +38,6 @@ public class NPCStats : MonoBehaviour, IDamagable
         _itemSpawner = ItemSpawner.Instance;
         _gameManager = GameManager.Instance;
         _playerWeapons = PlayerWeapons.Instance;
-        _conversationSystem = GetComponent<ConversationSystem>();
         _npcBase = GetComponent<NPCBase>();
         _enemyAI2 = GetComponent<NPC_AI>();
     }
@@ -107,7 +105,6 @@ public class NPCStats : MonoBehaviour, IDamagable
 
         _enemyHealthCanvas.ActivateHealthSlider();
 
-        //_enemyAI.ExtendViewAndAttackDistance();
         _enemyAI2.ExtendAwareness();
         _playerWeapons.IncrementShotsHit();
 
@@ -158,7 +155,6 @@ public class NPCStats : MonoBehaviour, IDamagable
             _isDead = true;
             _gameManager.IncrementEnemiesKilled();
             _itemSpawner.SpawnRandomItemAt(transform.position);
-            _conversationSystem.DeactivateSpeechBoxOnNPCDeath();
             Destroy(gameObject);
         }
     }

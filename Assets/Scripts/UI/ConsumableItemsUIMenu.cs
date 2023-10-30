@@ -18,6 +18,7 @@ public class ConsumableItemsUIMenu : MonoBehaviour
     {
         PlayerInventory.Instance.OnSuccessfulAdd += populateConsumableItemsUI;
         PlayerInventory.Instance.OnItemRemovedFromInventory += populateConsumableItemsUI;
+        populateConsumableItemsUI();
     }
 
     private void OnDisable()
