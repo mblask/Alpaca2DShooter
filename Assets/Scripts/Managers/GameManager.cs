@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     public event Action OnTogglePause;
 
     [Header("Read-only")]
-    [SerializeField] private float _levelTime;
+    [SerializeField] private float _gameTime;
     private float _incrementedTime;
     private float _timeIncrement = 0.1f;
 
@@ -68,6 +68,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public float GetGameTime()
+    {
+        return _gameTime;
+    }
+
+    public int GetEnemiesKilled()
+    {
+        return _enemiesKilled;
+    }
+
     public void IncrementEnemiesKilled()
     {
         _enemiesKilled++;
@@ -75,13 +85,13 @@ public class GameManager : MonoBehaviour
 
     private void timeManager()
     {
-        _levelTime += Time.deltaTime;
+        _gameTime += Time.deltaTime;
 
         _incrementedTime += Time.deltaTime;
 
         if (_incrementedTime >= _timeIncrement)
         {
-            OnTimeUpdated?.Invoke(_levelTime);
+            OnTimeUpdated?.Invoke(_gameTime);
             _incrementedTime -= _timeIncrement;
         }
     }

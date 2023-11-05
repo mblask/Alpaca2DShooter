@@ -34,6 +34,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
     
     private List<StatModifyingData> _injuries = new List<StatModifyingData>();
 
+    private float _accumulatedHealthLoss = 0.0f;
     private float _staminaTrigger = 0.0f;
 
     [Header("Movement Characteristics")]
@@ -78,7 +79,9 @@ public class PlayerStats : MonoBehaviour, IDamagable
         if (value == 0)
             return;
 
-        PlayerHealth.UpdateCurrentValue(-value * (1.0f - PlayerDefense.GetFinalValue() / 100.0f));
+        float modifiedValue = -value * (1.0f - PlayerDefense.GetFinalValue() / 100.0f);
+        PlayerHealth.UpdateCurrentValue(modifiedValue);
+        _accumulatedHealthLoss += MathF.Abs(modifiedValue);
         FloatingTextSpawner.CreateFloatingTextStatic(transform.position, value.ToString("F0"), new Color(1.0f, 0.5f, 0.0f));
 
         ParticleSystem bloodPSObject = Instantiate(_gameAssets.BloodPS, transform.position, Quaternion.identity, null);
@@ -103,6 +106,11 @@ public class PlayerStats : MonoBehaviour, IDamagable
 
         _cameraController?.ShakeCamera(0.05f, 0.1f);
         OnHealthUIUpdate?.Invoke(PlayerHealth.GetCurrentValue());
+    }
+
+    public float GetTotalHealthLoss()
+    {
+        return _accumulatedHealthLoss;
     }
 
     private void hitShading()
