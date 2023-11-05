@@ -6,8 +6,6 @@ public class Portal : MonoBehaviour
     [SerializeField] private PortalType _portalType;
     public PortalType PortalType => _portalType;
 
-    private List<ArtefactItem> _requiredArtefacts;
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         PlayerBase playerBase = collision.GetComponent<PlayerBase>();
@@ -25,7 +23,5 @@ public class Portal : MonoBehaviour
         PlayerBase playerBase = collision.GetComponent<PlayerBase>();
         if (playerBase == null)
             return;
-
-        //Debug.Log("Cancel active UI elements! - How to?");
     }
 }

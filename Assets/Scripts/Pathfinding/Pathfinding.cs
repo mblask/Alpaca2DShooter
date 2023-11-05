@@ -108,6 +108,9 @@ public class Pathfinding
         PathNode start = _grid.GetValue(startColumn, startRow);
         PathNode end = _grid.GetValue(endColumn, endRow);
 
+        if (start == null || end == null)
+            return new List<PathNode>();
+
         _openList = new List<PathNode> { start };
         _closedList = new List<PathNode>();
 

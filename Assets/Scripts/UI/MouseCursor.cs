@@ -32,7 +32,7 @@ public class MouseCursor : MonoBehaviour
         transform.localScale = Vector3.one * _startingCrosshairScale;
     }
 
-    private void LateUpdate()
+    private void Update()
     {
         cursorPosition();
         resizeCursor();

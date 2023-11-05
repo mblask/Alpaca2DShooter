@@ -4894,7 +4894,6 @@ GameObject:
   - component: {fileID: 7270363628272429560}
   - component: {fileID: -8080476024278136289}
   - component: {fileID: 8874459827295818487}
-  - component: {fileID: 8874459827295818483}
   - component: {fileID: 8874459827295818480}
   m_Layer: 7
   m_Name: NPC_Boss_L2
@@ -5104,25 +5103,6 @@ MonoBehaviour:
   _throwable: {fileID: 0}
   _selectedWeapon: {fileID: 11400000, guid: 347dff94e829f684dbc2ea07a9ffb197, type: 2}
   _reloadTime: 0
---- !u!114 &8874459827295818483
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8874459827295818481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 185e95ecb30ef7f48940748b0e6a8d0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _conversationList:
-  - Topic: 
-    Speech: {fileID: 11400000, guid: b7ddc60bf8ca7814485b3dc56f42e0c0, type: 2}
-    IsMission: 0
-  - Topic: 
-    Speech: {fileID: 11400000, guid: 2bdeb02202e317448b2b96941d1a1c2a, type: 2}
-    IsMission: 1
 --- !u!114 &8874459827295818480
 MonoBehaviour:
   m_ObjectHideFlags: 0

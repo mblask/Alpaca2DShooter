@@ -24,6 +24,8 @@ public class LevelsManager : MonoBehaviour
     private int _numberOfGroupsPlayed = 0;
     private int _numberOfSingleGroupLevelsUsed = 0;
 
+    private bool _firstSpawn = true;
+    [SerializeField] private bool _spawnInPlayerLevel = true;
     private Transform _playerTransform;
     private bool _playerSpawned = false;
 
@@ -43,6 +45,9 @@ public class LevelsManager : MonoBehaviour
     {
         _levelProgressChoiceUI = LevelProgressChoiceUI.Instance;
 
+        if (_spawnInPlayerLevel)
+            spawnPlayerInPlayersLevel();
+
         if (!spawnPlayerRandomly())
             spawnPlayerInPlayersLevel();
     }
@@ -58,6 +63,7 @@ public class LevelsManager : MonoBehaviour
         _playerLevel.SetupLevel(true);
         _currentLevel = _playerLevel;
         _playerTransform = Instantiate(GameAssets.Instance.Player, _playerLevel.GetSpawnPortalPosition(), Quaternion.identity, null);
+        _playerSpawned = true;
     }
 
     private bool spawnPlayerRandomly()
@@ -84,8 +90,9 @@ public class LevelsManager : MonoBehaviour
         return true;
     }
 
-    private enum completionState
+    public enum completionState
     {
+        firstExitingPlayerLevel,
         exitingPlayerLevel,
         exitingBossLevel,
         groupNotCompleted,
@@ -98,7 +105,13 @@ public class LevelsManager : MonoBehaviour
             return completionState.exitingBossLevel;
 
         if (_currentLevel.Equals(_playerLevel))
-            return completionState.exitingPlayerLevel;
+        {
+            if (!_firstSpawn)
+                return completionState.exitingPlayerLevel;
+            
+            _firstSpawn = false;
+            return completionState.firstExitingPlayerLevel;
+        }
 
         if (_numberOfSingleGroupLevelsUsed == _levelsToPass)
             return completionState.groupCompleted;
@@ -117,6 +130,10 @@ public class LevelsManager : MonoBehaviour
         {
             case completionState.exitingBossLevel:
                 exitingBossLevel();
+                break;
+
+            case completionState.firstExitingPlayerLevel:
+                transferPlayerToAnotherLevel();
                 break;
 
             case completionState.exitingPlayerLevel:
@@ -138,6 +155,13 @@ public class LevelsManager : MonoBehaviour
 
     private void exitingBossLevel()
     {
+        _levelsToPass--;
+        if (_levelsToPass == 0)
+        {
+            Debug.Log("Game finished");
+            return;
+        }
+
         _numberOfSingleGroupLevelsUsed = 0;
         transferPlayerToAnotherLevel();
     }
@@ -212,7 +236,13 @@ public class LevelsManager : MonoBehaviour
             return;
         }
 
-        transferPlayerToPlayerLevel();
+        //Make a UI menu to select either to go to PlayerLevel or directly to BossLevel
+        bool goToPlayerLevel = false;
+        if (goToPlayerLevel)
+            transferPlayerToPlayerLevel();
+        else
+            transferPlayerToBossLevel();
+
         _numberOfSingleGroupLevelsUsed = 0;
     }
 
