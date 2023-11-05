@@ -1,7 +1,7 @@
 using AlpacaMyGames;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
+
 
 public class ItemSpawner : MonoBehaviour
 {
@@ -43,11 +43,11 @@ public class ItemSpawner : MonoBehaviour
         {
             case InventoryItem inventoryItem:
                 spawnedItem.GetComponent<RotateObject>().RotationSpeed = 0.0f;
-                spawnedItem.GetComponentInChildren<Light2D>().intensity = 0.0f;
+                spawnedItem.GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>().intensity = 0.0f;
                 break;
             case NonInventoryItem nonInventoryItem:
                 spawnedItem.GetComponent<SpriteRenderer>().color = (item as NonInventoryItem).Color;
-                spawnedItem.GetComponentInChildren<Light2D>().color = (item as NonInventoryItem).Color;
+                spawnedItem.GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>().color = (item as NonInventoryItem).Color;
 
                 if (item is ThrowableItem)
                 {

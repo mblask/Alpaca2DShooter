@@ -14,6 +14,7 @@ public class LevelsManager : MonoBehaviour
         }
     }
 
+    [Tooltip("Initial number of levels required to pass a group of levels\r\nRequired levels to pass decrease by one after each boss level")]
     [SerializeField] private int _levelsToPass = 2;
     private int _bossLevel = 0;
     public int BossLevel => _bossLevel;
@@ -22,9 +23,11 @@ public class LevelsManager : MonoBehaviour
     private List<LevelObject> _bossLevelsList;
     private LevelObject _playerLevel;
     private int _numberOfGroupsPlayed = 0;
-    private int _numberOfSingleGroupLevelsUsed = 0;
+    [SerializeField] private int _numberOfSingleGroupLevelsUsed = 0;
 
     private bool _firstSpawn = true;
+    [Tooltip("If true, when all boss levels completed it will reset them and start again\r\nIf false, when all boss levels completed, it will move player to other normal levels")]
+    [SerializeField] private bool _rotateBossLevels = true;
     [SerializeField] private bool _spawnInPlayerLevel = true;
     private Transform _playerTransform;
     private bool _playerSpawned = false;
@@ -32,6 +35,7 @@ public class LevelsManager : MonoBehaviour
     private LevelObject _currentLevel;
 
     private LevelProgressChoiceUI _levelProgressChoiceUI;
+    private PlayerOrBossLevelUI _playerOrBossLevelUI;
 
     private void Awake()
     {
@@ -44,6 +48,7 @@ public class LevelsManager : MonoBehaviour
     private void Start()
     {
         _levelProgressChoiceUI = LevelProgressChoiceUI.Instance;
+        _playerOrBossLevelUI = PlayerOrBossLevelUI.Instance;
 
         if (_spawnInPlayerLevel)
             spawnPlayerInPlayersLevel();
@@ -90,7 +95,7 @@ public class LevelsManager : MonoBehaviour
         return true;
     }
 
-    public enum completionState
+    public enum CompletionState
     {
         firstExitingPlayerLevel,
         exitingPlayerLevel,
@@ -99,52 +104,61 @@ public class LevelsManager : MonoBehaviour
         groupCompleted,
     }
 
-    private completionState checkGroupCompleted()
+    private CompletionState checkGroupCompleted()
     {
         if (_currentLevel.GetLevelType().Equals(LevelType.Boss))
-            return completionState.exitingBossLevel;
+            return CompletionState.exitingBossLevel;
 
         if (_currentLevel.Equals(_playerLevel))
         {
             if (!_firstSpawn)
-                return completionState.exitingPlayerLevel;
+                return CompletionState.exitingPlayerLevel;
             
             _firstSpawn = false;
-            return completionState.firstExitingPlayerLevel;
+            return CompletionState.firstExitingPlayerLevel;
         }
 
         if (_numberOfSingleGroupLevelsUsed == _levelsToPass)
-            return completionState.groupCompleted;
+            return CompletionState.groupCompleted;
 
-        return completionState.groupNotCompleted;
+        return CompletionState.groupNotCompleted;
     }
 
-    public static void CheckCompletionStateStatic()
+    public static void EnteringExitPortal()
     {
         _instance.checkCompletionState();
     }
 
+    public static void ExitingExitPortal()
+    {
+        if (_instance._currentLevel.Equals(_instance._playerLevel))
+            _instance._levelProgressChoiceUI?.ShowUI(false);
+
+        _instance._playerOrBossLevelUI?.ActivateUI(false);
+    }
+
     private void checkCompletionState()
     {
-        switch (checkGroupCompleted())
+        CompletionState state = checkGroupCompleted();
+        switch (state)
         {
-            case completionState.exitingBossLevel:
+            case CompletionState.exitingBossLevel:
                 exitingBossLevel();
                 break;
 
-            case completionState.firstExitingPlayerLevel:
+            case CompletionState.firstExitingPlayerLevel:
                 transferPlayerToAnotherLevel();
                 break;
 
-            case completionState.exitingPlayerLevel:
+            case CompletionState.exitingPlayerLevel:
                 exitingPlayerLevel();
                 break;
 
-            case completionState.groupCompleted:
-                groupCompleted();
+            case CompletionState.groupCompleted:
+                _playerOrBossLevelUI.ActivateUI(true);
                 break;
 
-            case completionState.groupNotCompleted:
+            case CompletionState.groupNotCompleted:
                 groupNotCompleted();
                 break;
 
@@ -168,7 +182,23 @@ public class LevelsManager : MonoBehaviour
 
     private void exitingPlayerLevel()
     {
-        _levelProgressChoiceUI.ShowUI();
+        _levelProgressChoiceUI.ShowUI(true);
+    }
+
+    public void TransferPlayerToLevel(LevelType levelType)
+    {
+        switch(levelType)
+        {
+            case LevelType.Player:
+                transferPlayerToPlayerLevel();
+                break;
+            case LevelType.Boss:
+                transferPlayerToBossLevel();
+                break;
+            case LevelType.Normal:
+                transferPlayerToAnotherLevel();
+                break;
+        }
     }
 
     public static void TransferPlayerToBossLevelStatic()
@@ -183,8 +213,15 @@ public class LevelsManager : MonoBehaviour
 
         if (level == null)
         {
-            exitingBossLevel();
-            return;
+            if (!_rotateBossLevels)
+            {
+                exitingBossLevel();
+                return;
+            }
+
+            _bossLevel = 0;
+            _bossLevelsList.ForEach(level => level.SetPlayed(false));
+            level = _bossLevelsList.GetRandomElement();
         }
 
         _bossLevel++;
@@ -197,7 +234,7 @@ public class LevelsManager : MonoBehaviour
 
     private void groupNotCompleted()
     {
-        Debug.Log(completionState.groupNotCompleted);
+        Debug.Log(CompletionState.groupNotCompleted);
         Debug.Log("Transfer player to another level!");
 
         transferPlayerToAnotherLevel();
@@ -228,7 +265,7 @@ public class LevelsManager : MonoBehaviour
     {
         _numberOfGroupsPlayed++;
 
-        Debug.Log(completionState.groupCompleted);
+        Debug.Log(CompletionState.groupCompleted);
         Debug.Log($"Number of groups played: {_numberOfGroupsPlayed}");
         if (_currentLevel.GetLevelType().Equals(LevelType.Boss))
         {
@@ -236,13 +273,7 @@ public class LevelsManager : MonoBehaviour
             return;
         }
 
-        //Make a UI menu to select either to go to PlayerLevel or directly to BossLevel
-        bool goToPlayerLevel = false;
-        if (goToPlayerLevel)
-            transferPlayerToPlayerLevel();
-        else
-            transferPlayerToBossLevel();
-
+        transferPlayerToPlayerLevel();
         _numberOfSingleGroupLevelsUsed = 0;
     }
 

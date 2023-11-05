@@ -1,30 +1,26 @@
-using System.Collections;
+using AlpacaMyGames;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ObjectDestroy : MonoBehaviour, IDamagable
 {
-    [Header("Object sturdiness")]
-    [Tooltip("Affects how many bullets needs to destroy the object.")]
-    [SerializeField] private ObjectSturdiness _sturdiness;
-
     [Header("Drop items on destroy")]
     [SerializeField] private bool _dropRandomItem = false;
     [SerializeField] private Item _dropItem;
+    [SerializeField] private List<Item> _dropItemList = new List<Item>();
 
     [Header("Particle system settings")]
     [SerializeField] private bool _useOriginalSprite;
     [SerializeField] private Sprite _particleSprite;
     [SerializeField] private Color _particleColor;
 
-    private int _bulletHitsToDestroy;
     private int _hitCount = 0;
 
     private string _bulletTagName = "Bullet";
 
     private void Start()
     {
-        _bulletHitsToDestroy = sturdinessToBulletNum(_sturdiness);
+        _hitCount = Random.Range(0, 2);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -59,8 +55,14 @@ public class ObjectDestroy : MonoBehaviour, IDamagable
         if (!_dropRandomItem && _dropItem == null)
             return;
 
+        if (Utilities.ChanceFunc(50))
+            return;
+
         if (_dropRandomItem)
             ItemSpawner.Instance.SpawnRandomItemAt(transform.position);
+
+        if (_dropItemList.Count > 0)
+            ItemSpawner.Instance.SpawnItem(transform.position, _dropItemList.GetRandomElement());            
 
         if (_dropItem != null)
             ItemSpawner.Instance.SpawnItem(transform.position, _dropItem);
@@ -81,24 +83,5 @@ public class ObjectDestroy : MonoBehaviour, IDamagable
 
         objectDestroyPS.GetComponent<ParticleSystem>().textureSheetAnimation.SetSprite(0, _particleSprite);
         mainModule.startColor = _particleColor;
-    }
-
-    private int sturdinessToBulletNum(ObjectSturdiness sturdiness)
-    {
-        switch (sturdiness)
-        {
-            case ObjectSturdiness.Weak:
-                return Random.Range(1, 3);
-            case ObjectSturdiness.Medium:
-                return Random.Range(3, 5);
-            case ObjectSturdiness.Strong:
-                return Random.Range(5, 7);
-            case ObjectSturdiness.Sturdy:
-                return Random.Range(7, 9);
-            case ObjectSturdiness.Indestructible:
-                return 9999;
-            default:
-                return 9999;
-        }
     }
 }

@@ -7,6 +7,8 @@ public class Terminal : Box2dCollider, IInteractable
     private SpriteRenderer _spriteRenderer;
     private TerminalCanvas _terminalCanvas;
 
+    public string InteractableName { get; } = "Terminal";
+
     [SerializeField] private List<Hackable> _hackables = new List<Hackable>();
     [SerializeField] private Portal _exitPortal;
     private ExitPortalPosition _exitPortalPosition;

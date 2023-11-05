@@ -1,3 +1,4 @@
+using AlpacaMyGames;
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -28,6 +29,9 @@ public class GameManager : MonoBehaviour
     private bool _gameIsRunning = true;
     private bool _isPaused = false;
 
+    private GameAssets _gameAssets;
+    private Transform _mouseCursorTransform;
+
     private void Awake()
     {
         _instance = this;
@@ -35,6 +39,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        _mouseCursorTransform = MouseCursor.Instance.transform;
+        _gameAssets = GameAssets.Instance;
+
         if (PlayerStats.Instance != null)
             PlayerStats.Instance.OnPlayerDeath += TriggerFailure;
     }
@@ -50,6 +57,11 @@ public class GameManager : MonoBehaviour
         if (_gameIsRunning)
         {
             timeManager();
+
+            if (_mouseCursorTransform == null)
+            {
+                _mouseCursorTransform = Instantiate(_gameAssets.MouseCursorObject, Utilities.GetMouseWorldLocation(), Quaternion.identity, transform.parent);
+            }
 
             if (Input.GetKeyDown(KeyCode.Escape))
                 OnTogglePause?.Invoke();

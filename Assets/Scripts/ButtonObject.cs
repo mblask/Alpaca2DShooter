@@ -10,6 +10,8 @@ public class ButtonObject : MonoBehaviour, IButton
     private Color _pressedColor = Color.green;
     private Color _releasedColor = Color.red;
 
+    public string InteractableName { get; } = "Button";
+
     private Action _onButtonPresssed;
     private Action _onButtonReleased;
 

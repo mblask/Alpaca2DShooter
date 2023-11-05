@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
+
 
 public class MainLightingManager : MonoBehaviour
 {
@@ -27,13 +27,13 @@ public class MainLightingManager : MonoBehaviour
         }
     }
 
-    private Light2D _mainLight;
+    private UnityEngine.Rendering.Universal.Light2D _mainLight;
     private Vector2 _mainLightingStrength = new Vector2(0.1f, 0.5f);
 
     private void Awake()
     {
         _instance = this;
-        _mainLight = GetComponent<Light2D>();
+        _mainLight = GetComponent<UnityEngine.Rendering.Universal.Light2D>();
     }
 
     private void Start()

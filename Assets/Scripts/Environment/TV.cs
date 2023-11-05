@@ -1,19 +1,19 @@
 using AlpacaMyGames;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
+
 
 public class TV : SwitchableObject
 {
-    private Light2D _tvPointLight;
+    private UnityEngine.Rendering.Universal.Light2D _tvPointLight;
 
     private void Awake()
     {
-        _tvPointLight = GetComponentInChildren<Light2D>();
+        _tvPointLight = GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>();
     }
 
     private void Start()
     {
-        _tvPointLight = GetComponentInChildren<Light2D>();
+        _tvPointLight = GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>();
 
         IsOn = Utilities.ChanceFunc(50);
         Toggle();

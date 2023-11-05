@@ -67,6 +67,9 @@ public class GameAssets : MonoBehaviour
     public List<CharacterBase> CharacterBaseList;
     public List<CharacterBaseScriptable> CharacterBaseScriptableList;
 
+    [Header("Mouse cursor")]
+    public Transform MouseCursorObject;
+
     private void Awake()
     {
         _instance = this;

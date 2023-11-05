@@ -80,7 +80,10 @@ public class MouseInteraction : MonoBehaviour
         IInteractable interactable = collision.GetComponent<IInteractable>();
 
         if (interactable != null)
+        {
             interactable.Highlight();
+            FloatingTextSpawner.CreateFloatingTextStatic(collision.transform.position, interactable.InteractableName, Color.white, destroyAfter: 1.0f, fontSize: 4, floatSpeed: 0.5f);
+        }
 
         PickupItem pickupItem = collision.GetComponent<PickupItem>();
         if (pickupItem != null)
@@ -92,7 +95,10 @@ public class MouseInteraction : MonoBehaviour
         IInteractable interactable = collision.GetComponent<IInteractable>();
 
         if (interactable != null)
+        {
             interactable.RemoveHighlight();
+            FloatingTextSpawner.RemoveLastStatic();
+        }
 
         PickupItem pickupItem = collision.GetComponent<PickupItem>();
         if (pickupItem != null)

@@ -8,6 +8,8 @@ public class Box : MonoBehaviour, IInteractable
     private Color _highlightColor = Color.green;
     private Color _defaultColor = Color.white;
 
+    public string InteractableName { get; } = "Box";
+
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();

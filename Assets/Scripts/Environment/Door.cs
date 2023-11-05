@@ -9,6 +9,8 @@ public class Door : Box2dCollider, IInteractable
 
     [SerializeField] private Color _defaultColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
     [SerializeField] private Color _highlightColor = new Color(0.6f, 1.0f, 0.6f, 1.0f);
+    public string InteractableName { get; } = "Door";
+
     [SerializeField] private bool _isLocked = true;
     private bool _isClosed = true;
 

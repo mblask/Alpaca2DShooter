@@ -24,12 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1311804304442197512}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -18.31, y: -3.07, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3702992166257012821
 MonoBehaviour:
@@ -54,15 +55,7 @@ MonoBehaviour:
     type: 3}
   ItemSlotUIPrefab: {fileID: 8364620979190049944, guid: ab90f7bae0f7b5849a04135b900a1fec,
     type: 3}
-  Player: {fileID: 8196825197066008456, guid: 1aec6afb1600a224fa2c488498512929, type: 3}
-  Mine: {fileID: 7346663964101727333, guid: 49a39b89380eae64d83a7baf168ebd97, type: 3}
-  Grenade: {fileID: 7912929506115796245, guid: 643c779ef38aa844fb42b9e8baa3b744, type: 3}
-  FlashGrenade: {fileID: 2100056278436479500, guid: edcbe36bf376c744c9c36944ef23c0cd,
-    type: 3}
   DestructionArea: {fileID: 8609378906264422291, guid: 84d9d9856c74c274bb1521ff3cb71c44,
-    type: 3}
-  NPCPrefab: {fileID: 17813973010984863, guid: 52a1892016b466d4594d0e836d32924b, type: 3}
-  NPCBossPrefab: {fileID: 8874459827295818493, guid: 00436e50d1abf6948aaf6150d38bcacb,
     type: 3}
   ItemTemplate: {fileID: 9080969874544118615, guid: 4312b61d953601e48a5486a87b8b6234,
     type: 3}
@@ -75,6 +68,14 @@ MonoBehaviour:
   FiringTrap: {fileID: 8156374904455766617, guid: c7e0f79d2074b26478351f521fc646d8,
     type: 3}
   Blood: {fileID: 9144573411589949775, guid: 1208b2fe3d9aed24791cf90e9099a653, type: 3}
+  Player: {fileID: 8196825197066008456, guid: 1aec6afb1600a224fa2c488498512929, type: 3}
+  NPCPrefab: {fileID: 17813973010984863, guid: 52a1892016b466d4594d0e836d32924b, type: 3}
+  NPCBossPrefab: {fileID: 8874459827295818493, guid: 00436e50d1abf6948aaf6150d38bcacb,
+    type: 3}
+  Mine: {fileID: 7346663964101727333, guid: 49a39b89380eae64d83a7baf168ebd97, type: 3}
+  Grenade: {fileID: 7912929506115796245, guid: 643c779ef38aa844fb42b9e8baa3b744, type: 3}
+  FlashGrenade: {fileID: 2100056278436479500, guid: edcbe36bf376c744c9c36944ef23c0cd,
+    type: 3}
   ObjectDestroyPS: {fileID: 6286873006748181702, guid: 09af176826afcd4438fddea34718dade,
     type: 3}
   BloodPS: {fileID: 8495303254531532346, guid: 8f46ec2d9399963429da0758697b32e6, type: 3}
@@ -155,3 +156,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b0948f73513965f4ab42da506bb57951, type: 2}
   - {fileID: 11400000, guid: 783c40fd9c053dc4cad5e76df19af9e0, type: 2}
   - {fileID: 11400000, guid: 4b4cc5d02a272174ba947d9bf685defc, type: 2}
+  MouseCursorObject: {fileID: 1834719948709531579, guid: f9484b6522b118c429f8b3f00542c74e,
+    type: 3}

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Portal : MonoBehaviour
@@ -15,7 +14,7 @@ public class Portal : MonoBehaviour
         if (!_portalType.Equals(PortalType.Exit))
             return;
 
-        LevelsManager.CheckCompletionStateStatic();
+        LevelsManager.EnteringExitPortal();
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -23,5 +22,7 @@ public class Portal : MonoBehaviour
         PlayerBase playerBase = collision.GetComponent<PlayerBase>();
         if (playerBase == null)
             return;
+
+        LevelsManager.ExitingExitPortal();
     }
 }

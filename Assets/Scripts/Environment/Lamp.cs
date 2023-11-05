@@ -1,21 +1,23 @@
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
+
 using AlpacaMyGames;
 
 public class Lamp : SwitchableObject, IInteractable, IDamagable
 {
     private SpriteRenderer _spriteRenderer;
-    private Light2D _light;
+    private UnityEngine.Rendering.Universal.Light2D _light;
 
     private float _defaultIntensity;
 
     [SerializeField] private Color _defaultColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
     [SerializeField] private Color _highlightColor = new Color(0.6f, 1.0f, 0.6f, 1.0f);
 
+    public string InteractableName { get; } = "Lamp";
+
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _light = transform.Find("Light2D").GetComponent<Light2D>();
+        _light = transform.Find("Light2D").GetComponent<UnityEngine.Rendering.Universal.Light2D>();
         _defaultIntensity = _light.intensity;
     }
 

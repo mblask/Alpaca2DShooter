@@ -38,6 +38,26 @@ public class FloatingTextSpawner : MonoBehaviour
         }
     }
 
+    private void removeLast()
+    {
+        if (_floatingTextObjectsList.Count == 0)
+            return;
+
+        int index = _floatingTextObjectsList.Count - 1;
+        FloatingTextSingle singleText = _floatingTextObjectsList[index];
+
+        if (singleText != null)
+        {
+            _floatingTextObjectsList.RemoveAt(index);
+            Destroy(singleText.gameObject);
+        }
+    }
+
+    public static void RemoveLastStatic()
+    {
+        _instance.removeLast();
+    }
+
     public static FloatingTextSingle CreateFloatingTextStatic(Vector3 spawnPosition, string textToWrite, Color fontColor, float destroyAfter = 0.7f, float fontSize = 4.0f, float floatSpeed = 1.0f, bool storeInSpawner = true, FloatDirection floatDirection = FloatDirection.UpRight)
     {
         if (_instance == null)
