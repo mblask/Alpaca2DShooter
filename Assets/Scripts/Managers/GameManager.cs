@@ -15,8 +15,6 @@ public class GameManager : MonoBehaviour
     }
 
     public event Action<float> OnTimeUpdated;
-    public event Action<int> OnArtefactsUpdated;
-    public event Action<GameEndType, int> OnGameComplete;
     public event Action OnTogglePause;
 
     [Header("Read-only")]
@@ -41,15 +39,6 @@ public class GameManager : MonoBehaviour
     {
         _mouseCursorTransform = MouseCursor.Instance.transform;
         _gameAssets = GameAssets.Instance;
-
-        if (PlayerStats.Instance != null)
-            PlayerStats.Instance.OnPlayerDeath += TriggerFailure;
-    }
-
-    private void OnDisable()
-    {
-        if (PlayerStats.Instance != null)
-            PlayerStats.Instance.OnPlayerDeath -= TriggerFailure;
     }
 
     private void Update()
@@ -57,15 +46,19 @@ public class GameManager : MonoBehaviour
         if (_gameIsRunning)
         {
             timeManager();
-
-            if (_mouseCursorTransform == null)
-            {
-                _mouseCursorTransform = Instantiate(_gameAssets.MouseCursorObject, Utilities.GetMouseWorldLocation(), Quaternion.identity, transform.parent);
-            }
+            checkMouseCursor();
 
             if (Input.GetKeyDown(KeyCode.Escape))
                 OnTogglePause?.Invoke();
         }
+    }
+
+    private void checkMouseCursor()
+    {
+        if (_mouseCursorTransform != null)
+            return;
+        
+        _mouseCursorTransform = Instantiate(_gameAssets.MouseCursorObject, Utilities.GetMouseWorldLocation(), Quaternion.identity, transform.parent);
     }
 
     public float GetGameTime()
@@ -98,12 +91,9 @@ public class GameManager : MonoBehaviour
 
     public void TriggerVictory()
     {
-        Debug.Log("GameManager: TriggerVictory");
-    }
+        Debug.Log("Game finished!");
+        _gameIsRunning = false;
 
-    public void TriggerFailure()
-    {
-        Debug.Log("GameManager: TriggerFailure");
     }
 
     public void SetPaused(bool value)
@@ -119,11 +109,6 @@ public class GameManager : MonoBehaviour
     public bool IsGameRunning()
     {
         return _gameIsRunning;
-    }
-
-    public void SetGameRunning(bool value)
-    {
-        _gameIsRunning = value;
     }
 
     private void resetTimeScale()

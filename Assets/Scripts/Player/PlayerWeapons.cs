@@ -50,7 +50,7 @@ public class PlayerWeapons : MonoBehaviour
 
     private bool _weaponEquipped = false;
     private bool _canShoot = true;
-    private bool _isShooting = false;
+    //private bool _isShooting = false;
     private bool _isAutoShooting = false;
     private bool _canSwitchWeapons = true;
     private bool _canPutWeaponAway = true;
@@ -163,7 +163,7 @@ public class PlayerWeapons : MonoBehaviour
         if (!_canShoot)
             return;
 
-        _isShooting = true;
+        //_isShooting = true;
         _canSwitchWeapons = false;
         _canPutWeaponAway = false;
 
@@ -226,7 +226,7 @@ public class PlayerWeapons : MonoBehaviour
 
     public void LeftClickUp()
     {
-        _isShooting = false;
+        //_isShooting = false;
         _isAutoShooting = false;
         _canSwitchWeapons = true;
         _canPutWeaponAway = true;

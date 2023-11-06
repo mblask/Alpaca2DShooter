@@ -18,7 +18,6 @@ public class ItemSpawner : MonoBehaviour
 
     [SerializeField] private List<Item> _availableItems = new List<Item>();
     private List<Transform> _spawnedArtefacts = new List<Transform>();
-    [SerializeField] private List<ArtefactItem> _availableArtefacts;
 
     private List<Item> _itemPool = new List<Item>();
 
@@ -114,26 +113,5 @@ public class ItemSpawner : MonoBehaviour
         int randomNumber = Random.Range(0, 100);
 
         return randomNumber <= EnemyDropRate;
-    }
-
-    public void SpawnArtefacts(int artefactsRequired)
-    {
-        while (_spawnedArtefacts.Count < artefactsRequired)
-        {
-            int randomIndex = Random.Range(0, _availableArtefacts.Count);
-
-            Vector2 randomPosition = 
-                Vector2.right * Random.Range(0.0f, 20.0f) + Vector2.up * Random.Range(0.0f, 20.0f);
-
-            Transform spawnedArtefact = SpawnItem(randomPosition, _availableArtefacts[randomIndex]);
-
-            if (!_spawnedArtefacts.Contains(spawnedArtefact))
-                _spawnedArtefacts.Add(spawnedArtefact);
-        }
-    }
-
-    public List<ArtefactItem> GetAvailableArtefacts()
-    {
-        return _availableArtefacts;
     }
 }

@@ -13,11 +13,11 @@ public class AchievementConstants
     private const string _sniperDescription = "Once you aim, nothing can escape your crosshairs. You've finished the game with an accuracy greater than 80%.";
     private const string _hackerDescription = "Zeros and ones, that's all there is for you. You've successfully hacked 10 terminals.";
 
-    private Dictionary<AchievementType, Achievement> _achievementDictionary =
+    private static Dictionary<AchievementType, Achievement> _achievementDictionary =
         new Dictionary<AchievementType, Achievement>
     {
             { AchievementType.None,
-                new Achievement { AchievementType = AchievementType.None, Description = _noneDescription, Value = string.Empty } },
+                new Achievement { AchievementType = AchievementType.None, Description = _noneDescription } },
             { AchievementType.Lightning,
                 new Achievement { AchievementType = AchievementType.Lightning, Description = _lightningDescription } },
             { AchievementType.Bloodthirst,
@@ -37,4 +37,14 @@ public class AchievementConstants
             { AchievementType.Hacker,
                 new Achievement { AchievementType = AchievementType.Hacker, Description = _hackerDescription } }
     };
+
+    public static Achievement GetAchievement(AchievementType type)
+    {
+        if (!_achievementDictionary.TryGetValue(type, out Achievement result))
+        {
+            return new Achievement { AchievementType = AchievementType.None };
+        }
+
+        return result;
+    }
 }

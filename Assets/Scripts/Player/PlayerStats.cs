@@ -17,7 +17,6 @@ public class PlayerStats : MonoBehaviour, IDamagable
 
     public event Action<float> OnHealthUIUpdate;
     public event Action<float> OnStaminaUIUpdate;
-    public event Action OnPlayerDeath;
 
     public List<Stat> Stats;
 
@@ -297,8 +296,6 @@ public class PlayerStats : MonoBehaviour, IDamagable
         GetComponent<BoxCollider2D>().enabled = false;
         GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
         GetComponent<SpriteRenderer>().enabled = false;
-
-        OnPlayerDeath?.Invoke();
 
         Destroy(gameObject);
     }

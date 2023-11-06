@@ -100,15 +100,6 @@ public class ItemTooltip : MonoBehaviour
     {
         _sb = new StringBuilder();
 
-        ArtefactItem artefact = item as ArtefactItem;
-
-        if (artefact != null)
-        {
-            _sb.Append("Artefact");
-
-            return;
-        }
-
         ConsumableItem consumable = item as ConsumableItem;
 
         if (consumable != null)

@@ -34,20 +34,6 @@ public class PlayerController : MonoBehaviour
     {
         _playerStats = GetComponent<PlayerStats>();
         _camera = Camera.main;
-
-        if (GameManager.Instance != null)
-            GameManager.Instance.OnGameComplete += GameManager_OnGameComplete;
-    }
-
-    private void OnDisable()
-    {
-        if (GameManager.Instance != null)
-            GameManager.Instance.OnGameComplete -= GameManager_OnGameComplete;
-    }
-
-    private void GameManager_OnGameComplete(GameEndType arg1, int arg2)
-    {
-        DeactivateInput();
     }
 
     private void Update()

@@ -9,7 +9,6 @@ public class WallFiringTrap : Hackable
     private NPCAllegiance _allegiance = NPCAllegiance.Enemy;
 
     private Vector2 _damageInterval = new Vector2(3.0f, 6.0f);
-    private string _trapTag = "Enemy";
 
     private bool _turnedOn = true;
     private bool _isShooting = false;

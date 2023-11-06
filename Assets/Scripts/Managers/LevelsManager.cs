@@ -34,6 +34,8 @@ public class LevelsManager : MonoBehaviour
 
     private LevelObject _currentLevel;
 
+    private GameManager _gameManager;
+
     private LevelProgressChoiceUI _levelProgressChoiceUI;
     private PlayerOrBossLevelUI _playerOrBossLevelUI;
 
@@ -47,6 +49,7 @@ public class LevelsManager : MonoBehaviour
 
     private void Start()
     {
+        _gameManager = GameManager.Instance;
         _levelProgressChoiceUI = LevelProgressChoiceUI.Instance;
         _playerOrBossLevelUI = PlayerOrBossLevelUI.Instance;
 
@@ -172,7 +175,7 @@ public class LevelsManager : MonoBehaviour
         _levelsToPass--;
         if (_levelsToPass == 0)
         {
-            Debug.Log("Game finished");
+            _gameManager.TriggerVictory();
             return;
         }
 

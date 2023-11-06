@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -21,17 +19,6 @@ public class GameEndPanel : MonoBehaviour
 
         _gameSuccessAnimator = _containerTransform.Find("GameSuccessPanel").GetComponent<Animator>();
         _gameFailAnimator = _containerTransform.Find("GameFailPanel").GetComponent<Animator>();
-    }
-
-    private void Start()
-    {
-        GameManager.Instance.OnGameComplete += SetupGameEndPanel;
-    }
-
-    private void OnDisable()
-    {
-        if (GameManager.Instance != null)
-            GameManager.Instance.OnGameComplete -= SetupGameEndPanel;
     }
 
     public void SetupGameEndPanel(GameEndType type, int score)

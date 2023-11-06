@@ -51,9 +51,6 @@ public class GameAssets : MonoBehaviour
     [Header("Consumables")]
     public List<ConsumableItem> Consumables;
 
-    [Header("Available Artefacts")]
-    public List<ArtefactItem> AvailableArtefacts;
-
     [Header("Available Weapons")]
     public List<WeaponItem> WeaponsList;
 

@@ -18,8 +18,6 @@ public class NPCWeapons : MonoBehaviour
     private bool _autoShootingCoroutineRunning = false;
 
     [SerializeField] private ThrowableItem _throwable;
-    private float _throwableTimer = 0.0f;
-    private Vector2 _throwableInterval = new Vector2(0.4f, 0.8f);
 
     [Header("Weapons, read-only")]
     [SerializeField] private WeaponItem _selectedWeapon;

@@ -16,9 +16,6 @@ public class LevelObject : MonoBehaviour
     private Transform _environmentContainer;
     private Transform _npcContainer;
 
-    private int _maxNumberOfArtefactsRequired = 3;
-    private List<ArtefactItem> _requiredArtefacts;
-
     [SerializeField] private LevelType _levelType;
     [SerializeField] private bool _wasPlayed = false;
 
@@ -66,7 +63,6 @@ public class LevelObject : MonoBehaviour
         spawnPortals(levelNeedsSpawnPortal);
         spawnEnemies();
         spawnTraps();
-        setRequiredArtefacts();
 
         _isReady = true;
         _wasPlayed = true;
@@ -113,30 +109,6 @@ public class LevelObject : MonoBehaviour
 
         foreach (Transform trap in _spawnedTraps)
             if (trap != null) Destroy(trap.gameObject);
-    }
-
-    private void setRequiredArtefacts()
-    {
-        if (_levelType.Equals(LevelType.Boss) || _levelType.Equals(LevelType.Player))
-            return;
-
-        _requiredArtefacts = new List<ArtefactItem>();
-
-        for (int i = 0; i < _maxNumberOfArtefactsRequired; i++)
-        {
-            if (!Utilities.ChanceFunc(67))
-                continue;
-
-            ArtefactItem artefact = GameAssets.Instance.AvailableArtefacts.GetRandomElement();
-
-            if (_requiredArtefacts.Contains(artefact))
-            {
-                i--;
-                continue;
-            }
-
-            _requiredArtefacts.Add(artefact);
-        }
     }
 
     private void deactivateSpawnPointsAround(Vector3 position, float radius)

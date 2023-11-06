@@ -47,9 +47,6 @@ public class Door : Box2dCollider, IInteractable
         if (!PlayerInventory.GetItemsStatic().Contains(_keyItem) && _keyItem != null)
         {
             string message = _lockedDoorMessage != null ? _lockedDoorMessage : "It's locked!";
-
-            SpeechBox.TriggerSpeechBoxOnInteractionStatic(message);
-
             return;
         }
         
