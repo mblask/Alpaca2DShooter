@@ -1,3 +1,6 @@
+using System;
+
+[Serializable]
 public class Achievement
 {
     public AchievementType AchievementType;

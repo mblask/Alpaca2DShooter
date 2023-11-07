@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     private bool _isPaused = false;
 
     private GameAssets _gameAssets;
+    private AchievementManager _achievementsManager;
     private Transform _mouseCursorTransform;
 
     private void Awake()
@@ -38,6 +39,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         _mouseCursorTransform = MouseCursor.Instance.transform;
+        _achievementsManager = AchievementManager.Instance;
         _gameAssets = GameAssets.Instance;
     }
 
@@ -74,6 +76,7 @@ public class GameManager : MonoBehaviour
     public void IncrementEnemiesKilled()
     {
         _enemiesKilled++;
+        _achievementsManager.CheckOnNpcKilled(_enemiesKilled);
     }
 
     private void timeManager()
@@ -93,7 +96,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Game finished!");
         _gameIsRunning = false;
-
+        _achievementsManager.CheckOnGameFinished();
     }
 
     public void SetPaused(bool value)

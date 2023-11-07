@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class CraftingManager : MonoBehaviour
@@ -6,14 +7,27 @@ public class CraftingManager : MonoBehaviour
     private static CraftingManager _instance;
     [SerializeField] private List<CraftingRecipe> _craftingRecipes;
 
+    private AchievementManager _achievementManager;
+
     private void Awake()
     {
         _instance = this;
     }
 
+    private void Start()
+    {
+        _achievementManager = AchievementManager.Instance;
+    }
+
     public static bool CraftItemStatic(CraftingRecipe craftingRecipe)
     {
-        return _instance.craftItem(craftingRecipe);
+        if (_instance.craftItem(craftingRecipe))
+        {
+            _instance._achievementManager.CheckOnItemCrafted(craftingRecipe.ProductItem);
+            return true;
+        }
+
+        return false;
     }
 
     private bool craftItem(CraftingRecipe craftingRecipe)

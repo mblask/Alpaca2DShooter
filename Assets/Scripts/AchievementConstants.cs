@@ -38,12 +38,15 @@ public class AchievementConstants
                 new Achievement { AchievementType = AchievementType.Hacker, Description = _hackerDescription } }
     };
 
-    public static Achievement GetAchievement(AchievementType type)
+    public static Achievement GetAchievement(AchievementType type, string value = null)
     {
         if (!_achievementDictionary.TryGetValue(type, out Achievement result))
         {
             return new Achievement { AchievementType = AchievementType.None };
         }
+
+        if (!string.IsNullOrEmpty(value))
+            result.Value = value;
 
         return result;
     }
