@@ -9,6 +9,7 @@ public class PickupItem : MonoBehaviour
     private bool _isPickable = true;
 
     private AudioManager _audioManager;
+    private AchievementManager _achievementManager;
 
     private void Awake()
     {
@@ -18,6 +19,7 @@ public class PickupItem : MonoBehaviour
     private void Start()
     {
         _audioManager = AudioManager.Instance;
+        _achievementManager = AchievementManager.Instance;
 
         if (_item != null)
             _spriteRenderer.sprite = _item.ItemSprite;
@@ -45,6 +47,8 @@ public class PickupItem : MonoBehaviour
             NonInventoryItem nonInventoryItem = _item as NonInventoryItem;
             if (!nonInventoryItem.UseItem())
                 return;
+
+            _achievementManager.CheckOnItemUsed(_item);
         }
 
         ItemTooltip.RemoveTooltipStatic();

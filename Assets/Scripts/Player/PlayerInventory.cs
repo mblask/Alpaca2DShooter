@@ -24,6 +24,7 @@ public class PlayerInventory : MonoBehaviour, ICrafting
     private bool _craftingPossible = false;
 
     private ItemSpawner _itemSpawner;
+    private AchievementManager _achievementManager;
 
     private void Awake()
     {
@@ -33,6 +34,7 @@ public class PlayerInventory : MonoBehaviour, ICrafting
     private void Start()
     {
         _itemSpawner = ItemSpawner.Instance;
+        _achievementManager = AchievementManager.Instance;
     }
 
     private void Update()
@@ -67,7 +69,8 @@ public class PlayerInventory : MonoBehaviour, ICrafting
         if (!_items.Contains(consumable))
             return;
 
-        consumable.UseItem();
+        if (consumable.UseItem())
+            _achievementManager.CheckOnItemUsed(consumable);
     }
 
     public static bool AddToInventoryStatic(Item item)

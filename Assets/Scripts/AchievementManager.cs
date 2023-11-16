@@ -84,47 +84,49 @@ public class AchievementManager : MonoBehaviour
 
     public void CheckOnNpcKilled(int enemiesKilled)
     {
-        if (enemiesKilled == 50)
-        {
-            Achievement achievement = AchievementConstants.GetAchievement(AchievementType.Bloodthirst);
-            _unlockedAchievements.AddIfNone(achievement);
-            Debug.Log(AchievementType.Bloodthirst);
-        }
+        if (enemiesKilled != 50)
+            return;
+
+        Achievement achievement = AchievementConstants.GetAchievement(AchievementType.Bloodthirst);
+        _unlockedAchievements.AddIfNone(achievement);
+        Debug.Log(AchievementType.Bloodthirst);
     }
 
     public void CheckOnItemCrafted(Item item)
     {
         _itemsCrafted++;
-        if (_itemsCrafted == 20)
-        {
-            Achievement achievement = AchievementConstants.GetAchievement(AchievementType.Crafter);
-            _unlockedAchievements.AddIfNone(achievement);
-            Debug.Log(AchievementType.Crafter);
-        }
+        if (_itemsCrafted != 20)
+            return;
+        
+        Achievement achievement = AchievementConstants.GetAchievement(AchievementType.Crafter);
+        _unlockedAchievements.AddIfNone(achievement);
+        Debug.Log(AchievementType.Crafter);
     }
 
     public void CheckOnItemUsed(Item item)
     {
-        if (item is ConsumableItem)
+        switch (item)
         {
-            _medicItemsUsed++;
-            if (_medicItemsUsed == 20)
-            {
+            case ConsumableItem:
+                _medicItemsUsed++;
+                if (_medicItemsUsed != 20) return;
                 Achievement achievement = AchievementConstants.GetAchievement(AchievementType.Medic);
                 _unlockedAchievements.AddIfNone(achievement);
                 Debug.Log(AchievementType.Medic);
-            }
+                break;
+            default:
+                break;
         }
     }
 
     public void CheckOnTerminalHacked()
     {
         _terminalsHacked++;
-        if (_terminalsHacked == 5)
-        {
-            Achievement achievement = AchievementConstants.GetAchievement(AchievementType.Hacker);
-            _unlockedAchievements.AddIfNone(achievement);
-            Debug.Log(AchievementType.Hacker);
-        }
+        if (_terminalsHacked != 5)
+            return;
+        
+        Achievement achievement = AchievementConstants.GetAchievement(AchievementType.Hacker);
+        _unlockedAchievements.AddIfNone(achievement);
+        Debug.Log(AchievementType.Hacker);
     }
 }

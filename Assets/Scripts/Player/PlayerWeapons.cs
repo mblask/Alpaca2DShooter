@@ -50,7 +50,6 @@ public class PlayerWeapons : MonoBehaviour
 
     private bool _weaponEquipped = false;
     private bool _canShoot = true;
-    //private bool _isShooting = false;
     private bool _isAutoShooting = false;
     private bool _canSwitchWeapons = true;
     private bool _canPutWeaponAway = true;
@@ -64,7 +63,9 @@ public class PlayerWeapons : MonoBehaviour
     private int _shotsHit;
 
     private WeaponImage _weaponImage;
+    private ThrowableImage _throwableImage;
     private AmmoPanel _ammoPanel;
+    private ThrowableAmmoPanel _throwableAmmoPanel;
     private AccuracyPanel _accuracyPanel;
     private MouseCursor _mouseCursor;
     private AudioManager _audioManager;
@@ -84,9 +85,11 @@ public class PlayerWeapons : MonoBehaviour
         _gameManager = GameManager.Instance;
         _cameraController = CameraController.Instance;
         _pointerOver = new PointerOver();
-
         _weaponImage = WeaponImage.Instance;
+        _throwableImage = ThrowableImage.Instance;
         _ammoPanel = AmmoPanel.Instance;
+        _throwableAmmoPanel = ThrowableAmmoPanel.Instance;
+
         _accuracyPanel = AccuracyPanel.Instance;
         _mouseCursor = MouseCursor.Instance;
         _audioManager = AudioManager.Instance;
@@ -98,7 +101,7 @@ public class PlayerWeapons : MonoBehaviour
     {
         _mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition);
         keyboardInput();
-        autoShooting();
+        autoShootingProcedure();
         intervalWeaponProcedure();
     }
 
@@ -109,8 +112,10 @@ public class PlayerWeapons : MonoBehaviour
 
         if (_throwables.Count > 0)
             _currentThrowable = _throwables[0];
-        
-        ThrowableImage.UpdateThrowableUIStatic(_currentThrowable);
+
+        _throwableImage.UpdateThrowableUI(_currentThrowable);
+        if (_currentThrowable != null)
+            _throwableAmmoPanel.UpdateAmmoText(_currentThrowable.TotalAmmo);
     }
 
     private void keyboardInput()
@@ -163,7 +168,6 @@ public class PlayerWeapons : MonoBehaviour
         if (!_canShoot)
             return;
 
-        //_isShooting = true;
         _canSwitchWeapons = false;
         _canPutWeaponAway = false;
 
@@ -195,7 +199,7 @@ public class PlayerWeapons : MonoBehaviour
         }
     }
 
-    private void autoShooting()
+    private void autoShootingProcedure()
     {
         if (!_isAutoShooting || _isReloading)
             return;
@@ -226,7 +230,6 @@ public class PlayerWeapons : MonoBehaviour
 
     public void LeftClickUp()
     {
-        //_isShooting = false;
         _isAutoShooting = false;
         _canSwitchWeapons = true;
         _canPutWeaponAway = true;
@@ -274,6 +277,7 @@ public class PlayerWeapons : MonoBehaviour
         }
 
         _currentThrowable.TotalAmmo--;
+        _throwableAmmoPanel.UpdateAmmoText(_currentThrowable.TotalAmmo);
 
         if (_currentThrowable.TotalAmmo == 0)
         {
@@ -282,12 +286,12 @@ public class PlayerWeapons : MonoBehaviour
             if (_throwables.Count > 0)
             {
                 _currentThrowable = _throwables[0];
-                ThrowableImage.UpdateThrowableUIStatic(_currentThrowable);
+                _throwableImage.UpdateThrowableUI(_currentThrowable);
             }
             else
             {
                 _currentThrowable = null;
-                ThrowableImage.UpdateThrowableUIStatic(_currentThrowable);
+                _throwableImage.UpdateThrowableUI(_currentThrowable);
             }
         }
     }
@@ -309,7 +313,8 @@ public class PlayerWeapons : MonoBehaviour
 
         _currentThrowable = _throwables[currentIndex];
 
-        ThrowableImage.UpdateThrowableUIStatic(_currentThrowable);
+        _throwableImage.UpdateThrowableUI(_currentThrowable);
+        _throwableAmmoPanel.UpdateAmmoText(_currentThrowable.TotalAmmo);
     }
 
     public void EnableShooting(bool value)
@@ -567,14 +572,14 @@ public class PlayerWeapons : MonoBehaviour
         shootingPS.Play();
     }
 
-    public bool AddThrowable(ThrowableWeapon weapon)
+    public bool AddThrowable(ThrowableWeapon throwable)
     {
-        if (weapon == null)
+        if (throwable == null)
             return false;
 
         for (int i = 0; i < _throwables.Count; i++)
         {
-            if (weapon.ThrowableItem == _throwables[i].ThrowableItem)
+            if (throwable.ThrowableItem == _throwables[i].ThrowableItem)
             {
                 _throwables[i].TotalAmmo++;
                 _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
@@ -583,12 +588,13 @@ public class PlayerWeapons : MonoBehaviour
             }
         }
 
-        _throwables.Add(weapon);
+        _throwables.Add(throwable);
 
         if (_currentThrowable == null)
-            _currentThrowable = weapon;
+            _currentThrowable = throwable;
 
-        ThrowableImage.UpdateThrowableUIStatic(_currentThrowable);
+        _throwableImage.UpdateThrowableUI(_currentThrowable);
+        _throwableAmmoPanel.UpdateAmmoText(_currentThrowable.TotalAmmo);
 
         return true;
     }

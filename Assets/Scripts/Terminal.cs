@@ -23,6 +23,7 @@ public class Terminal : Box2dCollider, IInteractable
 
     private PlayerStats _playerStats;
     private TerminalUI _terminalUI;
+    private AchievementManager _achievementManager;
 
     private void Awake()
     {
@@ -34,6 +35,7 @@ public class Terminal : Box2dCollider, IInteractable
     {
         _playerStats = PlayerStats.Instance;
         _terminalUI = TerminalUI.Instance;
+        _achievementManager = AchievementManager.Instance;
         _exitPortalPosition = ExitPortalPosition.Instance;
     }
 
@@ -78,6 +80,7 @@ public class Terminal : Box2dCollider, IInteractable
         {
             _hackingInProgress = false;
             _isHacked = true;
+            _achievementManager.CheckOnTerminalHacked();
             openTerminal();
         }
     }
