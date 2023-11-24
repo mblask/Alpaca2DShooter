@@ -41,16 +41,16 @@ public class AchievementManager : MonoBehaviour
         {
             Achievement achievement = 
                 AchievementConstants.GetAchievement(AchievementType.Lightning, gameTime.ToString());
-            _unlockedAchievements.AddIfNone(achievement);
-            Debug.Log(AchievementType.Lightning);
+            if (_unlockedAchievements.AddIfNone(achievement))
+                Debug.Log(AchievementType.Lightning);
         }
 
         int enemiesKilled = _gameManager.GetEnemiesKilled();
         if (enemiesKilled == 0)
         {
             Achievement achievement = AchievementConstants.GetAchievement(AchievementType.Pacifist);
-            _unlockedAchievements.AddIfNone(achievement);
-            Debug.Log(AchievementType.Pacifist);
+            if (_unlockedAchievements.AddIfNone(achievement))
+                Debug.Log(AchievementType.Pacifist);
         }
 
         float playerMaxHealth = _playerStats.PlayerHealth.GetFinalValue();
@@ -59,8 +59,8 @@ public class AchievementManager : MonoBehaviour
         {
             Achievement achievement = AchievementConstants.GetAchievement
                 (AchievementType.Survivalist, (playerHealth / playerMaxHealth * 100.0f).ToString());
-            _unlockedAchievements.AddIfNone(achievement);
-            Debug.Log(AchievementType.Survivalist);
+            if (_unlockedAchievements.AddIfNone(achievement))
+                Debug.Log(AchievementType.Survivalist);
         }
 
         float totalHealthLoss = _playerStats.GetTotalHealthLoss();
@@ -77,8 +77,8 @@ public class AchievementManager : MonoBehaviour
         {
             Achievement achievement = 
                 AchievementConstants.GetAchievement(AchievementType.Sniper, accuracy.ToString());
-            _unlockedAchievements.AddIfNone(achievement);
-            Debug.Log(AchievementType.Sniper);
+            if (_unlockedAchievements.AddIfNone(achievement))
+                Debug.Log(AchievementType.Sniper);
         }
     }
 
@@ -88,8 +88,8 @@ public class AchievementManager : MonoBehaviour
             return;
 
         Achievement achievement = AchievementConstants.GetAchievement(AchievementType.Bloodthirst);
-        _unlockedAchievements.AddIfNone(achievement);
-        Debug.Log(AchievementType.Bloodthirst);
+        if (_unlockedAchievements.AddIfNone(achievement))
+            Debug.Log(AchievementType.Bloodthirst);
     }
 
     public void CheckOnItemCrafted(Item item)
@@ -99,8 +99,8 @@ public class AchievementManager : MonoBehaviour
             return;
         
         Achievement achievement = AchievementConstants.GetAchievement(AchievementType.Crafter);
-        _unlockedAchievements.AddIfNone(achievement);
-        Debug.Log(AchievementType.Crafter);
+        if (_unlockedAchievements.AddIfNone(achievement))
+            Debug.Log(AchievementType.Crafter);
     }
 
     public void CheckOnItemUsed(Item item)
@@ -111,8 +111,8 @@ public class AchievementManager : MonoBehaviour
                 _medicItemsUsed++;
                 if (_medicItemsUsed != 20) return;
                 Achievement achievement = AchievementConstants.GetAchievement(AchievementType.Medic);
-                _unlockedAchievements.AddIfNone(achievement);
-                Debug.Log(AchievementType.Medic);
+                if (_unlockedAchievements.AddIfNone(achievement))
+                    Debug.Log(AchievementType.Medic);
                 break;
             default:
                 break;
@@ -126,7 +126,7 @@ public class AchievementManager : MonoBehaviour
             return;
         
         Achievement achievement = AchievementConstants.GetAchievement(AchievementType.Hacker);
-        _unlockedAchievements.AddIfNone(achievement);
-        Debug.Log(AchievementType.Hacker);
+        if (_unlockedAchievements.AddIfNone(achievement))
+            Debug.Log(AchievementType.Hacker);
     }
 }
