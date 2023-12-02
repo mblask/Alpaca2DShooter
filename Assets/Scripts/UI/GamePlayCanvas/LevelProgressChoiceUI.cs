@@ -34,7 +34,10 @@ public class LevelProgressChoiceUI : MonoBehaviour
 
     public void ShowUI(bool value)
     {
-        _container?.gameObject?.SetActive(value);
+        if (_container == null)
+            return;
+
+        _container.gameObject?.SetActive(value);
     }
 
     private void cancelButton()

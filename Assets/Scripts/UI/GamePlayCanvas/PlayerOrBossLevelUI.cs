@@ -52,6 +52,9 @@ public class PlayerOrBossLevelUI : MonoBehaviour
 
     public void ActivateUI(bool value)
     {
+        if (_container == null)
+            return;
+
         if (value.Equals(_container.gameObject.activeSelf))
             return;
 

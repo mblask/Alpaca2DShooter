@@ -2,6 +2,16 @@ using System.Collections.Generic;
 
 public class AchievementConstants
 {
+    public const float LIGHTNING_GOAL = 120.0f;
+    public const int PACIFIST_GOAL = 0;
+    public const int BLOODTHIRST_GOAL = 50;
+    public const float SURVIVALIST_GOAL = 0.05f;
+    public const float IRONMAN_GOAL = 0.1f;
+    public const float SNIPER_GOAL = 0.8f;
+    public const int CRAFTER_GOAL = 20;
+    public const int MEDIC_GOAL = 20;
+    public const int HACKER_GOAL = 5;
+
     private const string _noneDescription = "N/A";
     private const string _lightningDescription = "Lightning fast movement through the maze. You finish the game in a record time.";
     private const string _bloodthirstDescription = "Nobody stands a chance against you. You reach an enemy-elimination-milestone, 50 killed.";

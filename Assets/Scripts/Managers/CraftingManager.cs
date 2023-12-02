@@ -23,7 +23,7 @@ public class CraftingManager : MonoBehaviour
     {
         if (_instance.craftItem(craftingRecipe))
         {
-            _instance._achievementManager.CheckOnItemCrafted(craftingRecipe.ProductItem);
+            _instance._achievementManager.CheckOnItemCrafted();
             return true;
         }
 
