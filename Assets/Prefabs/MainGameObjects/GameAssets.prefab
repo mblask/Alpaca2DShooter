@@ -85,14 +85,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fe7f209bd2ecd7e4e964ac24c4f2fede, type: 2}
   - {fileID: 11400000, guid: 309cc1aefcd98da4e9f2709029948105, type: 2}
   - {fileID: 11400000, guid: 4ce150cc01079ae4fb80ade66c4265b1, type: 2}
-  AvailableArtefacts:
-  - {fileID: 11400000, guid: 937eab12cfd96fd4a8036be3e6a87ed7, type: 2}
-  - {fileID: 11400000, guid: a321c9cf27b8d2d45a59a974e951dc01, type: 2}
-  - {fileID: 11400000, guid: 4c8984da17957ec49baafa807cc86377, type: 2}
-  - {fileID: 11400000, guid: 65546cbf45588204981830fc8419b8d5, type: 2}
-  - {fileID: 11400000, guid: fb6216d202afe1e4c9586bb9beed7ffb, type: 2}
-  - {fileID: 11400000, guid: 35312ec8f1b160641929463271f317a9, type: 2}
-  - {fileID: 11400000, guid: 7b5ccda8f2eb24a4189bbf1fbd0b8ab5, type: 2}
   WeaponsList:
   - {fileID: 11400000, guid: 8e403aae5daf09c49a7cc32cfef2d5d2, type: 2}
   - {fileID: 11400000, guid: e8a7754bc5105c74696fd95bff87f112, type: 2}
@@ -106,6 +98,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c0bb4237c9fd0b849a55738186624d30, type: 2}
   - {fileID: 11400000, guid: e0c0946cb00471a4a8ffdbce76aafff5, type: 2}
   - {fileID: 11400000, guid: 3d96132ade87a474080c898b28603881, type: 2}
+  AvailableSkills:
+  - {fileID: 11400000, guid: cdb3b9113006ba240a79d5c6ec296dc0, type: 2}
+  - {fileID: 11400000, guid: aaf7cae0f4ef3214585994b1166fb144, type: 2}
+  - {fileID: 11400000, guid: 72be8c88bbc1789429cb933209c81542, type: 2}
+  - {fileID: 11400000, guid: 64da7c7a1c092c046b97a89693a2d88c, type: 2}
+  - {fileID: 11400000, guid: 3af376a6122d66142808a0d7491268a6, type: 2}
+  - {fileID: 11400000, guid: 256fdb8df752ed24b9a66510a5adb5aa, type: 2}
+  - {fileID: 11400000, guid: 94f9e363e352d30449d3a352e68e3876, type: 2}
   CharacterBaseList:
   - CharacterType: 0
     CharacterAOC: {fileID: 22100000, guid: c35c335cec9bb2945a7d846c5f91db90, type: 2}

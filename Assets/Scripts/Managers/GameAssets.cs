@@ -60,6 +60,9 @@ public class GameAssets : MonoBehaviour
     [Header("Available Ammo")]
     public List<AmmoItem> AvailableAmmoItems;
 
+    [Header("Available Skills")]
+    public List<SkillSO> AvailableSkills;
+
     [Header("Character Base List")]
     public List<CharacterBase> CharacterBaseList;
     public List<CharacterBaseScriptable> CharacterBaseScriptableList;
@@ -77,6 +80,11 @@ public class GameAssets : MonoBehaviour
         return BossTransforms
             .Where(transform => transform.GetComponent<NPCStats>().BossId == id)
             .FirstOrDefault();
+    }
+
+    public SkillSO GetSkillByStatType(StatType type)
+    {
+        return AvailableSkills.Find(skill => skill.Stat.Equals(type));
     }
 
     public ConsumableItem GetConsumableByType(ConsumableType type)

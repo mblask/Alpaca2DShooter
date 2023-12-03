@@ -101,8 +101,7 @@ public class AchievementManager : MonoBehaviour
     }
 
     private void triggerAchievement(AchievementType type, string value = null)
-    {
-        Debug.Log(type);
+    { 
         Achievement achievement = AchievementConstants.GetAchievement(type, value);
         if (_unlockedAchievements.AddIfNone(achievement))
             _achievementUI.UpdateText(type);

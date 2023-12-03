@@ -25,16 +25,6 @@ public class Stat
         _baseValue = baseValue;
     }
 
-    public void SetStatType(StatType statType)
-    {
-        _statType = statType;
-    }
-
-    public float GetBaseValue()
-    {
-        return _baseValue;
-    }
-
     public void SetBaseValue(float value)
     {
         _baseValue = value;

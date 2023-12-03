@@ -27,9 +27,9 @@ public class PlayerStats : MonoBehaviour, IDamagable
     public Stat PlayerAccuracy;
     public Stat PlayerDefense;
     public Stat PlayerStrength;
-    public Vector2 PlayerDamage = new Vector2();
     public Stat LimbToughness;
     public Stat HackingSpeed;
+    public Vector2 PlayerDamage = new Vector2();
     
     private List<StatModifyingData> _injuries = new List<StatModifyingData>();
 
