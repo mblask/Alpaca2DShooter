@@ -13,12 +13,13 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    private List<SkillSO> _unlockedSkills = new List<SkillSO>();
+    [SerializeField] private List<SkillSO> _unlockedSkills = new List<SkillSO>();
 
     private GameAssets _gameAssets;
 
     private void Awake()
     {
+        DontDestroyOnLoad(this);
         _instance = this;
     }
 
