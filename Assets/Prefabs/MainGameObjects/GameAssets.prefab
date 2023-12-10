@@ -106,47 +106,39 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3af376a6122d66142808a0d7491268a6, type: 2}
   - {fileID: 11400000, guid: 256fdb8df752ed24b9a66510a5adb5aa, type: 2}
   - {fileID: 11400000, guid: 94f9e363e352d30449d3a352e68e3876, type: 2}
-  CharacterBaseList:
-  - CharacterType: 0
-    CharacterAOC: {fileID: 22100000, guid: c35c335cec9bb2945a7d846c5f91db90, type: 2}
-    MovementSpeed: 3.5
-    Accuracy: 3
-    HealthModifier: 1.2
-  - CharacterType: 1
-    CharacterAOC: {fileID: 22100000, guid: 69fb994b734228246b4c22edc2c2b3d4, type: 2}
-    MovementSpeed: 4
-    Accuracy: 3
-    HealthModifier: 1.1
-  - CharacterType: 2
-    CharacterAOC: {fileID: 22100000, guid: d679b3bd68fd73047abca3f541a0381e, type: 2}
-    MovementSpeed: 3.5
-    Accuracy: 3
-    HealthModifier: 1.1
-  - CharacterType: 3
-    CharacterAOC: {fileID: 22100000, guid: bdcba94b8ea006645b3ac2faa90af47c, type: 2}
-    MovementSpeed: 2.5
-    Accuracy: 2
-    HealthModifier: 1
-  - CharacterType: 4
-    CharacterAOC: {fileID: 22100000, guid: 81466b54971cc6f48b4044fba4a072fb, type: 2}
-    MovementSpeed: 4
-    Accuracy: 8
-    HealthModifier: 1.5
-  - CharacterType: 5
-    CharacterAOC: {fileID: 22100000, guid: 751c269919c9a794f9bcbde5732099e6, type: 2}
-    MovementSpeed: 4.5
-    Accuracy: 7
-    HealthModifier: 1.3
-  - CharacterType: 6
-    CharacterAOC: {fileID: 22100000, guid: d69bcb1edae53c54b8d32cb42def5134, type: 2}
-    MovementSpeed: 4.5
-    Accuracy: 3
-    HealthModifier: 1.4
-  - CharacterType: 7
-    CharacterAOC: {fileID: 22100000, guid: 2c87d373423663f46a30afb601ed7185, type: 2}
-    MovementSpeed: 4.5
-    Accuracy: 3
-    HealthModifier: 1.2
+  CharacterBases:
+  - Type: 1
+    Scriptable: {fileID: 11400000, guid: 4d44b4e198ef14e42ad1e31c3c160241, type: 2}
+    AnimatorController: {fileID: 22100000, guid: c35c335cec9bb2945a7d846c5f91db90,
+      type: 2}
+  - Type: 2
+    Scriptable: {fileID: 11400000, guid: e5274e7d2df71dd498b8d3bb3b66218f, type: 2}
+    AnimatorController: {fileID: 22100000, guid: 69fb994b734228246b4c22edc2c2b3d4,
+      type: 2}
+  - Type: 3
+    Scriptable: {fileID: 11400000, guid: 7df210d3391ff274b9bc8391a90b37ca, type: 2}
+    AnimatorController: {fileID: 22100000, guid: d679b3bd68fd73047abca3f541a0381e,
+      type: 2}
+  - Type: 4
+    Scriptable: {fileID: 11400000, guid: 53de4797844cc6d43999c71a9db4cc41, type: 2}
+    AnimatorController: {fileID: 22100000, guid: bdcba94b8ea006645b3ac2faa90af47c,
+      type: 2}
+  - Type: 5
+    Scriptable: {fileID: 11400000, guid: dc4d81ed4d3af3b418c813e0cf1675c7, type: 2}
+    AnimatorController: {fileID: 22100000, guid: 81466b54971cc6f48b4044fba4a072fb,
+      type: 2}
+  - Type: 6
+    Scriptable: {fileID: 11400000, guid: 4b4cc5d02a272174ba947d9bf685defc, type: 2}
+    AnimatorController: {fileID: 22100000, guid: 751c269919c9a794f9bcbde5732099e6,
+      type: 2}
+  - Type: 7
+    Scriptable: {fileID: 11400000, guid: b0948f73513965f4ab42da506bb57951, type: 2}
+    AnimatorController: {fileID: 22100000, guid: d69bcb1edae53c54b8d32cb42def5134,
+      type: 2}
+  - Type: 8
+    Scriptable: {fileID: 11400000, guid: 783c40fd9c053dc4cad5e76df19af9e0, type: 2}
+    AnimatorController: {fileID: 22100000, guid: 2c87d373423663f46a30afb601ed7185,
+      type: 2}
   CharacterBaseScriptableList:
   - {fileID: 11400000, guid: e5274e7d2df71dd498b8d3bb3b66218f, type: 2}
   - {fileID: 11400000, guid: 4d44b4e198ef14e42ad1e31c3c160241, type: 2}

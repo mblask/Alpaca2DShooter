@@ -19,7 +19,7 @@ public class Workshop : MonoBehaviour, IWorkshop
             return;
 
         if (value)
-            FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Press C\r\n to activate workshop", Color.white, 1.0f, 5.0f, 0.5f);
+            FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Press C\r\n to activate workshop", Color.white, 1.0f, 8.0f, 0.5f);
 
         crafting.EnableCrafting(value);
     }

@@ -12,9 +12,10 @@ public class PlayerBase : MonoBehaviour
         }
     }
 
-    private CharacterBase _playerCharacterBase;
     private CharacterBaseScriptable _playerCharacterBaseScriptable;
 
+    private GameAssets _gameAssets;
+    private PlayerSelector _playerSelector;
     private PlayerAnimations _playerAnimations;
     private PlayerStats _playerStats;
 
@@ -28,7 +29,26 @@ public class PlayerBase : MonoBehaviour
 
     private void Start()
     {
-        setupCharacter(GameAssets.Instance?.CharacterBaseScriptableList[0]);
+        _playerSelector = PlayerSelector.Instance;
+        _gameAssets = GameAssets.Instance;
+        selectCharacter();
+    }
+
+    private void selectCharacter()
+    {
+        try
+        {
+            CharacterBaseType baseType = _playerSelector.GetSelected();
+            _playerSelector.DestroySelf();
+            if (baseType.Equals(CharacterBaseType.None))
+                setupCharacter(_gameAssets.CharacterBaseScriptableList[0]);
+
+            setupCharacter(_gameAssets.GetBaseScriptabeByType(baseType));
+        }
+        catch
+        {
+            setupCharacter(_gameAssets.CharacterBaseScriptableList[0]);
+        }
     }
 
     private void setupCharacter(CharacterBaseScriptable characterBase)
@@ -58,31 +78,6 @@ public class PlayerBase : MonoBehaviour
             new Stat(StatType.LimbToughness, characterBase.LimbToughness),
             new Stat(StatType.HackingSpeed, characterBase.HackingSpeed)
         };
-    }
-
-    private void setCharacterBase(string characterBaseType)
-    {
-        if (GameAssets.Instance == null)
-            return;
-
-        bool characterSet = false;
-        foreach (CharacterBaseScriptable characterBase in GameAssets.Instance.CharacterBaseScriptableList)
-        {
-            if (characterBase.CharacterType.ToString().Equals(characterBaseType))
-            {
-                setupCharacter(characterBase);
-                characterSet = true;
-                break;
-            }
-        }
-
-        if (!characterSet)
-            setupCharacter(GameAssets.Instance.CharacterBaseScriptableList[1]);
-    }
-
-    public CharacterBase GetCharacterBase()
-    {
-        return _playerCharacterBase;
     }
 
     public CharacterBaseScriptable GetCharacterBaseScriptable()

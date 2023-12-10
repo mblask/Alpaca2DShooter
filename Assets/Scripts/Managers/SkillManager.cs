@@ -5,7 +5,7 @@ using UnityEngine;
 public class SkillManager : MonoBehaviour
 {
     private static SkillManager _instance;
-    public static SkillManager INstance
+    public static SkillManager Instance
     {
         get
         {
@@ -19,8 +19,11 @@ public class SkillManager : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(this);
+        if (_instance != null)
+            Destroy(_instance.gameObject);
+
         _instance = this;
+        DontDestroyOnLoad(this);
     }
 
     private void Start()

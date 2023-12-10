@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c83903f0cf34c2c498c71a6ec3d87cb7, type: 3}
   m_Name: SarahConnor
   m_EditorClassIdentifier: 
-  CharacterType: 7
+  CharacterType: 8
   CharacterAOC: {fileID: 22100000, guid: 2c87d373423663f46a30afb601ed7185, type: 2}
   Health: 90
   HealthModifier: 1.2

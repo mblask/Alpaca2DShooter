@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c83903f0cf34c2c498c71a6ec3d87cb7, type: 3}
   m_Name: BrownDude
   m_EditorClassIdentifier: 
-  CharacterType: 2
+  CharacterType: 3
   CharacterAOC: {fileID: 22100000, guid: d679b3bd68fd73047abca3f541a0381e, type: 2}
   Health: 90
   HealthModifier: 1.1

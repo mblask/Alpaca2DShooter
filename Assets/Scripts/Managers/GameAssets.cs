@@ -13,8 +13,6 @@ public class GameAssets : MonoBehaviour
         }
     }
 
-    public const string CHARACTER_TYPE_STRING = "CharacterType";
-
     [Header("Bosses")]
     public List<Transform> BossTransforms;
 
@@ -64,7 +62,6 @@ public class GameAssets : MonoBehaviour
     public List<SkillSO> AvailableSkills;
 
     [Header("Character Base List")]
-    public List<CharacterBase> CharacterBaseList;
     public List<CharacterBaseScriptable> CharacterBaseScriptableList;
 
     [Header("Mouse cursor")]
@@ -73,6 +70,11 @@ public class GameAssets : MonoBehaviour
     private void Awake()
     {
         _instance = this;
+    }
+
+    public CharacterBaseScriptable GetBaseScriptabeByType(CharacterBaseType type)
+    {
+        return CharacterBaseScriptableList.Find(baseType => baseType.CharacterType.Equals(type));
     }
 
     public Transform GetBossById(int id)

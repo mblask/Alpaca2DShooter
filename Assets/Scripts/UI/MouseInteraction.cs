@@ -82,7 +82,7 @@ public class MouseInteraction : MonoBehaviour
         if (interactable != null)
         {
             interactable.Highlight();
-            FloatingTextSpawner.CreateFloatingTextStatic(collision.transform.position, interactable.InteractableName, Color.white, destroyAfter: 1.0f, fontSize: 4, floatSpeed: 0.5f);
+            FloatingTextSpawner.CreateFloatingTextStatic(collision.transform.position, interactable.InteractableName, Color.white, destroyAfter: 1.0f, fontSize: 8, floatSpeed: 0.5f);
         }
 
         PickupItem pickupItem = collision.GetComponent<PickupItem>();

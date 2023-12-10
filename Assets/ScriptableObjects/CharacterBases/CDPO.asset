@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c83903f0cf34c2c498c71a6ec3d87cb7, type: 3}
   m_Name: CDPO
   m_EditorClassIdentifier: 
-  CharacterType: 4
+  CharacterType: 5
   CharacterAOC: {fileID: 22100000, guid: 81466b54971cc6f48b4044fba4a072fb, type: 2}
   Health: 90
   HealthModifier: 1.5

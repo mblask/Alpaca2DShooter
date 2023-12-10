@@ -257,7 +257,7 @@ public class NPC_AI : MonoBehaviour, IBlindable
     {
         string randomAlert = Constants.NPC_ALERT_MESSAGES.GetRandomElement();
         FloatingTextSpawner
-            .CreateFloatingTextStatic(transform.position, randomAlert, Color.red, destroyAfter: 0.8f, fontSize: 4, floatSpeed: 0.5f);
+            .CreateFloatingTextStatic(transform.position, randomAlert, Color.red, destroyAfter: 0.8f, fontSize: 8, floatSpeed: 0.5f);
     }
 
     private void getNextWaypoint()

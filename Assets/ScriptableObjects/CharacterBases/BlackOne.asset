@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c83903f0cf34c2c498c71a6ec3d87cb7, type: 3}
   m_Name: BlackOne
   m_EditorClassIdentifier: 
-  CharacterType: 0
+  CharacterType: 1
   CharacterAOC: {fileID: 22100000, guid: c35c335cec9bb2945a7d846c5f91db90, type: 2}
   Health: 90
   HealthModifier: 1.2

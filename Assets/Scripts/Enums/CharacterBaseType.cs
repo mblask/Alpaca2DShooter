@@ -1,5 +1,6 @@
 public enum CharacterBaseType
 {
+    None,
     Black,
     Blue,
     Brown,

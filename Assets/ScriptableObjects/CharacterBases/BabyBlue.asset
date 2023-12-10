@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c83903f0cf34c2c498c71a6ec3d87cb7, type: 3}
   m_Name: BabyBlue
   m_EditorClassIdentifier: 
-  CharacterType: 1
+  CharacterType: 2
   CharacterAOC: {fileID: 22100000, guid: 69fb994b734228246b4c22edc2c2b3d4, type: 2}
   Health: 90
   HealthModifier: 1.1

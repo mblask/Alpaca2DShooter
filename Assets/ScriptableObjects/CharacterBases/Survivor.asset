@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c83903f0cf34c2c498c71a6ec3d87cb7, type: 3}
   m_Name: Survivor
   m_EditorClassIdentifier: 
-  CharacterType: 6
+  CharacterType: 7
   CharacterAOC: {fileID: 22100000, guid: d69bcb1edae53c54b8d32cb42def5134, type: 2}
   Health: 90
   HealthModifier: 1.4

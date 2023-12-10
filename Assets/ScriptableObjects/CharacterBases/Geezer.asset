@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c83903f0cf34c2c498c71a6ec3d87cb7, type: 3}
   m_Name: Geezer
   m_EditorClassIdentifier: 
-  CharacterType: 3
+  CharacterType: 4
   CharacterAOC: {fileID: 22100000, guid: bdcba94b8ea006645b3ac2faa90af47c, type: 2}
   Health: 90
   HealthModifier: 1

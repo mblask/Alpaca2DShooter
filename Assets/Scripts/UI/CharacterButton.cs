@@ -1,10 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
-using TMPro;
 
 public class CharacterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -13,10 +10,11 @@ public class CharacterButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private Button _selectButton;
     private RectTransform _buttonRectTransform;
     private Transform _lockedTextTransform;
-    private MainMenuCanvas _mainMenuCanvas;
 
     private bool _mouseOver = false;
     private float _rotation = -0.8f;
+
+    private PlayerSelector _playerSelector;
 
     [Space]
     [SerializeField] private float _scoreToUnlock;
@@ -48,12 +46,10 @@ public class CharacterButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     private void Start()
     {
-        checkAndSetupButton();
+        _playerSelector = PlayerSelector.Instance;
 
-        if (_locked)
-            setButtonActive(true);
-        else
-            setButtonActive(false);
+        checkAndSetupButton();
+        setButtonActive(_locked);
     }
 
     private void Update()
@@ -64,8 +60,7 @@ public class CharacterButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void SelectAndStartGame()
     {
-        PlayerPrefs.SetString(GameAssets.CHARACTER_TYPE_STRING, _characterType.ToString());
-
+        _playerSelector.SelectPlayerBase(_characterType);
         StartCoroutine(MainMenuCanvas.Instance.ActivateLoadingScreen());
     }
 
@@ -89,18 +84,16 @@ public class CharacterButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
         //score needed to unlock character
         List<Highscore> highscores = SaveManager.Load();
 
-        if (highscores != null)
+        if (highscores == null || highscores.Count == 0)
+            return;
+
+        foreach (Highscore highscore in highscores)
         {
-            foreach (Highscore highscore in highscores)
+            if (_scoreToUnlock < highscore.score)
             {
-                if (_scoreToUnlock > highscore.score)
-                    continue;
-                else
-                {
-                    _locked = false;
-                    return;
-                }
-            }            
+                _locked = false;
+                return;
+            }
         }
     }
 }

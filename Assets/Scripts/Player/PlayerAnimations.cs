@@ -35,7 +35,7 @@ public class PlayerAnimations : MonoBehaviour
     private void Start()
     {
         if (_animator.runtimeAnimatorController == null)
-            _animator.runtimeAnimatorController = GameAssets.Instance.CharacterBaseList[0].CharacterAOC;
+            _animator.runtimeAnimatorController = GameAssets.Instance.CharacterBaseScriptableList[0].CharacterAOC;
     }
 
     public void SetPlayerAOC(AnimatorOverrideController aoc)

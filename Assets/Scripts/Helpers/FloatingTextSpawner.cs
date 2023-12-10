@@ -4,7 +4,7 @@ using TMPro;
 
 public class FloatingTextSpawnerStatic
 {
-    public static FloatingTextSingle Create(Vector3 spawnPosition, string textToWrite, Color fontColor, float destroyAfter = 1.0f, float fontSize = 4.0f, float floatSpeed = 1.0f, FloatDirection floatDirection = FloatDirection.UpRight)
+    public static FloatingTextSingle Create(Vector3 spawnPosition, string textToWrite, Color fontColor, float destroyAfter = 1.0f, float fontSize = 8.0f, float floatSpeed = 1.0f, FloatDirection floatDirection = FloatDirection.UpRight)
     {
         GameObject floatingTextObject = new GameObject("FloatingTextObject", typeof(FloatingTextSingle));
         FloatingTextSingle floatingText = floatingTextObject.GetComponent<FloatingTextSingle>();
@@ -58,7 +58,7 @@ public class FloatingTextSpawner : MonoBehaviour
         _instance.removeLast();
     }
 
-    public static FloatingTextSingle CreateFloatingTextStatic(Vector3 spawnPosition, string textToWrite, Color fontColor, float destroyAfter = 0.7f, float fontSize = 4.0f, float floatSpeed = 1.0f, bool storeInSpawner = true, FloatDirection floatDirection = FloatDirection.UpRight)
+    public static FloatingTextSingle CreateFloatingTextStatic(Vector3 spawnPosition, string textToWrite, Color fontColor, float destroyAfter = 0.7f, float fontSize = 8.0f, float floatSpeed = 1.0f, bool storeInSpawner = true, FloatDirection floatDirection = FloatDirection.UpRight)
     {
         if (_instance == null)
             Debug.LogError("There is no Floating Text object in the scene!");
