@@ -5,19 +5,17 @@ using UnityEngine.EventSystems;
 
 public class CharacterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] private CharacterBaseType _characterType;
+    [SerializeField] private CharacterBaseScriptable _character;
 
     private Button _selectButton;
     private RectTransform _buttonRectTransform;
     private Transform _lockedTextTransform;
 
     private bool _mouseOver = false;
-    private float _rotation = -0.8f;
+    private float _rotation = -0.6f;
 
     private PlayerSelector _playerSelector;
 
-    [Space]
-    [SerializeField] private float _scoreToUnlock;
     private bool _locked;
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -25,7 +23,7 @@ public class CharacterButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
         _mouseOver = true;
 
         if (_locked)
-            ScoreInfo.Instance.SetupScoreInfo(_scoreToUnlock);
+            ScoreInfo.Instance.SetupScoreInfo(_character.ScoreToUnlock);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -60,7 +58,7 @@ public class CharacterButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void SelectAndStartGame()
     {
-        _playerSelector.SelectPlayerBase(_characterType);
+        _playerSelector.SelectPlayerBase(_character.CharacterType);
         StartCoroutine(MainMenuCanvas.Instance.ActivateLoadingScreen());
     }
 
@@ -75,7 +73,7 @@ public class CharacterButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
         _locked = true;
 
         //no score needed to unlock a character
-        if (_scoreToUnlock == 0)
+        if (_character.ScoreToUnlock == 0)
         {
             _locked = false;
             return;
@@ -89,7 +87,7 @@ public class CharacterButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
         foreach (Highscore highscore in highscores)
         {
-            if (_scoreToUnlock < highscore.score)
+            if (_character.ScoreToUnlock < highscore.score)
             {
                 _locked = false;
                 return;

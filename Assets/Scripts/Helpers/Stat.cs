@@ -5,6 +5,7 @@ using UnityEngine;
 public class Stat
 {
     [SerializeField] private StatType _statType;
+    public StatType StatType => _statType;
     private float _baseValue = 0;
     private float _finalValue = 0;
     [SerializeField] private float _currentValue;
@@ -21,8 +22,11 @@ public class Stat
 
     public Stat(StatType statType, float baseValue)
     {
+        _modifiers = new List<float>();
+        _multipliers = new List<float>();
         _statType = statType;
         _baseValue = baseValue;
+        _currentValue = GetFinalValue();
     }
 
     public void SetBaseValue(float value)

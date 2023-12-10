@@ -54,30 +54,28 @@ public class PlayerBase : MonoBehaviour
     private void setupCharacter(CharacterBaseScriptable characterBase)
     {
         _playerCharacterBaseScriptable = characterBase;
-
         _playerAnimations.SetPlayerAOC(characterBase.CharacterAOC);
+
         _playerStats.PlayerAccuracy.SetBaseValue(characterBase.Accuracy);
-        _playerStats.PlayerSpeed
-            .SetBaseValue(characterBase.MovementSpeed * 1.2f);
-        _playerStats.PlayerHealth
-            .SetBaseValue(1000);
+        _playerStats.PlayerSpeed.SetBaseValue(characterBase.MovementSpeed * 1.2f);
+        _playerStats.PlayerHealth.SetBaseValue(characterBase.Health);
         _playerStats.PlayerStamina.SetBaseValue(characterBase.Stamina);
         _playerStats.PlayerDefense.SetBaseValue(characterBase.Defense);
         _playerStats.PlayerStrength.SetBaseValue(characterBase.Strength);
         _playerStats.HackingSpeed.SetBaseValue(characterBase.HackingSpeed);
         _playerStats.LimbToughness.SetBaseValue(characterBase.LimbToughness);
 
-        _playerStats.Stats = new List<Stat>()
+        foreach (BaseStat stat in characterBase.BaseStats)
         {
-            new Stat(StatType.Health, characterBase.Health),
-            new Stat(StatType.Stamina, characterBase.Stamina),
-            new Stat(StatType.Strength, characterBase.Strength),
-            new Stat(StatType.Speed, characterBase.MovementSpeed),
-            new Stat(StatType.Accuracy, characterBase.Accuracy),
-            new Stat(StatType.Defense, characterBase.Defense),
-            new Stat(StatType.LimbToughness, characterBase.LimbToughness),
-            new Stat(StatType.HackingSpeed, characterBase.HackingSpeed)
-        };
+            float value = stat.Value;
+            if (stat.Type.Equals(StatType.Speed))
+                value *= 1.2f;
+
+            if (stat.Type.Equals(StatType.Health))
+                value *= characterBase.HealthModifier;
+
+            _playerStats.Stats.Add(new Stat(stat.Type, value));
+        }
     }
 
     public CharacterBaseScriptable GetCharacterBaseScriptable()

@@ -39,6 +39,11 @@ public class SkillManager : MonoBehaviour
             _unlockedSkills.AddIfNone(skill);
     }
 
+    public List<SkillSO> GetUnlockedSkills()
+    {
+        return _unlockedSkills;
+    }
+
     private SkillSO GetSkill(AchievementType achievement)
     {
         switch (achievement)

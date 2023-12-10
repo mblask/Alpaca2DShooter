@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterType: 8
   CharacterAOC: {fileID: 22100000, guid: 2c87d373423663f46a30afb601ed7185, type: 2}
+  ScoreToUnlock: 0
   Health: 90
   HealthModifier: 1.2
   Stamina: 130
