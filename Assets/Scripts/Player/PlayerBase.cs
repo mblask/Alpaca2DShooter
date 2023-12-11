@@ -38,12 +38,14 @@ public class PlayerBase : MonoBehaviour
     {
         try
         {
-            CharacterBaseType baseType = _playerSelector.GetSelected();
+            CharacterBaseType baseType = _playerSelector.GetSelectedBase();
+            List<SkillSO> selectedSkills = _playerSelector.GetSelectedSkills();
             _playerSelector.DestroySelf();
             if (baseType.Equals(CharacterBaseType.None))
                 setupCharacter(_gameAssets.CharacterBaseScriptableList[0]);
 
             setupCharacter(_gameAssets.GetBaseScriptabeByType(baseType));
+            setupPlayerSkills(selectedSkills);
         }
         catch
         {
@@ -76,6 +78,55 @@ public class PlayerBase : MonoBehaviour
 
             _playerStats.Stats.Add(new Stat(stat.Type, value));
         }
+    }
+
+    private void setupPlayerSkills(List<SkillSO> skills)
+    {
+        foreach (SkillSO skill in skills)
+        {
+            switch (skill.Stat)
+            {
+                case StatType.Health:
+                    UpdateStat(_playerStats.PlayerHealth, skill);
+                    break;
+                case StatType.Stamina:
+                    UpdateStat(_playerStats.PlayerStamina, skill);
+                    break;
+                case StatType.Accuracy:
+                    UpdateStat(_playerStats.PlayerAccuracy, skill);
+                    break;
+                case StatType.Damage:
+                    _playerStats.PlayerDamage += Vector2.one * skill.Modifier;
+                    _playerStats.PlayerDamage *= Vector2.one * skill.Multiplier;
+                    break;
+                case StatType.Defense:
+                    UpdateStat(_playerStats.PlayerDefense, skill);
+                    break;
+                case StatType.Speed:
+                    UpdateStat(_playerStats.PlayerSpeed, skill);
+                    break;
+                case StatType.Strength:
+                    UpdateStat(_playerStats.PlayerStrength, skill);
+                    break;
+                case StatType.LimbToughness:
+                    UpdateStat(_playerStats.LimbToughness, skill);
+                    break;
+                case StatType.HackingSpeed:
+                    UpdateStat(_playerStats.HackingSpeed, skill);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void UpdateStat(Stat stat, SkillSO skill)
+    {
+        if (skill.Modifier > 0.0f)
+            stat.AddModifier(skill.Modifier);
+
+        if (skill.Multiplier > 0.0f)
+            stat.AddBaseMultiplier(skill.Multiplier);
     }
 
     public CharacterBaseScriptable GetCharacterBaseScriptable()

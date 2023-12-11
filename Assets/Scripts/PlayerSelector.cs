@@ -13,7 +13,7 @@ public class PlayerSelector : MonoBehaviour
     }
 
     private CharacterBaseType _selectedPlayerBase;
-    private List<SkillSO> _selectedSkills = new List<SkillSO>();
+    [SerializeField] private List<SkillSO> _selectedSkills = new List<SkillSO>();
 
     private void Awake()
     {
@@ -35,9 +35,21 @@ public class PlayerSelector : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    public CharacterBaseType GetSelected()
+    public CharacterBaseType GetSelectedBase()
     {
         return _selectedPlayerBase;
+    }
+
+    public void AddSkill(SkillSO skill)
+    {
+        if (!_selectedSkills.Contains(skill))
+            _selectedSkills.Add(skill);
+    }
+
+    public void RemoveSkill(SkillSO skill)
+    {
+        if (_selectedSkills.Contains(skill))
+            _selectedSkills.Remove(skill);
     }
 
     public List<SkillSO> GetSelectedSkills()

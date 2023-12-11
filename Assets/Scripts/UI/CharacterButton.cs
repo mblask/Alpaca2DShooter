@@ -12,7 +12,7 @@ public class CharacterButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private Transform _lockedTextTransform;
 
     private bool _mouseOver = false;
-    private float _rotation = -0.6f;
+    private float _rotation = -120.0f;
 
     private PlayerSelector _playerSelector;
 
@@ -53,7 +53,7 @@ public class CharacterButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private void Update()
     {
         if (_mouseOver && !_locked)
-            _buttonRectTransform.Rotate(Vector3.forward, _rotation);
+            _buttonRectTransform.Rotate(Vector3.forward, _rotation * Time.deltaTime);
     }
 
     public void SelectAndStartGame()

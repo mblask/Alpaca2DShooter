@@ -78,13 +78,13 @@ public class Stat
 
     public void AddBaseMultiplier(float multiplier)
     {
-        if (multiplier != 1.0f)
+        if (multiplier != 1.0f || multiplier != 0.0f)
             _multipliers.Add(multiplier);
     }
     
     public void RemoveBaseMultiplier(float multiplier)
     {
-        if (multiplier != 1.0f)
+        if (multiplier != 1.0f || multiplier != 0.0f)
             _multipliers.Remove(multiplier);
     }
 

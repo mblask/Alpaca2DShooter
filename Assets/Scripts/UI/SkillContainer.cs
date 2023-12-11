@@ -17,7 +17,7 @@ public class SkillContainer : MonoBehaviour
         foreach (SkillSO skill in _availableSkills)
         {
             SkillButton button = Instantiate(_gameAssets.SkillButton, transform).GetComponent<SkillButton>();
-            button.SetButtonText(skill.Name);
+            button.SetupButton(skill);
         }
     }
 }
