@@ -1,5 +1,7 @@
+using AlpacaMyGames;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Terminal : Box2dCollider, IInteractable
@@ -20,6 +22,8 @@ public class Terminal : Box2dCollider, IInteractable
     private float _stopwatch = 0.0f;
 
     private bool _isInteracting = false;
+
+    private List<DataItem> _dataItems;
 
     private PlayerStats _playerStats;
     private TerminalUI _terminalUI;
@@ -163,6 +167,35 @@ public class Terminal : Box2dCollider, IInteractable
 
             hackable.TurnOnOff();
         }
+    }
+
+    public void InsertDataItem(DataItem dataItem)
+    {
+        if (_dataItems.Count > 0)
+            return;
+        
+        _dataItems.Add(dataItem);
+        PlayerInventory.DeleteItemFromInventoryStatic(dataItem);
+        Debug.Log("Data carrier inserted");
+    }
+
+    public void RemoveDataItem()
+    {
+        if (_dataItems.Count == 0)
+            return;
+
+        PlayerInventory.AddToInventoryStatic(_dataItems[0]);
+        _dataItems.Clear();
+        Debug.Log("Data carrier removed");
+    }
+
+    public void RunDataCarrier()
+    {
+        if (_dataItems.Count == 0)
+            return;
+
+        DataItem dataItem = _dataItems[0];
+        Debug.Log(dataItem.Text);
     }
 
     public void Highlight()

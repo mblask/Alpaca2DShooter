@@ -15,7 +15,7 @@ public class ItemTooltip : MonoBehaviour
         }
     }
 
-    [Range(25.0f, 100.0f)]public float ImageRotationSpeed = 50.0f;
+    private float _imageRotationSpeed = 50.0f;
 
     private Transform _container;
     private Animator _animator;
@@ -55,7 +55,7 @@ public class ItemTooltip : MonoBehaviour
 
     private void rotateTooltipImage()
     {
-        float angle = _itemImage.transform.rotation.eulerAngles.z + ImageRotationSpeed * Time.deltaTime;
+        float angle = _itemImage.transform.rotation.eulerAngles.z + _imageRotationSpeed * Time.deltaTime;
         Vector3 eulerAngles = new Vector3(0.0f, 0.0f, angle);
         _itemImage.transform.eulerAngles = eulerAngles;
     }
@@ -100,105 +100,116 @@ public class ItemTooltip : MonoBehaviour
     {
         _sb = new StringBuilder();
 
-        ConsumableItem consumable = item as ConsumableItem;
-
-        if (consumable != null)
+        switch (item)
         {
-            if (consumable.LifeRestored != Vector2.zero)
-            {
-                _sb.Append("Restores Life:");
-                _sb.AppendLine();
-                _sb.Append(consumable.LifeRestored.x.ToString() + " to " + consumable.LifeRestored.y.ToString());
-                _sb.AppendLine();
-            }
+            case ConsumableItem consumable:
+                ReadConsumableItem(consumable);
+                break;
+            case InstantaneousItem instantaneous:
+                ReadInstantaneousItem(instantaneous);
+                break;
+            case WeaponItem weaponItem:
+                ReadWeaponItem(weaponItem);
+                break;
+            case JunkItem:
+                ReadJunkItem();
+                break;
+            case DataItem:
+                ReadDataItem();
+                break;
+        }
+    }
 
-            if (consumable.StaminaRestored != Vector2.zero)
-            {
-                _sb.Append("Restores Stamina:");
-                _sb.AppendLine();
-                _sb.Append(consumable.StaminaRestored.x.ToString() + " to " + consumable.StaminaRestored.y.ToString());
-            }
-
-            if (consumable.LimbPatcher)
-            {
-                _sb.Append("Limb Patcher");
-                _sb.AppendLine();
-            }
-
-            if (consumable.LimbToughnessDuration != Vector2.zero)
-            {
-                char sign = Mathf.Sign(consumable.LimbToughnessDuration.x) > 0.0f ? '+' : '-';
-                _sb.Append("Toughness " + sign + consumable.LimbToughnessDuration.x * 100.0f + "% (" + consumable.LimbToughnessDuration.y + "s)");
-            }
-
-            return;
+    private void ReadConsumableItem(ConsumableItem consumable)
+    {
+        if (consumable.LifeRestored != Vector2.zero)
+        {
+            _sb.Append("Restores Life:");
+            _sb.AppendLine();
+            _sb.Append(consumable.LifeRestored.x.ToString() + " to " + consumable.LifeRestored.y.ToString());
+            _sb.AppendLine();
         }
 
-        InstantaneousItem instantaneous = item as InstantaneousItem;
-
-        if (instantaneous != null)
+        if (consumable.StaminaRestored != Vector2.zero)
         {
-            if (instantaneous.LifeRestored != Vector2.zero)
-            {
-                _sb.Append("Restores Life:");
-                _sb.AppendLine();
-                _sb.Append(instantaneous.LifeRestored.x.ToString() + " to " + instantaneous.LifeRestored.y.ToString());
-                _sb.AppendLine();
-            }
-
-            if (instantaneous.StaminaRestored != Vector2.zero)
-            {
-                _sb.Append("Restores Stamina:");
-                _sb.AppendLine();
-                _sb.Append(instantaneous.StaminaRestored.x.ToString() + " to " + instantaneous.StaminaRestored.y.ToString());
-            }
-
-            return;
+            _sb.Append("Restores Stamina:");
+            _sb.AppendLine();
+            _sb.Append(consumable.StaminaRestored.x.ToString() + " to " + consumable.StaminaRestored.y.ToString());
         }
 
-        WeaponItem weaponItem = item as WeaponItem;
-
-        if (weaponItem != null)
+        if (consumable.LimbPatcher)
         {
-            _sb.Append("Damage: ");
-            _sb.Append(weaponItem.WeaponDamage.x.ToString());
-            _sb.Append(" - ");
-            _sb.Append(weaponItem.WeaponDamage.y.ToString());
-
-            if (weaponItem.MagazineBullets > 0)
-            {
-                _sb.AppendLine();
-                _sb.Append("Mag. Capacity: ");
-                _sb.Append(weaponItem.MagazineBullets.ToString());
-            }
-
-            if (weaponItem.Automatic)
-            {
-                _sb.AppendLine();
-                _sb.Append("Automatic");
-            }
-
-            if (weaponItem.StrengthRequired > 0)
-            {
-                _sb.AppendLine();
-                _sb.Append("Strength: ");
-                _sb.Append(weaponItem.StrengthRequired.ToString());
-            }
-
-            requiredStats(weaponItem);
-
-            return;
+            _sb.Append("Limb Patcher");
+            _sb.AppendLine();
         }
 
-        JunkItem junkItem = item as JunkItem;
-        if (junkItem != null)
+        if (consumable.LimbToughnessDuration != Vector2.zero)
+        {
+            char sign = Mathf.Sign(consumable.LimbToughnessDuration.x) > 0.0f ? '+' : '-';
+            _sb.Append("Toughness " + sign + consumable.LimbToughnessDuration.x * 100.0f + "% (" + consumable.LimbToughnessDuration.y + "s)");
+        }
+    }
+
+    private void ReadInstantaneousItem(InstantaneousItem instantaneous)
+    {
+        if (instantaneous.LifeRestored != Vector2.zero)
+        {
+            _sb.Append("Restores Life:");
+            _sb.AppendLine();
+            _sb.Append(instantaneous.LifeRestored.x.ToString() + " to " + instantaneous.LifeRestored.y.ToString());
+            _sb.AppendLine();
+        }
+
+        if (instantaneous.StaminaRestored != Vector2.zero)
+        {
+            _sb.Append("Restores Stamina:");
+            _sb.AppendLine();
+            _sb.Append(instantaneous.StaminaRestored.x.ToString() + " to " + instantaneous.StaminaRestored.y.ToString());
+        }
+    }
+
+    private void ReadWeaponItem(WeaponItem weaponItem)
+    {
+        _sb.Append("Damage: ");
+        _sb.Append(weaponItem.WeaponDamage.x.ToString());
+        _sb.Append(" - ");
+        _sb.Append(weaponItem.WeaponDamage.y.ToString());
+
+        if (weaponItem.MagazineBullets > 0)
         {
             _sb.AppendLine();
-            _sb.AppendLine("Junk item");
-            _sb.AppendLine("Used in crafting");
-
-            return;
+            _sb.Append("Mag. Capacity: ");
+            _sb.Append(weaponItem.MagazineBullets.ToString());
         }
+
+        if (weaponItem.Automatic)
+        {
+            _sb.AppendLine();
+            _sb.Append("Automatic");
+        }
+
+        if (weaponItem.StrengthRequired > 0)
+        {
+            _sb.AppendLine();
+            _sb.Append("Strength: ");
+            _sb.Append(weaponItem.StrengthRequired.ToString());
+        }
+
+        requiredStats(weaponItem);
+    }
+
+    private void ReadJunkItem()
+    {
+        _sb.AppendLine();
+        _sb.AppendLine("Junk item");
+        _sb.AppendLine("Used in crafting");
+    }
+
+    private void ReadDataItem()
+    {
+        _sb.AppendLine();
+        _sb.AppendLine("Data item");
+        _sb.AppendLine("Can be read or\nrun on terminals");
     }
 
     private void requiredStats(WeaponItem weapon)
