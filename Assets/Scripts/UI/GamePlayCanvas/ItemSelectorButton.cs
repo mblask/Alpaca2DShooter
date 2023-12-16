@@ -18,7 +18,7 @@ public class ItemSelectorButton : MonoBehaviour
 
     private void Start()
     {
-        _button.onLeftClick = () => { _terminalUI.AddDataItem(_item); Debug.Log("Clicked"); };
+        _button.onLeftClick = () => { _terminalUI.AddDataItem(_item); };
     }
 
     public void SetItem(DataItem item)

@@ -3,10 +3,12 @@ using UnityEngine;
 public class MouseInteraction : MonoBehaviour
 {
     private PlayerWeapons _playerWeapons;
+    private PointerOver _pointerOver;
 
     private void Start()
     {
         _playerWeapons = PlayerWeapons.Instance;
+        _pointerOver = new PointerOver();
     }
 
     private void Update()
@@ -18,6 +20,9 @@ public class MouseInteraction : MonoBehaviour
     private void onLeftMouseDown()
     {
         if (!Input.GetMouseButtonDown(0))
+            return;
+
+        if (_pointerOver.OverUI())
             return;
 
         checkInteractables();

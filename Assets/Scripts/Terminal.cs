@@ -192,7 +192,6 @@ public class Terminal : Box2dCollider, IInteractable
 
         _chosenDataItem = dataItem;
         PlayerInventory.DeleteItemFromInventoryStatic(dataItem);
-        Debug.Log("Data carrier inserted");
     }
 
     public void RemoveDataItem()
@@ -202,7 +201,6 @@ public class Terminal : Box2dCollider, IInteractable
 
         PlayerInventory.AddToInventoryStatic(_chosenDataItem);
         _chosenDataItem = null;
-        Debug.Log("Data carrier removed");
     }
 
     public void RunDataCarrier()

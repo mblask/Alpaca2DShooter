@@ -22,12 +22,14 @@ public class InventoryUI : MonoBehaviour
 
         PlayerInventory.Instance.OnToggleInventoryUI += showInventory;
         PlayerInventory.Instance.OnSuccessfulAdd += UpdateItemContainer;
+        PlayerInventory.Instance.OnItemRemovedFromInventory += UpdateItemContainer;
     }
 
     private void OnDisable()
     {
         PlayerInventory.Instance.OnToggleInventoryUI -= showInventory;
         PlayerInventory.Instance.OnSuccessfulAdd -= UpdateItemContainer;
+        PlayerInventory.Instance.OnItemRemovedFromInventory -= UpdateItemContainer;
     }
 
     private void showInventory()
