@@ -23,9 +23,11 @@ public class Terminal : Box2dCollider, IInteractable
 
     private bool _isInteracting = false;
 
-    private List<DataItem> _dataItems;
+    private DataItem _chosenDataItem;
 
     private PlayerStats _playerStats;
+    private PlayerInventory _playerInventory;
+    private List<DataItem> _dataItems = new List<DataItem>();
     private TerminalUI _terminalUI;
     private AchievementManager _achievementManager;
 
@@ -38,6 +40,7 @@ public class Terminal : Box2dCollider, IInteractable
     private void Start()
     {
         _playerStats = PlayerStats.Instance;
+        _playerInventory = PlayerInventory.Instance;
         _terminalUI = TerminalUI.Instance;
         _achievementManager = AchievementManager.Instance;
         _exitPortalPosition = ExitPortalPosition.Instance;
@@ -85,6 +88,7 @@ public class Terminal : Box2dCollider, IInteractable
             _hackingInProgress = false;
             _isHacked = true;
             _achievementManager.CheckOnTerminalHacked();
+            checkForDataItems();
             openTerminal();
         }
     }
@@ -93,6 +97,18 @@ public class Terminal : Box2dCollider, IInteractable
     {
         _terminalUI.SetTerminal(this);
         _terminalUI.ActivateUI(true);
+        _terminalUI.AddDataItemsUI(_dataItems);
+    }
+
+    private void checkForDataItems()
+    {
+        List<Item> items = _playerInventory.GetItems();
+        foreach (Item item in items)
+        {
+            DataItem dataItem = item as DataItem;
+            if (dataItem != null)
+                _dataItems.Add(dataItem);
+        }
     }
 
     private bool checkPlayerTooFar()
@@ -171,30 +187,30 @@ public class Terminal : Box2dCollider, IInteractable
 
     public void InsertDataItem(DataItem dataItem)
     {
-        if (_dataItems.Count > 0)
+        if (_chosenDataItem != null)
             return;
-        
-        _dataItems.Add(dataItem);
+
+        _chosenDataItem = dataItem;
         PlayerInventory.DeleteItemFromInventoryStatic(dataItem);
         Debug.Log("Data carrier inserted");
     }
 
     public void RemoveDataItem()
     {
-        if (_dataItems.Count == 0)
+        if (_chosenDataItem == null)
             return;
 
-        PlayerInventory.AddToInventoryStatic(_dataItems[0]);
-        _dataItems.Clear();
+        PlayerInventory.AddToInventoryStatic(_chosenDataItem);
+        _chosenDataItem = null;
         Debug.Log("Data carrier removed");
     }
 
     public void RunDataCarrier()
     {
-        if (_dataItems.Count == 0)
+        if (_chosenDataItem == null)
             return;
 
-        DataItem dataItem = _dataItems[0];
+        DataItem dataItem = _chosenDataItem;
         Debug.Log(dataItem.Text);
     }
 

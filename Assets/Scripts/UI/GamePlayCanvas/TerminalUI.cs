@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TerminalUI : MonoBehaviour
@@ -12,11 +13,19 @@ public class TerminalUI : MonoBehaviour
     }
 
     private Transform _container;
+    private Transform _inventoryItemSelector;
+    private Transform _itemButtonsContainer;
+
     private AlpacaButtonUI _turnOffTrapsButton;
     private AlpacaButtonUI _showExitButton;
     private AlpacaButtonUI _switchAllegianceButton;
+    private AlpacaButtonUI _insertDriveButton;
+    private AlpacaButtonUI _runDriveButton;
 
-    private Terminal _terminal;
+    private List<DataItem> _dataItems = new List<DataItem>();
+
+    private Terminal _terminal; 
+    private GameAssets _gameAssets;
 
     private Camera _mainCamera;
 
@@ -24,17 +33,26 @@ public class TerminalUI : MonoBehaviour
     {
         _instance = this;
         _container = transform.Find("Container");
-        _turnOffTrapsButton = _container.Find("TurnOffTrapsButton").GetComponent<AlpacaButtonUI>();
-        _showExitButton = _container.Find("ShowExitButton").GetComponent<AlpacaButtonUI>();
-        _switchAllegianceButton = _container.Find("SwitchAllegianceButton").GetComponent<AlpacaButtonUI>();
+        _inventoryItemSelector = _container.Find("InventoryItemSelectorUI");
+        _itemButtonsContainer = _inventoryItemSelector.Find("ScrollView").Find("Viewport").Find("Content");
+
+        _turnOffTrapsButton = _container.Find("ButtonContainer").Find("TurnOffTrapsButton").GetComponent<AlpacaButtonUI>();
+        _showExitButton = _container.Find("ButtonContainer").Find("ShowExitButton").GetComponent<AlpacaButtonUI>();
+        _switchAllegianceButton = _container.Find("ButtonContainer").Find("SwitchAllegianceButton").GetComponent<AlpacaButtonUI>();
+        _insertDriveButton = _container.Find("ButtonContainer").Find("InsertDataCarrierButton").GetComponent<AlpacaButtonUI>();
+        //_runDriveButton = _container.Find("ButtonContainer").Find("RunDataDiscButton").GetComponent<AlpacaButtonUI>();
     }
 
     private void Start()
     {
         _mainCamera = Camera.main;
+        _gameAssets = GameAssets.Instance;
+
         _turnOffTrapsButton.onLeftClick = () => { _terminal?.TurnOnOff(); };
         _showExitButton.onLeftClick = () => { _terminal?.ShowExitPortal(); };
         _switchAllegianceButton.onLeftClick = () => { _terminal?.Hack(); };
+        _insertDriveButton.onLeftClick = () => { showExistingDataItems(); };
+        //_runDriveButton.onLeftClick = () => { _terminal?.RunDataCarrier(); };
     }
 
     private void Update()
@@ -55,9 +73,43 @@ public class TerminalUI : MonoBehaviour
         _container.gameObject.SetActive(value);
     }
 
+    public void AddDataItemsUI(List<DataItem> dataItems)
+    {
+        bool itemsExist = dataItems != null && dataItems.Count > 0;
+        _insertDriveButton.gameObject.SetActive(itemsExist);
+
+        if (!itemsExist)
+            return;
+
+        _dataItems = dataItems;
+    }
+
+    private void showExistingDataItems()
+    {
+        _inventoryItemSelector.gameObject.SetActive(true);
+
+        foreach (Transform child in _itemButtonsContainer)
+        {
+            Destroy(child.gameObject);
+        }
+        
+        foreach (DataItem item in _dataItems)
+        {
+            ItemSelectorButton button = Instantiate(_gameAssets.ItemSelectorButton, _itemButtonsContainer)
+                .GetComponent<ItemSelectorButton>();
+            button.SetItem(item);
+        }
+    }
+
     public void SetTerminal(Terminal terminal)
     {
         _terminal = terminal;
         ActivateUI(true);
+    }
+
+    public void AddDataItem(DataItem dataItem)
+    {
+        _terminal.InsertDataItem(dataItem);
+        _inventoryItemSelector.gameObject.SetActive(false);
     }
 }

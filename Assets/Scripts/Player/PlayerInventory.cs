@@ -63,6 +63,11 @@ public class PlayerInventory : MonoBehaviour, ICrafting
         return _instance.getItems();
     }
 
+    public List<Item> GetItems()
+    {
+        return _items;
+    }
+
     public void UseConsumable(ConsumableType type)
     {
         ConsumableItem consumable = GameAssets.Instance.GetConsumableByType(type);
