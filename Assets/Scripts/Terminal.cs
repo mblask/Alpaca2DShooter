@@ -1,7 +1,5 @@
-using AlpacaMyGames;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Terminal : Box2dCollider, IInteractable
@@ -124,7 +122,7 @@ public class Terminal : Box2dCollider, IInteractable
         _hackingInProgress = false;
         _terminalCanvas.Activate(false);
         FloatingTextSpawner.CreateFloatingTextStatic
-            (transform.position, "Too far from\nthe computer", Color.white, 1.0f, 8.0f, 0.5f);
+            (_playerStats.transform.position, "Too far from\nthe computer", Color.white, 1.0f, 8.0f, 0.5f);
     }
 
     public void Interact()
@@ -215,8 +213,7 @@ public class Terminal : Box2dCollider, IInteractable
     public void Highlight()
     {
         _spriteRenderer.color = Constants.HIGHLIGHT_COLOR;
-        FloatingTextSpawner.CreateFloatingTextStatic
-            (transform.position, "Terminal", Color.white, 1.0f, 8.0f, 0.5f);
+        //FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Terminal", Color.white, 1.0f, 8.0f, 0.5f);
     }
 
     public void RemoveHighlight()

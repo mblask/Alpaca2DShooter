@@ -5,9 +5,12 @@ public class MouseInteraction : MonoBehaviour
     private PlayerWeapons _playerWeapons;
     private PointerOver _pointerOver;
 
+    private InteractableTooltipUI _interactionTooltip;
+
     private void Start()
     {
         _playerWeapons = PlayerWeapons.Instance;
+        _interactionTooltip = InteractableTooltipUI.Instance;
         _pointerOver = new PointerOver();
     }
 
@@ -83,11 +86,10 @@ public class MouseInteraction : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         IInteractable interactable = collision.GetComponent<IInteractable>();
-
         if (interactable != null)
         {
             interactable.Highlight();
-            FloatingTextSpawner.CreateFloatingTextStatic(collision.transform.position, interactable.InteractableName, Color.white, destroyAfter: 1.0f, fontSize: 8, floatSpeed: 0.5f);
+            _interactionTooltip.SetTooltip(collision.transform, interactable.InteractableName);
         }
 
         PickupItem pickupItem = collision.GetComponent<PickupItem>();
@@ -102,7 +104,7 @@ public class MouseInteraction : MonoBehaviour
         if (interactable != null)
         {
             interactable.RemoveHighlight();
-            FloatingTextSpawner.RemoveLastStatic();
+            _interactionTooltip.HideTooltip();
         }
 
         PickupItem pickupItem = collision.GetComponent<PickupItem>();

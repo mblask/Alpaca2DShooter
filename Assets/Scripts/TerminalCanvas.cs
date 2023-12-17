@@ -37,7 +37,7 @@ public class TerminalCanvas : MonoBehaviour
         {
             Activate(false);
             FloatingTextSpawner.CreateFloatingTextStatic
-                (transform.position, "Cracked!\nTraps reveresed.", Color.white, 2.0f, 8, 0.8f);
+                (PlayerStats.Instance.transform.position, "Cracked!", Color.white, 2.0f, 7, 0.8f, true, FloatDirection.UpLeft);
         }
     }
 }
