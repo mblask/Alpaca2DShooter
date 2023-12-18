@@ -25,7 +25,6 @@ public class Terminal : Box2dCollider, IInteractable
 
     private PlayerStats _playerStats;
     private PlayerInventory _playerInventory;
-    private List<DataItem> _dataItems = new List<DataItem>();
     private TerminalUI _terminalUI;
     private AchievementManager _achievementManager;
 
@@ -86,7 +85,6 @@ public class Terminal : Box2dCollider, IInteractable
             _hackingInProgress = false;
             _isHacked = true;
             _achievementManager.CheckOnTerminalHacked();
-            checkForDataItems();
             openTerminal();
         }
     }
@@ -95,18 +93,22 @@ public class Terminal : Box2dCollider, IInteractable
     {
         _terminalUI.SetTerminal(this);
         _terminalUI.ActivateUI(true);
-        _terminalUI.AddDataItemsUI(_dataItems);
+        _terminalUI.InsertedDataItem(_chosenDataItem);
+        _terminalUI.AddDataItemsUI(checkForDataItems());
     }
 
-    private void checkForDataItems()
+    private List<DataItem> checkForDataItems()
     {
+        List<DataItem> dataItems = new List<DataItem>();
         List<Item> items = _playerInventory.GetItems();
         foreach (Item item in items)
         {
             DataItem dataItem = item as DataItem;
             if (dataItem != null)
-                _dataItems.Add(dataItem);
+                dataItems.Add(dataItem);
         }
+
+        return dataItems;
     }
 
     private bool checkPlayerTooFar()
@@ -213,7 +215,6 @@ public class Terminal : Box2dCollider, IInteractable
     public void Highlight()
     {
         _spriteRenderer.color = Constants.HIGHLIGHT_COLOR;
-        //FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Terminal", Color.white, 1.0f, 8.0f, 0.5f);
     }
 
     public void RemoveHighlight()

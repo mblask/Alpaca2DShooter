@@ -19,11 +19,12 @@ public class AlpacaButtonUI : MonoBehaviour, IPointerClickHandler, IPointerDownH
     private void Awake()
     {
         _image = GetComponent<Image>();
+        _defaultColor = _image.color;
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        _defaultColor = _image.color;
+        _image.color = _defaultColor;
     }
 
     public void OnPointerClick(PointerEventData eventData)

@@ -13,6 +13,7 @@ public class TerminalUI : MonoBehaviour
     }
 
     private Transform _container;
+    private Transform _buttonContainer;
     private Transform _inventoryItemSelector;
     private Transform _itemButtonsContainer;
 
@@ -34,15 +35,16 @@ public class TerminalUI : MonoBehaviour
     {
         _instance = this;
         _container = transform.Find("Container");
+        _buttonContainer = _container.Find("ButtonContainer");
         _inventoryItemSelector = _container.Find("InventoryItemSelectorUI");
         _itemButtonsContainer = _inventoryItemSelector.Find("ScrollView").Find("Viewport").Find("Content");
 
-        _turnOffTrapsButton = _container.Find("ButtonContainer").Find("TurnOffTrapsButton").GetComponent<AlpacaButtonUI>();
-        _showExitButton = _container.Find("ButtonContainer").Find("ShowExitButton").GetComponent<AlpacaButtonUI>();
-        _switchAllegianceButton = _container.Find("ButtonContainer").Find("SwitchAllegianceButton").GetComponent<AlpacaButtonUI>();
-        _insertDriveButton = _container.Find("ButtonContainer").Find("InsertDataCarrierButton").GetComponent<AlpacaButtonUI>();
-        _removeDriveButton = _container.Find("ButtonContainer").Find("RemoveDataCarrierButton").GetComponent<AlpacaButtonUI>();
-        _runDriveButton = _container.Find("ButtonContainer").Find("RunDriveButton").GetComponent<AlpacaButtonUI>();
+        _turnOffTrapsButton = _buttonContainer.Find("TurnOffTrapsButton").GetComponent<AlpacaButtonUI>();
+        _showExitButton = _buttonContainer.Find("ShowExitButton").GetComponent<AlpacaButtonUI>();
+        _switchAllegianceButton = _buttonContainer.Find("SwitchAllegianceButton").GetComponent<AlpacaButtonUI>();
+        _insertDriveButton = _buttonContainer.Find("InsertDataCarrierButton").GetComponent<AlpacaButtonUI>();
+        _removeDriveButton = _buttonContainer.Find("RemoveDataCarrierButton").GetComponent<AlpacaButtonUI>();
+        _runDriveButton = _buttonContainer.Find("RunDriveButton").GetComponent<AlpacaButtonUI>();
     }
 
     private void Start()
@@ -74,15 +76,22 @@ public class TerminalUI : MonoBehaviour
     public void ActivateUI(bool value)
     {
         _container.gameObject.SetActive(value);
+        _inventoryItemSelector.gameObject.SetActive(false);
+        _dataItems.Clear();
+    }
+
+    public void InsertedDataItem(DataItem dataItem)
+    {
+        bool dataItemAlreadyInTerminal = dataItem != null;
+
+        _insertDriveButton.gameObject.SetActive(!dataItemAlreadyInTerminal);
+        _runDriveButton.gameObject.SetActive(dataItemAlreadyInTerminal);
+        _removeDriveButton.gameObject.SetActive(dataItemAlreadyInTerminal);
     }
 
     public void AddDataItemsUI(List<DataItem> dataItems)
     {
-        bool itemsExist = dataItems != null && dataItems.Count > 0;
-        _insertDriveButton.gameObject.SetActive(itemsExist);
-        _removeDriveButton.gameObject.SetActive(!itemsExist);
-
-        if (!itemsExist)
+        if (dataItems == null || dataItems.Count == 0)
             return;
 
         _dataItems = dataItems;
@@ -115,17 +124,20 @@ public class TerminalUI : MonoBehaviour
     private void removeDataItem()
     {
         _terminal?.RemoveDataItem();
-        _insertDriveButton.gameObject.SetActive(true);
-        _removeDriveButton.gameObject.SetActive(false);
-        _runDriveButton.gameObject.SetActive(false);
+        triggerInsertRemoveButtons(true);
     }
 
     public void AddDataItem(DataItem dataItem)
     {
         _terminal?.InsertDataItem(dataItem);
-        _insertDriveButton.gameObject.SetActive(false);
-        _removeDriveButton.gameObject.SetActive(true);
-        _runDriveButton.gameObject.SetActive(true);
+        triggerInsertRemoveButtons(false);
         _inventoryItemSelector.gameObject.SetActive(false);
+    }
+
+    public void triggerInsertRemoveButtons(bool value)
+    {
+        _insertDriveButton.gameObject.SetActive(value);
+        _removeDriveButton.gameObject.SetActive(!value);
+        _runDriveButton.gameObject.SetActive(!value);
     }
 }
