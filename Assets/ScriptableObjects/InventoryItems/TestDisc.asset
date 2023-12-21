@@ -19,4 +19,5 @@ MonoBehaviour:
   PickupAudio: 7
   ComputerUsable: 1
   AudioClip: {fileID: 0}
-  Text: Hello there, general Kenobi!
+  Text: Hello there, general Kenobi! How is your day going? I am sent here to execute
+    you. You will enjoy it. Good day to you too.

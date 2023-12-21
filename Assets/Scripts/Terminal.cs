@@ -26,6 +26,7 @@ public class Terminal : Box2dCollider, IInteractable
     private PlayerStats _playerStats;
     private PlayerInventory _playerInventory;
     private TerminalUI _terminalUI;
+    private TextConsoleUI _textConsole;
     private AchievementManager _achievementManager;
 
     private void Awake()
@@ -39,6 +40,7 @@ public class Terminal : Box2dCollider, IInteractable
         _playerStats = PlayerStats.Instance;
         _playerInventory = PlayerInventory.Instance;
         _terminalUI = TerminalUI.Instance;
+        _textConsole = TextConsoleUI.Instance;
         _achievementManager = AchievementManager.Instance;
         _exitPortalPosition = ExitPortalPosition.Instance;
     }
@@ -209,6 +211,7 @@ public class Terminal : Box2dCollider, IInteractable
             return;
 
         DataItem dataItem = _chosenDataItem;
+        _textConsole.TextToWrite(dataItem.Text);
         Debug.Log(dataItem.Text);
     }
 
