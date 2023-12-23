@@ -18,7 +18,7 @@ public class TextConsoleUI : MonoBehaviour
     private void Awake()
     {
         _instance = this;
-        _textMesh = transform.Find("Text").GetComponent<TextMeshProUGUI>();
+        _textMesh = transform.Find("ScrollView").Find("Viewport").Find("Content").Find("Text").GetComponent<TextMeshProUGUI>();
     }
 
     public void TextToWrite(string text)

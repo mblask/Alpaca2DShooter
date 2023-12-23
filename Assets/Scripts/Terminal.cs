@@ -212,7 +212,6 @@ public class Terminal : Box2dCollider, IInteractable
 
         DataItem dataItem = _chosenDataItem;
         _textConsole.TextToWrite(dataItem.Text);
-        Debug.Log(dataItem.Text);
     }
 
     public void Highlight()
