@@ -84,7 +84,7 @@ public class PlayerWeapons : MonoBehaviour
         _camera = Camera.main;
         _gameManager = GameManager.Instance;
         _cameraController = CameraController.Instance;
-        _pointerOver = new PointerOver();
+        _pointerOver = PointerOver.GetInstance();
         _weaponImage = WeaponImage.Instance;
         _throwableImage = ThrowableImage.Instance;
         _ammoPanel = AmmoPanel.Instance;

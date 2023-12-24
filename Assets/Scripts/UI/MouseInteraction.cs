@@ -11,7 +11,7 @@ public class MouseInteraction : MonoBehaviour
     {
         _playerWeapons = PlayerWeapons.Instance;
         _interactionTooltip = InteractableTooltipUI.Instance;
-        _pointerOver = new PointerOver();
+        _pointerOver = PointerOver.GetInstance();
     }
 
     private void Update()
