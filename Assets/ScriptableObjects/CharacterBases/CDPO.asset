@@ -22,5 +22,6 @@ MonoBehaviour:
   Accuracy: 8
   Defense: 15
   Strength: 3
-  HackingSpeed: 3.5
+  Hacking: 3.5
   LimbToughness: 10
+  BaseStats: []

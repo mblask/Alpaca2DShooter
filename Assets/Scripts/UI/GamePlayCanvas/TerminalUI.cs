@@ -89,6 +89,20 @@ public class TerminalUI : MonoBehaviour
         _removeDriveButton.gameObject.SetActive(dataItemAlreadyInTerminal);
     }
 
+    public void UpdateButtonAvailability(float hackingSkill)
+    {
+        if (hackingSkill < 2.0f)
+        {
+            _turnOffTrapsButton?.Disabled(true);
+            _switchAllegianceButton?.Disabled(true);
+        }
+
+        if (hackingSkill < 3.0f)
+        {
+            _turnOffTrapsButton?.Disabled(true);
+        }
+    }
+
     public void AddDataItemsUI(List<DataItem> dataItems)
     {
         if (dataItems == null || dataItems.Count == 0)

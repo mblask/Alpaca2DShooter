@@ -18,7 +18,6 @@ public class TextConsoleUI : MonoBehaviour
     private Animator _animator;
 
     private bool _isActive = false;
-    private bool _connectedToTerminal = false;
     private TextMeshProUGUI _textMesh;
     private string _completeTextToWrite;
     private string[] _textParagraphs;

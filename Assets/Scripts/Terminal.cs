@@ -96,6 +96,7 @@ public class Terminal : Box2dCollider, IInteractable
     {
         _terminalUI.SetTerminal(this);
         _terminalUI.ActivateUI(true);
+        _terminalUI.UpdateButtonAvailability(_playerStats.Hacking.GetCurrentValue());
         _terminalUI.InsertedDataItem(_chosenDataItem);
         _terminalUI.AddDataItemsUI(checkForDataItems());
     }
@@ -152,7 +153,7 @@ public class Terminal : Box2dCollider, IInteractable
             return;
 
         _hackingInProgress = true;
-        _hackingSpeed = _playerStats.HackingSpeed.GetFinalValue();
+        _hackingSpeed = _playerStats.Hacking.GetFinalValue();
         _hackables.AddRange
             (transform.parent?.GetComponentsInChildren<Hackable>() ?? new Hackable[0]);
         _hackables.AddRange

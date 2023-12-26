@@ -17,7 +17,7 @@ public class CharacterBaseScriptable : ScriptableObject
     public float Accuracy;
     public float Defense;
     public int Strength;
-    public float HackingSpeed;
+    public float Hacking;
     public float LimbToughness;
 
     [Header("Stats list")]

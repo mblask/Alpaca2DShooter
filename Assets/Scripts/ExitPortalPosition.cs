@@ -52,6 +52,12 @@ public class ExitPortalPosition : MonoBehaviour
         if (exitPortalTransform == null)
             return;
 
+        if (_spriteRenderer.enabled)
+        {
+            _spriteRenderer.enabled = false;
+            return;
+        }
+
         _spriteRenderer.enabled = true;
         _exitPortal = exitPortalTransform;
     }

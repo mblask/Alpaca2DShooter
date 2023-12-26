@@ -61,7 +61,7 @@ public class SkillManager : MonoBehaviour
             case AchievementType.Sniper:
                 return _gameAssets.GetSkillByStatType(StatType.Accuracy);
             case AchievementType.Hacker:
-                return _gameAssets.GetSkillByStatType(StatType.HackingSpeed);
+                return _gameAssets.GetSkillByStatType(StatType.Hacking);
             default:
                 return null;
         }

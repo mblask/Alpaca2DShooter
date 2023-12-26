@@ -28,7 +28,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
     public Stat PlayerDefense;
     public Stat PlayerStrength;
     public Stat LimbToughness;
-    public Stat HackingSpeed;
+    public Stat Hacking;
     public Vector2 PlayerDamage = new Vector2();
     
     private List<StatModifyingData> _injuries = new List<StatModifyingData>();
@@ -358,8 +358,8 @@ public class PlayerStats : MonoBehaviour, IDamagable
                 return PlayerSpeed;
             case StatType.Strength:
                 return PlayerStrength;
-            case StatType.HackingSpeed:
-                return HackingSpeed;
+            case StatType.Hacking:
+                return Hacking;
             case StatType.LimbToughness:
                 return LimbToughness;
             default:

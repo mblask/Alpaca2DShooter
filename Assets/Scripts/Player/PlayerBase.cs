@@ -64,7 +64,7 @@ public class PlayerBase : MonoBehaviour
         _playerStats.PlayerStamina.SetBaseValue(characterBase.Stamina);
         _playerStats.PlayerDefense.SetBaseValue(characterBase.Defense);
         _playerStats.PlayerStrength.SetBaseValue(characterBase.Strength);
-        _playerStats.HackingSpeed.SetBaseValue(characterBase.HackingSpeed);
+        _playerStats.Hacking.SetBaseValue(characterBase.Hacking);
         _playerStats.LimbToughness.SetBaseValue(characterBase.LimbToughness);
 
         foreach (BaseStat stat in characterBase.BaseStats)
@@ -111,8 +111,8 @@ public class PlayerBase : MonoBehaviour
                 case StatType.LimbToughness:
                     UpdateStat(_playerStats.LimbToughness, skill);
                     break;
-                case StatType.HackingSpeed:
-                    UpdateStat(_playerStats.HackingSpeed, skill);
+                case StatType.Hacking:
+                    UpdateStat(_playerStats.Hacking, skill);
                     break;
                 default:
                     break;

@@ -8,5 +8,5 @@ public enum StatType
     Speed,
     Strength,
     LimbToughness,
-    HackingSpeed
+    Hacking
 }
