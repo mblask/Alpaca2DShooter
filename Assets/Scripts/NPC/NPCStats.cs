@@ -57,7 +57,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         if (!_enemyType.Equals(NPCEnemyType.Boss))
             return;
 
-        //health, speed, accuracy multipliers
+        //health, accuracy multipliers
         float healthMultiplier = 8.0f;
         float accuracyMultiplier = 3.0f;
 
@@ -150,12 +150,12 @@ public class NPCStats : MonoBehaviour, IDamagable
 
     private void die()
     {
-        if (!_isDead)
-        {
-            _isDead = true;
-            _gameManager.IncrementEnemiesKilled();
-            _itemSpawner.SpawnRandomItemAt(transform.position);
-            Destroy(gameObject);
-        }
+        if (_isDead)
+            return;
+        
+        _isDead = true;
+        _gameManager.IncrementEnemiesKilled();
+        _itemSpawner.SpawnRandomItemAt(transform.position);
+        Destroy(gameObject);
     }
 }

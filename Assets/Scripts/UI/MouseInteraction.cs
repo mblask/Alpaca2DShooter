@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class MouseInteraction : MonoBehaviour
@@ -25,6 +26,9 @@ public class MouseInteraction : MonoBehaviour
         if (!Input.GetMouseButtonDown(0))
             return;
 
+        if (_playerWeapons == null)
+            return;
+
         if (_pointerOver.OverUI())
             return;
 
@@ -37,12 +41,18 @@ public class MouseInteraction : MonoBehaviour
         if (!Input.GetMouseButtonUp(0))
             return;
 
+        if (_playerWeapons == null)
+            return;
+
         _playerWeapons.LeftClickUp();
         _playerWeapons.EnableShooting(true);
     }
 
     private void checkInteractables()
     {
+        if (_playerWeapons == null)
+            return;
+
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 0.1f);
         foreach (Collider2D collider in hits)
         {
@@ -64,6 +74,9 @@ public class MouseInteraction : MonoBehaviour
 
     private void colliderClose(Collider2D collider)
     {
+        if (_playerWeapons == null)
+            return;
+
         _playerWeapons.EnableShooting(false);
 
         if (collider.GetComponent<NPC_AI>() != null)
@@ -72,6 +85,9 @@ public class MouseInteraction : MonoBehaviour
 
     private void colliderFar(Collider2D collider)
     {
+        if (_playerWeapons == null)
+            return;
+
         _playerWeapons.EnableShooting(false);
 
         if (collider.GetComponent<Box>() != null)

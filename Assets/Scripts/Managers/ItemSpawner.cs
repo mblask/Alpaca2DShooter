@@ -16,9 +16,9 @@ public class ItemSpawner : MonoBehaviour
 
     [Range(0.0f, 100.0f)] public float EnemyDropRate = 25.0f;
 
+    [Header("Droppable items")]
     [SerializeField] private List<Item> _availableItems = new List<Item>();
-    private List<Transform> _spawnedArtefacts = new List<Transform>();
-
+    [SerializeField] private List<Item> _bossDrops = new List<Item>();
     private List<Item> _itemPool = new List<Item>();
 
     private GameAssets _gameAssets;
@@ -40,11 +40,11 @@ public class ItemSpawner : MonoBehaviour
 
         switch (item)
         {
-            case InventoryItem inventoryItem:
+            case InventoryItem:
                 spawnedItem.GetComponent<RotateObject>().RotationSpeed = 0.0f;
                 spawnedItem.GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>().intensity = 0.0f;
                 break;
-            case NonInventoryItem nonInventoryItem:
+            case NonInventoryItem:
                 spawnedItem.GetComponent<SpriteRenderer>().color = (item as NonInventoryItem).Color;
                 spawnedItem.GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>().color = (item as NonInventoryItem).Color;
 
@@ -76,11 +76,19 @@ public class ItemSpawner : MonoBehaviour
         return spawnedItem;
     }
 
-    private void generateItemPool()
+    private void generateItemPool(bool bossDrop = false)
     {
         float randomDropChance = Random.Range(0.0f, 100.0f);
 
         foreach (Item item in _availableItems)
+            if (item != null)
+                if (item.ChanceToDrop > randomDropChance)
+                    _itemPool.Add(item);
+
+        if (!bossDrop)
+            return;
+
+        foreach (Item item in _bossDrops)
             if (item != null)
                 if (item.ChanceToDrop > randomDropChance)
                     _itemPool.Add(item);
@@ -91,12 +99,12 @@ public class ItemSpawner : MonoBehaviour
         _itemPool.Clear();
     }
 
-    public void SpawnRandomItemAt(Vector3 position)
+    public void SpawnRandomItemAt(Vector3 position, bool bossDrop = false)
     {
-        if (!shouldDropItem())
+        if (!shouldDropItem() || bossDrop)
             return;
 
-        generateItemPool();
+        generateItemPool(bossDrop);
 
         if (_itemPool.Count > 0)
         {

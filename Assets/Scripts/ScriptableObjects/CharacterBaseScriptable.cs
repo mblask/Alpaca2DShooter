@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,11 +21,4 @@ public class CharacterBaseScriptable : ScriptableObject
 
     [Header("Stats list")]
     public List<BaseStat> BaseStats = new List<BaseStat>();
-}
-
-[Serializable]
-public class BaseStat
-{
-    public StatType Type;
-    public float Value;
 }

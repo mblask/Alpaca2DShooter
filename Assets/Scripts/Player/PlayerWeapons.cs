@@ -481,7 +481,6 @@ public class PlayerWeapons : MonoBehaviour
     private Vector2 shootingDirection(Vector3 targetPosition)
     {
         float distanceFromShootingSpot = ((Vector2)targetPosition - (Vector2)_shootingSpot.position).magnitude;
-
         float distanceFromGameObject = ((Vector2)targetPosition - (Vector2)transform.position).magnitude;
 
         if (distanceFromGameObject < _nonShootingDistance)

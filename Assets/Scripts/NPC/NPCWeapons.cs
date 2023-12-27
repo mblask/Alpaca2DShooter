@@ -1,12 +1,11 @@
 using AlpacaMyGames;
-using System.Collections;
 using UnityEngine;
 
 public class NPCWeapons : MonoBehaviour
 {
     private Transform _shootingSpot;
     private Animator _animator;
-    private NPC_AI _npcAI2;
+    private NPC_AI _npcAI;
 
     private string _removeWeaponTriggerName = "RemoveWeapon";
 
@@ -15,7 +14,8 @@ public class NPCWeapons : MonoBehaviour
     private float _timer = 0.0f;
     private float _autoWeaponTimer = 0.0f;
     private Vector2 _enemyShootingInterval = new Vector2(0.2f, 0.6f);
-    private bool _autoShootingCoroutineRunning = false;
+    private bool _autoShooting = false;
+    private float _autoShootingTimer = 0.0f;
 
     [SerializeField] private ThrowableItem _throwable;
 
@@ -34,7 +34,7 @@ public class NPCWeapons : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _shootingSpot = transform.Find("ShootingSpot");
-        _npcAI2 = GetComponent<NPC_AI>();
+        _npcAI = GetComponent<NPC_AI>();
     }
 
     private void Start()
@@ -44,12 +44,17 @@ public class NPCWeapons : MonoBehaviour
         chooseEnemysWeapon();
     }
 
+    private void Update()
+    {
+        autoShootingRoutine();
+    }
+
     private void chooseEnemysWeapon()
     {
         if (GameAssets.Instance == null)
             return;
 
-        int randomWeaponIndex = UnityEngine.Random.Range(0, 12);
+        int randomWeaponIndex = Random.Range(0, 12);
 
         if (randomWeaponIndex < 4)
         {
@@ -92,12 +97,11 @@ public class NPCWeapons : MonoBehaviour
 
         if (_shootTarget == null)
         {
-            StopCoroutine("AutoShooting");
+            _autoShooting = false;
             return;
         }
 
-        //if (_npcAI.ObstaclesInTheWay(_shootTarget.position))
-        if (_npcAI2.ObstaclesInRaycast(_shootTarget.position))
+        if (_npcAI.ObstaclesInRaycast(_shootTarget.position))
             return;
 
         _timer -= Time.deltaTime;
@@ -108,17 +112,15 @@ public class NPCWeapons : MonoBehaviour
             {
                 if (_autoWeaponTimer < 0.0f)
                 {
-                    if (!_autoShootingCoroutineRunning)
+                    if (!_autoShooting)
                     {
                         //Start automatic shooting
-                        _autoShootingCoroutineRunning = true;
-                        StartCoroutine(nameof(AutoShooting));
+                        _autoShooting = true;
                     }
                     else
                     {
                         //Stop automatic shooting
-                        StopCoroutine(nameof(AutoShooting));
-                        _autoShootingCoroutineRunning = false;
+                        _autoShooting = false;
                     }
 
                     //When either started or stopped auto shooting, reset the timer
@@ -163,16 +165,14 @@ public class NPCWeapons : MonoBehaviour
     public void StopAttack()
     {
         _shootTarget = null;
-        StopCoroutine(nameof(AutoShooting));
-        _autoShootingCoroutineRunning = false;
+        _autoShooting = false;
     }
 
     public void ThrowThrowable(Transform target)
     {
         _shootTarget = target;
 
-        //if (_npcAI.ObstaclesInTheWay(_shootTarget.position))
-        if (_npcAI2.ObstaclesInRaycast(_shootTarget.position))
+        if (_npcAI.ObstaclesInRaycast(_shootTarget.position))
             return;
 
         Grenade grenade =
@@ -209,14 +209,17 @@ public class NPCWeapons : MonoBehaviour
         _audioManager.PlayClip(_selectedWeapon.WeaponShootAudio);
     }
 
-    public IEnumerator AutoShooting()
+    private void autoShootingRoutine()
     {
-        while (true)
-        {
-            shoot();
+        if (!_autoShooting)
+            return;
 
-            yield return new WaitForSeconds(_selectedWeapon.ShootInterval);
-        }
+        _autoShootingTimer -= Time.deltaTime;
+        if (_autoShootingTimer > 0.0f)
+            return;
+
+        shoot();
+        _autoShootingTimer = _selectedWeapon.ShootInterval;
     }
 
     private Vector2 shootingDirection(Vector3 target)

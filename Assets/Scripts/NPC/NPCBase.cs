@@ -1,5 +1,6 @@
 using UnityEngine;
 using AlpacaMyGames;
+using System.Collections.Generic;
 
 public class NPCBase : MonoBehaviour
 {
@@ -45,13 +46,13 @@ public class NPCBase : MonoBehaviour
 
     private CharacterBaseScriptable getRandomCharacterBaseScriptable()
     {
-        CharacterBaseScriptable characterBase;
+        CharacterBaseScriptable playerBase = PlayerBase.Instance.GetCharacterBaseScriptable();
+        List<CharacterBaseScriptable> availableBases = new List<CharacterBaseScriptable>();
+        foreach (CharacterBaseScriptable scriptable in _gameAssets.CharacterBaseScriptableList)
+            if (scriptable.CharacterType != playerBase.CharacterType)
+                availableBases.Add(scriptable);
 
-        do
-        {
-            characterBase = _gameAssets.CharacterBaseScriptableList.GetRandomElement();
-        } while (characterBase.Equals(PlayerBase.Instance.GetCharacterBaseScriptable()));
-
+        CharacterBaseScriptable characterBase = availableBases.GetRandomElement();
         return characterBase;
     }
 
