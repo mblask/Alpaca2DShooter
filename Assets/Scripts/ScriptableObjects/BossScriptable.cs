@@ -6,6 +6,5 @@ public class BossScriptable : CharacterBaseScriptable
     [Header("Boss settings")]
     public string Name;
     public int Level;
-    public float HealthMultiplier;
-    public float SpeedMultiplier;
+    public WeaponItem WeaponOfChoice;
 }

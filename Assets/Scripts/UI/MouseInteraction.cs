@@ -91,12 +91,19 @@ public class MouseInteraction : MonoBehaviour
         _playerWeapons.EnableShooting(false);
 
         if (collider.GetComponent<Box>() != null)
+        {
             _playerWeapons.EnableShooting(true);
+            return;
+        }
 
         if (collider.GetComponent<NPC_AI>() != null)
+        {
             _playerWeapons.EnableShooting(true);
+            return;
+        }
 
-        FloatingTextSpawner.CreateFloatingTextStatic(_playerWeapons.transform.position, "Too far away!", Color.white);
+        FloatingTextSpawner.CreateFloatingTextStatic
+            (_playerWeapons.transform.position, "Too far away!", Color.white);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

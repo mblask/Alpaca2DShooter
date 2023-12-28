@@ -3,11 +3,6 @@ using UnityEngine;
 
 public class NPCStats : MonoBehaviour, IDamagable
 {
-    [SerializeField] private NPCEnemyType _enemyType;
-    public NPCEnemyType EnemyType => _enemyType;
-    [SerializeField] private int _bossId;
-    public int BossId => _bossId;
-
     [Header("Enemy stats")]
     public Stat EnemyHealth;
     public Stat EnemySpeed;
@@ -52,20 +47,13 @@ public class NPCStats : MonoBehaviour, IDamagable
         _enemyHealthCanvas.SetPosition(this.transform);
     }
 
-    public void ModifyStats()
+    public void InitializeStats(CharacterBaseScriptable baseScriptable)
     {
-        if (!_enemyType.Equals(NPCEnemyType.Boss))
-            return;
-
-        //health, accuracy multipliers
-        float healthMultiplier = 8.0f;
-        float accuracyMultiplier = 3.0f;
-
-        EnemyHealth.AddBaseMultiplier(healthMultiplier);
-        EnemyHealth.SetCurrentToFinalValue();
-        _healthRegeneration = 1.0f;
-        EnemyAccuracy.AddBaseMultiplier(accuracyMultiplier);
-        EnemyAccuracy.SetCurrentToFinalValue();
+        float npcHealthModifier = 0.3f;
+        EnemySpeed.SetBaseValue(baseScriptable.MovementSpeed);
+        EnemyAccuracy.SetBaseValue(baseScriptable.Accuracy);
+        EnemyHealth.SetBaseValue(baseScriptable.Health * npcHealthModifier);
+        EnemyDefense.SetBaseValue(baseScriptable.Defense);
     }
 
     private void regenerateHealth(float value)

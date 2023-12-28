@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdb9888ca3cb0bc468afffc662a0faf2, type: 3}
+  m_Name: L3TheresaM
+  m_EditorClassIdentifier: 
+  CharacterType: 8
+  CharacterAOC: {fileID: 22100000, guid: 2c87d373423663f46a30afb601ed7185, type: 2}
+  ScoreToUnlock: 0
+  Health: 800
+  HealthModifier: 1
+  Stamina: 100
+  MovementSpeed: 3.5
+  Accuracy: 3
+  Defense: 10
+  Strength: 3
+  Hacking: 0
+  LimbToughness: 20
+  BaseStats: []
+  Name: Theresa M.
+  Level: 3
+  WeaponOfChoice: {fileID: 11400000, guid: 27da57185e6a67d4d9732d5ab8efa4eb, type: 2}

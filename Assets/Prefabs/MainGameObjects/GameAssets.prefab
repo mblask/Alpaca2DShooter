@@ -44,9 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6eb1684c6366e554991647db792e84a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BossTransforms:
-  - {fileID: 8874459827295818493, guid: 00436e50d1abf6948aaf6150d38bcacb, type: 3}
-  - {fileID: 8874459827295818493, guid: 0514b1d798f0de340b2eaa5682d54a3b, type: 3}
+  BossTransforms: []
   WoundsTextObject: {fileID: 1717593013482268369, guid: 3d5f70199d20a4c4abe31b3ec58164d7,
     type: 3}
   HeadshotPostProcessing: {fileID: 1595008553273350601, guid: dbdb2c719e4938b4ca544c79df83c4bf,
@@ -119,5 +117,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b0948f73513965f4ab42da506bb57951, type: 2}
   - {fileID: 11400000, guid: 783c40fd9c053dc4cad5e76df19af9e0, type: 2}
   - {fileID: 11400000, guid: 4b4cc5d02a272174ba947d9bf685defc, type: 2}
+  BossScriptableList:
+  - {fileID: 11400000, guid: 71200c8f357bc534ab7459ab4d12e05e, type: 2}
+  - {fileID: 11400000, guid: ae92798a10a44554591d30063c470c31, type: 2}
+  - {fileID: 11400000, guid: a8f1652e4d17e4d4fabe63356f177c9a, type: 2}
+  - {fileID: 11400000, guid: e9b231f049cf93c43a28f9c1a83260d0, type: 2}
+  - {fileID: 11400000, guid: 44262892fa8352e44a217ca6f6c73ee6, type: 2}
+  - {fileID: 11400000, guid: 7691a1ffe7a88ed44b35f7a6e0f03edf, type: 2}
   MouseCursorObject: {fileID: 1834719948709531579, guid: f9484b6522b118c429f8b3f00542c74e,
     type: 3}

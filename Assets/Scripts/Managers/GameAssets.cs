@@ -13,9 +13,6 @@ public class GameAssets : MonoBehaviour
         }
     }
 
-    [Header("Bosses")]
-    public List<Transform> BossTransforms;
-
     [Header("UI Prefabs")]
     public Transform WoundsTextObject;
     public Transform HeadshotPostProcessing;
@@ -66,6 +63,9 @@ public class GameAssets : MonoBehaviour
     [Header("Character Base List")]
     public List<CharacterBaseScriptable> CharacterBaseScriptableList;
 
+    [Header("Boss Base List")]
+    public List<BossScriptable> BossScriptableList;
+
     [Header("Mouse cursor")]
     public Transform MouseCursorObject;
 
@@ -77,13 +77,6 @@ public class GameAssets : MonoBehaviour
     public CharacterBaseScriptable GetBaseScriptabeByType(CharacterBaseType type)
     {
         return CharacterBaseScriptableList.Find(baseType => baseType.CharacterType.Equals(type));
-    }
-
-    public Transform GetBossById(int id)
-    {
-        return BossTransforms
-            .Where(transform => transform.GetComponent<NPCStats>().BossId == id)
-            .FirstOrDefault();
     }
 
     public SkillSO GetSkillByStatType(StatType type)

@@ -259,13 +259,13 @@ MonoBehaviour:
   PlayerStrength:
     _statType: 6
     _currentValue: 0
-  PlayerDamage: {x: 0, y: 0}
   LimbToughness:
     _statType: 7
     _currentValue: 0
-  HackingSpeed:
-    _statType: 8
+  Hacking:
+    _statType: 0
     _currentValue: 0
+  PlayerDamage: {x: 0, y: 0}
   _staminaTriggerThreshold: 0.1
 --- !u!114 &8196825197066008497
 MonoBehaviour:

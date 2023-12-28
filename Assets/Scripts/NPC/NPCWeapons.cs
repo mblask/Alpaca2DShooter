@@ -49,6 +49,17 @@ public class NPCWeapons : MonoBehaviour
         autoShootingRoutine();
     }
 
+    public void InitializeBossWeapon(WeaponItem weaponOfChoice)
+    {
+        int chanceForWeaponOfChoice = 75;
+        bool randomChance = Utilities.ChanceFunc(chanceForWeaponOfChoice);
+
+        if (randomChance)
+            _selectedWeapon = weaponOfChoice;
+        else
+            chooseEnemysWeapon();
+    }
+
     private void chooseEnemysWeapon()
     {
         if (GameAssets.Instance == null)

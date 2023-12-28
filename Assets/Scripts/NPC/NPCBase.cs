@@ -1,11 +1,18 @@
 using UnityEngine;
 using AlpacaMyGames;
 using System.Collections.Generic;
+using System.Linq;
 
 public class NPCBase : MonoBehaviour
 {
+    [SerializeField] private NPCEnemyType _enemyType;
+    public NPCEnemyType EnemyType => _enemyType;
+    [SerializeField] private int _bossLevel;
+    public int BossLevel => _bossLevel;
+
     private Animator _animator;
-    private NPCStats _enemyStats;
+    private NPCStats _npcStats;
+    private NPCWeapons _npcWeapons;
 
     private CharacterBaseScriptable _npcCharacterBase;
 
@@ -14,34 +21,48 @@ public class NPCBase : MonoBehaviour
     private void Awake()
     {
         _animator = GetComponent<Animator>();
-        _enemyStats = GetComponent<NPCStats>();
+        _npcStats = GetComponent<NPCStats>();
+        _npcWeapons = GetComponent<NPCWeapons>();
     }
 
     private void Start()
     {
+        if (_enemyType == NPCEnemyType.Boss)
+            return;
+        
         _gameAssets = GameAssets.Instance;
+        setCharacterBase();
+    }
 
+    public void SetBossLevel(int level)
+    {
+        _bossLevel = level;
+        _gameAssets = GameAssets.Instance;
         setCharacterBase();
     }
 
     private void setCharacterBase()
     {
-        _npcCharacterBase = getRandomCharacterBaseScriptable();
-
-        if (_npcCharacterBase == null)
+        switch (_enemyType)
         {
-            Debug.LogError("There are no scriptable character bases!");
-            return;
+            case NPCEnemyType.Normal:
+                _npcCharacterBase = getRandomCharacterBaseScriptable();
+                if (_npcCharacterBase == null)
+                    Debug.LogError("There are no scriptable character bases!");
+                break;
+            case NPCEnemyType.Boss:
+                BossScriptable bossScriptable = _gameAssets.BossScriptableList
+                    .Where(boss => boss.Level == _bossLevel)
+                    .ToList().GetRandomElement();
+                if (bossScriptable == null)
+                    Debug.LogError("There are no scriptable character bases!");
+                _npcWeapons.InitializeBossWeapon(bossScriptable.WeaponOfChoice);
+                _npcCharacterBase = bossScriptable;
+                break;
         }
 
-        float npcHealthModifier = 0.3f;
-
         _animator.runtimeAnimatorController = _npcCharacterBase.CharacterAOC;
-        _enemyStats.EnemySpeed.SetBaseValue(_npcCharacterBase.MovementSpeed);
-        _enemyStats.EnemyAccuracy.SetBaseValue(_npcCharacterBase.Accuracy);
-        _enemyStats.EnemyHealth.SetBaseValue(_npcCharacterBase.Health * npcHealthModifier);
-        _enemyStats.EnemyDefense.SetBaseValue(_npcCharacterBase.Defense);
-        _enemyStats.ModifyStats();
+        _npcStats.InitializeStats(_npcCharacterBase);
     }
 
     private CharacterBaseScriptable getRandomCharacterBaseScriptable()

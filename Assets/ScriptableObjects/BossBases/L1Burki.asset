@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdb9888ca3cb0bc468afffc662a0faf2, type: 3}
+  m_Name: L1Burki
+  m_EditorClassIdentifier: 
+  CharacterType: 3
+  CharacterAOC: {fileID: 22100000, guid: d679b3bd68fd73047abca3f541a0381e, type: 2}
+  ScoreToUnlock: 0
+  Health: 500
+  HealthModifier: 1
+  Stamina: 100
+  MovementSpeed: 4
+  Accuracy: 4
+  Defense: 15
+  Strength: 3
+  Hacking: 0
+  LimbToughness: 20
+  BaseStats: []
+  Name: Burki
+  Level: 1
+  WeaponOfChoice: {fileID: 11400000, guid: 347dff94e829f684dbc2ea07a9ffb197, type: 2}

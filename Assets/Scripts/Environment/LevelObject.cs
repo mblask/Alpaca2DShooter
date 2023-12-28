@@ -183,8 +183,10 @@ public class LevelObject : MonoBehaviour
                 if (!spawnPoint.IsActive())
                     continue;
 
-                Transform boss = GameAssets.Instance.GetBossById(bossLevel);
-                Instantiate(boss, spawnPoint.transform.position, Quaternion.identity, _npcContainer);
+                Transform bossTransform = Instantiate
+                    (GameAssets.Instance.NPCBossPrefab, spawnPoint.transform.position, Quaternion.identity, _npcContainer);
+                NPCBase bossBase = bossTransform.GetComponent<NPCBase>();
+                bossBase.SetBossLevel(bossLevel);
                 _bossSpawned = true;
             }
         }
