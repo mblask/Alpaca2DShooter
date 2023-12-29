@@ -1,4 +1,6 @@
+using AlpacaMyGames;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class NPCStats : MonoBehaviour, IDamagable
@@ -8,7 +10,9 @@ public class NPCStats : MonoBehaviour, IDamagable
     public Stat EnemySpeed;
     public Stat EnemyAccuracy;
     public Stat EnemyDefense;
+    public Stat EnemyLimbToughness;
 
+    private List<StatModifyingData> _wounds = new List<StatModifyingData>();
     private float _healthRegeneration;
 
     private GameAssets _gameAssets;
@@ -39,6 +43,7 @@ public class NPCStats : MonoBehaviour, IDamagable
 
     private void Update()
     {
+        processWounds();
         regenerateHealth(_healthRegeneration);
     }
 
@@ -54,6 +59,81 @@ public class NPCStats : MonoBehaviour, IDamagable
         EnemyAccuracy.SetBaseValue(baseScriptable.Accuracy);
         EnemyHealth.SetBaseValue(baseScriptable.Health * npcHealthModifier);
         EnemyDefense.SetBaseValue(baseScriptable.Defense);
+        EnemyLimbToughness.SetBaseValue(baseScriptable.LimbToughness);
+    }
+
+    private void processWounds()
+    {
+        if (!_npcBase.EnemyType.Equals(NPCEnemyType.Boss))
+            return;
+
+        if (_wounds.Count == 0)
+            return;
+
+        for (int i = _wounds.Count - 1; i >= 0; i--)
+        {
+            StatModifyingData wound = _wounds[i];
+            wound.Duration -= Time.deltaTime;
+            if (wound.Duration > 0)
+                continue;
+
+            Stat enemyStat = getStatByType(wound.StatAffected);
+            enemyStat.RemoveBaseMultiplier(wound.StatMultiplier);
+            enemyStat.RemoveModifier(wound.StatModifier);
+            _wounds.Remove(wound);
+        }
+    }
+
+    private void rollWoundsDice()
+    {
+        List<StatModifyingData> injuryPool = new List<StatModifyingData>();
+        rollLegsInjury(injuryPool);
+        //add other rolls - arms, head, etc.
+
+        if (injuryPool.Count == 0)
+            return;
+
+        StatModifyingData randomPick = injuryPool.GetRandomElement();
+        FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Critical hit", Color.red);
+
+        _wounds.Add(randomPick);
+        updateStatsWithWounds();
+    }
+
+    private void rollLegsInjury(List<StatModifyingData> injuryPool)
+    {
+        if (EnemySpeed.IsHandicaped())
+            return;
+
+        float legsWoundedChance = 2.0f;
+        if (!Utilities.ChanceFunc(legsWoundedChance))
+            return;
+
+        float legsWoundedDuration = 10.0f;
+        StatModifyingData crippleLegs = new StatModifyingData
+        {
+            StatAffected = StatType.Speed,
+            Duration = legsWoundedDuration,
+            IsInjury = true,
+            StatHandicaped = true,
+            StatMultiplier = 0.5f,
+        };
+
+        injuryPool.Add(crippleLegs);
+    }
+
+    private void updateStatsWithWounds()
+    {
+        foreach (StatModifyingData wound in _wounds)
+        {
+            Stat enemyStat = getStatByType(wound.StatAffected);
+            if (enemyStat.IsHandicaped())
+                continue;
+
+            enemyStat.SetHandicaped(wound.StatHandicaped);
+            enemyStat.AddBaseMultiplier(wound.StatMultiplier);
+            enemyStat.AddModifier(wound.StatModifier);
+        }
     }
 
     private void regenerateHealth(float value)
@@ -90,6 +170,9 @@ public class NPCStats : MonoBehaviour, IDamagable
             bloodPSMain.startColor = robotBloodColor;
             bloodSR.color = robotBloodColor;
         }
+
+        if (_npcBase.EnemyType.Equals(NPCEnemyType.Boss))
+            rollWoundsDice();
 
         _enemyHealthCanvas.ActivateHealthSlider();
 
@@ -145,5 +228,22 @@ public class NPCStats : MonoBehaviour, IDamagable
         _gameManager.IncrementEnemiesKilled();
         _itemSpawner.SpawnRandomItemAt(transform.position);
         Destroy(gameObject);
+    }
+
+    private Stat getStatByType(StatType type)
+    {
+        switch (type)
+        {
+            case StatType.Health:
+                return EnemyHealth;
+            case StatType.Accuracy:
+                return EnemyAccuracy;
+            case StatType.Speed:
+                return EnemySpeed;
+            case StatType.LimbToughness:
+                return EnemyLimbToughness;
+            default:
+                return null;
+        }
     }
 }
