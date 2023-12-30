@@ -60,6 +60,9 @@ public class TextConsoleUI : MonoBehaviour
 
     private void closeUiOnInput()
     {
+        if (!_isActive)
+            return;
+
         bool clickAndClose = Input.GetMouseButtonUp(0) && !_pointerOver.OverUI();
         bool escapeClose = Input.GetKeyUp(KeyCode.Escape);
 

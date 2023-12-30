@@ -204,6 +204,7 @@ public class Terminal : Box2dCollider, IInteractable
             return;
 
         PlayerInventory.AddToInventoryStatic(_chosenDataItem);
+        _textConsoleUI.CloseUI(false);
         _chosenDataItem = null;
     }
 
@@ -212,8 +213,7 @@ public class Terminal : Box2dCollider, IInteractable
         if (_chosenDataItem == null)
             return;
 
-        DataItem dataItem = _chosenDataItem;
-        _textConsoleUI.TextToWrite(dataItem.Text);
+        _textConsoleUI.TextToWrite(_chosenDataItem.Text);
     }
 
     public void Highlight()

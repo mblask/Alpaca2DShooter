@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd3c359414ff13542bc50d3936beed10, type: 3}
   m_Name: LarryDisc
   m_EditorClassIdentifier: 
-  ItemName: Disc
+  ItemName: Larry
   ItemSprite: {fileID: 21300000, guid: 8a5eaaec8ea025d48a4aa265c9f33953, type: 3}
   ChanceToDrop: 5
   Color: {r: 1, g: 1, b: 1, a: 1}
