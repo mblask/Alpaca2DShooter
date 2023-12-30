@@ -44,7 +44,10 @@ public class InventoryUI : MonoBehaviour
     public void UpdateItemContainer()
     {
         if (!_container.gameObject.activeSelf)
+        {
+            ItemTooltip.RemoveTooltipStatic();
             return;
+        }
 
         if (_itemSlotContainer.childCount > 0)
         {

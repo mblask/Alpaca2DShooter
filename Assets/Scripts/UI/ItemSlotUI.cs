@@ -6,20 +6,34 @@ public class ItemSlotUI : MonoBehaviour
     private Item _item;
     private Image _itemImage;
     private AlpacaButtonUI _itemButton;
+
     private InventoryUI _inventoryUI;
 
     private void Awake()
     {
-        _inventoryUI = GetComponentInParent<InventoryUI>();
         _itemImage = transform.Find("Image").GetComponent<Image>();
         _itemButton = transform.Find("Image").GetComponent<AlpacaButtonUI>();
     }
 
     private void Start()
     {
+        _inventoryUI = GetComponentInParent<InventoryUI>();
+
         _itemButton.onLeftClick = () => {
             if (_item != null)
                 UseItemInSlot();
+        };
+
+        _itemButton.onCursorEnter = () =>
+        {
+            if (_item != null)
+                ItemTooltip.SetupTooltipStatic(_item);
+        };
+
+        _itemButton.onCursorExit = () =>
+        {
+            if (_item != null)
+                ItemTooltip.RemoveTooltipStatic();
         };
 
         _itemButton.onRightClick = () =>

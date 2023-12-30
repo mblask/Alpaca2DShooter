@@ -198,14 +198,18 @@ public class Terminal : Box2dCollider, IInteractable
         PlayerInventory.DeleteItemFromInventoryStatic(dataItem);
     }
 
-    public void RemoveDataItem()
+    public bool RemoveDataItem()
     {
         if (_chosenDataItem == null)
-            return;
+            return false;
 
-        PlayerInventory.AddToInventoryStatic(_chosenDataItem);
+        if (!PlayerInventory.AddToInventoryStatic(_chosenDataItem))
+            return false;
+
         _textConsoleUI.CloseUI(false);
+        _terminalUI.AddDataItemsUI(checkForDataItems());
         _chosenDataItem = null;
+        return true;
     }
 
     public void RunDataCarrier()

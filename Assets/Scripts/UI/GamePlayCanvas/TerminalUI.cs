@@ -93,7 +93,6 @@ public class TerminalUI : MonoBehaviour
     {
         if (hackingSkill < 2.0f)
         {
-            _turnOffTrapsButton?.Disabled(true);
             _switchAllegianceButton?.Disabled(true);
         }
 
@@ -137,7 +136,12 @@ public class TerminalUI : MonoBehaviour
 
     private void removeDataItem()
     {
-        _terminal?.RemoveDataItem();
+        if (_terminal == null)
+            return;
+
+        if (!_terminal.RemoveDataItem())
+           return;
+
         triggerInsertRemoveButtons(true);
     }
 
