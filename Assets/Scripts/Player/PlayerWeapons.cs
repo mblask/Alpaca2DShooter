@@ -253,7 +253,8 @@ public class PlayerWeapons : MonoBehaviour
         switch (_currentThrowable.ThrowableItem.Type)
         {
             case ThrowableWeaponType.Mine:
-                throwableTransform = Instantiate(GameAssets.Instance.Mine, throwPosition, Quaternion.identity, null);
+                throwableTransform = 
+                    Instantiate(GameAssets.Instance.Mine, throwPosition, Quaternion.identity, null);
                 Mine mine = throwableTransform.GetComponent<Mine>();
                 mine.ArmMine();
                 mine.ThrowMine(forceVector);

@@ -200,6 +200,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 358e6f668bcd30241ae7676ce04586eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _enemyType: 0
+  _bossLevel: 0
 --- !u!114 &2302085652859294874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,8 +214,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee55cdbf4b1ef7941b8cdb2e46f5892f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyType: 0
-  _bossId: 0
   EnemyHealth:
     _statType: 0
     _currentValue: 0
@@ -226,6 +226,9 @@ MonoBehaviour:
   EnemyDefense:
     _statType: 4
     _currentValue: 0
+  EnemyLimbToughness:
+    _statType: 0
+    _currentValue: 0
 --- !u!114 &4650867336500752246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,7 +238,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 17813973010984851}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1f18d5dd3faf8049bad82f9865851eb, type: 3}
+  m_Script: {fileID: 11500000, guid: c3248e5895e6eea4caa6c6596ace0726, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _npcAllegiance: 0

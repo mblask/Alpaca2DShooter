@@ -11,7 +11,9 @@ public class LevelObject : MonoBehaviour
     private List<SpawnPoint> _playerSpawnPoints = new List<SpawnPoint>();
     [SerializeField] private List<SpawnPoint> _portalSpawnPoints;
     private Transform _spawnPortalTransform;
-    private Transform _exitPortalTransform;
+    //private Transform _exitPortalTransform;
+    private Portal _exitPortal;
+    private NPCBase _levelBoss;
 
     private Transform _environmentContainer;
     private Transform _npcContainer;
@@ -81,8 +83,11 @@ public class LevelObject : MonoBehaviour
 
     private void clearPortals()
     {
-        if (_exitPortalTransform != null)
-            Destroy(_exitPortalTransform.gameObject);
+        //if (_exitPortalTransform != null)
+        //    Destroy(_exitPortalTransform.gameObject);
+
+        if (_exitPortal.transform != null)
+            Destroy(_exitPortal.gameObject);
 
         if (_spawnPortalTransform != null)
             Destroy(_spawnPortalTransform.gameObject);
@@ -129,11 +134,16 @@ public class LevelObject : MonoBehaviour
         if (_environmentContainer == null)
             transform.AddNewGameObject("Environment");
 
-        _exitPortalTransform = Instantiate(GameAssets.Instance.ExitPortal, randomSpawnPoint.Location, Quaternion.identity, _environmentContainer);
-        
+        /*_exitPortalTransform*/
+        _exitPortal = Instantiate(GameAssets.Instance.ExitPortal, randomSpawnPoint.Location, Quaternion.identity, _environmentContainer).GetComponent<Portal>();
+        //_exitPortal = _exitPortalTransform.GetComponent<Portal>();
+
         float deactivateSpawnPointsInRadius = 6.0f;
         if (_levelType.Equals(LevelType.Boss))
+        {
             deactivateSpawnPointsInRadius *= 0.5f;
+            _exitPortal.ClosePortal(true);
+        }
         
         deactivateSpawnPointsAround(randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
         
@@ -185,8 +195,9 @@ public class LevelObject : MonoBehaviour
 
                 Transform bossTransform = Instantiate
                     (GameAssets.Instance.NPCBossPrefab, spawnPoint.transform.position, Quaternion.identity, _npcContainer);
-                NPCBase bossBase = bossTransform.GetComponent<NPCBase>();
-                bossBase.SetBossLevel(bossLevel);
+                _levelBoss = bossTransform.GetComponent<NPCBase>();
+                _levelBoss.SetBossPositionLevel(this);
+                _levelBoss.SetBossLevel(bossLevel);
                 _bossSpawned = true;
             }
         }
@@ -217,6 +228,11 @@ public class LevelObject : MonoBehaviour
 
         _enemySpawnPoints.ForEach(spawnPoint => spawnPoint.SetActive(false));
         _playerSpawnPoints.ForEach(spawnPoint => spawnPoint.SetActive(false));
+    }
+
+    public void BossKilled()
+    {
+        _exitPortal.ClosePortal(false);
     }
 
     private void spawnTraps()

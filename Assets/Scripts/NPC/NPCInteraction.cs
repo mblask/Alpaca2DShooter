@@ -23,8 +23,7 @@ public class NPCInteraction : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        if (_npcAi.GetAllegiance().Equals(NPCAllegiance.Enemy))
-            return;
+        
     }
 
     public void RemoveHighlight()

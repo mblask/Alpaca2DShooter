@@ -10,6 +10,8 @@ public class NPCBase : MonoBehaviour
     [SerializeField] private int _bossLevel;
     public int BossLevel => _bossLevel;
 
+    private LevelObject _bossPositionLevel;
+
     private Animator _animator;
     private NPCStats _npcStats;
     private NPCWeapons _npcWeapons;
@@ -29,7 +31,7 @@ public class NPCBase : MonoBehaviour
     {
         if (_enemyType == NPCEnemyType.Boss)
             return;
-        
+
         _gameAssets = GameAssets.Instance;
         setCharacterBase();
     }
@@ -39,6 +41,16 @@ public class NPCBase : MonoBehaviour
         _bossLevel = level;
         _gameAssets = GameAssets.Instance;
         setCharacterBase();
+    }
+
+    public void SetBossPositionLevel(LevelObject level)
+    {
+        _bossPositionLevel = level;
+    }
+
+    public void BossKilled()
+    {
+        _bossPositionLevel.BossKilled();
     }
 
     private void setCharacterBase()

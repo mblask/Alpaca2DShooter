@@ -223,6 +223,9 @@ public class NPCStats : MonoBehaviour, IDamagable
     {
         if (_isDead)
             return;
+
+        if (_npcBase.EnemyType.Equals(NPCEnemyType.Boss))
+            _npcBase.BossKilled();
         
         _isDead = true;
         _gameManager.IncrementEnemiesKilled();
