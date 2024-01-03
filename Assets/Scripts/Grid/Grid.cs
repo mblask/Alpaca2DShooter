@@ -103,7 +103,6 @@ public class Grid<T>
     public T GetValue(Vector3 worldPosition)
     {
         Vector2Int xy = GetGridPositionFromWorld(worldPosition);
-        Debug.Log(xy);
         if (!validateGridPosition(xy))
             return default;
 

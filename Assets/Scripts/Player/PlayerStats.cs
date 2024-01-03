@@ -20,6 +20,10 @@ public class PlayerStats : MonoBehaviour, IDamagable
 
     public List<Stat> Stats;
 
+    [Header("For testing")]
+    [SerializeField]
+    private bool _invincible = false;
+
     [Header("Main Player Stats")]
     public Stat PlayerHealth;
     public Stat PlayerStamina;
@@ -75,6 +79,9 @@ public class PlayerStats : MonoBehaviour, IDamagable
 
     public void DamageObject(float value)
     {
+        if (_invincible)
+            return;
+
         if (value == 0)
             return;
 
@@ -268,7 +275,6 @@ public class PlayerStats : MonoBehaviour, IDamagable
 
         if (limbEnforcement.x > 0.0f)
         {
-            Debug.Log("Enforce limbs!");
             temporarilyModifyStat(new StatModifyingData
             {
                 StatAffected = StatType.LimbToughness,
@@ -277,13 +283,10 @@ public class PlayerStats : MonoBehaviour, IDamagable
                 StatModifier = limbEnforcement.x,
                 IsInjury = false
             });
-
-            Debug.Log(LimbToughness.GetFinalValue());
         }
 
         if (limbPatcher)
         {
-            Debug.Log("Patch limbs!");
             RemoveAllInjuries();
             _postProcessingManager.ResetPostProcessing();
             _cameraController.StopCameraWobble();

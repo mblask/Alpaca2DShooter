@@ -10,8 +10,7 @@ public class LevelObject : MonoBehaviour
     private List<Transform> _spawnedTraps = new List<Transform>();
     private List<SpawnPoint> _playerSpawnPoints = new List<SpawnPoint>();
     [SerializeField] private List<SpawnPoint> _portalSpawnPoints;
-    private Transform _spawnPortalTransform;
-    //private Transform _exitPortalTransform;
+    private Portal _spawnPortal;
     private Portal _exitPortal;
     private NPCBase _levelBoss;
 
@@ -83,22 +82,17 @@ public class LevelObject : MonoBehaviour
 
     private void clearPortals()
     {
-        //if (_exitPortalTransform != null)
-        //    Destroy(_exitPortalTransform.gameObject);
-
-        if (_exitPortal.transform != null)
+        if (_exitPortal?.transform != null)
             Destroy(_exitPortal.gameObject);
-
-        if (_spawnPortalTransform != null)
-            Destroy(_spawnPortalTransform.gameObject);
+        
+        if (_spawnPortal?.transform != null)
+            Destroy(_spawnPortal.gameObject);
     }
 
     private void clearNPCs()
     {
         if (_npcContainer == null)
             return;
-
-        Debug.Log($"Clear: {name}");
 
         foreach (Transform npc in _npcContainer)
             Destroy(npc.gameObject);
@@ -134,14 +128,12 @@ public class LevelObject : MonoBehaviour
         if (_environmentContainer == null)
             transform.AddNewGameObject("Environment");
 
-        /*_exitPortalTransform*/
         _exitPortal = Instantiate(GameAssets.Instance.ExitPortal, randomSpawnPoint.Location, Quaternion.identity, _environmentContainer).GetComponent<Portal>();
-        //_exitPortal = _exitPortalTransform.GetComponent<Portal>();
 
         float deactivateSpawnPointsInRadius = 6.0f;
         if (_levelType.Equals(LevelType.Boss))
         {
-            deactivateSpawnPointsInRadius *= 0.5f;
+            //deactivateSpawnPointsInRadius *= 0.5f;
             _exitPortal.ClosePortal(true);
         }
         
@@ -153,7 +145,7 @@ public class LevelObject : MonoBehaviour
         {
             randomSpawnPoint = _portalSpawnPoints.FindAll(point => point.IsActive()).GetRandomElement();
 
-            _spawnPortalTransform = Instantiate(GameAssets.Instance.SpawnPortal, randomSpawnPoint.Location, Quaternion.identity, _environmentContainer);
+            _spawnPortal = Instantiate(GameAssets.Instance.SpawnPortal, randomSpawnPoint.Location, Quaternion.identity, _environmentContainer).GetComponent<Portal>();
 
             deactivateSpawnPointsAround(randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
 
@@ -165,10 +157,10 @@ public class LevelObject : MonoBehaviour
 
     public Vector3 GetSpawnPortalPosition()
     {
-        if (_spawnPortalTransform == null)
+        if (_spawnPortal == null || _spawnPortal.transform == null)
             return default;
 
-        return _spawnPortalTransform.position;
+        return _spawnPortal.transform.position;
     }
 
     private void spawnEnemies()
@@ -203,7 +195,7 @@ public class LevelObject : MonoBehaviour
         }
 
         int chanceToSpawnEnemy = 75;
-        int chanceToSpawnDoubleEnemies = 25;
+        int chanceToSpawnDoubleEnemies = 10;
         foreach (SpawnPoint spawnPoint in _enemySpawnPoints)
         {
             if (!spawnPoint.IsActive())

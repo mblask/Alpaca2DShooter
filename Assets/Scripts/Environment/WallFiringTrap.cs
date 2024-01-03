@@ -6,7 +6,7 @@ public class WallFiringTrap : Hackable
 {
     private List<ShootingSpot> _shootingSpots;
 
-    private NPCAllegiance _allegiance = NPCAllegiance.Enemy;
+    private NPCAllegiance _allegiance;
 
     private Vector2 _damageInterval = new Vector2(3.0f, 6.0f);
 
@@ -23,6 +23,7 @@ public class WallFiringTrap : Hackable
     private void Awake()
     {
         _shootingSpots = Utilities.GetListOfObjectsFromContainer<ShootingSpot>(transform);
+        _allegiance = NPCAllegiance.Enemy;
     }
 
     private void Start()

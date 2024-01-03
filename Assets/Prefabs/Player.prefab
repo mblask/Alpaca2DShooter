@@ -241,6 +241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Stats: []
+  _invincible: 1
   PlayerHealth:
     _statType: 0
     _currentValue: 0

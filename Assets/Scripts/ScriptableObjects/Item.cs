@@ -11,7 +11,6 @@ public class Item : ScriptableObject
 
     public virtual bool UseItem()
     {
-        Debug.Log("Use: " + ItemName);
         return true;
     }
 }

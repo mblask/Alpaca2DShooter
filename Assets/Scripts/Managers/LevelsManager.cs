@@ -237,9 +237,6 @@ public class LevelsManager : MonoBehaviour
 
     private void groupNotCompleted()
     {
-        Debug.Log(CompletionState.groupNotCompleted);
-        Debug.Log("Transfer player to another level!");
-
         transferPlayerToAnotherLevel();
     }
 
@@ -249,7 +246,6 @@ public class LevelsManager : MonoBehaviour
 
         if (level == null)
         {
-            Debug.Log("No available levels. Reset levelObjects and select one.");
             _levelsList.ForEach(level => level.SetPlayed(false));
             level = _levelsList.GetRandomElement();
         }
@@ -261,15 +257,12 @@ public class LevelsManager : MonoBehaviour
 
         _currentLevel.ClearLevel();
         _currentLevel = level;
-        Debug.Log($"Entered: {_currentLevel.name}");
     }
 
     private void groupCompleted()
     {
         _numberOfGroupsPlayed++;
 
-        Debug.Log(CompletionState.groupCompleted);
-        Debug.Log($"Number of groups played: {_numberOfGroupsPlayed}");
         if (_currentLevel.GetLevelType().Equals(LevelType.Boss))
         {
             transferPlayerToAnotherLevel();
@@ -284,11 +277,8 @@ public class LevelsManager : MonoBehaviour
     {
         if (_playerLevel == null)
         {
-            Debug.LogError("No PlayerLevel currently existing!!");
             return;
         }
-
-        Debug.Log("Transfer player to player level!");
 
         if (!_playerLevel.IsReady())
             _playerLevel.SetupLevel(true);

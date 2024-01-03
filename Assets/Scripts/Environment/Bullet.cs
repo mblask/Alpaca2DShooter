@@ -27,7 +27,7 @@ public class Bullet : MonoBehaviour
         _bulletDirection = direction;
         _bulletDamage = damage;
 
-        if (shooterTag.Equals(""))
+        if (shooterTag.Equals("") || shooterTag.Equals("Untagged"))
         {
             _shooterTag = Constants.ENEMY_TAG;
             return;

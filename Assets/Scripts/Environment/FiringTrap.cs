@@ -11,7 +11,7 @@ public class FiringTrap : Hackable, IDamagable
 
     [SerializeField] private bool _isWorking = true;
     private bool _turnedOn = true;
-    private NPCAllegiance _allegiance = NPCAllegiance.Enemy;
+    private NPCAllegiance _allegiance;
 
     private float _rotationSpeed = 1.0f;
 
@@ -35,6 +35,7 @@ public class FiringTrap : Hackable, IDamagable
     {
         _weaponSpriteRenderer = transform.Find("WeaponHolder").GetComponent<SpriteRenderer>();
         _shootingSpot = transform.Find("ShootingSpot");
+        _allegiance = NPCAllegiance.Enemy;
     }
 
     private void Start()
