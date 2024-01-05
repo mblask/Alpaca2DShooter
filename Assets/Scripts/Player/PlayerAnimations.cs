@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAnimations : MonoBehaviour
@@ -92,15 +90,5 @@ public class PlayerAnimations : MonoBehaviour
     public bool IsCurrentAnimationWeapon()
     {
         return IsAnimationWeapon(_currentAnimationType);
-    }
-
-    public void SetBool(string name, bool value)
-    {
-        _animator.SetBool(name, value);
-    }
-
-    public bool GetBool(string name)
-    {
-        return _animator.GetBool(name);
     }
 }

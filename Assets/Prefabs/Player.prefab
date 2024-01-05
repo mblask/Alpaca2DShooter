@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 8196825197066008498}
   - component: {fileID: 8196825197066008463}
   - component: {fileID: 1214335819}
+  - component: {fileID: -8568866553161139213}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -330,6 +331,56 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fe7f209bd2ecd7e4e964ac24c4f2fede, type: 2}
   - {fileID: 11400000, guid: 309cc1aefcd98da4e9f2709029948105, type: 2}
   - {fileID: 11400000, guid: 4ce150cc01079ae4fb80ade66c4265b1, type: 2}
+--- !u!114 &-8568866553161139213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8196825197066008499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f468a34fdad0d541a31864aaa9ce31a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _invincible: 0
+  Health:
+    _statType: 0
+    _currentValue: 0
+  Stamina:
+    _statType: 0
+    _currentValue: 0
+  Speed:
+    _statType: 0
+    _currentValue: 0
+  Accuracy:
+    _statType: 0
+    _currentValue: 0
+  Defense:
+    _statType: 0
+    _currentValue: 0
+  Strength:
+    _statType: 0
+    _currentValue: 0
+  LimbToughness:
+    _statType: 0
+    _currentValue: 0
+  Hacking:
+    _statType: 0
+    _currentValue: 0
+  BodyArmor:
+    _statType: 0
+    _currentValue: 0
+  PlayerDamage: {x: 0, y: 0}
+  _items: []
+  _staminaTriggerThreshold: 0.1
+  _nonShootingDistance: 1
+  _closeQuarterShooting: 0.75
+  _shootingOffset: 0.5
+  _cameraShakeDuration: 0.05
+  _cameraShakeMagnitude: 0.1
+  _weapons: []
+  _throwables: []
 --- !u!1 &8196825198217699624
 GameObject:
   m_ObjectHideFlags: 0
