@@ -46,8 +46,8 @@ public class AchievementManager : MonoBehaviour
         if (enemiesKilled == AchievementConstants.PACIFIST_GOAL)
             triggerAchievement(AchievementType.Pacifist);
 
-        float playerMaxHealth = _playerStats.PlayerHealth.GetFinalValue();
-        float playerHealth = _playerStats.PlayerHealth.GetCurrentValue();
+        float playerMaxHealth = _playerStats.Health.GetFinalValue();
+        float playerHealth = _playerStats.Health.GetCurrentValue();
         if (playerHealth <= AchievementConstants.SURVIVALIST_GOAL * playerMaxHealth)
             triggerAchievement(AchievementType.Survivalist, (playerHealth / playerMaxHealth * 100.0f).ToString());
 

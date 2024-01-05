@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,8 +28,7 @@ public class PlayerHealthSlider : MonoBehaviour
         if (value < 0.0f)
             value = 0.0f;
 
-        _playerHealthSlider.maxValue = _playerStats.PlayerHealth.GetFinalValue();
-
+        _playerHealthSlider.maxValue = _playerStats.Health.GetFinalValue();
         _playerHealthSlider.value = value;
     }
 }

@@ -36,12 +36,13 @@ public class ItemSpawner : MonoBehaviour
     public Transform SpawnItem(Vector3 position, Item item)
     {
         Transform spawnedItem = Instantiate(_gameAssets.ItemTemplate, position, Quaternion.identity, null);
-        spawnedItem.GetComponent<PickupItem>().SetItem(item);
+        PickupItem pickup = spawnedItem.GetComponent<PickupItem>();
+        pickup.SetItem(item);
 
         switch (item)
         {
             case InventoryItem:
-                spawnedItem.GetComponent<RotateObject>().RotationSpeed = 0.0f;
+                pickup.SetRotationSpeed(0.0f);
                 spawnedItem.GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>().intensity = 0.0f;
                 break;
             case NonInventoryItem:

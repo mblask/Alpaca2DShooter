@@ -18,21 +18,19 @@ public class PlayerStats : MonoBehaviour, IDamagable
     public event Action<float> OnHealthUIUpdate;
     public event Action<float> OnStaminaUIUpdate;
 
-    public List<Stat> Stats;
-
     [Header("For testing")]
-    [SerializeField]
-    private bool _invincible = false;
+    [SerializeField] private bool _invincible = false;
 
     [Header("Main Player Stats")]
-    public Stat PlayerHealth;
-    public Stat PlayerStamina;
-    public Stat PlayerSpeed;
-    public Stat PlayerAccuracy;
-    public Stat PlayerDefense;
-    public Stat PlayerStrength;
+    public Stat Health;
+    public Stat Stamina;
+    public Stat Speed;
+    public Stat Accuracy;
+    public Stat Defense;
+    public Stat Strength;
     public Stat LimbToughness;
     public Stat Hacking;
+    public Stat BodyArmor;
     public Vector2 PlayerDamage = new Vector2();
     
     private List<StatModifyingData> _injuries = new List<StatModifyingData>();
@@ -45,14 +43,13 @@ public class PlayerStats : MonoBehaviour, IDamagable
     [SerializeField] private const float _staminaHealConst = 4.0f;
     [SerializeField] private float _staminaTriggerThreshold = 0.1f;
 
-    private float _playerFinalSpeed;
-
     private GameAssets _gameAssets;
     private CameraController _cameraController;
     
     private PlayerBase _playerBase;
     private PlayerController _playerController;
     private PlayerHitManager _playerHitManager;
+    private PlayerArmorSlider _playerArmorSlider;
     private PostProcessingManager _postProcessingManager;
 
     public void Awake()
@@ -69,7 +66,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
         _gameAssets = GameAssets.Instance;
         _cameraController = CameraController.Instance;
         _postProcessingManager = PostProcessingManager.Instance;
-        _playerFinalSpeed = PlayerSpeed.GetFinalValue();
+        _playerArmorSlider = PlayerArmorSlider.Instance;
     }
 
     private void Update()
@@ -85,8 +82,15 @@ public class PlayerStats : MonoBehaviour, IDamagable
         if (value == 0)
             return;
 
-        float modifiedValue = -value * (1.0f - PlayerDefense.GetFinalValue() / 100.0f);
-        PlayerHealth.UpdateCurrentValue(modifiedValue);
+        if (BodyArmor.GetCurrentValue() > 0.0f)
+        {
+            BodyArmor.UpdateCurrentValue(-value);
+            _playerArmorSlider.UpdatePlayerArmorSlider(BodyArmor.GetCurrentValue());
+            return;
+        }
+
+        float modifiedValue = -value * (1.0f - Defense.GetFinalValue() / 100.0f);
+        Health.UpdateCurrentValue(modifiedValue);
         _accumulatedHealthLoss += MathF.Abs(modifiedValue);
         FloatingTextSpawner.CreateFloatingTextStatic(transform.position, value.ToString("F0"), new Color(1.0f, 0.5f, 0.0f));
 
@@ -107,11 +111,11 @@ public class PlayerStats : MonoBehaviour, IDamagable
         hitShading();
         _playerHitManager?.CheckHit();
 
-        if (PlayerHealth.GetCurrentValue() <= 0.0f)
+        if (Health.GetCurrentValue() <= 0.0f)
             die();
 
         _cameraController?.ShakeCamera(0.05f, 0.1f);
-        OnHealthUIUpdate?.Invoke(PlayerHealth.GetCurrentValue());
+        OnHealthUIUpdate?.Invoke(Health.GetCurrentValue());
     }
 
     public float GetTotalHealthLoss()
@@ -153,12 +157,12 @@ public class PlayerStats : MonoBehaviour, IDamagable
         if (value == 0)
             return;
 
-        PlayerHealth.UpdateCurrentValue(value);
+        Health.UpdateCurrentValue(value);
 
-        if (PlayerHealth.GetCurrentValue() >= PlayerHealth.GetFinalValue())
-            PlayerHealth.SetCurrentToFinalValue();
+        if (Health.GetCurrentValue() >= Health.GetFinalValue())
+            Health.SetCurrentToFinalValue();
 
-        OnHealthUIUpdate?.Invoke(PlayerHealth.GetCurrentValue());
+        OnHealthUIUpdate?.Invoke(Health.GetCurrentValue());
     }
 
     public static void TemporarilyModifyStat(StatModifyingData injuryData)
@@ -183,10 +187,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
             stat.SetHandicaped(true);
 
         if (injuryData.StatAffected.Equals(StatType.Speed))
-        {
-            _playerFinalSpeed = PlayerSpeed.GetFinalValue();
             _playerController.SetLegsInjured(true);
-        }
 
         StartCoroutine(removeStatModifierCoroutine(injuryData.StatAffected, injuryData.Duration, injuryData.StatModifier, injuryData.StatMultiplier));
     }
@@ -212,10 +213,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
         stat.SetHandicaped(false);
 
         if (statType.Equals(StatType.Speed))
-        {
-            _playerFinalSpeed = PlayerSpeed.GetFinalValue();
             _playerController.SetLegsInjured(false);
-        }
     }
 
     private IEnumerator removeStatModifierCoroutine(StatType statType, float duration, float modifier, float multiplier)
@@ -236,6 +234,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
         {
             InstantaneousItem instantaneous = item as InstantaneousItem;
             healing(instantaneous.LifeRestored, instantaneous.StaminaRestored, Vector2.zero, false);
+            addBodyArmor(instantaneous.Armor);
 
             return true;
         }
@@ -251,26 +250,37 @@ public class PlayerStats : MonoBehaviour, IDamagable
         return false;
     }
 
+    private void addBodyArmor(float bodyArmor)
+    {
+        float maxArmor = 100.0f;
+
+        BodyArmor.UpdateCurrentValue(bodyArmor);
+        if (BodyArmor.GetCurrentValue() > maxArmor)
+            BodyArmor.UpdateCurrentValue(maxArmor);
+
+        _playerArmorSlider.UpdatePlayerArmorSlider(BodyArmor.GetCurrentValue());
+    }
+
     private void healing(Vector2 lifeRestoration, Vector2 staminaRestoration, Vector2 limbEnforcement, bool limbPatcher)
     {
         if (lifeRestoration.magnitude > 0.0f)
         {
-            PlayerHealth.UpdateCurrentValue(lifeRestoration.GetRandom());
+            Health.UpdateCurrentValue(lifeRestoration.GetRandom());
 
-            if (PlayerHealth.GetCurrentValue() > PlayerHealth.GetFinalValue())
-                PlayerHealth.SetCurrentToFinalValue();
+            if (Health.GetCurrentValue() > Health.GetFinalValue())
+                Health.SetCurrentToFinalValue();
 
-            OnHealthUIUpdate?.Invoke(PlayerHealth.GetCurrentValue());
+            OnHealthUIUpdate?.Invoke(Health.GetCurrentValue());
         }
 
         if (staminaRestoration.magnitude > 0.0f)
         {
-            PlayerStamina.UpdateCurrentValue(staminaRestoration.GetRandom());
+            Stamina.UpdateCurrentValue(staminaRestoration.GetRandom());
 
-            if (PlayerStamina.GetCurrentValue() > PlayerStamina.GetFinalValue())
-                PlayerStamina.SetCurrentToFinalValue();
+            if (Stamina.GetCurrentValue() > Stamina.GetFinalValue())
+                Stamina.SetCurrentToFinalValue();
 
-            OnStaminaUIUpdate?.Invoke(PlayerStamina.GetCurrentValue());
+            OnStaminaUIUpdate?.Invoke(Stamina.GetCurrentValue());
         }
 
         if (limbEnforcement.x > 0.0f)
@@ -310,36 +320,31 @@ public class PlayerStats : MonoBehaviour, IDamagable
 
         if (_playerController.IsMoving() && _playerController.IsRunning())
         {
-            PlayerStamina.UpdateCurrentValue(-Time.deltaTime * _staminaDrainConst);
+            Stamina.UpdateCurrentValue(-Time.deltaTime * _staminaDrainConst);
             _staminaTrigger -= Time.deltaTime * _staminaDrainConst;
 
-            if (PlayerStamina.GetCurrentValue() <= 0.0f)
-                PlayerStamina.SetCurrentValue(0.0f);
+            if (Stamina.GetCurrentValue() <= 0.0f)
+                Stamina.SetCurrentValue(0.0f);
         }
         else
         {
-            if (PlayerStamina.GetCurrentValue() < PlayerStamina.GetFinalValue())
+            if (Stamina.GetCurrentValue() < Stamina.GetFinalValue())
             {
-                PlayerStamina.UpdateCurrentValue(Time.deltaTime * _staminaHealConst);
+                Stamina.UpdateCurrentValue(Time.deltaTime * _staminaHealConst);
                 _staminaTrigger += Time.deltaTime * _staminaHealConst;
             }
         }
 
         if (Mathf.Abs(_staminaTrigger) >= _staminaTriggerThreshold)
         {
-            OnStaminaUIUpdate?.Invoke(PlayerStamina.GetCurrentValue());
+            OnStaminaUIUpdate?.Invoke(Stamina.GetCurrentValue());
             _staminaTrigger = 0.0f;
         }
     }
 
-    public float GetFinalSpeed()
-    {
-        return _playerFinalSpeed;
-    }
-
     public bool IsAlive()
     {
-        return PlayerHealth.GetCurrentValue() > 0.0f;
+        return Health.GetCurrentValue() > 0.0f;
     }
 
     public static Stat GetStatByTypeStatic(StatType statType)
@@ -352,15 +357,15 @@ public class PlayerStats : MonoBehaviour, IDamagable
         switch (statType)
         {
             case StatType.Health:
-                return PlayerHealth;
+                return Health;
             case StatType.Stamina:
-                return PlayerStamina;
+                return Stamina;
             case StatType.Accuracy:
-                return PlayerAccuracy;
+                return Accuracy;
             case StatType.Speed:
-                return PlayerSpeed;
+                return Speed;
             case StatType.Strength:
-                return PlayerStrength;
+                return Strength;
             case StatType.Hacking:
                 return Hacking;
             case StatType.LimbToughness:

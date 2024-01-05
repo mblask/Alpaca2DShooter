@@ -5,6 +5,7 @@ public class InstantaneousItem : NonInventoryItem
 {
     public Vector2 LifeRestored;
     public Vector2 StaminaRestored;
+    public float Armor;
 
     public override bool UseItem()
     {

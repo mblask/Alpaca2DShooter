@@ -28,7 +28,7 @@ public class PlayerStaminaSlider : MonoBehaviour
         if (_playerStaminaSlider == null)
             return;
 
-        _playerStaminaSlider.maxValue = PlayerStats.Instance.PlayerStamina.GetFinalValue();
+        _playerStaminaSlider.maxValue = PlayerStats.Instance.Stamina.GetFinalValue();
 
         _playerStaminaSlider.value = value;
     }

@@ -381,8 +381,8 @@ public class PlayerWeapons : MonoBehaviour
         setCurrentWeaponAmmo(_currentWeapon.WeaponItem.MagazineBullets);
 
         _playerStats.PlayerDamage = new Vector2(
-            _currentWeapon.WeaponItem.WeaponDamage.x + (_playerStats.PlayerStrength.GetFinalValue() - 2.0f) / 10.0f,
-            _currentWeapon.WeaponItem.WeaponDamage.y + (_playerStats.PlayerStrength.GetFinalValue() - 2.0f) / 10.0f
+            _currentWeapon.WeaponItem.WeaponDamage.x + (_playerStats.Strength.GetFinalValue() - 2.0f) / 10.0f,
+            _currentWeapon.WeaponItem.WeaponDamage.y + (_playerStats.Strength.GetFinalValue() - 2.0f) / 10.0f
             );
 
         _shootingInterval = _currentWeapon.WeaponItem.ShootInterval;
@@ -488,9 +488,9 @@ public class PlayerWeapons : MonoBehaviour
             return Vector2.zero;
 
         if (distanceFromShootingSpot < _closeQuarterShooting)
-            return (targetPosition + getRandomOffset(_shootingOffset, _playerStats.PlayerAccuracy.GetFinalValue()) - transform.position).normalized;
+            return (targetPosition + getRandomOffset(_shootingOffset, _playerStats.Accuracy.GetFinalValue()) - transform.position).normalized;
         else
-            return (targetPosition + getRandomOffset(_shootingOffset, _playerStats.PlayerAccuracy.GetFinalValue()) - _shootingSpot.position).normalized;
+            return (targetPosition + getRandomOffset(_shootingOffset, _playerStats.Accuracy.GetFinalValue()) - _shootingSpot.position).normalized;
     }
 
     private Vector3 getRandomOffset(float shootingOffset, float accuracy)
@@ -605,7 +605,7 @@ public class PlayerWeapons : MonoBehaviour
             return false;
 
         //check strength requirement
-        if (_playerStats.PlayerStrength.GetFinalValue() < weapon.WeaponItem.StrengthRequired)
+        if (_playerStats.Strength.GetFinalValue() < weapon.WeaponItem.StrengthRequired)
         {
             List<string> stringList = new List<string> { "Not enough strength!", "I cannot use this!", "Too big piece..." };
             FloatingTextSpawner.CreateFloatingTextStatic(transform.position, stringList.GetRandomElement(), Color.white);

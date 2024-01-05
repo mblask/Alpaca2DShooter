@@ -6,9 +6,10 @@ public class Stat
 {
     [SerializeField] private StatType _statType;
     public StatType StatType => _statType;
-    private float _baseValue = 0;
-    private float _finalValue = 0;
+    private float _baseValue = 0.0f;
+    private float _finalValue = 0.0f;
     [SerializeField] private float _currentValue;
+    private float _maxValue = 0.0f;
     private List<float> _modifiers;
     private List<float> _multipliers;
 

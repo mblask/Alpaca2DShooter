@@ -10,10 +10,13 @@ public class PickupItem : MonoBehaviour
 
     private AudioManager _audioManager;
     private AchievementManager _achievementManager;
+    private ObjectRotation _rotation;
+    [SerializeField] private float _rotationSpeed = 2.5f;
 
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _rotation = new ObjectRotation(transform, _rotationSpeed);
     }
 
     private void Start()
@@ -23,6 +26,16 @@ public class PickupItem : MonoBehaviour
 
         if (_item != null)
             _spriteRenderer.sprite = _item.ItemSprite;
+    }
+
+    private void Update()
+    {
+        _rotation.Rotate2dBody();
+    }
+
+    public void SetRotationSpeed(float speed)
+    {
+        _rotation.RotationSpeed = speed;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

@@ -58,26 +58,15 @@ public class PlayerBase : MonoBehaviour
         _playerCharacterBaseScriptable = characterBase;
         _playerAnimations.SetPlayerAOC(characterBase.CharacterAOC);
 
-        _playerStats.PlayerAccuracy.SetBaseValue(characterBase.Accuracy);
-        _playerStats.PlayerSpeed.SetBaseValue(characterBase.MovementSpeed * 1.2f);
-        _playerStats.PlayerHealth.SetBaseValue(characterBase.Health);
-        _playerStats.PlayerStamina.SetBaseValue(characterBase.Stamina);
-        _playerStats.PlayerDefense.SetBaseValue(characterBase.Defense);
-        _playerStats.PlayerStrength.SetBaseValue(characterBase.Strength);
+        _playerStats.Accuracy.SetBaseValue(characterBase.Accuracy);
+        _playerStats.Speed.SetBaseValue(characterBase.MovementSpeed * 1.2f);
+        _playerStats.Health.SetBaseValue(characterBase.Health);
+        _playerStats.Stamina.SetBaseValue(characterBase.Stamina);
+        _playerStats.Defense.SetBaseValue(characterBase.Defense);
+        _playerStats.Strength.SetBaseValue(characterBase.Strength);
         _playerStats.Hacking.SetBaseValue(characterBase.Hacking);
         _playerStats.LimbToughness.SetBaseValue(characterBase.LimbToughness);
-
-        foreach (BaseStat stat in characterBase.BaseStats)
-        {
-            float value = stat.Value;
-            if (stat.Type.Equals(StatType.Speed))
-                value *= 1.2f;
-
-            if (stat.Type.Equals(StatType.Health))
-                value *= characterBase.HealthModifier;
-
-            _playerStats.Stats.Add(new Stat(stat.Type, value));
-        }
+        _playerStats.BodyArmor.SetBaseValue(0.0f);
     }
 
     private void setupPlayerSkills(List<SkillSO> skills)
@@ -87,26 +76,26 @@ public class PlayerBase : MonoBehaviour
             switch (skill.Stat)
             {
                 case StatType.Health:
-                    UpdateStat(_playerStats.PlayerHealth, skill);
+                    UpdateStat(_playerStats.Health, skill);
                     break;
                 case StatType.Stamina:
-                    UpdateStat(_playerStats.PlayerStamina, skill);
+                    UpdateStat(_playerStats.Stamina, skill);
                     break;
                 case StatType.Accuracy:
-                    UpdateStat(_playerStats.PlayerAccuracy, skill);
+                    UpdateStat(_playerStats.Accuracy, skill);
                     break;
                 case StatType.Damage:
                     _playerStats.PlayerDamage += Vector2.one * skill.Modifier;
                     _playerStats.PlayerDamage *= Vector2.one * skill.Multiplier;
                     break;
                 case StatType.Defense:
-                    UpdateStat(_playerStats.PlayerDefense, skill);
+                    UpdateStat(_playerStats.Defense, skill);
                     break;
                 case StatType.Speed:
-                    UpdateStat(_playerStats.PlayerSpeed, skill);
+                    UpdateStat(_playerStats.Speed, skill);
                     break;
                 case StatType.Strength:
-                    UpdateStat(_playerStats.PlayerStrength, skill);
+                    UpdateStat(_playerStats.Strength, skill);
                     break;
                 case StatType.LimbToughness:
                     UpdateStat(_playerStats.LimbToughness, skill);

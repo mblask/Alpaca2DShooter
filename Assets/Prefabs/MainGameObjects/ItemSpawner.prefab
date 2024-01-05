@@ -68,5 +68,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bdab38d4c38fa564eb87faa259d55ac5, type: 2}
   - {fileID: 11400000, guid: 27da57185e6a67d4d9732d5ab8efa4eb, type: 2}
   - {fileID: 11400000, guid: e8a7754bc5105c74696fd95bff87f112, type: 2}
+  - {fileID: 11400000, guid: 75753538d872a1047aeef7112e1ad8da, type: 2}
   _bossDrops:
   - {fileID: 11400000, guid: db7cdd4d7b17f7c49b13d9459c19c6fa, type: 2}
+  - {fileID: 11400000, guid: 7f6a775c5d2b1f647a4c2431b1eb7d80, type: 2}

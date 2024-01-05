@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
         Vector2 movementDirection = new Vector2(Mathf.Cos(Mathf.Deg2Rad * currentAngle), Mathf.Sin(Mathf.Deg2Rad * currentAngle));
         Vector2 strafeDirection = new Vector2(Mathf.Cos(Mathf.Deg2Rad * (currentAngle - 90.0f)), Mathf.Sin(Mathf.Deg2Rad * (currentAngle - 90.0f)));
 
-        Vector2 finalMovementPosition = currentPosition + (axisMovement.x * strafeDirection + axisMovement.y * movementDirection) * _playerStats.PlayerSpeed.GetFinalValue() * Time.fixedDeltaTime;
+        Vector2 finalMovementPosition = currentPosition + (axisMovement.x * strafeDirection + axisMovement.y * movementDirection) * _playerStats.Speed.GetFinalValue() * Time.fixedDeltaTime;
 
         _rigidBody.MovePosition(finalMovementPosition);
     }
@@ -110,12 +110,12 @@ public class PlayerController : MonoBehaviour
 
         float runningSpeedMultiplier = 1.5f;
 
-        _canRun = _playerStats.PlayerStamina.GetCurrentValue() > 0.0f;
+        _canRun = _playerStats.Stamina.GetCurrentValue() > 0.0f;
         
         if (!_canRun && _isRunning)
         {
             _isRunning = false;
-            _playerStats.PlayerSpeed.RemoveBaseMultiplier(runningSpeedMultiplier);
+            _playerStats.Speed.RemoveBaseMultiplier(runningSpeedMultiplier);
             return;
         }
 
@@ -126,13 +126,13 @@ public class PlayerController : MonoBehaviour
                 if (_movement.magnitude > 0.0f)
                 {
                     _isRunning = true;
-                    _playerStats.PlayerSpeed.AddBaseMultiplier(runningSpeedMultiplier);
+                    _playerStats.Speed.AddBaseMultiplier(runningSpeedMultiplier);
                 }
             }
             else
             {
                 _isRunning = false;
-                _playerStats.PlayerSpeed.RemoveBaseMultiplier(runningSpeedMultiplier);
+                _playerStats.Speed.RemoveBaseMultiplier(runningSpeedMultiplier);
             }
         }
     }
