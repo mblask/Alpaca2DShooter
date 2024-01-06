@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: FlashGrenade
   m_EditorClassIdentifier: 
   ItemName: Flash Grenade
-  ItemSprite: {fileID: 21300000, guid: ab3ced75439e9a340b4e2f6291094748, type: 3}
+  ItemSprite: {fileID: 21300000, guid: acb71b577b5d7ce4c99cf64d78323c33, type: 3}
   ChanceToDrop: 5
-  Color: {r: 0.25490198, g: 0.3764706, b: 0.28627452, a: 1}
+  Color: {r: 0.3882353, g: 0.6313726, b: 0.3529412, a: 1}
   PickupAudio: 7
   Type: 2
   WeaponDamage: {x: 0, y: 0}

@@ -38,6 +38,18 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        getInput();
+        triggerRunning();
+    }
+
+    private void FixedUpdate()
+    {
+        rotatePlayer(_mousePosition);
+        movePlayer(_movement.normalized);
+    }
+
+    private void getInput()
+    {
         if (_inputActive)
         {
             _movement.x = Input.GetAxisRaw("Horizontal");
@@ -60,14 +72,6 @@ public class PlayerController : MonoBehaviour
         }
 
         _mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition);
-
-        triggerRunning();
-    }
-
-    private void FixedUpdate()
-    {
-        rotatePlayer(_mousePosition);
-        movePlayer(_movement.normalized);
     }
 
     public void DeactivateInput()

@@ -6,22 +6,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private const string EQUIP_GUN = "EquipGun";
-    private const string EQUIP_SILENCER = "EquipSilencer";
-    private const string EQUIP_MACHINE = "EquipMachine";
-    private const string EQUIP_SHOTGUN = "EquipShotgun";
-    private const string RELOAD = "Reload";
-    private const string REMOVE_WEAPON = "RemoveWeapon";
-    
-    private const int MAX_NUMBER_OF_ITEMS = 12;
-    
-    public Action OnSuccessfulAdd;
-    public Action OnItemRemovedFromInventory;
-    public Action OnToggleInventoryUI;
-    public Action OnToggleCraftingUI;
-    public event Action<float> OnHealthUIUpdate;
-    public event Action<float> OnStaminaUIUpdate;
-
     private static Player _instance;
     public static Player Instance
     {
@@ -30,82 +14,6 @@ public class Player : MonoBehaviour
             return _instance;
         }
     }
-
-    private Animator _animator;
-    private Rigidbody2D _rigidBody;
-    private Transform _shootingSpot;
-
-    private AnimationType _currentAnimationType;
-    private CharacterBaseScriptable _playerCharacterBaseScriptable;
-
-    [Header("For testing")]
-    [SerializeField] private bool _invincible = false;
-
-    [Header("Main Player Stats")]
-    public Stat Health;
-    public Stat Stamina;
-    public Stat Speed;
-    public Stat Accuracy;
-    public Stat Defense;
-    public Stat Strength;
-    public Stat LimbToughness;
-    public Stat Hacking;
-    public Stat BodyArmor;
-    public Vector2 PlayerDamage = new Vector2();
-
-    private List<StatModifyingData> _injuries = new List<StatModifyingData>();
-
-    [SerializeField] private List<Item> _items = new List<Item>();
-    private List<WoundType> _woundsList = new List<WoundType>();
-
-    [Header("Movement Characteristics")]
-    [SerializeField] private const float _staminaDrainConst = 2.5f;
-    [SerializeField] private const float _staminaHealConst = 4.0f;
-    [SerializeField] private float _staminaTriggerThreshold = 0.1f;
-    private Vector2 _movement;
-    private Vector2 _mousePosition;
-    private bool _isRunning = false;
-    private bool _canRun = true;
-    private float _accumulatedHealthLoss = 0.0f;
-    private float _staminaTrigger = 0.0f;
-
-    private Weapon _currentWeapon;
-    public Weapon CurrentWeapon
-    {
-        get
-        {
-            return _currentWeapon;
-        }
-    }
-    private ThrowableWeapon _currentThrowable;
-
-    private bool _legsInjured = false;
-    private bool _inputActive = true;
-    private bool _craftingPossible = false;
-
-    [Header("Shooting settings - Read-only")]
-    [SerializeField] private float _nonShootingDistance = 1.00f;
-    [SerializeField] private float _closeQuarterShooting = 0.75f;
-    [SerializeField] private float _shootingOffset = 0.5f;
-    private bool _weaponEquipped = false;
-    private bool _canShoot = true;
-    private bool _isAutoShooting = false;
-    private bool _canSwitchWeapons = true;
-    private bool _canPutWeaponAway = true;
-    private float _shootingInterval;
-    private bool _intervalWeaponActivated = false;
-    private bool _isReloading = false;
-    private int _currentAmmo;
-    private int _shotsFired;
-    private int _shotsHit;
-
-    [Header("Camera shake - Read-only")]
-    [SerializeField] private float _cameraShakeDuration = 0.05f;
-    [SerializeField] private float _cameraShakeMagnitude = 0.1f;
-
-    [Header("Items")]
-    [SerializeField] private List<Weapon> _weapons = new List<Weapon>();
-    [SerializeField] private List<ThrowableWeapon> _throwables = new List<ThrowableWeapon>();
 
     private GameAssets _gameAssets;
     private PlayerSelector _playerSelector;
@@ -126,6 +34,86 @@ public class Player : MonoBehaviour
     private MouseCursor _mouseCursor;
     private AudioManager _audioManager;
 
+    private void Awake()
+    {
+        _instance = this;
+
+        _animator = GetComponent<Animator>();
+        _currentAnimationType = AnimationType.Idle;
+
+        _rigidBody = GetComponent<Rigidbody2D>();
+
+        _shootingSpot = transform.Find("ShootingSpot");
+    }
+
+    private void Start()
+    {
+        if (_animator.runtimeAnimatorController == null)
+            _animator.runtimeAnimatorController = GameAssets.Instance.CharacterBaseScriptableList[0].CharacterAOC;
+
+        _playerSelector = PlayerSelector.Instance;
+        _gameAssets = GameAssets.Instance;
+        selectCharacter();
+
+        _cameraController = CameraController.Instance;
+        _postProcessingManager = PostProcessingManager.Instance;
+        _woundedUI = WoundedUI.Instance;
+
+        _itemSpawner = ItemSpawner.Instance;
+        _achievementManager = AchievementManager.Instance;
+
+        _playerArmorSlider = PlayerArmorSlider.Instance;
+
+        _camera = Camera.main;
+        _gameManager = GameManager.Instance;
+        _pointerOver = PointerOver.GetInstance();
+        _weaponImage = WeaponImage.Instance;
+        _throwableImage = ThrowableImage.Instance;
+        _ammoPanel = AmmoPanel.Instance;
+        _throwableAmmoPanel = ThrowableAmmoPanel.Instance;
+
+        _accuracyPanel = AccuracyPanel.Instance;
+        _mouseCursor = MouseCursor.Instance;
+        _audioManager = AudioManager.Instance;
+
+        weaponsStartSetup();
+    }
+
+    private void Update()
+    {
+        getInput();
+        triggerRunning();
+        toggleInventoryUI();
+        toggleCraftingUI();
+        staminaManager();
+
+        _mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition);
+        keyboardInput();
+        autoShootingProcedure();
+        intervalWeaponProcedure();
+    }
+
+    private void FixedUpdate()
+    {
+        rotatePlayer(_mousePosition);
+        movePlayer(_movement.normalized);
+    }
+
+    //**********
+    //Animations
+    //**********
+
+    private const string EQUIP_GUN = "EquipGun";
+    private const string EQUIP_SILENCER = "EquipSilencer";
+    private const string EQUIP_MACHINE = "EquipMachine";
+    private const string EQUIP_SHOTGUN = "EquipShotgun";
+    private const string RELOAD = "Reload";
+    private const string REMOVE_WEAPON = "RemoveWeapon";
+
+    private Animator _animator;
+
+    private AnimationType _currentAnimationType;
+
     private void setPlayerAOC(AnimatorOverrideController aoc)
     {
         _animator.runtimeAnimatorController = aoc;
@@ -133,7 +121,7 @@ public class Player : MonoBehaviour
 
     private void playAnimation(AnimationType animation)
     {
-        if (isCurrentAnimationWeapon() && IsAnimationWeapon(animation))
+        if (isCurrentAnimationWeapon() && isAnimationWeapon(animation))
             _animator.SetTrigger(REMOVE_WEAPON);
 
         _currentAnimationType = animation;
@@ -163,7 +151,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public bool IsAnimationWeapon(AnimationType currentAnimationType)
+    private bool isAnimationWeapon(AnimationType currentAnimationType)
     {
         switch (currentAnimationType)
         {
@@ -179,8 +167,26 @@ public class Player : MonoBehaviour
 
     private bool isCurrentAnimationWeapon()
     {
-        return IsAnimationWeapon(_currentAnimationType);
+        return isAnimationWeapon(_currentAnimationType);
     }
+
+    //****
+    //Base
+    //****
+
+    [Header("Main Player Stats")]
+    public Stat Health;
+    public Stat Stamina;
+    public Stat Speed;
+    public Stat Accuracy;
+    public Stat Defense;
+    public Stat Strength;
+    public Stat LimbToughness;
+    public Stat Hacking;
+    public Stat BodyArmor;
+    public Vector2 PlayerDamage = new Vector2();
+
+    private CharacterBaseScriptable _playerCharacterBaseScriptable;
 
     private void selectCharacter()
     {
@@ -224,32 +230,32 @@ public class Player : MonoBehaviour
             switch (skill.Stat)
             {
                 case StatType.Health:
-                    UpdateStat(Health, skill);
+                    updateStat(Health, skill);
                     break;
                 case StatType.Stamina:
-                    UpdateStat(Stamina, skill);
+                    updateStat(Stamina, skill);
                     break;
                 case StatType.Accuracy:
-                    UpdateStat(Accuracy, skill);
+                    updateStat(Accuracy, skill);
                     break;
                 case StatType.Damage:
                     PlayerDamage += Vector2.one * skill.Modifier;
                     PlayerDamage *= Vector2.one * skill.Multiplier;
                     break;
                 case StatType.Defense:
-                    UpdateStat(Defense, skill);
+                    updateStat(Defense, skill);
                     break;
                 case StatType.Speed:
-                    UpdateStat(Speed, skill);
+                    updateStat(Speed, skill);
                     break;
                 case StatType.Strength:
-                    UpdateStat(Strength, skill);
+                    updateStat(Strength, skill);
                     break;
                 case StatType.LimbToughness:
-                    UpdateStat(LimbToughness, skill);
+                    updateStat(LimbToughness, skill);
                     break;
                 case StatType.Hacking:
-                    UpdateStat(Hacking, skill);
+                    updateStat(Hacking, skill);
                     break;
                 default:
                     break;
@@ -257,7 +263,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void UpdateStat(Stat stat, SkillSO skill)
+    private void updateStat(Stat stat, SkillSO skill)
     {
         if (skill.Modifier > 0.0f)
             stat.AddModifier(skill.Modifier);
@@ -266,9 +272,56 @@ public class Player : MonoBehaviour
             stat.AddBaseMultiplier(skill.Multiplier);
     }
 
-    private CharacterBaseScriptable getCharacterBaseScriptable()
+    public CharacterBaseScriptable GetCharacterBaseScriptable()
     {
         return _playerCharacterBaseScriptable;
+    }
+
+    //**********
+    //Controller
+    //**********
+
+    private Rigidbody2D _rigidBody;
+
+    private bool _legsInjured = false;
+
+    [Header("Movement Characteristics")]
+    [SerializeField] private const float _staminaDrainConst = 2.5f;
+    [SerializeField] private const float _staminaHealConst = 4.0f;
+    [SerializeField] private float _staminaTriggerThreshold = 0.1f;
+    private Vector2 _movement;
+    private Vector2 _mousePosition;
+    private bool _isRunning = false;
+    private bool _canRun = true;
+    private float _accumulatedHealthLoss = 0.0f;
+    private float _staminaTrigger = 0.0f;
+
+    private bool _inputActive = true;
+
+    private void getInput()
+    {
+        if (_inputActive)
+        {
+            _movement.x = Input.GetAxisRaw("Horizontal");
+            _movement.y = Input.GetAxisRaw("Vertical");
+
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                PlayerInventory.Instance.UseConsumable(ConsumableType.HerbalBooster);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                PlayerInventory.Instance.UseConsumable(ConsumableType.LimbPatcher);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                PlayerInventory.Instance.UseConsumable(ConsumableType.LimbProtector);
+            }
+        }
+
+        _mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition);
     }
 
     private void deactivateInput()
@@ -279,7 +332,7 @@ public class Player : MonoBehaviour
 
     private void movePlayer(Vector2 axisMovement)
     {
-        if (!isAlive())
+        if (!IsAlive())
             return;
 
         if (axisMovement == null)
@@ -340,7 +393,7 @@ public class Player : MonoBehaviour
 
     private void rotatePlayer(Vector2 targetPosition)
     {
-        if (!isAlive())
+        if (!IsAlive())
             return;
 
         Vector2 direction = targetPosition - _rigidBody.position;
@@ -358,17 +411,29 @@ public class Player : MonoBehaviour
             disturbable.DisturbAnimation();
     }
 
-    public bool isRunning()
+    private bool isRunning()
     {
         return _isRunning;
     }
 
-    public bool isMoving()
+    private bool isMoving()
     {
         return _movement.magnitude > 0.0f;
     }
 
-    public void checkHit()
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, 40.0f);
+    }
+
+    //***********
+    //Hit manager
+    //***********
+
+    private List<WoundType> _woundsList = new List<WoundType>();
+
+    private void checkHit()
     {
         Color hitTextColor = Color.red;
 
@@ -451,7 +516,7 @@ public class Player : MonoBehaviour
         _woundedUI.ActivateUI();
     }
 
-    public void removeAllWounds()
+    private void removeAllWounds()
     {
         _woundsList.Clear();
         _woundedUI.ActivateUI();
@@ -459,13 +524,27 @@ public class Player : MonoBehaviour
 
     public static List<WoundType> GetWoundsListStatic()
     {
-        return _instance?.getWoundList();
+        return _instance.getWoundList();
     }
 
     private List<WoundType> getWoundList()
     {
         return _woundsList;
     }
+
+    //*********
+    //Inventory
+    //*********
+
+    private const int MAX_NUMBER_OF_ITEMS = 12;
+
+    public Action OnSuccessfulAdd;
+    public Action OnItemRemovedFromInventory;
+    public Action OnToggleInventoryUI;
+    public Action OnToggleCraftingUI;
+
+    [SerializeField] private List<Item> _items = new List<Item>();
+    private bool _craftingPossible = false;
 
     private void toggleInventoryUI()
     {
@@ -487,7 +566,7 @@ public class Player : MonoBehaviour
         return _instance.getItems();
     }
 
-    public void useConsumable(ConsumableType type)
+    private void useConsumable(ConsumableType type)
     {
         ConsumableItem consumable = GameAssets.Instance.GetConsumableByType(type);
         if (!_items.Contains(consumable))
@@ -564,12 +643,24 @@ public class Player : MonoBehaviour
         return _items;
     }
 
-    public void enableCrafting(bool value)
+    public void EnableCrafting(bool value)
     {
         _craftingPossible = value;
     }
 
-    public void damagePlayer(float value)
+    //*****
+    //Stats
+    //*****
+
+    public event Action<float> OnHealthUIUpdate;
+    public event Action<float> OnStaminaUIUpdate;
+
+    [Header("For testing")]
+    [SerializeField] private bool _invincible = false;
+
+    private List<StatModifyingData> _injuries = new List<StatModifyingData>();
+
+    public void DamagePlayer(float value)
     {
         if (_invincible)
             return;
@@ -592,7 +683,7 @@ public class Player : MonoBehaviour
         ParticleSystem bloodPSObject = Instantiate(_gameAssets.BloodPS, transform.position, Quaternion.identity, null);
         Transform bloodTransform = Instantiate(_gameAssets.Blood, transform.position, Quaternion.identity, null);
 
-        if (getCharacterBaseScriptable().CharacterType.Equals(CharacterBaseType.Robot))
+        if (GetCharacterBaseScriptable().CharacterType.Equals(CharacterBaseType.Robot))
         {
             ParticleSystem.MainModule bloodPSMain = bloodPSObject.main;
             SpriteRenderer bloodSR = bloodTransform.GetComponent<SpriteRenderer>();
@@ -687,7 +778,7 @@ public class Player : MonoBehaviour
         StartCoroutine(removeStatModifierCoroutine(injuryData.StatAffected, injuryData.Duration, injuryData.StatModifier, injuryData.StatMultiplier));
     }
 
-    public void removeAllInjuries()
+    private void removeAllInjuries()
     {
         foreach (StatModifyingData data in _injuries)
         {
@@ -697,7 +788,7 @@ public class Player : MonoBehaviour
 
     public static void RemoveStatModifierStatic(StatType statType, float modifier, float multiplier)
     {
-        _instance?.removeStatModifier(statType, modifier, multiplier);
+        _instance.removeStatModifier(statType, modifier, multiplier);
     }
 
     private void removeStatModifier(StatType statType, float modifier, float multiplier)
@@ -720,7 +811,7 @@ public class Player : MonoBehaviour
         StopCoroutine(nameof(removeStatModifierCoroutine));
     }
 
-    public bool useItem(Item item)
+    public bool UseItem(Item item)
     {
         if (item == null)
             return false;
@@ -834,7 +925,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public bool isAlive()
+    public bool IsAlive()
     {
         return Health.GetCurrentValue() > 0.0f;
     }
@@ -867,6 +958,40 @@ public class Player : MonoBehaviour
         }
     }
 
+    //*******
+    //Weapons
+    //*******
+
+    private Transform _shootingSpot;
+
+    [Header("Shooting settings - Read-only")]
+    [SerializeField] private float _nonShootingDistance = 1.00f;
+    [SerializeField] private float _closeQuarterShooting = 0.75f;
+    [SerializeField] private float _shootingOffset = 0.5f;
+    private bool _weaponEquipped = false;
+    private bool _canShoot = true;
+    private bool _isAutoShooting = false;
+    private bool _canSwitchWeapons = true;
+    private bool _canPutWeaponAway = true;
+    private float _shootingInterval;
+    private bool _intervalWeaponActivated = false;
+    private bool _isReloading = false;
+    private int _currentAmmo;
+    private int _shotsFired;
+    private int _shotsHit;
+
+    [Header("Camera shake - Read-only")]
+    [SerializeField] private float _cameraShakeDuration = 0.05f;
+    [SerializeField] private float _cameraShakeMagnitude = 0.1f;
+
+    [Header("Items")]
+    [SerializeField] private List<Weapon> _weapons = new List<Weapon>();
+    [SerializeField] private List<ThrowableWeapon> _throwables = new List<ThrowableWeapon>();
+
+    private Weapon _currentWeapon;
+    public Weapon CurrentWeapon => _currentWeapon;
+    private ThrowableWeapon _currentThrowable;
+
     private void weaponsStartSetup()
     {
         if (_weapons.Count > 0)
@@ -885,7 +1010,7 @@ public class Player : MonoBehaviour
         if (_gameManager == null)
             return;
 
-        if (!isAlive() || !_gameManager.IsGameRunning() || _gameManager.IsPaused())
+        if (!IsAlive() || !_gameManager.IsGameRunning() || _gameManager.IsPaused())
             return;
 
         if (Input.GetKeyDown(KeyCode.R) && _weaponEquipped)
@@ -913,7 +1038,7 @@ public class Player : MonoBehaviour
             useThrowable();
     }
 
-    public void leftClickDown()
+    public void LeftClickDown()
     {
         if (_pointerOver.OverUI())
             return;
@@ -990,7 +1115,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void leftClickUp()
+    public void LeftClickUp()
     {
         _isAutoShooting = false;
         _canSwitchWeapons = true;
@@ -1080,12 +1205,12 @@ public class Player : MonoBehaviour
         _throwableAmmoPanel.UpdateAmmoText(_currentThrowable.TotalAmmo);
     }
 
-    public void enableShooting(bool value)
+    public void EnableShooting(bool value)
     {
         _canShoot = value;
     }
 
-    public void setReloading(bool value)
+    public void SetReloading(bool value)
     {
         _isReloading = value;
     }
@@ -1171,7 +1296,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void incrementShotsHit()
+    public void IncrementShotsHit()
     {
         _shotsHit++;
         _accuracyPanel?.SetupAccuracyText((float)_shotsHit / _shotsFired);
@@ -1334,7 +1459,7 @@ public class Player : MonoBehaviour
         shootingPS.Play();
     }
 
-    public bool addThrowable(ThrowableWeapon throwable)
+    public bool AddThrowable(ThrowableWeapon throwable)
     {
         if (throwable == null)
             return false;
@@ -1361,7 +1486,7 @@ public class Player : MonoBehaviour
         return true;
     }
 
-    public bool addWeapon(Weapon weapon)
+    public bool AddWeapon(Weapon weapon)
     {
         if (weapon == null)
             return false;
@@ -1409,18 +1534,14 @@ public class Player : MonoBehaviour
         return _currentWeapon;
     }
 
-    public static ThrowableWeapon GetCurrentThrowableStatic()
-    {
-        return _instance?.getCurrentThrowable();
-    }
-
-    public bool IsArmed()
-    {
-        return _weaponEquipped;
-    }
-
     private ThrowableWeapon getCurrentThrowable()
     {
         return _currentThrowable;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, _nonShootingDistance);
     }
 }

@@ -3248,7 +3248,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7866354780475814736}
   m_HandleRect: {fileID: 2782411832275527070}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 1.0000038
   m_Size: 0.43333337
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -9861,7 +9861,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.0006502493}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &5501604041733099145
@@ -10872,14 +10872,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.44016108, g: 1, b: 0.36470592, a: 0.627451}
+  m_Color: {r: 0.3873174, g: 0.6320754, b: 0.35479707, a: 0.627451}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ab3ced75439e9a340b4e2f6291094748, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3e12afae74a10b143b61e0a0e342cbb0, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -17383,11 +17383,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7851024685490516935, guid: aec5246d0a680df4296d90a95f410067,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7851024685490516935, guid: aec5246d0a680df4296d90a95f410067,
         type: 3}

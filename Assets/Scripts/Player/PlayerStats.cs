@@ -256,7 +256,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
 
         BodyArmor.UpdateCurrentValue(bodyArmor);
         if (BodyArmor.GetCurrentValue() > maxArmor)
-            BodyArmor.UpdateCurrentValue(maxArmor);
+            BodyArmor.SetCurrentValue(maxArmor);
 
         _playerArmorSlider.UpdatePlayerArmorSlider(BodyArmor.GetCurrentValue());
     }
