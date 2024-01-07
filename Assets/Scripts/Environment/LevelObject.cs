@@ -123,6 +123,14 @@ public class LevelObject : MonoBehaviour
 
     private void spawnPortals(bool spawnPortalNeeded = true)
     {
+        spawnExitPortal();
+        spawnSpawnPortal(spawnPortalNeeded);
+
+        _portalSpawnPoints.ForEach(spawnPoint => spawnPoint.SetActive(false));
+    }
+
+    private void spawnExitPortal()
+    {
         SpawnPoint randomSpawnPoint = _portalSpawnPoints.FindAll(point => point.IsActive()).GetRandomElement();
 
         if (_environmentContainer == null)
@@ -133,26 +141,27 @@ public class LevelObject : MonoBehaviour
         float deactivateSpawnPointsInRadius = 6.0f;
         if (_levelType.Equals(LevelType.Boss))
         {
-            //deactivateSpawnPointsInRadius *= 0.5f;
+            deactivateSpawnPointsInRadius *= 0.5f;
             _exitPortal.ClosePortal(true);
         }
-        
-        deactivateSpawnPointsAround(randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
+
+        if (_levelType != LevelType.Player)
+            deactivateSpawnPointsAround(randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
         
         randomSpawnPoint.SetActive(false);
+    }
 
-        if (spawnPortalNeeded)
-        {
-            randomSpawnPoint = _portalSpawnPoints.FindAll(point => point.IsActive()).GetRandomElement();
+    private void spawnSpawnPortal(bool spawnPortalNeeded)
+    {
+        if (!spawnPortalNeeded)
+            return;
 
-            _spawnPortal = Instantiate(GameAssets.Instance.SpawnPortal, randomSpawnPoint.Location, Quaternion.identity, _environmentContainer).GetComponent<Portal>();
+        SpawnPoint randomSpawnPoint = _portalSpawnPoints.FindAll(point => point.IsActive()).GetRandomElement();
+        _spawnPortal = Instantiate(GameAssets.Instance.SpawnPortal, randomSpawnPoint.Location, Quaternion.identity, _environmentContainer).GetComponent<Portal>();
 
-            deactivateSpawnPointsAround(randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
-
-            randomSpawnPoint.SetActive(false);
-        }
-
-        _portalSpawnPoints.ForEach(spawnPoint => spawnPoint.SetActive(false));
+        float deactivateSpawnPointsInRadius = 6.0f;
+        deactivateSpawnPointsAround(randomSpawnPoint.Location, deactivateSpawnPointsInRadius);
+        randomSpawnPoint.SetActive(false);
     }
 
     public Vector3 GetSpawnPortalPosition()

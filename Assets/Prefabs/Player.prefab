@@ -343,7 +343,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f468a34fdad0d541a31864aaa9ce31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _invincible: 0
   Health:
     _statType: 0
     _currentValue: 0
@@ -372,8 +371,9 @@ MonoBehaviour:
     _statType: 0
     _currentValue: 0
   PlayerDamage: {x: 0, y: 0}
-  _items: []
   _staminaTriggerThreshold: 0.1
+  _items: []
+  _invincible: 0
   _nonShootingDistance: 1
   _closeQuarterShooting: 0.75
   _shootingOffset: 0.5

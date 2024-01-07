@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using AlpacaMyGames;
 
 public class RandomWeaponSpawnObject : MonoBehaviour
 {
-    private ItemSpawner _itemSpawner;
-
     [SerializeField] private bool _spawnRandomly;
     [SerializeField] private WeaponItem _specificWeapon;
 
@@ -15,33 +11,26 @@ public class RandomWeaponSpawnObject : MonoBehaviour
         spawnItem();
     }
 
-    private void spawnRandomly()
-    {
-        if (!_spawnRandomly)
-            return;
-
-        if (Utilities.ChanceFunc(50))
-            Destroy(gameObject);
-    }
-
     private void spawnItem()
     {
-        _itemSpawner = ItemSpawner.Instance;
+        if (_spawnRandomly && Utilities.ChanceFunc(50))
+            Destroy(gameObject);
 
-        spawnRandomly();
+        ItemSpawner itemSpawner = ItemSpawner.Instance;
+        GameAssets gameAssets = GameAssets.Instance;
 
         if (_specificWeapon == null)
         {
-            List<WeaponItem> weapons = GameAssets.Instance.WeaponsList;
+            Item randomWeapon = Utilities.ChanceFunc(50) ?
+                gameAssets.WeaponsList.GetRandomElement() : gameAssets.ThrowablesList.GetRandomElement();
 
-            Transform weaponObject = _itemSpawner?.SpawnItem(transform.position, weapons.GetRandomElement());
+            Transform weaponObject = itemSpawner?.SpawnItem(transform.position, randomWeapon);
             weaponObject.transform.parent = transform.parent;
         }
         else
         {
-            _itemSpawner?.SpawnItem(transform.position, _specificWeapon);
+            itemSpawner?.SpawnItem(transform.position, _specificWeapon);
         }
-
 
         Destroy(gameObject);
     }
