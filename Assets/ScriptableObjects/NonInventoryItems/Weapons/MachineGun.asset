@@ -26,3 +26,4 @@ MonoBehaviour:
   MagazineBullets: 28
   AmmoType: 2
   StrengthRequired: 2
+  UseChance: 18

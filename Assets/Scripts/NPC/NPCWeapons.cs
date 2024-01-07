@@ -1,4 +1,5 @@
 using AlpacaMyGames;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class NPCWeapons : MonoBehaviour
@@ -21,6 +22,7 @@ public class NPCWeapons : MonoBehaviour
 
     [Header("Weapons, read-only")]
     [SerializeField] private WeaponItem _selectedWeapon;
+    private float _enemyWeaponLevel = 1;
     private bool _reloadActivated = false;
     [SerializeField] private float _reloadTime = 0.0f;
 
@@ -41,12 +43,17 @@ public class NPCWeapons : MonoBehaviour
     {
         _gameAssets = GameAssets.Instance;
         _audioManager = AudioManager.Instance;
-        chooseEnemysWeapon();
     }
 
     private void Update()
     {
         autoShootingRoutine();
+    }
+
+    public void SetEnemyWeaponLevel(int level)
+    {
+        _enemyWeaponLevel = level;
+        chooseWeapon();
     }
 
     public void InitializeBossWeapon(WeaponItem weaponOfChoice)
@@ -57,36 +64,29 @@ public class NPCWeapons : MonoBehaviour
         if (randomChance)
             _selectedWeapon = weaponOfChoice;
         else
-            chooseEnemysWeapon();
+            chooseWeapon();
     }
 
-    private void chooseEnemysWeapon()
+    private void chooseWeapon()
     {
-        if (GameAssets.Instance == null)
-            return;
+        if (_gameAssets == null)
+            _gameAssets = GameAssets.Instance;
 
-        int randomWeaponIndex = Random.Range(0, 12);
+        List<WeaponItem> itemPool = new List<WeaponItem>();
+        for (int i = 0; i < _gameAssets.WeaponsList.Count; i++)
+        {
+            float weaponChance = _gameAssets.WeaponsList[i].UseChance;
+            int sampleSize = 5;
+            for (int j = 0; j < sampleSize; j++)
+            {
+                if (!Utilities.ChanceFunc(weaponChance))
+                    continue;
 
-        if (randomWeaponIndex < 4)
-        {
-            //Gun - 4/12 chance to spawn (0, 1, 2, 3)
-            _selectedWeapon = GameAssets.Instance.WeaponsList[0];
+                itemPool.Add(_gameAssets.WeaponsList[i]);
+            }
         }
-        else if (randomWeaponIndex >= 4 && randomWeaponIndex < 8)
-        {
-            //Silencer - 4/12 chance to spawn (4, 5, 6, 7)
-            _selectedWeapon = GameAssets.Instance.WeaponsList[1];
-        }
-        else if (randomWeaponIndex >= 8 && randomWeaponIndex < 10)
-        {
-            //Machine gun - 2/12 chance to spawn (8, 9)
-            _selectedWeapon = GameAssets.Instance.WeaponsList[2];
-        }
-        else
-        {
-            //Shotgun - 2/12 chance to spawn (10, 11)
-            _selectedWeapon = GameAssets.Instance.WeaponsList[3];
-        }
+
+        _selectedWeapon = itemPool.GetRandomElement();
     }
 
     public void PresentWeapon(bool presentWeapon)

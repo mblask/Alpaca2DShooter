@@ -20,6 +20,8 @@ public class LevelObject : MonoBehaviour
     [SerializeField] private LevelType _levelType;
     [SerializeField] private bool _wasPlayed = false;
 
+    [SerializeField] private int _levelNumber = 1;
+
     private bool _bossSpawned = false;
 
     private bool _isReady = false;
@@ -59,8 +61,10 @@ public class LevelObject : MonoBehaviour
         return playerTransform;
     }
 
-    public void SetupLevel(bool levelNeedsSpawnPortal = true)
+    public void SetupLevel(int levelNumber, bool levelNeedsSpawnPortal = true)
     {
+        _levelNumber = levelNumber;
+
         spawnPortals(levelNeedsSpawnPortal);
         spawnEnemies();
         spawnTraps();
@@ -218,17 +222,27 @@ public class LevelObject : MonoBehaviour
                 for (int i = 0; i < 2; i++)
                 {
                     Vector2 position = spawnPoint.Location + i * Vector3.up;
-                    Instantiate(GameAssets.Instance.NPCPrefab, position, Quaternion.identity, _npcContainer);
+                    spawnEnemy(position);
+                    //Instantiate(GameAssets.Instance.NPCPrefab, position, Quaternion.identity, _npcContainer)
+                    //    .GetComponent<NPCWeapons>().SetEnemyWeaponLevel(_levelNumber);
                 }
 
                 continue;
             }
 
-            Instantiate(GameAssets.Instance.NPCPrefab, spawnPoint.Location, Quaternion.identity, _npcContainer);
+            spawnEnemy(spawnPoint.Location);
+            //Instantiate(GameAssets.Instance.NPCPrefab, spawnPoint.Location, Quaternion.identity, _npcContainer).
+            //    GetComponent<NPCWeapons>().SetEnemyWeaponLevel(_levelNumber);
         }
 
         _enemySpawnPoints.ForEach(spawnPoint => spawnPoint.SetActive(false));
         _playerSpawnPoints.ForEach(spawnPoint => spawnPoint.SetActive(false));
+    }
+
+    private void spawnEnemy(Vector3 position)
+    {
+        Instantiate(GameAssets.Instance.NPCPrefab, position, Quaternion.identity, _npcContainer)
+            .GetComponent<NPCWeapons>().SetEnemyWeaponLevel(_levelNumber);
     }
 
     public void BossKilled()

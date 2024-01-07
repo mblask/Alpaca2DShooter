@@ -16,6 +16,7 @@ public class LevelsManager : MonoBehaviour
 
     [Tooltip("Initial number of levels required to pass a group of levels\r\nRequired levels to pass decrease by one after each boss level")]
     [SerializeField] private int _levelsToPass = 2;
+    [SerializeField] private int _levelNumber = 1;
     private int _bossLevel = 0;
     public int BossLevel => _bossLevel;
 
@@ -68,7 +69,7 @@ public class LevelsManager : MonoBehaviour
         if (_playerLevel == null)
             return;
 
-        _playerLevel.SetupLevel(true);
+        _playerLevel.SetupLevel(_levelNumber, true);
         _currentLevel = _playerLevel;
         _playerTransform = Instantiate(GameAssets.Instance.Player, _playerLevel.GetSpawnPortalPosition(), Quaternion.identity, null);
         _playerSpawned = true;
@@ -88,7 +89,7 @@ public class LevelsManager : MonoBehaviour
             return false;
 
         _playerTransform = randomLevel.SpawnPlayer();
-        randomLevel.SetupLevel(false);
+        randomLevel.SetupLevel(_levelNumber, false);
 
         _currentLevel = randomLevel;
         _playerSpawned = true;
@@ -173,6 +174,7 @@ public class LevelsManager : MonoBehaviour
     private void exitingBossLevel()
     {
         _levelsToPass--;
+        _levelNumber++;
         if (_levelsToPass == 0)
         {
             _gameManager.TriggerVictory();
@@ -229,7 +231,7 @@ public class LevelsManager : MonoBehaviour
 
         _bossLevel++;
         if (!level.IsReady())
-            level.SetupLevel();
+            level.SetupLevel(_levelNumber);
 
         _currentLevel = level;
         _playerTransform.position = level.GetSpawnPortalPosition();
@@ -237,6 +239,7 @@ public class LevelsManager : MonoBehaviour
 
     private void groupNotCompleted()
     {
+        _levelNumber++;
         transferPlayerToAnotherLevel();
     }
 
@@ -250,7 +253,7 @@ public class LevelsManager : MonoBehaviour
             level = _levelsList.GetRandomElement();
         }
 
-        level.SetupLevel(true);
+        level.SetupLevel(_levelNumber, true);
         _numberOfSingleGroupLevelsUsed++;
 
         _playerTransform.position = level.GetSpawnPortalPosition();
@@ -281,7 +284,7 @@ public class LevelsManager : MonoBehaviour
         }
 
         if (!_playerLevel.IsReady())
-            _playerLevel.SetupLevel(true);
+            _playerLevel.SetupLevel(_levelNumber, true);
 
         _currentLevel.ClearLevel();
         _currentLevel = _playerLevel;

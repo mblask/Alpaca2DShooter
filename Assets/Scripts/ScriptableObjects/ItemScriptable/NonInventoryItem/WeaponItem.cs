@@ -16,6 +16,9 @@ public class WeaponItem : NonInventoryItem
     [Header("Required to use")]
     public float StrengthRequired;
 
+    [Header("Enemy use chance")]
+    public float UseChance;
+
     public override bool UseItem()
     {
         if (PlayerWeapons.Instance == null)
