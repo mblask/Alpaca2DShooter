@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class WeaponImage : MonoBehaviour
 {
@@ -28,13 +27,6 @@ public class WeaponImage : MonoBehaviour
     {
         _playerWeapons = PlayerWeapons.Instance;
         activateUI(_playerWeapons.GetWeapons().Count > 0);
-    }
-
-    public void PlayerWeapons_OnWeaponsChanged(PlayerWeapons playerWeapons)
-    {
-        Weapon currentPlayerWeapon = playerWeapons.GetCurrentWeapon();
-
-        SetWeaponImage(currentPlayerWeapon);
     }
 
     public void SetWeaponImage(Weapon weapon)

@@ -22,6 +22,7 @@ public class PlayerHitManager : MonoBehaviour
 
     private PlayerStats _playerStats;
     private WoundedUI _woundedUI;
+    private GamePlayCanvas _uiCanvas;
 
     private void Awake()
     {
@@ -34,6 +35,7 @@ public class PlayerHitManager : MonoBehaviour
         _postProcessingManager = PostProcessingManager.Instance;
         _playerStats = PlayerStats.Instance;
         _woundedUI = WoundedUI.Instance;
+        _uiCanvas = GamePlayCanvas.Instance;
     }
 
     public void CheckHit()
@@ -100,7 +102,7 @@ public class PlayerHitManager : MonoBehaviour
         else
             return;
 
-        _woundedUI.ActivateUI();
+        _uiCanvas.ActivateWoundedUI();
     }
 
     private IEnumerator removeWoundTypeCoroutine(WoundType woundType, float after)
@@ -115,13 +117,13 @@ public class PlayerHitManager : MonoBehaviour
         }
 
         _woundsList.Remove(woundType);
-        _woundedUI.ActivateUI();
+        _uiCanvas.ActivateWoundedUI();
     }
 
     public void RemoveAllWounds()
     {
         _woundsList.Clear();
-        _woundedUI.ActivateUI();
+        _uiCanvas.ActivateWoundedUI();
     }
 
     public static List<WoundType> GetWoundsListStatic()

@@ -1,5 +1,4 @@
 using AlpacaMyGames;
-using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,9 +13,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public event Action<float> OnTimeUpdated;
-    public event Action OnTogglePause;
-
     [Header("Read-only")]
     [SerializeField] private float _gameTime;
     private float _incrementedTime;
@@ -30,6 +26,7 @@ public class GameManager : MonoBehaviour
     private GameAssets _gameAssets;
     private AchievementManager _achievementsManager;
     private Transform _mouseCursorTransform;
+    private GamePlayCanvas _uiCanvas;
 
     private void Awake()
     {
@@ -41,6 +38,7 @@ public class GameManager : MonoBehaviour
         _mouseCursorTransform = MouseCursor.Instance.transform;
         _achievementsManager = AchievementManager.Instance;
         _gameAssets = GameAssets.Instance;
+        _uiCanvas = GamePlayCanvas.Instance;
     }
 
     private void Update()
@@ -51,7 +49,7 @@ public class GameManager : MonoBehaviour
             checkMouseCursor();
 
             if (Input.GetKeyDown(KeyCode.Escape))
-                OnTogglePause?.Invoke();
+                _uiCanvas.TogglePauseUI();
         }
     }
 
@@ -86,10 +84,7 @@ public class GameManager : MonoBehaviour
         _incrementedTime += Time.deltaTime;
 
         if (_incrementedTime >= _timeIncrement)
-        {
-            OnTimeUpdated?.Invoke(_gameTime);
             _incrementedTime -= _timeIncrement;
-        }
     }
 
     public void TriggerVictory()

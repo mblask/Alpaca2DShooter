@@ -14,13 +14,6 @@ public class PlayerHealthSlider : MonoBehaviour
     private void Start()
     {
         _playerStats = PlayerStats.Instance;
-        PlayerStats.Instance.OnHealthUIUpdate += UpdatePlayerHealthSlider;
-    }
-
-    private void OnDisable()
-    {
-        if (PlayerStats.Instance != null)
-            PlayerStats.Instance.OnHealthUIUpdate -= UpdatePlayerHealthSlider;
     }
 
     public void UpdatePlayerHealthSlider(float value)

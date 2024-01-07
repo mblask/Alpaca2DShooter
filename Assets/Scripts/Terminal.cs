@@ -25,9 +25,8 @@ public class Terminal : Box2dCollider, IInteractable
 
     private PlayerStats _playerStats;
     private PlayerInventory _playerInventory;
-    private TerminalUI _terminalUI;
-    private TextConsoleUI _textConsoleUI;
     private AchievementManager _achievementManager;
+    private GamePlayCanvas _uiCanvas;
 
     private void Awake()
     {
@@ -39,10 +38,9 @@ public class Terminal : Box2dCollider, IInteractable
     {
         _playerStats = PlayerStats.Instance;
         _playerInventory = PlayerInventory.Instance;
-        _terminalUI = TerminalUI.Instance;
-        _textConsoleUI = TextConsoleUI.Instance;
         _achievementManager = AchievementManager.Instance;
         _exitPortalPosition = ExitPortalPosition.Instance;
+        _uiCanvas = GamePlayCanvas.Instance;
     }
 
     private void Update()
@@ -60,8 +58,8 @@ public class Terminal : Box2dCollider, IInteractable
             return;
 
         _isInteracting = false;
-        _terminalUI.ActivateUI(false);
-        _textConsoleUI.CloseUI(false);
+        _uiCanvas.ActivateTerminalUI(false);
+        _uiCanvas.CloseTextConsoleUI(false);
     }
 
     private void breakingInProcedure()
@@ -94,11 +92,11 @@ public class Terminal : Box2dCollider, IInteractable
 
     private void openTerminal()
     {
-        _terminalUI.SetTerminal(this);
-        _terminalUI.ActivateUI(true);
-        _terminalUI.UpdateButtonAvailability(_playerStats.Hacking.GetCurrentValue());
-        _terminalUI.InsertedDataItem(_chosenDataItem);
-        _terminalUI.AddDataItemsUI(checkForDataItems());
+        _uiCanvas.SetTerminal(this);
+        _uiCanvas.ActivateTerminalUI(true);
+        _uiCanvas.UpdateButtonAvailability(_playerStats.Hacking.GetCurrentValue());
+        _uiCanvas.InsertedDataItem(_chosenDataItem);
+        _uiCanvas.AddDataItemsUI(checkForDataItems());
     }
 
     private List<DataItem> checkForDataItems()
@@ -206,8 +204,8 @@ public class Terminal : Box2dCollider, IInteractable
         if (!PlayerInventory.AddToInventoryStatic(_chosenDataItem))
             return false;
 
-        _textConsoleUI.CloseUI(false);
-        _terminalUI.AddDataItemsUI(checkForDataItems());
+        _uiCanvas.CloseTextConsoleUI(false);
+        _uiCanvas.AddDataItemsUI(checkForDataItems());
         _chosenDataItem = null;
         return true;
     }
@@ -217,7 +215,7 @@ public class Terminal : Box2dCollider, IInteractable
         if (_chosenDataItem == null)
             return;
 
-        _textConsoleUI.TextToWrite(_chosenDataItem.Text);
+        _uiCanvas.ActivateTextConsoleUI(_chosenDataItem.Text);
     }
 
     public void Highlight()

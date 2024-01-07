@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
     private AccuracyPanel _accuracyPanel;
     private MouseCursor _mouseCursor;
     private AudioManager _audioManager;
+    private GamePlayCanvas _uiCanvas;
 
     private void Awake()
     {
@@ -77,6 +78,8 @@ public class Player : MonoBehaviour
         _audioManager = AudioManager.Instance;
 
         weaponsStartSetup();
+
+        _uiCanvas = GamePlayCanvas.Instance;
     }
 
     private void Update()
@@ -498,7 +501,7 @@ public class Player : MonoBehaviour
         else
             return;
 
-        _woundedUI.ActivateUI();
+        _uiCanvas.ActivateWoundedUI();
     }
 
     private IEnumerator removeWoundTypeCoroutine(WoundType woundType, float after)
@@ -513,13 +516,13 @@ public class Player : MonoBehaviour
         }
 
         _woundsList.Remove(woundType);
-        _woundedUI.ActivateUI();
+        _uiCanvas.ActivateWoundedUI();
     }
 
     private void removeAllWounds()
     {
         _woundsList.Clear();
-        _woundedUI.ActivateUI();
+        _uiCanvas.ActivateWoundedUI();
     }
 
     public static List<WoundType> GetWoundsListStatic()
@@ -1000,9 +1003,9 @@ public class Player : MonoBehaviour
         if (_throwables.Count > 0)
             _currentThrowable = _throwables[0];
 
-        _throwableImage.UpdateThrowableUI(_currentThrowable);
+        _uiCanvas.SetThrowableImage(_currentThrowable);
         if (_currentThrowable != null)
-            _throwableAmmoPanel.UpdateAmmoText(_currentThrowable.TotalAmmo);
+            _uiCanvas.UpdateThrowableAmmoText(_currentThrowable.TotalAmmo);
     }
 
     private void keyboardInput()
@@ -1165,7 +1168,7 @@ public class Player : MonoBehaviour
         }
 
         _currentThrowable.TotalAmmo--;
-        _throwableAmmoPanel.UpdateAmmoText(_currentThrowable.TotalAmmo);
+        _uiCanvas.UpdateThrowableAmmoText(_currentThrowable.TotalAmmo);
 
         if (_currentThrowable.TotalAmmo == 0)
         {
@@ -1174,12 +1177,12 @@ public class Player : MonoBehaviour
             if (_throwables.Count > 0)
             {
                 _currentThrowable = _throwables[0];
-                _throwableImage.UpdateThrowableUI(_currentThrowable);
+                _uiCanvas.SetThrowableImage(_currentThrowable);
             }
             else
             {
                 _currentThrowable = null;
-                _throwableImage.UpdateThrowableUI(_currentThrowable);
+                _uiCanvas.SetThrowableImage(_currentThrowable);
             }
         }
     }
@@ -1201,8 +1204,8 @@ public class Player : MonoBehaviour
 
         _currentThrowable = _throwables[currentIndex];
 
-        _throwableImage.UpdateThrowableUI(_currentThrowable);
-        _throwableAmmoPanel.UpdateAmmoText(_currentThrowable.TotalAmmo);
+        _uiCanvas.SetThrowableImage(_currentThrowable);
+        _uiCanvas.UpdateThrowableAmmoText(_currentThrowable.TotalAmmo);
     }
 
     public void EnableShooting(bool value)
@@ -1250,7 +1253,7 @@ public class Player : MonoBehaviour
         }
 
         setWeapon(currentIndex);
-        _weaponImage.SetWeaponImage(_currentWeapon);
+        _uiCanvas.SetWeaponImage(_currentWeapon);
     }
 
     public void setWeapon(int index = 0)
@@ -1480,8 +1483,8 @@ public class Player : MonoBehaviour
         if (_currentThrowable == null)
             _currentThrowable = throwable;
 
-        _throwableImage.UpdateThrowableUI(_currentThrowable);
-        _throwableAmmoPanel.UpdateAmmoText(_currentThrowable.TotalAmmo);
+        _uiCanvas.SetThrowableImage(_currentThrowable);
+        _uiCanvas.UpdateThrowableAmmoText(_currentThrowable.TotalAmmo);
 
         return true;
     }
@@ -1517,7 +1520,7 @@ public class Player : MonoBehaviour
         if (_currentWeapon == null)
         {
             _currentWeapon = weapon;
-            _weaponImage.SetWeaponImage(_currentWeapon);
+            _uiCanvas.SetWeaponImage(_currentWeapon);
             setWeapon(0);
         }
 

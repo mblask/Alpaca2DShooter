@@ -62,10 +62,10 @@ public class ItemTooltip : MonoBehaviour
 
     public static void SetupTooltipStatic(Item item)
     {
-        _instance?.setupTooltip(item);
+        _instance?.SetupTooltip(item);
     }
 
-    private void setupTooltip(Item item)
+    public void SetupTooltip(Item item)
     {
         _animator.SetTrigger(GO_TO_DEFAULT_STRING);
 
@@ -82,10 +82,10 @@ public class ItemTooltip : MonoBehaviour
 
     public static void RemoveTooltipStatic()
     {
-        _instance?.removeTooltip();
+        _instance?.RemoveTooltip();
     }
     
-    private void removeTooltip()
+    public void RemoveTooltip()
     {
         if (_animator.GetBool(IS_ACTIVE_STRING))
             _animator.SetBool(IS_ACTIVE_STRING, false);
@@ -103,24 +103,24 @@ public class ItemTooltip : MonoBehaviour
         switch (item)
         {
             case ConsumableItem consumable:
-                ReadConsumableItem(consumable);
+                readConsumableItem(consumable);
                 break;
             case InstantaneousItem instantaneous:
-                ReadInstantaneousItem(instantaneous);
+                readInstantaneousItem(instantaneous);
                 break;
             case WeaponItem weaponItem:
-                ReadWeaponItem(weaponItem);
+                readWeaponItem(weaponItem);
                 break;
             case JunkItem:
-                ReadJunkItem();
+                readJunkItem();
                 break;
             case DataItem:
-                ReadDataItem();
+                readDataItem();
                 break;
         }
     }
 
-    private void ReadConsumableItem(ConsumableItem consumable)
+    private void readConsumableItem(ConsumableItem consumable)
     {
         if (consumable.LifeRestored != Vector2.zero)
         {
@@ -150,7 +150,7 @@ public class ItemTooltip : MonoBehaviour
         }
     }
 
-    private void ReadInstantaneousItem(InstantaneousItem instantaneous)
+    private void readInstantaneousItem(InstantaneousItem instantaneous)
     {
         if (instantaneous.LifeRestored != Vector2.zero)
         {
@@ -168,7 +168,7 @@ public class ItemTooltip : MonoBehaviour
         }
     }
 
-    private void ReadWeaponItem(WeaponItem weaponItem)
+    private void readWeaponItem(WeaponItem weaponItem)
     {
         _sb.Append("Damage: ");
         _sb.Append(weaponItem.WeaponDamage.x.ToString());
@@ -198,14 +198,14 @@ public class ItemTooltip : MonoBehaviour
         requiredStats(weaponItem);
     }
 
-    private void ReadJunkItem()
+    private void readJunkItem()
     {
         _sb.AppendLine();
         _sb.AppendLine("Junk item");
         _sb.AppendLine("Used in crafting");
     }
 
-    private void ReadDataItem()
+    private void readDataItem()
     {
         _sb.AppendLine();
         _sb.AppendLine("Data item");

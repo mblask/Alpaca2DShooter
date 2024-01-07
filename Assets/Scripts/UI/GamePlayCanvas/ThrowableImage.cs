@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class ThrowableImage : MonoBehaviour
 {
@@ -13,9 +12,7 @@ public class ThrowableImage : MonoBehaviour
         }
     }
 
-    private Transform _container;
     private Image _image;
-    private TextMeshProUGUI _text;
 
     private void Awake()
     {
@@ -23,7 +20,7 @@ public class ThrowableImage : MonoBehaviour
         _image = transform.Find("Image").GetComponent<Image>();
     }
 
-    public void UpdateThrowableUI(ThrowableWeapon throwable)
+    public void SetThrowableImage(ThrowableWeapon throwable)
     {
         if (throwable == null || throwable.TotalAmmo == 0)
         {

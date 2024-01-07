@@ -21,7 +21,7 @@ public class AchievementManager : MonoBehaviour
     private GameManager _gameManager;
     private PlayerStats _playerStats;
     private PlayerWeapons _playerWeapons;
-    private AchievementUI _achievementUI;
+    private GamePlayCanvas _uiCanvas;
 
     private void Awake()
     {
@@ -33,7 +33,7 @@ public class AchievementManager : MonoBehaviour
         _gameManager = GameManager.Instance;
         _playerStats = PlayerStats.Instance;
         _playerWeapons = PlayerWeapons.Instance;
-        _achievementUI = AchievementUI.Instance;
+        _uiCanvas = GamePlayCanvas.Instance;
     }
 
     public void CheckOnGameFinished()
@@ -104,6 +104,6 @@ public class AchievementManager : MonoBehaviour
     { 
         Achievement achievement = AchievementConstants.GetAchievement(type, value);
         if (_unlockedAchievements.AddIfNone(achievement))
-            _achievementUI.UpdateText(type);
+            _uiCanvas.UpdateAchievementText(type);
     }
 }

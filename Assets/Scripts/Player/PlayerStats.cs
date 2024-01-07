@@ -15,9 +15,6 @@ public class PlayerStats : MonoBehaviour, IDamagable
         }
     }
 
-    public event Action<float> OnHealthUIUpdate;
-    public event Action<float> OnStaminaUIUpdate;
-
     [Header("For testing")]
     [SerializeField] private bool _invincible = false;
 
@@ -51,6 +48,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
     private PlayerHitManager _playerHitManager;
     private PlayerArmorSlider _playerArmorSlider;
     private PostProcessingManager _postProcessingManager;
+    private GamePlayCanvas _uiCanvas;
 
     public void Awake()
     {
@@ -67,6 +65,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
         _cameraController = CameraController.Instance;
         _postProcessingManager = PostProcessingManager.Instance;
         _playerArmorSlider = PlayerArmorSlider.Instance;
+        _uiCanvas = GamePlayCanvas.Instance;
     }
 
     private void Update()
@@ -115,7 +114,8 @@ public class PlayerStats : MonoBehaviour, IDamagable
             die();
 
         _cameraController?.ShakeCamera(0.05f, 0.1f);
-        OnHealthUIUpdate?.Invoke(Health.GetCurrentValue());
+
+        _uiCanvas.UpdatePlayerHealthSlider(Health.GetCurrentValue());
     }
 
     public float GetTotalHealthLoss()
@@ -162,7 +162,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
         if (Health.GetCurrentValue() >= Health.GetFinalValue())
             Health.SetCurrentToFinalValue();
 
-        OnHealthUIUpdate?.Invoke(Health.GetCurrentValue());
+        _uiCanvas.UpdatePlayerHealthSlider(Health.GetCurrentValue());
     }
 
     public static void TemporarilyModifyStat(StatModifyingData injuryData)
@@ -270,7 +270,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
             if (Health.GetCurrentValue() > Health.GetFinalValue())
                 Health.SetCurrentToFinalValue();
 
-            OnHealthUIUpdate?.Invoke(Health.GetCurrentValue());
+            _uiCanvas.UpdatePlayerHealthSlider(Health.GetCurrentValue());
         }
 
         if (staminaRestoration.magnitude > 0.0f)
@@ -280,7 +280,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
             if (Stamina.GetCurrentValue() > Stamina.GetFinalValue())
                 Stamina.SetCurrentToFinalValue();
 
-            OnStaminaUIUpdate?.Invoke(Stamina.GetCurrentValue());
+            _uiCanvas.UpdatePlayerStaminaSlider(Stamina.GetCurrentValue());
         }
 
         if (limbEnforcement.x > 0.0f)
@@ -337,7 +337,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
 
         if (Mathf.Abs(_staminaTrigger) >= _staminaTriggerThreshold)
         {
-            OnStaminaUIUpdate?.Invoke(Stamina.GetCurrentValue());
+            _uiCanvas.UpdatePlayerStaminaSlider(Stamina.GetCurrentValue());
             _staminaTrigger = 0.0f;
         }
     }

@@ -15,18 +15,10 @@ public class ConsumableItemsUIMenu : MonoBehaviour
 
     private void Start()
     {
-        PlayerInventory.Instance.OnSuccessfulAdd += populateConsumableItemsUI;
-        PlayerInventory.Instance.OnItemRemovedFromInventory += populateConsumableItemsUI;
-        populateConsumableItemsUI();
+        PopulateConsumableItemsUI();
     }
 
-    private void OnDisable()
-    {
-        PlayerInventory.Instance.OnSuccessfulAdd -= populateConsumableItemsUI;
-        PlayerInventory.Instance.OnItemRemovedFromInventory -= populateConsumableItemsUI;
-    }
-
-    private void populateConsumableItemsUI()
+    public void PopulateConsumableItemsUI()
     {
         List<Item> items = PlayerInventory.GetItemsStatic();
         List<ConsumableItem> consumableItems = new List<ConsumableItem>();

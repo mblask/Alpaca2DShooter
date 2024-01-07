@@ -36,9 +36,7 @@ public class LevelsManager : MonoBehaviour
     private LevelObject _currentLevel;
 
     private GameManager _gameManager;
-
-    private LevelProgressChoiceUI _levelProgressChoiceUI;
-    private PlayerOrBossLevelUI _playerOrBossLevelUI;
+    private GamePlayCanvas _uiCanvas;
 
     private void Awake()
     {
@@ -51,8 +49,7 @@ public class LevelsManager : MonoBehaviour
     private void Start()
     {
         _gameManager = GameManager.Instance;
-        _levelProgressChoiceUI = LevelProgressChoiceUI.Instance;
-        _playerOrBossLevelUI = PlayerOrBossLevelUI.Instance;
+        _uiCanvas = GamePlayCanvas.Instance;
 
         if (_spawnInPlayerLevel)
             spawnPlayerInPlayersLevel();
@@ -136,9 +133,9 @@ public class LevelsManager : MonoBehaviour
     public static void ExitingExitPortal()
     {
         if (_instance._currentLevel.Equals(_instance._playerLevel))
-            _instance._levelProgressChoiceUI?.ShowUI(false);
+            _instance._uiCanvas?.ShowLevelProgressChoiceUI(false);
 
-        _instance._playerOrBossLevelUI?.ActivateUI(false);
+        _instance._uiCanvas?.ActivatePlayerOrBossUI(false);
     }
 
     private void checkCompletionState()
@@ -159,7 +156,7 @@ public class LevelsManager : MonoBehaviour
                 break;
 
             case CompletionState.groupCompleted:
-                _playerOrBossLevelUI.ActivateUI(true);
+                _uiCanvas.ActivatePlayerOrBossUI(true);
                 break;
 
             case CompletionState.groupNotCompleted:
@@ -187,7 +184,7 @@ public class LevelsManager : MonoBehaviour
 
     private void exitingPlayerLevel()
     {
-        _levelProgressChoiceUI.ShowUI(true);
+        _uiCanvas.ShowLevelProgressChoiceUI(true);
     }
 
     public void TransferPlayerToLevel(LevelType levelType)

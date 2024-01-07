@@ -3248,8 +3248,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7866354780475814736}
   m_HandleRect: {fileID: 2782411832275527070}
   m_Direction: 2
-  m_Value: 1.0000038
-  m_Size: 0.43333337
+  m_Value: 1.0000036
+  m_Size: 0.43333328
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -9876,6 +9876,7 @@ GameObject:
   - component: {fileID: 5501604041733099188}
   - component: {fileID: 5501604041733099191}
   - component: {fileID: 5501604041733099190}
+  - component: {fileID: 3482700348494388072}
   m_Layer: 5
   m_Name: GamePlayCanvas
   m_TagString: Untagged
@@ -9986,6 +9987,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &3482700348494388072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5501604041733099145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 928328a39bfd5fd4b895303020df44b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5925663642215728628
 GameObject:
   m_ObjectHideFlags: 0

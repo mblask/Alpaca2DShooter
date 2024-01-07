@@ -10,6 +10,7 @@ public class PickupItem : MonoBehaviour
 
     private AudioManager _audioManager;
     private AchievementManager _achievementManager;
+    private GamePlayCanvas _uiCanvas;
     private ObjectRotation _rotation;
     [SerializeField] private float _rotationSpeed = 2.5f;
 
@@ -23,6 +24,7 @@ public class PickupItem : MonoBehaviour
     {
         _audioManager = AudioManager.Instance;
         _achievementManager = AchievementManager.Instance;
+        _uiCanvas = GamePlayCanvas.Instance;
 
         if (_item != null)
             _spriteRenderer.sprite = _item.ItemSprite;
@@ -64,7 +66,7 @@ public class PickupItem : MonoBehaviour
             _achievementManager.CheckOnItemUsed(_item);
         }
 
-        ItemTooltip.RemoveTooltipStatic();
+        _uiCanvas.RemoveItemTooltip();
 
         _audioManager.PlayClip(_item.PickupAudio);
         Destroy(gameObject);

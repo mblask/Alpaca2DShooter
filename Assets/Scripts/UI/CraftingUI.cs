@@ -4,23 +4,21 @@ using UnityEngine.UI;
 
 public class CraftingUI : MonoBehaviour
 {
-    private static CraftingUI _instance;
 
     private Transform _container;
     private Transform _possibleCraftsTransform;
     private List<IngredientSlotUI> _ingredientSlotUIList;
     private ProductSlotUI _productSlotUI;
     private Transform _possibleCraftedItemsContainer;
-
     private Button _craftButton;
 
     private CraftingRecipe _recipeToCraft;
 
     private GameAssets _gameAssets;
+    private GamePlayCanvas _canvas;
 
     private void Awake()
     {
-        _instance = this;
         _container = transform.Find("Container");
         _possibleCraftsTransform = _container.Find("PossibleCraftsScreen");
         _possibleCraftedItemsContainer = _possibleCraftsTransform.Find("ScrollView").Find("Viewport").Find("Content");
@@ -31,14 +29,9 @@ public class CraftingUI : MonoBehaviour
 
     private void Start()
     {
-        PlayerInventory.Instance.OnToggleCraftingUI += showCraftingUI;
         _gameAssets = GameAssets.Instance;
+        _canvas = GamePlayCanvas.Instance;
         _craftButton.onClick.AddListener(craftItem);
-    }
-
-    private void OnDisable()
-    {
-        PlayerInventory.Instance.OnToggleCraftingUI -= showCraftingUI;
     }
 
     private void craftItem()
@@ -53,11 +46,6 @@ public class CraftingUI : MonoBehaviour
         showPossibleCraftsScreen(CraftingManager.GetPossibleCraftsStatic().Count > 0);
     }
 
-    public static void PopulateCraftingSlots(CraftingRecipe recipe)
-    {
-        _instance.populateCraftingSlots(recipe);
-    }
-
     private void clearCraftingSlots()
     {
         _recipeToCraft = null;
@@ -67,7 +55,7 @@ public class CraftingUI : MonoBehaviour
         _productSlotUI.RemoveItemFromSlot();
     }
 
-    private void populateCraftingSlots(CraftingRecipe recipe)
+    public void PopulateCraftingSlots(CraftingRecipe recipe)
     {
         if (recipe == null)
             return;
@@ -84,7 +72,7 @@ public class CraftingUI : MonoBehaviour
             _productSlotUI.AddItemToSlot(recipe.ProductItem);
     }
 
-    private void showCraftingUI()
+    public void ShowCraftingUI()
     {
         bool isActive = !_container.gameObject.activeSelf;
 
@@ -98,9 +86,9 @@ public class CraftingUI : MonoBehaviour
         showPossibleCraftsScreen(_container.gameObject.activeSelf && CraftingManager.GetPossibleCraftsStatic().Count > 0);
 
         if (!isActive)
-            ItemTooltip.RemoveTooltipStatic();
+            _canvas.RemoveItemTooltip();
     }
-
+    
     private void showPossibleCraftsScreen(bool value)
     {
         _possibleCraftsTransform.gameObject.SetActive(value);

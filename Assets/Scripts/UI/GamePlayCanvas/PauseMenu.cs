@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PauseMenu : MonoBehaviour
@@ -19,15 +17,8 @@ public class PauseMenu : MonoBehaviour
     private void Start()
     {
         _gameManager = GameManager.Instance;
-
-        _gameManager.OnTogglePause += TogglePause;
     }
 
-    private void OnDisable()
-    {
-        if (_gameManager != null)
-            _gameManager.OnTogglePause -= TogglePause;
-    }
 
     public void TogglePause()
     {

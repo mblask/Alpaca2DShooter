@@ -8,6 +8,7 @@ public class InventoryUI : MonoBehaviour
     private const int MAX_NUMBER_OF_ITEMS = 12;
 
     private GameAssets _gameAssets;
+    private GamePlayCanvas _canvas;
 
     private void Awake()
     {
@@ -18,24 +19,13 @@ public class InventoryUI : MonoBehaviour
     private void Start()
     {
         _gameAssets = GameAssets.Instance;
+        _canvas = GamePlayCanvas.Instance;
         UpdateItemContainer();
-
-        PlayerInventory.Instance.OnToggleInventoryUI += showInventory;
-        PlayerInventory.Instance.OnSuccessfulAdd += UpdateItemContainer;
-        PlayerInventory.Instance.OnItemRemovedFromInventory += UpdateItemContainer;
     }
 
-    private void OnDisable()
-    {
-        PlayerInventory.Instance.OnToggleInventoryUI -= showInventory;
-        PlayerInventory.Instance.OnSuccessfulAdd -= UpdateItemContainer;
-        PlayerInventory.Instance.OnItemRemovedFromInventory -= UpdateItemContainer;
-    }
-
-    private void showInventory()
+    public void ShowInventory()
     {
         bool isActive = !_container.gameObject.activeSelf;
-
         _container.gameObject.SetActive(isActive);
         
         UpdateItemContainer();
@@ -45,7 +35,7 @@ public class InventoryUI : MonoBehaviour
     {
         if (!_container.gameObject.activeSelf)
         {
-            ItemTooltip.RemoveTooltipStatic();
+            _canvas.RemoveItemTooltip();
             return;
         }
 

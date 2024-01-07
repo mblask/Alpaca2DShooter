@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 
 public class MouseInteraction : MonoBehaviour
@@ -6,12 +5,12 @@ public class MouseInteraction : MonoBehaviour
     private PlayerWeapons _playerWeapons;
     private PointerOver _pointerOver;
 
-    private InteractableTooltipUI _interactionTooltip;
+    private GamePlayCanvas _canvas;
 
     private void Start()
     {
+        _canvas = GamePlayCanvas.Instance;
         _playerWeapons = PlayerWeapons.Instance;
-        _interactionTooltip = InteractableTooltipUI.Instance;
         _pointerOver = PointerOver.GetInstance();
     }
 
@@ -112,12 +111,12 @@ public class MouseInteraction : MonoBehaviour
         if (interactable != null)
         {
             interactable.Highlight();
-            _interactionTooltip.SetTooltip(collision.transform, interactable.InteractableName);
+            _canvas.SetInteractableTooltip(collision.transform, interactable.InteractableName);
         }
 
         PickupItem pickupItem = collision.GetComponent<PickupItem>();
         if (pickupItem != null)
-            ItemTooltip.SetupTooltipStatic(pickupItem.GetItem());
+            _canvas.SetupItemTooltip(pickupItem.GetItem());
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -127,11 +126,11 @@ public class MouseInteraction : MonoBehaviour
         if (interactable != null)
         {
             interactable.RemoveHighlight();
-            _interactionTooltip.HideTooltip();
+            _canvas.HideInteractableTooltip();
         }
 
         PickupItem pickupItem = collision.GetComponent<PickupItem>();
         if (pickupItem != null)
-            ItemTooltip.RemoveTooltipStatic();
+            _canvas.RemoveItemTooltip();
     }
 }

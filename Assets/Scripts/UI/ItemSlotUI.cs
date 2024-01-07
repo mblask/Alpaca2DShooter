@@ -7,7 +7,7 @@ public class ItemSlotUI : MonoBehaviour
     private Image _itemImage;
     private AlpacaButtonUI _itemButton;
 
-    private InventoryUI _inventoryUI;
+    private GamePlayCanvas _canvas;
 
     private void Awake()
     {
@@ -17,7 +17,7 @@ public class ItemSlotUI : MonoBehaviour
 
     private void Start()
     {
-        _inventoryUI = GetComponentInParent<InventoryUI>();
+        _canvas = GamePlayCanvas.Instance;
 
         _itemButton.onLeftClick = () => {
             if (_item != null)
@@ -27,13 +27,13 @@ public class ItemSlotUI : MonoBehaviour
         _itemButton.onCursorEnter = () =>
         {
             if (_item != null)
-                ItemTooltip.SetupTooltipStatic(_item);
+                _canvas.SetupItemTooltip(_item);
         };
 
         _itemButton.onCursorExit = () =>
         {
             if (_item != null)
-                ItemTooltip.RemoveTooltipStatic();
+                _canvas.RemoveItemTooltip();
         };
 
         _itemButton.onRightClick = () =>
@@ -48,7 +48,7 @@ public class ItemSlotUI : MonoBehaviour
         if (_item != null)
         {
             if (_item.UseItem())
-                _inventoryUI.UpdateItemContainer();
+                _canvas.UpdateItemContainer();
         }
     }
 
