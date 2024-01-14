@@ -22,13 +22,13 @@ public class NPCWeapons : MonoBehaviour
 
     [Header("Weapons, read-only")]
     [SerializeField] private WeaponItem _selectedWeapon;
-    private float _enemyWeaponLevel = 1;
     private bool _reloadActivated = false;
     [SerializeField] private float _reloadTime = 0.0f;
 
     private Transform _shootTarget;
     public bool HasShootingTarget => _shootTarget != null;
-    
+
+    private LevelsManager _levelsManager;
     private GameAssets _gameAssets;
     private AudioManager _audioManager;
 
@@ -41,19 +41,15 @@ public class NPCWeapons : MonoBehaviour
 
     private void Start()
     {
+        _levelsManager = LevelsManager.Instance;
         _gameAssets = GameAssets.Instance;
         _audioManager = AudioManager.Instance;
+        chooseWeapon();
     }
 
     private void Update()
     {
         autoShootingRoutine();
-    }
-
-    public void SetEnemyWeaponLevel(int level)
-    {
-        _enemyWeaponLevel = level;
-        chooseWeapon();
     }
 
     public void InitializeBossWeapon(WeaponItem weaponOfChoice)
@@ -69,20 +65,22 @@ public class NPCWeapons : MonoBehaviour
 
     private void chooseWeapon()
     {
-        if (_gameAssets == null)
-            _gameAssets = GameAssets.Instance;
+        if (_levelsManager == null)
+            _levelsManager = LevelsManager.Instance;
+
+        List<WeaponItem> availableWeapons = _levelsManager.GetAvailableNpcWeapons();
 
         List<WeaponItem> itemPool = new List<WeaponItem>();
-        for (int i = 0; i < _gameAssets.WeaponsList.Count; i++)
+        for (int i = 0; i < availableWeapons.Count; i++)
         {
-            float weaponChance = _gameAssets.WeaponsList[i].UseChance;
+            float weaponChance = availableWeapons[i].UseChance;
             int sampleSize = 5;
             for (int j = 0; j < sampleSize; j++)
             {
                 if (!Utilities.ChanceFunc(weaponChance))
                     continue;
 
-                itemPool.Add(_gameAssets.WeaponsList[i]);
+                itemPool.Add(availableWeapons[i]);
             }
         }
 

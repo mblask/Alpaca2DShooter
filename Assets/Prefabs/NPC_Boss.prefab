@@ -5152,7 +5152,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8874459827295818481}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3248e5895e6eea4caa6c6596ace0726, type: 3}
+  m_Script: {fileID: 11500000, guid: b1f18d5dd3faf8049bad82f9865851eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _npcAllegiance: 0
@@ -5170,6 +5170,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _throwable: {fileID: 0}
   _selectedWeapon: {fileID: 11400000, guid: 347dff94e829f684dbc2ea07a9ffb197, type: 2}
+  _availableWeapons:
+  - Level: 1
+    AvailableWeapons:
+    - {fileID: 11400000, guid: 8e403aae5daf09c49a7cc32cfef2d5d2, type: 2}
+  - Level: 2
+    AvailableWeapons:
+    - {fileID: 11400000, guid: e8a7754bc5105c74696fd95bff87f112, type: 2}
+  - Level: 4
+    AvailableWeapons:
+    - {fileID: 11400000, guid: 347dff94e829f684dbc2ea07a9ffb197, type: 2}
+  - Level: 7
+    AvailableWeapons:
+    - {fileID: 11400000, guid: 27da57185e6a67d4d9732d5ab8efa4eb, type: 2}
   _reloadTime: 0
 --- !u!114 &8874459827295818480
 MonoBehaviour:

@@ -241,8 +241,7 @@ public class LevelObject : MonoBehaviour
 
     private void spawnEnemy(Vector3 position)
     {
-        Instantiate(GameAssets.Instance.NPCPrefab, position, Quaternion.identity, _npcContainer)
-            .GetComponent<NPCWeapons>().SetEnemyWeaponLevel(_levelNumber);
+        Instantiate(GameAssets.Instance.NPCPrefab, position, Quaternion.identity, _npcContainer);
     }
 
     public void BossKilled()

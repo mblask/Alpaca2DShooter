@@ -33,6 +33,10 @@ public class LevelsManager : MonoBehaviour
     private Transform _playerTransform;
     private bool _playerSpawned = false;
 
+    [Header("NPC weapons")]
+    [Tooltip("On level number X, enemies get a chance of carrying certain weapon")]
+    [SerializeField] private List<LevelWeapons> _avaialableEnemyWeapons = new List<LevelWeapons>();
+
     private LevelObject _currentLevel;
 
     private GameManager _gameManager;
@@ -56,6 +60,16 @@ public class LevelsManager : MonoBehaviour
 
         if (!spawnPlayerRandomly())
             spawnPlayerInPlayersLevel();
+    }
+
+    public List<WeaponItem> GetAvailableNpcWeapons()
+    {
+        List<WeaponItem> weapons = new List<WeaponItem>();
+        foreach (LevelWeapons levelWeapon in _avaialableEnemyWeapons)
+            if (_levelNumber >= levelWeapon.Level)
+                weapons.AddRange(levelWeapon.AvailableWeapons);
+
+        return weapons;
     }
 
     private void spawnPlayerInPlayersLevel()

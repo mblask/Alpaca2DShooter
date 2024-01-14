@@ -143,6 +143,9 @@ public class NPC_AI : MonoBehaviour, IBlindable
 
     private void chaseState()
     {
+        if (_playerStats == null)
+            _playerStats = PlayerStats.Instance;
+
         rotateTowards(_playerStats.transform.position);
 
         float distanceToPlayer = Vector2.Distance(transform.position, _playerStats.transform.position);
