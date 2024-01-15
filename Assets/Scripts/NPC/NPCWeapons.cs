@@ -70,6 +70,12 @@ public class NPCWeapons : MonoBehaviour
 
         List<WeaponItem> availableWeapons = _levelsManager.GetAvailableNpcWeapons();
 
+        if (availableWeapons.Count == 1)
+        {
+            _selectedWeapon = availableWeapons[0];
+            return;
+        }
+
         List<WeaponItem> itemPool = new List<WeaponItem>();
         for (int i = 0; i < availableWeapons.Count; i++)
         {
@@ -83,6 +89,9 @@ public class NPCWeapons : MonoBehaviour
                 itemPool.Add(availableWeapons[i]);
             }
         }
+
+        if (itemPool.Count == 0)
+            itemPool = availableWeapons;
 
         _selectedWeapon = itemPool.GetRandomElement();
     }
