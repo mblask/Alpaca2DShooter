@@ -444,7 +444,8 @@ public class PlayerWeapons : MonoBehaviour
                 Instantiate(GameAssets.Instance.BulletPrefab, _shootingSpot.position, Quaternion.identity, null);
 
             Bullet bullet = bulletTransform.GetComponent<Bullet>();
-            bullet.SetupBullet(direction, _playerStats.PlayerDamage.GetRandom(), gameObject.tag);
+            DamageData damageData = new DamageData { Damage = _playerStats.PlayerDamage.GetRandom() };
+            bullet.SetupBullet(direction, damageData, gameObject.tag);
         }
         
         _shotsFired++;

@@ -219,7 +219,8 @@ public class NPCWeapons : MonoBehaviour
             Transform bulletObject = Instantiate(_gameAssets.BulletPrefab, _shootingSpot.position, Quaternion.identity, null);
             Bullet bullet = bulletObject.GetComponent<Bullet>();
 
-            bullet.SetupBullet(direction, UnityEngine.Random.Range(_selectedWeapon.WeaponDamage.x, _selectedWeapon.WeaponDamage.y), gameObject.tag);
+            DamageData damageData = new DamageData { Damage = _selectedWeapon.WeaponDamage.GetRandom(), BleedingChance = 0.0f };
+            bullet.SetupBullet(direction, damageData, gameObject.tag);
         }
 
         generateShootingParticleSystem();

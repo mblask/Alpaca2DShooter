@@ -15,12 +15,12 @@ public class ElectricityGenerator : Box2dCollider, IDamagable
             transform.parent.GetComponentsInParent<SwitchableObject>().ToList() : new List<SwitchableObject>());
     }
 
-    public void DamageObject(float value)
+    public void DamageObject(DamageData damageData)
     {
         if (_isBroken)
             return;
 
-        _health -= value;
+        _health -= damageData.Damage;
 
         if (_health < 0.0f)
         {

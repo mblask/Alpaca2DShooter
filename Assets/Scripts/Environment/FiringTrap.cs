@@ -78,7 +78,7 @@ public class FiringTrap : Hackable, IDamagable
         }        
     }
 
-    public void DamageObject(float amount)
+    public void DamageObject(DamageData damageData)
     {
         //non damagable object, though hittable
         //Particle System and/or Light up object
@@ -247,7 +247,9 @@ public class FiringTrap : Hackable, IDamagable
             Transform bulletTransform = Instantiate(GameAssets.Instance.BulletPrefab, _shootingSpot.position, Quaternion.identity, null);
             Bullet bullet = bulletTransform.GetComponent<Bullet>();
 
-            bullet.SetupBullet(direction, _selectedWeapon.WeaponItem.WeaponDamage.GetRandom(), gameObject.tag);
+            DamageData damageData = 
+                new DamageData { Damage = _selectedWeapon.WeaponItem.WeaponDamage.GetRandom() };
+            bullet.SetupBullet(direction, damageData, gameObject.tag);
         }
 
         generateShootingParticleSystem();

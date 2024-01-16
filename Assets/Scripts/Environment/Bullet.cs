@@ -8,6 +8,7 @@ public class Bullet : MonoBehaviour
 
     private Rigidbody2D _rigidbody;
     private Vector2 _bulletDirection;
+    private DamageData _bulletDamageData;
     private float _bulletDamage;
     private string _shooterTag;
 
@@ -22,10 +23,10 @@ public class Bullet : MonoBehaviour
         Destroy(gameObject, _destroyAfter);
     }
 
-    public void SetupBullet(Vector3 direction, float damage, string shooterTag)
+    public void SetupBullet(Vector3 direction, DamageData damageData, string shooterTag)
     {
         _bulletDirection = direction;
-        _bulletDamage = damage;
+        _bulletDamageData = damageData;
 
         if (shooterTag.Equals("") || shooterTag.Equals("Untagged"))
         {
@@ -51,7 +52,7 @@ public class Bullet : MonoBehaviour
         IDamagable damagable = collision.GetComponent<IDamagable>();
         if (damagable != null)
         {
-            damagable.DamageObject(_bulletDamage);
+            damagable.DamageObject(_bulletDamageData);
             AudioManager.Instance.PlayClip(SFXClip.BulletHitsCharacter);
 
             Destroy(gameObject);

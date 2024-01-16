@@ -1,3 +1,4 @@
+using AlpacaMyGames;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -75,8 +76,8 @@ public class AreaOfEffect : MonoBehaviour
                 continue;
 
             _damagableList.Add(damagable);
-            float damage = Random.Range(_damage.x, _damage.y) / Mathf.Pow(transform.localScale.x, 2);
-            damagable.DamageObject(damage);
+            float damage = _damage.GetRandom() / Mathf.Pow(transform.localScale.x, 2);
+            damagable.DamageObject(new DamageData { Damage = damage });
         }
     }
 

@@ -24,7 +24,7 @@ public class Box : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        _objectDestroy.DamageObject();
+        _objectDestroy.DamageObject(new DamageData());
     }
 
     public void RemoveHighlight()

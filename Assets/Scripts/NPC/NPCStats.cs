@@ -13,7 +13,13 @@ public class NPCStats : MonoBehaviour, IDamagable
     public Stat EnemyLimbToughness;
 
     private List<StatModifyingData> _wounds = new List<StatModifyingData>();
-    private float _healthRegeneration;
+    private float _healthRegeneration = 0.0f;
+    private bool _isBleeding;
+    private float _bleedingIntensity = 3.0f;
+    private float _bloodSpawningTime = 0.5f;
+    private float _bloodSpawningStopwatch = 0.0f;
+    private float _bleedingStopwatch = 0.0f;
+    private float _defaultBleedingTime = 15.0f;
 
     private GameAssets _gameAssets;
     private GameManager _gameManager;
@@ -45,6 +51,7 @@ public class NPCStats : MonoBehaviour, IDamagable
     {
         processWounds();
         regenerateHealth(_healthRegeneration);
+        bleedingProcess();
     }
 
     private void LateUpdate()
@@ -100,6 +107,14 @@ public class NPCStats : MonoBehaviour, IDamagable
         updateStatsWithWounds();
     }
 
+    private void rollBleeding(float chance)
+    {
+        if (Utilities.ChanceFunc(chance) && !_isBleeding)
+        {
+            _isBleeding = true;
+        }
+    }
+
     private void rollLegsInjury(List<StatModifyingData> injuryPool)
     {
         if (EnemySpeed.IsHandicaped())
@@ -147,13 +162,42 @@ public class NPCStats : MonoBehaviour, IDamagable
         EnemyHealth.UpdateCurrentValue(value * Time.deltaTime);
     }
 
-    public void DamageObject(float value)
+    private void bleedingProcess()
     {
-        if (value == 0.0f)
+        if (!_isBleeding)
             return;
 
-        EnemyHealth.UpdateCurrentValue(-value * (1.0f - EnemyDefense.GetFinalValue() / 100.0f));
-        FloatingTextSpawner.CreateFloatingTextStatic(transform.position, value.ToString("F0"), new Color(1.0f, 0.5f, 0.0f));
+        EnemyHealth.UpdateCurrentValue(-1.0f * _bleedingIntensity * Time.deltaTime);
+        if (EnemyHealth.GetCurrentValue() <= 0.0f)
+        {
+            die();
+            return;
+        }
+
+        _bloodSpawningStopwatch += Time.deltaTime;
+        if (_bloodSpawningStopwatch >= _bloodSpawningTime)
+        {
+            Vector3 position = transform.position + Utilities.GetRandomVector3(1.0f, false);
+            Instantiate(_gameAssets.Blood, position, Quaternion.identity, null);
+            _bloodSpawningStopwatch = 0.0f;
+        }
+
+        _bleedingStopwatch += Time.deltaTime;
+        if (_bleedingStopwatch >= _defaultBleedingTime)
+        {
+            _isBleeding = false;
+            _bleedingStopwatch = 0.0f;
+        }
+    }
+
+    public void DamageObject(DamageData damageData)
+    {
+        if (damageData.Damage == 0.0f)
+            return;
+
+        EnemyHealth.UpdateCurrentValue(-damageData.Damage * (1.0f - EnemyDefense.GetFinalValue() / 100.0f));
+        FloatingTextSpawner.CreateFloatingTextStatic
+            (transform.position, damageData.Damage.ToString("F0"), new Color(1.0f, 0.5f, 0.0f));
 
         _enemyHealthCanvas.UpdateHealthSlider(EnemyHealth.GetCurrentValue());
 
@@ -172,7 +216,10 @@ public class NPCStats : MonoBehaviour, IDamagable
         }
 
         if (_npcBase.EnemyType.Equals(NPCEnemyType.Boss))
+        {
             rollWoundsDice();
+            rollBleeding(damageData.BleedingChance);
+        }
 
         _enemyHealthCanvas.ActivateHealthSlider();
 
@@ -226,6 +273,12 @@ public class NPCStats : MonoBehaviour, IDamagable
 
         if (_npcBase.EnemyType.Equals(NPCEnemyType.Boss))
             _npcBase.BossKilled();
+
+        for (int i = 0; i < 5; i++)
+        {
+            Vector3 position = transform.position + Utilities.GetRandomVector3(1.0f, false);
+            Instantiate(_gameAssets.Blood, position, Quaternion.identity, null);
+        }
         
         _isDead = true;
         _gameManager.IncrementEnemiesKilled();

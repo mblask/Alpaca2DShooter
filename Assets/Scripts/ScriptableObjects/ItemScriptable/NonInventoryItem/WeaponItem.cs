@@ -12,6 +12,7 @@ public class WeaponItem : NonInventoryItem
     public Vector2 WeaponDamage;
     public int MagazineBullets;
     public AmmoType AmmoType;
+    public float BleedingChance;
 
     [Header("Required to use")]
     public float StrengthRequired;

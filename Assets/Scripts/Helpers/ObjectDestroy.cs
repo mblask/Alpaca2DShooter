@@ -27,15 +27,14 @@ public class ObjectDestroy : MonoBehaviour, IDamagable
     {
         if (collision.CompareTag(_bulletTagName))
         {
-            DamageObject();
-
+            DamageObject(new DamageData { Damage = 1.0f, BleedingChance = 0.0f });
             Destroy(collision.gameObject);
         }
     }
 
-    public void DamageObject(float damage = 1.0f)
+    public void DamageObject(DamageData damageData)
     {
-        _hitCount -= (int)damage;
+        _hitCount -= (int)damageData.Damage;
 
         if (_hitCount <= 0)
         {

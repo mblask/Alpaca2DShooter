@@ -80,8 +80,10 @@ public class WallFiringTrap : Hackable
     {
         Bullet bullet = Instantiate(GameAssets.Instance.BulletPrefab, position, Quaternion.identity, null)
             .GetComponent<Bullet>();
-        bullet.SetupBullet(Utilities.GetVectorFromAngle(transform.rotation.eulerAngles.z + 90), 
-            _damageInterval.GetRandom(), gameObject.tag);
+        Vector2 directionVector = Utilities.GetVectorFromAngle(transform.rotation.eulerAngles.z + 90);
+        DamageData damageData = new DamageData { Damage = _damageInterval.GetRandom() };
+        bullet.SetupBullet(directionVector, damageData, gameObject.tag);
+
         generateShootingParticles(position);
         _audioManager.PlayClip(SFXClip.GunShot);
     }
