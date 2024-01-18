@@ -21,6 +21,7 @@ public class GamePlayCanvas : MonoBehaviour
     private ThrowableImage _throwableImage;
     private ItemTooltip _itemTooltip;
     private InventoryUI _inventoryUI;
+    private CollectiblesUI _collectiblesUI;
     private CraftingUI _craftingUI;
     private ConsumableItemsUIMenu _consumableItemsMenuUI;
     private WoundedUI _woundedUI;
@@ -45,6 +46,7 @@ public class GamePlayCanvas : MonoBehaviour
         _throwableImage = transform.GetComponentInChildren<ThrowableImage>();
         _itemTooltip = transform.GetComponentInChildren<ItemTooltip>();
         _inventoryUI = transform.GetComponentInChildren<InventoryUI>();
+        _collectiblesUI = transform.GetComponentInChildren<CollectiblesUI>();
         _craftingUI = transform.GetComponentInChildren<CraftingUI>();
         _consumableItemsMenuUI = transform.GetComponentInChildren<ConsumableItemsUIMenu>();
         _woundedUI = transform.GetComponentInChildren<WoundedUI>();
@@ -110,6 +112,11 @@ public class GamePlayCanvas : MonoBehaviour
     public void UpdateItemContainer()
     {
         _inventoryUI.UpdateItemContainer();
+    }
+
+    public void ShowCollectiblesUI()
+    {
+        _collectiblesUI.ShowUI();
     }
 
     public void ShowCraftingUI()

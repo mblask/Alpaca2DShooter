@@ -52,6 +52,8 @@ MonoBehaviour:
     type: 3}
   ItemSlotUIPrefab: {fileID: 8364620979190049944, guid: ab90f7bae0f7b5849a04135b900a1fec,
     type: 3}
+  CollectibleItemSlotUI: {fileID: 2687467618835496298, guid: b0f84abc62855e9409b5f97dc772fe94,
+    type: 3}
   SkillButton: {fileID: 7535905215928460360, guid: dc37666c0e00911419e6c3bf419b7192,
     type: 3}
   ItemSelectorButton: {fileID: 6898912956237059018, guid: aab725571059631408706c396e2abbaa,

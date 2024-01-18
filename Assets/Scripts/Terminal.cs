@@ -102,7 +102,7 @@ public class Terminal : Box2dCollider, IInteractable
     private List<DataItem> checkForDataItems()
     {
         List<DataItem> dataItems = new List<DataItem>();
-        List<Item> items = _playerInventory.GetItems();
+        List<Item> items = _playerInventory.GetCollectibles();
         foreach (Item item in items)
         {
             DataItem dataItem = item as DataItem;
@@ -193,7 +193,7 @@ public class Terminal : Box2dCollider, IInteractable
             return;
 
         _chosenDataItem = dataItem;
-        PlayerInventory.DeleteItemFromInventoryStatic(dataItem);
+        _playerInventory.RemoveCollectible(dataItem);
     }
 
     public bool RemoveDataItem()

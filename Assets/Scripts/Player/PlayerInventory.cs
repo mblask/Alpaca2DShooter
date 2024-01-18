@@ -12,6 +12,8 @@ public class PlayerInventory : MonoBehaviour, ICrafting
         }
     }
 
+    private const int MAX_NUMBER_OF_COLLECTIBLES = 5;
+    [SerializeField] private List<Item> _collectibles = new List<Item>();
     private const int MAX_NUMBER_OF_ITEMS = 12;
     [SerializeField] private List<Item> _items = new List<Item>();
 
@@ -19,6 +21,7 @@ public class PlayerInventory : MonoBehaviour, ICrafting
 
     private ItemSpawner _itemSpawner;
     private AchievementManager _achievementManager;
+    private CollectiblesManager _collectiblesManager;
     private GamePlayCanvas _uiCanvas;
 
     private void Awake()
@@ -30,13 +33,43 @@ public class PlayerInventory : MonoBehaviour, ICrafting
     {
         _itemSpawner = ItemSpawner.Instance;
         _achievementManager = AchievementManager.Instance;
+        _collectiblesManager = CollectiblesManager.Instance;
         _uiCanvas = GamePlayCanvas.Instance;
     }
 
     private void Update()
     {
         toggleInventoryUI();
+        toggleCollectiblesUI();
         toggleCraftingUI();
+    }
+
+    private bool addCollectible(Item item)
+    {
+        if (_collectibles.Count < MAX_NUMBER_OF_COLLECTIBLES)
+        {
+            _collectibles.Add(item);
+            _collectiblesManager.UnlockCollectible(item);
+            return true;
+        }
+
+        return false;
+    }
+
+    public List<Item> GetCollectibles()
+    {
+        return _collectibles;
+    }
+
+    public bool RemoveCollectible(Item item)
+    {
+        return _collectibles.Remove(item);
+    }
+
+    private void toggleCollectiblesUI()
+    {
+        if (Input.GetKeyUp(KeyCode.C))
+            _uiCanvas.ShowCollectiblesUI();
     }
 
     private void toggleInventoryUI()
@@ -81,6 +114,9 @@ public class PlayerInventory : MonoBehaviour, ICrafting
 
     private bool addToInventory(Item item)
     {
+        if (item.IsCollectible)
+            return addCollectible(item);
+
         if (_items.Count < MAX_NUMBER_OF_ITEMS)
         {
             _items.Add(item);

@@ -15,6 +15,7 @@ MonoBehaviour:
   ItemName: Larry
   ItemSprite: {fileID: 21300000, guid: 8a5eaaec8ea025d48a4aa265c9f33953, type: 3}
   ChanceToDrop: 5
+  IsCollectible: 1
   Color: {r: 1, g: 1, b: 1, a: 1}
   PickupAudio: 7
   ComputerUsable: 1

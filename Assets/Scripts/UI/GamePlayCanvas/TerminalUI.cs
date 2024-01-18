@@ -115,9 +115,7 @@ public class TerminalUI : MonoBehaviour
         _inventoryItemSelector.gameObject.SetActive(true);
 
         foreach (Transform child in _itemButtonsContainer)
-        {
             Destroy(child.gameObject);
-        }
         
         foreach (DataItem item in _dataItems)
         {

@@ -25,6 +25,6 @@ MonoBehaviour:
   WeaponDamage: {x: 3, y: 5}
   MagazineBullets: 28
   AmmoType: 2
-  BleedingChance: 1
+  BleedingChance: 7
   StrengthRequired: 2
   UseChance: 18

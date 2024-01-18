@@ -179,6 +179,8 @@ public class NPCStats : MonoBehaviour, IDamagable
         {
             Vector3 position = transform.position + Utilities.GetRandomVector3(1.0f, false);
             Instantiate(_gameAssets.Blood, position, Quaternion.identity, null);
+            FloatingTextSpawner.CreateFloatingTextStatic
+                (transform.position, "Bleeding", Color.red, 0.7f, 6.0f, 2.0f, true, FloatDirection.Any);
             _bloodSpawningStopwatch = 0.0f;
         }
 
@@ -218,9 +220,9 @@ public class NPCStats : MonoBehaviour, IDamagable
         if (_npcBase.EnemyType.Equals(NPCEnemyType.Boss))
         {
             rollWoundsDice();
-            rollBleeding(damageData.BleedingChance);
         }
 
+        rollBleeding(damageData.BleedingChance);
         _enemyHealthCanvas.ActivateHealthSlider();
 
         _enemyAI.ExtendAwareness();

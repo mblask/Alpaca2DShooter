@@ -44,7 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb6140ea81c8f464ea823313f7c8528f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _unlockedSkills:
-  - {fileID: 11400000, guid: cdb3b9113006ba240a79d5c6ec296dc0, type: 2}
-  - {fileID: 11400000, guid: 3af376a6122d66142808a0d7491268a6, type: 2}
-  - {fileID: 11400000, guid: aaf7cae0f4ef3214585994b1166fb144, type: 2}
+  _unlockedSkills: []

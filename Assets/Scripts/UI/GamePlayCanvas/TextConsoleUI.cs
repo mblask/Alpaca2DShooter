@@ -31,7 +31,7 @@ public class TextConsoleUI : MonoBehaviour
         _pointerOver = PointerOver.GetInstance();
 
         _animator = GetComponent<Animator>();
-        _textMesh = transform.Find("ScrollView").Find("Viewport").Find("Content").Find("Text").GetComponent<TextMeshProUGUI>();
+        _textMesh = transform.Find("Text").GetComponent<TextMeshProUGUI>();
         _nextButton = transform.Find("NextButton").GetComponent<Button>();
         _previousButton = transform.Find("PreviousButton").GetComponent<Button>();
 
