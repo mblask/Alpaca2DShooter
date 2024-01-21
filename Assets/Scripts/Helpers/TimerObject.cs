@@ -4,17 +4,36 @@ public class TimerObject
     public float Duration { get; set; } = 0.0f;
     public bool IsOver { get; private set; }
 
-    public void Update(float timeIncrement)
+
+    public TimerObject() { }
+
+    public TimerObject(float duration)
     {
-        if (IsOver)
-            return;
-
-        Timer += timeIncrement;
-
-        if (Timer >= Duration)
-            IsOver = true;
+        Duration = duration;
     }
 
+    /// <summary>
+    /// Increments the timer by <paramref name="timeIncrement"/>
+    /// <br>Returns true if timer has surpassed the expected <see cref="Duration"/></br>
+    /// <br>Returns true if set <see cref="Duration"/> is 0</br>
+    /// </summary>
+    /// <param name="timeIncrement"></param>
+    /// <returns><see cref="bool"/></returns>
+    public bool Update(float timeIncrement)
+    {
+        if (IsOver)
+            return true;
+
+        if (Duration == 0.0f)
+            return true;
+
+        Timer += timeIncrement;
+        return Timer >= Duration;
+    }
+
+    /// <summary>
+    /// Resets the timer to initial values
+    /// </summary>
     public void Reset()
     {
         Timer = 0.0f;

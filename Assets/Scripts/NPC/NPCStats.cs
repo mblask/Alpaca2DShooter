@@ -2,6 +2,7 @@ using AlpacaMyGames;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class NPCStats : MonoBehaviour, IDamagable
 {
@@ -22,10 +23,11 @@ public class NPCStats : MonoBehaviour, IDamagable
     private float _defaultBleedingTime = 15.0f;
 
     private bool _isEnraged = false;
+    private float _enragedDuration = 10.0f;
+    private TimerObject _enragedTimer = new TimerObject();
     private bool _isHealing = false;
     private float _healAmount = 0.0f;
-    private float _healDuration = 0.0f;
-    private float _healingTimer = 0.0f;
+    private TimerObject _healingTimer = new TimerObject();
 
     private GameAssets _gameAssets;
     private GameManager _gameManager;
@@ -35,6 +37,8 @@ public class NPCStats : MonoBehaviour, IDamagable
 
     private NPCBase _npcBase;
     private NPC_AI _enemyAI;
+    private Light2D _bossLight;
+    private ParticleSystem _burstParticleSystem;
 
     private bool _isDead = false;
 
@@ -59,6 +63,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         regenerateHealth(_healthRegeneration);
         bleedingProcess();
         healingProcess();
+        enragedProcess();
     }
 
     private void LateUpdate()
@@ -199,12 +204,26 @@ public class NPCStats : MonoBehaviour, IDamagable
         }
     }
 
+    private void enragedProcess()
+    {
+        if (!_isEnraged)
+            return;
+
+        _isEnraged = !_enragedTimer.Update(Time.deltaTime);
+
+        if (_enragedTimer.IsOver)
+        {
+            _bossLight.color = Color.red;
+            //Reset other characteristics
+        }
+    }
+
     private void bossEnrage()
     {
         if (!_npcBase.EnemyType.Equals(NPCEnemyType.Boss))
             return;
 
-            float rageThreshold = 0.15f;
+            float rageThreshold = 0.95f;
         if (EnemyHealth.GetCurrentValue() / EnemyHealth.GetFinalValue() >= rageThreshold)
             return;
 
@@ -212,10 +231,26 @@ public class NPCStats : MonoBehaviour, IDamagable
             return;
 
         _isEnraged = true;
+        playBurstParticleSystem();
+        _enragedTimer = new TimerObject(_enragedDuration);
         Vector2 healthPercentageToHeal = new Vector2(20.0f, 40.0f);
         float healAmount = EnemyHealth.GetFinalValue() * healthPercentageToHeal.GetRandom() / 100.0f;
         float healingDuration = 2.0f;
         healCharacter(healAmount, healingDuration);
+
+        //Add stat buffs
+    }
+
+    private void playBurstParticleSystem()
+    {
+        if (_burstParticleSystem == null)
+            _burstParticleSystem = transform.Find("BossParticleSystem").Find("BurstSystem").GetComponent<ParticleSystem>();
+
+        if (_bossLight == null)
+            _bossLight = transform.Find("BossLight").GetComponent<Light2D>();
+
+        _bossLight.color = Color.green;
+        _burstParticleSystem.Play();
     }
 
     private void healingProcess()
@@ -223,7 +258,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         if (!_isHealing)
             return;
 
-        if (_healDuration == 0.0f)
+        if (_healingTimer.Duration == 0.0f)
         {
             EnemyHealth.UpdateCurrentValue(_healAmount);
             _enemyHealthCanvas.UpdateHealthSlider(EnemyHealth.GetCurrentValue());
@@ -231,15 +266,13 @@ public class NPCStats : MonoBehaviour, IDamagable
             return;
         }
 
-        _healingTimer += Time.deltaTime;
-        if (_healingTimer > _healDuration)
+        if (!_healingTimer.Update(Time.deltaTime))
         {
             _isHealing = false;
-            _healingTimer = 0.0f;
             return;
         }
 
-        float healthincrement = _healAmount / _healDuration * Time.deltaTime;
+        float healthincrement = _healAmount / _healingTimer.Duration * Time.deltaTime;
         EnemyHealth.UpdateCurrentValue(healthincrement);
         _enemyHealthCanvas.UpdateHealthSlider(EnemyHealth.GetCurrentValue());
     }
@@ -248,7 +281,7 @@ public class NPCStats : MonoBehaviour, IDamagable
     {
         _isHealing = true;
         _healAmount = amount;
-        _healDuration = duration;
+        _healingTimer = new TimerObject(duration);
     }
 
     public void DamageObject(DamageData damageData)
