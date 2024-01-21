@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5368002254863286361}
   - component: {fileID: 7771110574548271403}
   - component: {fileID: 2302085652859294874}
-  - component: {fileID: 6505885329259250504}
+  - component: {fileID: 9006711078157296151}
   - component: {fileID: 17813973010984853}
   - component: {fileID: 17813973010984850}
   m_Layer: 7
@@ -229,7 +229,7 @@ MonoBehaviour:
   EnemyLimbToughness:
     _statType: 0
     _currentValue: 0
---- !u!114 &6505885329259250504
+--- !u!114 &9006711078157296151
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -238,7 +238,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 17813973010984851}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3248e5895e6eea4caa6c6596ace0726, type: 3}
+  m_Script: {fileID: 11500000, guid: b1f18d5dd3faf8049bad82f9865851eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _npcAllegiance: 0

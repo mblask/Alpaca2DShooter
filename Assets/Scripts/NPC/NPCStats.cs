@@ -21,6 +21,12 @@ public class NPCStats : MonoBehaviour, IDamagable
     private float _bleedingStopwatch = 0.0f;
     private float _defaultBleedingTime = 15.0f;
 
+    private bool _isEnraged = false;
+    private bool _isHealing = false;
+    private float _healAmount = 0.0f;
+    private float _healDuration = 0.0f;
+    private float _healingTimer = 0.0f;
+
     private GameAssets _gameAssets;
     private GameManager _gameManager;
     private ItemSpawner _itemSpawner;
@@ -52,6 +58,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         processWounds();
         regenerateHealth(_healthRegeneration);
         bleedingProcess();
+        healingProcess();
     }
 
     private void LateUpdate()
@@ -192,6 +199,58 @@ public class NPCStats : MonoBehaviour, IDamagable
         }
     }
 
+    private void bossEnrage()
+    {
+        if (!_npcBase.EnemyType.Equals(NPCEnemyType.Boss))
+            return;
+
+            float rageThreshold = 0.15f;
+        if (EnemyHealth.GetCurrentValue() / EnemyHealth.GetFinalValue() >= rageThreshold)
+            return;
+
+        if (_isEnraged)
+            return;
+
+        _isEnraged = true;
+        Vector2 healthPercentageToHeal = new Vector2(20.0f, 40.0f);
+        float healAmount = EnemyHealth.GetFinalValue() * healthPercentageToHeal.GetRandom() / 100.0f;
+        float healingDuration = 2.0f;
+        healCharacter(healAmount, healingDuration);
+    }
+
+    private void healingProcess()
+    {
+        if (!_isHealing)
+            return;
+
+        if (_healDuration == 0.0f)
+        {
+            EnemyHealth.UpdateCurrentValue(_healAmount);
+            _enemyHealthCanvas.UpdateHealthSlider(EnemyHealth.GetCurrentValue());
+            _isHealing = false;
+            return;
+        }
+
+        _healingTimer += Time.deltaTime;
+        if (_healingTimer > _healDuration)
+        {
+            _isHealing = false;
+            _healingTimer = 0.0f;
+            return;
+        }
+
+        float healthincrement = _healAmount / _healDuration * Time.deltaTime;
+        EnemyHealth.UpdateCurrentValue(healthincrement);
+        _enemyHealthCanvas.UpdateHealthSlider(EnemyHealth.GetCurrentValue());
+    }
+
+    private void healCharacter(float amount, float duration)
+    {
+        _isHealing = true;
+        _healAmount = amount;
+        _healDuration = duration;
+    }
+
     public void DamageObject(DamageData damageData)
     {
         if (damageData.Damage == 0.0f)
@@ -200,6 +259,8 @@ public class NPCStats : MonoBehaviour, IDamagable
         EnemyHealth.UpdateCurrentValue(-damageData.Damage * (1.0f - EnemyDefense.GetFinalValue() / 100.0f));
         FloatingTextSpawner.CreateFloatingTextStatic
             (transform.position, damageData.Damage.ToString("F0"), new Color(1.0f, 0.5f, 0.0f));
+
+        bossEnrage();
 
         _enemyHealthCanvas.UpdateHealthSlider(EnemyHealth.GetCurrentValue());
 
