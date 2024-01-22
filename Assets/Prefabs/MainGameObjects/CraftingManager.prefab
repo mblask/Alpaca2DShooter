@@ -46,9 +46,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _craftingRecipes:
   - {fileID: 11400000, guid: d8d3792b6b769474698d8e286bfa7b92, type: 2}
+  - {fileID: 11400000, guid: 112731bf79873b848ad2d8c0159dcd32, type: 2}
+  - {fileID: 11400000, guid: 356f8906babd4b4419759d76ec658ea4, type: 2}
+  - {fileID: 11400000, guid: e1bc51b7ac72aec4fb2f8eb880de0e2b, type: 2}
   - {fileID: 11400000, guid: 7e5775d2364631642b33e1efb83a1d7c, type: 2}
   - {fileID: 11400000, guid: 04e8eb7ed30a7be4c989f4e8bc7bb49b, type: 2}
   - {fileID: 11400000, guid: acc38b3d5c2177040b458ed1827db9f0, type: 2}
-  - {fileID: 11400000, guid: f3ea35f971ecc0442b4fca5baa45b60e, type: 2}
   - {fileID: 11400000, guid: 26e49e9d65d7cfa42bea988567a16952, type: 2}
-  - {fileID: 11400000, guid: e1bc51b7ac72aec4fb2f8eb880de0e2b, type: 2}
+  - {fileID: 11400000, guid: d50c5baf4114e8640b039948bbf8f1eb, type: 2}
+  - {fileID: 11400000, guid: d4de7342654591f4a98cf167e730aeed, type: 2}
+  - {fileID: 11400000, guid: f3ea35f971ecc0442b4fca5baa45b60e, type: 2}

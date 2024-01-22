@@ -14,16 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName: Mine
   ItemSprite: {fileID: 21300000, guid: 29b6598b6a25bc44090da82fd7c31043, type: 3}
-  ChanceToDrop: 1
+  ChanceToDrop: 5
+  IsCollectible: 0
   Color: {r: 1, g: 1, b: 1, a: 1}
   PickupAudio: 7
-  Trigger: 0
-  WeaponShootAudio: 0
-  WeaponReloadAudio: 0
-  Automatic: 0
-  ShootInterval: 0
-  WeaponDamage: {x: 20, y: 50}
-  MagazineBullets: 0
-  StrengthRequired: 1
   Type: 0
+  WeaponDamage: {x: 20, y: 50}
   ThrowForce: 10
