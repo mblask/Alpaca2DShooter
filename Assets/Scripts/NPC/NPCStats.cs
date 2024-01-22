@@ -13,7 +13,7 @@ public class NPCStats : MonoBehaviour, IDamagable
     public Stat EnemyDefense;
     public Stat EnemyLimbToughness;
 
-    private List<StatModifyingData> _wounds = new List<StatModifyingData>();
+    private List<StatModifyingData> _statModifyingData = new List<StatModifyingData>();
     private float _healthRegeneration = 0.0f;
     private bool _isBleeding;
     private float _bleedingIntensity = 3.0f;
@@ -59,7 +59,7 @@ public class NPCStats : MonoBehaviour, IDamagable
 
     private void Update()
     {
-        processWounds();
+        processStatModifyingData();
         regenerateHealth(_healthRegeneration);
         bleedingProcess();
         healingProcess();
@@ -81,25 +81,25 @@ public class NPCStats : MonoBehaviour, IDamagable
         EnemyLimbToughness.SetBaseValue(baseScriptable.LimbToughness);
     }
 
-    private void processWounds()
+    private void processStatModifyingData()
     {
         if (!_npcBase.EnemyType.Equals(NPCEnemyType.Boss))
             return;
 
-        if (_wounds.Count == 0)
+        if (_statModifyingData.Count == 0)
             return;
 
-        for (int i = _wounds.Count - 1; i >= 0; i--)
+        for (int i = _statModifyingData.Count - 1; i >= 0; i--)
         {
-            StatModifyingData wound = _wounds[i];
-            wound.Duration -= Time.deltaTime;
-            if (wound.Duration > 0)
+            StatModifyingData statModifier = _statModifyingData[i];
+            statModifier.Duration -= Time.deltaTime;
+            if (statModifier.Duration > 0)
                 continue;
 
-            Stat enemyStat = getStatByType(wound.StatAffected);
-            enemyStat.RemoveBaseMultiplier(wound.StatMultiplier);
-            enemyStat.RemoveModifier(wound.StatModifier);
-            _wounds.Remove(wound);
+            Stat enemyStat = getStatByType(statModifier.StatAffected);
+            enemyStat.RemoveBaseMultiplier(statModifier.StatMultiplier);
+            enemyStat.RemoveModifier(statModifier.StatModifier);
+            _statModifyingData.Remove(statModifier);
         }
     }
 
@@ -115,16 +115,13 @@ public class NPCStats : MonoBehaviour, IDamagable
         StatModifyingData randomPick = injuryPool.GetRandomElement();
         FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Critical hit", Color.red);
 
-        _wounds.Add(randomPick);
+        _statModifyingData.Add(randomPick);
         updateStatsWithWounds();
     }
 
     private void rollBleeding(float chance)
     {
-        if (Utilities.ChanceFunc(chance) && !_isBleeding)
-        {
-            _isBleeding = true;
-        }
+        _isBleeding = Utilities.ChanceFunc(chance) && !_isBleeding;
     }
 
     private void rollLegsInjury(List<StatModifyingData> injuryPool)
@@ -151,8 +148,11 @@ public class NPCStats : MonoBehaviour, IDamagable
 
     private void updateStatsWithWounds()
     {
-        foreach (StatModifyingData wound in _wounds)
+        foreach (StatModifyingData wound in _statModifyingData)
         {
+            if (!wound.IsInjury)
+                continue;
+
             Stat enemyStat = getStatByType(wound.StatAffected);
             if (enemyStat.IsHandicaped())
                 continue;
@@ -212,10 +212,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         _isEnraged = !_enragedTimer.Update(Time.deltaTime);
 
         if (_enragedTimer.IsOver)
-        {
             _bossLight.color = Color.red;
-            //Reset other characteristics
-        }
     }
 
     private void bossEnrage()
@@ -238,14 +235,32 @@ public class NPCStats : MonoBehaviour, IDamagable
         float healingDuration = 2.0f;
         healCharacter(healAmount, healingDuration);
 
-        //Add stat buffs
+        //Stat buffs
+        float buffDuration = 10.0f;
+        temporaryModifyStat(EnemySpeed, 0.0f, 1.5f, buffDuration);
+        temporaryModifyStat(EnemyDefense, 25.0f, 0.0f, buffDuration);
+    }
+
+    private void temporaryModifyStat(Stat stat, float modifier, float multiplier, float duration)
+    {
+        _statModifyingData.Add(new StatModifyingData
+        { 
+            Duration = duration,
+            IsInjury = false,
+            StatAffected = stat.StatType,
+            StatModifier = modifier,
+            StatMultiplier = multiplier
+        });
+
+        stat.AddModifier(modifier);
+        stat.AddBaseMultiplier(multiplier);
     }
 
     private void playBurstParticleSystem()
     {
         if (_burstParticleSystem == null)
             _burstParticleSystem = transform.Find("BossParticleSystem").Find("BurstSystem").GetComponent<ParticleSystem>();
-
+        
         if (_bossLight == null)
             _bossLight = transform.Find("BossLight").GetComponent<Light2D>();
 
@@ -388,10 +403,12 @@ public class NPCStats : MonoBehaviour, IDamagable
         {
             case StatType.Health:
                 return EnemyHealth;
-            case StatType.Accuracy:
-                return EnemyAccuracy;
             case StatType.Speed:
                 return EnemySpeed;
+            case StatType.Defense:
+                return EnemyDefense;
+            case StatType.Accuracy:
+                return EnemyAccuracy;
             case StatType.LimbToughness:
                 return EnemyLimbToughness;
             default:

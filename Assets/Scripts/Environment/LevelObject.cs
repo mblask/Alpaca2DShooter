@@ -223,16 +223,12 @@ public class LevelObject : MonoBehaviour
                 {
                     Vector2 position = spawnPoint.Location + i * Vector3.up;
                     spawnEnemy(position);
-                    //Instantiate(GameAssets.Instance.NPCPrefab, position, Quaternion.identity, _npcContainer)
-                    //    .GetComponent<NPCWeapons>().SetEnemyWeaponLevel(_levelNumber);
                 }
 
                 continue;
             }
 
             spawnEnemy(spawnPoint.Location);
-            //Instantiate(GameAssets.Instance.NPCPrefab, spawnPoint.Location, Quaternion.identity, _npcContainer).
-            //    GetComponent<NPCWeapons>().SetEnemyWeaponLevel(_levelNumber);
         }
 
         _enemySpawnPoints.ForEach(spawnPoint => spawnPoint.SetActive(false));
