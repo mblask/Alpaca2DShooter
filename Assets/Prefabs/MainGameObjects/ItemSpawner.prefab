@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2c1c6e184c0884439890e5cef9a0cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyDropRate: 50
+  EnemyDropRate: 75
   _availableItems:
   - {fileID: 11400000, guid: c0bb4237c9fd0b849a55738186624d30, type: 2}
   - {fileID: 11400000, guid: e0c0946cb00471a4a8ffdbce76aafff5, type: 2}
