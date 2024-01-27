@@ -9818,7 +9818,6 @@ GameObject:
   - component: {fileID: 3560616791064837435}
   - component: {fileID: 1211367572513094729}
   - component: {fileID: 7270363628272429560}
-  - component: {fileID: 8313266686065840687}
   - component: {fileID: 8874459827295818487}
   - component: {fileID: 8874459827295818480}
   m_Layer: 7
@@ -10033,19 +10032,6 @@ MonoBehaviour:
   EnemyLimbToughness:
     _statType: 0
     _currentValue: 0
---- !u!114 &8313266686065840687
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8874459827295818481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3248e5895e6eea4caa6c6596ace0726, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _npcAllegiance: 0
 --- !u!114 &8874459827295818487
 MonoBehaviour:
   m_ObjectHideFlags: 0
