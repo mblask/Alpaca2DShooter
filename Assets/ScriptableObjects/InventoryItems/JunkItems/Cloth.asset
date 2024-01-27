@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68df780b705a180478855c011f361040, type: 3}
-  m_Name: MetalCasing
+  m_Name: Cloth
   m_EditorClassIdentifier: 
-  ItemName: Metal Casing
-  ItemSprite: {fileID: 21300000, guid: 98d6e598dde646c409c0866aa6116154, type: 3}
-  ChanceToDrop: 25
+  ItemName: Cloth
+  ItemSprite: {fileID: 21300000, guid: 652feaac59590a342a69973c9d25fcf6, type: 3}
+  ChanceToDrop: 40
   IsCollectible: 0
-  Color: {r: 1, g: 1, b: 1, a: 1}
+  Color: {r: 0.69411767, g: 0.7607843, b: 1, a: 1}
   PickupAudio: 7

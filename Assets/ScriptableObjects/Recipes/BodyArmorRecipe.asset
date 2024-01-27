@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9590f8ee09418d6408edbbb755873f4f, type: 3}
-  m_Name: LimbPatcherRecipe
+  m_Name: BodyArmorRecipe
   m_EditorClassIdentifier: 
   CraftingIngredients:
-  - Item: {fileID: 11400000, guid: fe7f209bd2ecd7e4e964ac24c4f2fede, type: 2}
+  - Item: {fileID: 11400000, guid: a1108970178e2e74893e10634ab1e3d4, type: 2}
     DestroyedOnCrafting: 1
   - Item: {fileID: 11400000, guid: 74e6390e4bf75fc46919362added1efb, type: 2}
     DestroyedOnCrafting: 1
-  - Item: {fileID: 11400000, guid: c92af50a24538ad4ca5c9c66674ed87e, type: 2}
-    DestroyedOnCrafting: 0
-  ProductItem: {fileID: 11400000, guid: 309cc1aefcd98da4e9f2709029948105, type: 2}
+  - Item: {fileID: 11400000, guid: 4ce150cc01079ae4fb80ade66c4265b1, type: 2}
+    DestroyedOnCrafting: 1
+  ProductItem: {fileID: 11400000, guid: 75753538d872a1047aeef7112e1ad8da, type: 2}

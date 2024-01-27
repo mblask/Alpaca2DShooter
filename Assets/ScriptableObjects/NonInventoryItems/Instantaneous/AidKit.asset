@@ -15,7 +15,9 @@ MonoBehaviour:
   ItemName: Aid Kit
   ItemSprite: {fileID: 21300000, guid: ac4e159cf02256f439d3ad6976e16a44, type: 3}
   ChanceToDrop: 75
+  IsCollectible: 0
   Color: {r: 0.19215687, g: 1, b: 0.24313726, a: 1}
   PickupAudio: 8
-  LifeRestored: {x: 30, y: 40}
-  StaminaRestored: {x: 10, y: 20}
+  LifeRestored: {x: 40, y: 60}
+  StaminaRestored: {x: 20, y: 40}
+  Armor: 0

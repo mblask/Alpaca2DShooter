@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName: Herbal Booster
   ItemSprite: {fileID: 21300000, guid: 30e96684c37d89041a6ea7437759e1b1, type: 3}
-  ChanceToDrop: 0
+  ChanceToDrop: 20
+  IsCollectible: 0
   Color: {r: 1, g: 1, b: 1, a: 1}
   PickupAudio: 7
+  ConsumableType: 0
   LifeRestored: {x: 0, y: 0}
   StaminaRestored: {x: 100, y: 100}
   LimbPatcher: 0

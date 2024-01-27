@@ -10,6 +10,11 @@ public class Item : ScriptableObject
     public Color Color;
     public SFXClip PickupAudio;
 
+    public virtual string GetItemTooltipText()
+    {
+        return string.Empty;
+    }
+
     public virtual bool UseItem()
     {
         return true;

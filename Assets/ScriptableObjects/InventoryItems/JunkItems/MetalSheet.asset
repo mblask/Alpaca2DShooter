@@ -9,14 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a46314f2634414b4c801e29b7a70da88, type: 3}
-  m_Name: ShotgunAmmo
+  m_Script: {fileID: 11500000, guid: 68df780b705a180478855c011f361040, type: 3}
+  m_Name: MetalSheet
   m_EditorClassIdentifier: 
-  ItemName: Shotgun Ammo
-  ItemSprite: {fileID: 21300000, guid: 98bea5a1806dbd24f8a6a1c73f93f9d3, type: 3}
-  ChanceToDrop: 4
+  ItemName: Metal Sheet
+  ItemSprite: {fileID: 21300000, guid: 98d6e598dde646c409c0866aa6116154, type: 3}
+  ChanceToDrop: 25
   IsCollectible: 0
   Color: {r: 1, g: 1, b: 1, a: 1}
   PickupAudio: 7
-  AmmoType: 3
-  Amount: 15

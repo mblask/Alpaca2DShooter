@@ -111,18 +111,21 @@ public class ItemTooltip : MonoBehaviour
             case WeaponItem weaponItem:
                 readWeaponItem(weaponItem);
                 break;
-            case JunkItem:
-                readJunkItem();
+            case ThrowableItem throwableItem:
+                readThrowableItem(throwableItem);
                 break;
-            case DataItem:
-                readDataItem();
+            case JunkItem junkItem:
+                readJunkItem(junkItem);
+                break;
+            case DataItem dataItem:
+                readDataItem(dataItem);
                 break;
         }
     }
 
     private void readConsumableItem(ConsumableItem consumable)
     {
-        if (consumable.LifeRestored != Vector2.zero)
+        /*if (consumable.LifeRestored != Vector2.zero)
         {
             _sb.Append("Restores Life:");
             _sb.AppendLine();
@@ -147,12 +150,14 @@ public class ItemTooltip : MonoBehaviour
         {
             char sign = Mathf.Sign(consumable.LimbToughnessDuration.x) > 0.0f ? '+' : '-';
             _sb.Append("Toughness " + sign + consumable.LimbToughnessDuration.x * 100.0f + "% (" + consumable.LimbToughnessDuration.y + "s)");
-        }
+        }*/
+
+        _sb.Append(consumable.GetItemTooltipText());
     }
 
     private void readInstantaneousItem(InstantaneousItem instantaneous)
     {
-        if (instantaneous.LifeRestored != Vector2.zero)
+        /*if (instantaneous.LifeRestored != Vector2.zero)
         {
             _sb.Append("Restores Life:");
             _sb.AppendLine();
@@ -165,12 +170,14 @@ public class ItemTooltip : MonoBehaviour
             _sb.Append("Restores Stamina:");
             _sb.AppendLine();
             _sb.Append(instantaneous.StaminaRestored.x.ToString() + " to " + instantaneous.StaminaRestored.y.ToString());
-        }
+        }*/
+
+        _sb.Append(instantaneous.GetItemTooltipText());
     }
 
     private void readWeaponItem(WeaponItem weaponItem)
     {
-        _sb.Append("Damage: ");
+        /*_sb.Append("Damage: ");
         _sb.Append(weaponItem.WeaponDamage.x.ToString());
         _sb.Append(" - ");
         _sb.Append(weaponItem.WeaponDamage.y.ToString());
@@ -193,23 +200,34 @@ public class ItemTooltip : MonoBehaviour
             _sb.AppendLine();
             _sb.Append("Strength: ");
             _sb.Append(weaponItem.StrengthRequired.ToString());
-        }
+        }*/
+
+        _sb.Append(weaponItem.GetItemTooltipText());
 
         requiredStats(weaponItem);
     }
 
-    private void readJunkItem()
+    private void readThrowableItem(ThrowableItem throwableItem)
     {
-        _sb.AppendLine();
-        _sb.AppendLine("Junk item");
-        _sb.AppendLine("Used in crafting");
+        _sb.Append(throwableItem.GetItemTooltipText());
     }
 
-    private void readDataItem()
+    private void readJunkItem(JunkItem junkItem)
     {
-        _sb.AppendLine();
+        /*_sb.AppendLine();
+        _sb.AppendLine("Junk item");
+        _sb.AppendLine("Used in crafting");*/
+
+        _sb.Append(junkItem.GetItemTooltipText());
+    }
+
+    private void readDataItem(DataItem dataItem)
+    {
+        /*_sb.AppendLine();
         _sb.AppendLine("Data item");
-        _sb.AppendLine("Can be read or\nrun on terminals");
+        _sb.AppendLine("Can be read or\nrun on terminals");*/
+
+        _sb.Append(dataItem.GetItemTooltipText());
     }
 
     private void requiredStats(WeaponItem weapon)

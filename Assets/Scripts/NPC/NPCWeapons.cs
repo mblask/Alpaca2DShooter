@@ -22,6 +22,8 @@ public class NPCWeapons : MonoBehaviour
 
     [Header("Weapons, read-only")]
     [SerializeField] private WeaponItem _selectedWeapon;
+    private float _shootingIntervalMultiplier = 1.0f;
+    private TimerObject _shootingIntervalMultiplierTimer = new TimerObject();
     private bool _reloadActivated = false;
     [SerializeField] private float _reloadTime = 0.0f;
 
@@ -50,6 +52,16 @@ public class NPCWeapons : MonoBehaviour
     private void Update()
     {
         autoShootingRoutine();
+        shootingIntervalTimerProcess();
+    }
+
+    private void shootingIntervalTimerProcess()
+    {
+        if (_shootingIntervalMultiplierTimer.IsOver)
+            return;
+
+        if (_shootingIntervalMultiplierTimer.Update())
+            _shootingIntervalMultiplier = 1.0f;
     }
 
     public void InitializeBossWeapon(WeaponItem weaponOfChoice)
@@ -172,12 +184,23 @@ public class NPCWeapons : MonoBehaviour
         {
             _reloadTime += Time.deltaTime;
 
-            if (_reloadTime >= _selectedWeapon.ShootInterval)
+            if (_reloadTime >= getTotalShootingInterval())
             {
                 _reloadTime = 0.0f;
                 _reloadActivated = false;
             }
         }
+    }
+
+    public void SetTemporaryShootingMultiplier(float multiplier, float duration)
+    {
+        _shootingIntervalMultiplierTimer = new TimerObject(duration);
+        _shootingIntervalMultiplier = multiplier;
+    }
+
+    private float getTotalShootingInterval()
+    {
+        return _selectedWeapon.ShootInterval * _shootingIntervalMultiplier;
     }
 
     public void StopAttack()

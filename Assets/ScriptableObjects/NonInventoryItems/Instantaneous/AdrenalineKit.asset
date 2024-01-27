@@ -15,7 +15,9 @@ MonoBehaviour:
   ItemName: Adrenaline Kit
   ItemSprite: {fileID: 21300000, guid: 8d9bd0344ab00ab4a9f3abcc7ed3e6ac, type: 3}
   ChanceToDrop: 100
+  IsCollectible: 0
   Color: {r: 0.5235849, g: 0.7829942, b: 1, a: 1}
   PickupAudio: 8
   LifeRestored: {x: 0, y: 10}
   StaminaRestored: {x: 30, y: 60}
+  Armor: 20

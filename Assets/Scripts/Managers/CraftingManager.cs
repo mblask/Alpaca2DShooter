@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class CraftingManager : MonoBehaviour
@@ -41,6 +40,9 @@ public class CraftingManager : MonoBehaviour
 
         if (craftingRecipe.ProductItem is AmmoItem)
             return (craftingRecipe.ProductItem as AmmoItem).UseItem();
+
+        if (craftingRecipe.ProductItem is InstantaneousItem)
+            return (craftingRecipe.ProductItem as InstantaneousItem).UseItem();
 
         return PlayerInventory.AddToInventoryStatic(craftingRecipe.ProductItem);
     }

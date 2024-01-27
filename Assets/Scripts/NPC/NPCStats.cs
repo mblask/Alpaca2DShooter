@@ -10,7 +10,7 @@ public class NPCStats : MonoBehaviour, IDamagable
     public Stat EnemyHealth;
     public Stat EnemySpeed;
     public Stat EnemyAccuracy;
-    public Stat EnemyDefense;
+    public Stat EnemyDefence;
     public Stat EnemyLimbToughness;
 
     private List<StatModifyingData> _statModifyingData = new List<StatModifyingData>();
@@ -37,6 +37,7 @@ public class NPCStats : MonoBehaviour, IDamagable
 
     private NPCBase _npcBase;
     private NPC_AI _enemyAI;
+    private NPCWeapons _npcWeapons;
     private Light2D _bossLight;
     private ParticleSystem _burstParticleSystem;
 
@@ -55,6 +56,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         _playerWeapons = PlayerWeapons.Instance;
         _npcBase = GetComponent<NPCBase>();
         _enemyAI = GetComponent<NPC_AI>();
+        _npcWeapons = GetComponent<NPCWeapons>();
     }
 
     private void Update()
@@ -77,7 +79,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         EnemySpeed.SetBaseValue(baseScriptable.MovementSpeed);
         EnemyAccuracy.SetBaseValue(baseScriptable.Accuracy);
         EnemyHealth.SetBaseValue(baseScriptable.Health * npcHealthModifier);
-        EnemyDefense.SetBaseValue(baseScriptable.Defense);
+        EnemyDefence.SetBaseValue(baseScriptable.Defense);
         EnemyLimbToughness.SetBaseValue(baseScriptable.LimbToughness);
     }
 
@@ -237,8 +239,12 @@ public class NPCStats : MonoBehaviour, IDamagable
 
         //Stat buffs
         float buffDuration = 10.0f;
-        temporaryModifyStat(EnemySpeed, 0.0f, 1.5f, buffDuration);
-        temporaryModifyStat(EnemyDefense, 25.0f, 0.0f, buffDuration);
+        float speedMultiplier = 1.5f;
+        float defenceModifier = 25.0f;
+        float shootingTimerMultiplier = 0.75f;
+        temporaryModifyStat(EnemySpeed, 0.0f, speedMultiplier, buffDuration);
+        temporaryModifyStat(EnemyDefence, defenceModifier, 0.0f, buffDuration);
+        _npcWeapons.SetTemporaryShootingMultiplier(shootingTimerMultiplier, buffDuration);
     }
 
     private void temporaryModifyStat(Stat stat, float modifier, float multiplier, float duration)
@@ -304,7 +310,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         if (damageData.Damage == 0.0f)
             return;
 
-        EnemyHealth.UpdateCurrentValue(-damageData.Damage * (1.0f - EnemyDefense.GetFinalValue() / 100.0f));
+        EnemyHealth.UpdateCurrentValue(-damageData.Damage * (1.0f - EnemyDefence.GetFinalValue() / 100.0f));
         FloatingTextSpawner.CreateFloatingTextStatic
             (transform.position, damageData.Damage.ToString("F0"), new Color(1.0f, 0.5f, 0.0f));
 
@@ -406,7 +412,7 @@ public class NPCStats : MonoBehaviour, IDamagable
             case StatType.Speed:
                 return EnemySpeed;
             case StatType.Defense:
-                return EnemyDefense;
+                return EnemyDefence;
             case StatType.Accuracy:
                 return EnemyAccuracy;
             case StatType.LimbToughness:

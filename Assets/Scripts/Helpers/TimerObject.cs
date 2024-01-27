@@ -1,8 +1,18 @@
+using UnityEngine;
+
 public class TimerObject
 {
     public float Timer { get; private set; } = 0.0f;
     public float Duration { get; set; } = 0.0f;
-    public bool IsOver { get; private set; }
+    public bool IsOver
+    {
+        get
+        {
+            return Timer >= Duration;
+        }
+        
+        private set { }
+    }
 
 
     public TimerObject() { }
@@ -15,7 +25,7 @@ public class TimerObject
     /// <summary>
     /// Increments the timer by <paramref name="timeIncrement"/>
     /// <br>Returns true if timer has surpassed the expected <see cref="Duration"/></br>
-    /// <br>Returns true if set <see cref="Duration"/> is 0</br>
+    /// <br>Returns true if set <see cref="Duration"/> is 0.0</br>
     /// </summary>
     /// <param name="timeIncrement"></param>
     /// <returns><see cref="bool"/></returns>
@@ -29,6 +39,17 @@ public class TimerObject
 
         Timer += timeIncrement;
         return Timer >= Duration;
+    }
+
+    /// <summary>
+    /// Increments the timer by <see cref="Time.deltaTime"/>
+    /// <br>Returns true if timer has surpassed the expected <see cref="Duration"/></br>
+    /// <br>Returns true if set <see cref="Duration"/> is 0.0</br>
+    /// </summary>
+    /// <returns><see cref="bool"/></returns>
+    public bool Update()
+    {
+        return Update(Time.deltaTime);
     }
 
     /// <summary>
