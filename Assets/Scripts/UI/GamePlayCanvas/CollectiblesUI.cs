@@ -8,6 +8,8 @@ public class CollectiblesUI : MonoBehaviour
 
     private GameAssets _gameAssets;
     private PlayerInventory _playerInventory;
+    private GamePlayCanvas _canvas;
+    private IPointerOver _pointerOver;
 
     private void Awake()
     {
@@ -19,6 +21,8 @@ public class CollectiblesUI : MonoBehaviour
     {
         _gameAssets = GameAssets.Instance;
         _playerInventory = PlayerInventory.Instance;
+        _canvas = GamePlayCanvas.Instance;
+        _pointerOver = PointerOver.GetInstance();
     }
 
     public void ShowUI()
@@ -28,6 +32,10 @@ public class CollectiblesUI : MonoBehaviour
 
         if (active)
             populateItemContainer();
+
+        
+        if (!active)
+            _canvas.RemoveItemTooltip();
     }
 
     private void populateItemContainer()

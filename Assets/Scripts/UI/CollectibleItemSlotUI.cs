@@ -8,7 +8,7 @@ public class CollectibleItemSlotUI : MonoBehaviour
     
     private Item _item;
 
-    private ItemTooltip _tooltip;
+    private GamePlayCanvas _canvas;
 
     private void Awake()
     {
@@ -16,23 +16,18 @@ public class CollectibleItemSlotUI : MonoBehaviour
         _button = _itemImage.GetComponent<AlpacaButtonUI>();
     }
 
-    private void OnDisable()
-    {
-        _tooltip.RemoveTooltip();
-    }
-
     private void Start()
     {
-        _tooltip = ItemTooltip.Instance;
+        _canvas = GamePlayCanvas.Instance;
 
         _button.onCursorEnter = () => { 
             if (_item != null)
-                _tooltip.SetupTooltip(_item); 
+                _canvas.SetupItemTooltip(_item); 
         };
 
         _button.onCursorExit = () => {
             if (_item != null)
-                _tooltip.RemoveTooltip();
+                _canvas.RemoveItemTooltip();
         };
     }
 

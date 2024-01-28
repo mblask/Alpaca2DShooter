@@ -123,6 +123,7 @@ public class ItemTooltip : MonoBehaviour
         }
     }
 
+    //CLEAN METHODS IF THE UPDATE WORKS WELL!!
     private void readConsumableItem(ConsumableItem consumable)
     {
         /*if (consumable.LifeRestored != Vector2.zero)

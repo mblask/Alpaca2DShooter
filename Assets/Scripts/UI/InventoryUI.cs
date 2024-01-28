@@ -5,8 +5,9 @@ public class InventoryUI : MonoBehaviour
 {
     private Transform _container;
     private Transform _itemSlotContainer;
-    private const int MAX_NUMBER_OF_ITEMS = 12;
+    private int _maxNumberOfItems;
 
+    private PlayerInventory _playerInventory;
     private GameAssets _gameAssets;
     private GamePlayCanvas _canvas;
 
@@ -18,6 +19,8 @@ public class InventoryUI : MonoBehaviour
 
     private void Start()
     {
+        _playerInventory = PlayerInventory.Instance;
+        _maxNumberOfItems = _playerInventory.MaxNumberOfItems;
         _gameAssets = GameAssets.Instance;
         _canvas = GamePlayCanvas.Instance;
         UpdateItemContainer();
@@ -47,9 +50,9 @@ public class InventoryUI : MonoBehaviour
             }
         }
 
-        List<Item> inventoryItems = PlayerInventory.GetItemsStatic();
+        List<Item> inventoryItems = _playerInventory.GetItems();
 
-        for (int i = 0; i < MAX_NUMBER_OF_ITEMS; i++)
+        for (int i = 0; i < _maxNumberOfItems; i++)
         {
             Transform itemSlotTransform = Instantiate(_gameAssets.ItemSlotUIPrefab, _itemSlotContainer);
 

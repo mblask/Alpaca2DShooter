@@ -14,7 +14,8 @@ public class PlayerInventory : MonoBehaviour, ICrafting
 
     private const int MAX_NUMBER_OF_COLLECTIBLES = 5;
     [SerializeField] private List<Item> _collectibles = new List<Item>();
-    private const int MAX_NUMBER_OF_ITEMS = 12;
+    private const int MAX_NUMBER_OF_ITEMS = 20;
+    public int MaxNumberOfItems => MAX_NUMBER_OF_ITEMS;
     [SerializeField] private List<Item> _items = new List<Item>();
 
     private bool _craftingPossible = false;
