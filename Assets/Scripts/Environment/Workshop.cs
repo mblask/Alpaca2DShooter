@@ -1,10 +1,23 @@
 using UnityEngine;
 
-public class Workshop : MonoBehaviour, IWorkshop
+public class Workshop : MonoBehaviour
 {
+    private GamePlayCanvas _canvas;
+    private FloatingTextSingle _floatingText;
+
+    private void Start()
+    {
+        _canvas = GamePlayCanvas.Instance;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         ActivateWorkshopOnCollider(collision, true);
+        if (_floatingText == null)
+        {
+            _floatingText = FloatingTextSpawner.CreateFloatingTextStatic
+                (transform.position, "Press C\r\n to activate workshop", Color.white, 1.0f, 8.0f, 0.5f);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -18,9 +31,8 @@ public class Workshop : MonoBehaviour, IWorkshop
         if (crafting == null)
             return;
 
-        if (value)
-            FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Press C\r\n to activate workshop", Color.white, 1.0f, 8.0f, 0.5f);
-
         crafting.EnableCrafting(value);
+        if (_canvas.CraftingIsActive() && !value)
+            _canvas.ShowCraftingUI(false);
     }
 }

@@ -119,9 +119,14 @@ public class GamePlayCanvas : MonoBehaviour
         _collectiblesUI.ShowUI();
     }
 
-    public void ShowCraftingUI()
+    public bool CraftingIsActive()
     {
-        _craftingUI.ShowCraftingUI();
+        return _craftingUI.IsActive();
+    }
+
+    public void ShowCraftingUI(bool value)
+    {
+        _craftingUI.ShowCraftingUI(value);
     }
 
     public void PopulateCraftingSlots(CraftingRecipe recipe)

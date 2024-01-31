@@ -303,6 +303,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         _isHealing = true;
         _healAmount = amount;
         _healingTimer = new TimerObject(duration);
+        _enemyHealthCanvas.ActivateHealthSlider();
     }
 
     public void DamageObject(DamageData damageData)

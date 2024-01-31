@@ -580,13 +580,13 @@ public class PlayerWeapons : MonoBehaviour
 
         for (int i = 0; i < _throwables.Count; i++)
         {
-            if (throwable.ThrowableItem == _throwables[i].ThrowableItem)
-            {
-                _throwables[i].TotalAmmo++;
-                _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
+            if (throwable.ThrowableItem != _throwables[i].ThrowableItem)
+                continue;
 
-                return true;
-            }
+            _throwables[i].TotalAmmo++;
+            _uiCanvas.UpdateThrowableAmmoText(_currentThrowable.TotalAmmo);
+
+            return true;
         }
 
         _throwables.Add(throwable);

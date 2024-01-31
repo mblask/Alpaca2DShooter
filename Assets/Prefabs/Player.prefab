@@ -318,6 +318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6152ccf30a19bd44a584af092f8e39d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _collectibles: []
   _items:
   - {fileID: 11400000, guid: c0bb4237c9fd0b849a55738186624d30, type: 2}
   - {fileID: 11400000, guid: c92af50a24538ad4ca5c9c66674ed87e, type: 2}

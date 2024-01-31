@@ -7,6 +7,8 @@ public class CraftingManager : MonoBehaviour
     [SerializeField] private List<CraftingRecipe> _craftingRecipes;
 
     private AchievementManager _achievementManager;
+    private PlayerInventory _playerInventory;
+    private PlayerWeapons _playerWeapons;
 
     private void Awake()
     {
@@ -16,6 +18,8 @@ public class CraftingManager : MonoBehaviour
     private void Start()
     {
         _achievementManager = AchievementManager.Instance;
+        _playerInventory = PlayerInventory.Instance;
+        _playerWeapons = PlayerWeapons.Instance;
     }
 
     public static bool CraftItemStatic(CraftingRecipe craftingRecipe)
@@ -36,7 +40,7 @@ public class CraftingManager : MonoBehaviour
 
         foreach (CraftingIngredient ingredient in craftingRecipe.CraftingIngredients)
             if (ingredient.DestroyedOnCrafting)
-                PlayerInventory.DeleteItemFromInventoryStatic(ingredient.Item);
+                _playerInventory.DeleteItemFromInventory(ingredient.Item);
 
         if (craftingRecipe.ProductItem is AmmoItem)
             return (craftingRecipe.ProductItem as AmmoItem).UseItem();
@@ -44,7 +48,15 @@ public class CraftingManager : MonoBehaviour
         if (craftingRecipe.ProductItem is InstantaneousItem)
             return (craftingRecipe.ProductItem as InstantaneousItem).UseItem();
 
-        return PlayerInventory.AddToInventoryStatic(craftingRecipe.ProductItem);
+        if (craftingRecipe.ProductItem is ThrowableItem)
+        {
+            int craftingQuantity = 3;
+            ThrowableWeapon throwable = 
+                new ThrowableWeapon(craftingRecipe.ProductItem as ThrowableItem, craftingQuantity);
+            return _playerWeapons.AddThrowable(throwable);
+        }
+
+        return _playerInventory.AddToInventory(craftingRecipe.ProductItem);
     }
 
     public static List<CraftingRecipe> GetPossibleCraftsStatic()

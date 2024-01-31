@@ -72,20 +72,27 @@ public class CraftingUI : MonoBehaviour
             _productSlotUI.AddItemToSlot(recipe.ProductItem);
     }
 
-    public void ShowCraftingUI()
+    public bool IsActive()
     {
-        bool isActive = !_container.gameObject.activeSelf;
+        if (_container == null)
+            return false;
 
-        _container.gameObject.SetActive(isActive);
+        return _container.gameObject.activeSelf;
+    }
+
+    public void ShowCraftingUI(bool value)
+    {
+        _container.gameObject.SetActive(value);
 
         foreach (IngredientSlotUI ingredientSlot in _ingredientSlotUIList)
             ingredientSlot.RemoveItemFromSlot();
 
         _productSlotUI.RemoveItemFromSlot();
 
-        showPossibleCraftsScreen(_container.gameObject.activeSelf && CraftingManager.GetPossibleCraftsStatic().Count > 0);
+        bool showPossibleCrafts = _container.gameObject.activeSelf && CraftingManager.GetPossibleCraftsStatic().Count > 0;
+        showPossibleCraftsScreen(showPossibleCrafts);
 
-        if (!isActive)
+        if (!value)
             _canvas.RemoveItemTooltip();
     }
     

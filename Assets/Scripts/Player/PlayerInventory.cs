@@ -23,7 +23,7 @@ public class PlayerInventory : MonoBehaviour, ICrafting
     private ItemSpawner _itemSpawner;
     private AchievementManager _achievementManager;
     private CollectiblesManager _collectiblesManager;
-    private GamePlayCanvas _uiCanvas;
+    private GamePlayCanvas _canvas;
 
     private void Awake()
     {
@@ -35,7 +35,7 @@ public class PlayerInventory : MonoBehaviour, ICrafting
         _itemSpawner = ItemSpawner.Instance;
         _achievementManager = AchievementManager.Instance;
         _collectiblesManager = CollectiblesManager.Instance;
-        _uiCanvas = GamePlayCanvas.Instance;
+        _canvas = GamePlayCanvas.Instance;
     }
 
     private void Update()
@@ -69,14 +69,14 @@ public class PlayerInventory : MonoBehaviour, ICrafting
 
     private void toggleCollectiblesUI()
     {
-        if (Input.GetKeyUp(KeyCode.C))
-            _uiCanvas.ShowCollectiblesUI();
+        if (Input.GetKeyUp(KeyCode.T))
+            _canvas.ShowCollectiblesUI();
     }
 
     private void toggleInventoryUI()
     {
         if (Input.GetKeyDown(KeyCode.I))
-            _uiCanvas.ShowInventory();
+            _canvas.ShowInventory();
     }
 
     private void toggleCraftingUI()
@@ -85,7 +85,12 @@ public class PlayerInventory : MonoBehaviour, ICrafting
             return;
 
         if (Input.GetKeyDown(KeyCode.C))
-            _uiCanvas.ShowCraftingUI();
+        {
+            if (_canvas.CraftingIsActive())
+                _canvas.ShowCraftingUI(false);
+            else
+                _canvas.ShowCraftingUI(true);
+        }
     }
 
     public static List<Item> GetItemsStatic()
@@ -110,10 +115,10 @@ public class PlayerInventory : MonoBehaviour, ICrafting
 
     public static bool AddToInventoryStatic(Item item)
     {
-        return _instance.addToInventory(item);
+        return _instance.AddToInventory(item);
     }
 
-    private bool addToInventory(Item item)
+    public bool AddToInventory(Item item)
     {
         if (item.IsCollectible)
             return addCollectible(item);
@@ -121,8 +126,8 @@ public class PlayerInventory : MonoBehaviour, ICrafting
         if (_items.Count < MAX_NUMBER_OF_ITEMS)
         {
             _items.Add(item);
-            _uiCanvas.UpdateItemContainer();
-            _uiCanvas.PopulateConsumableItemsUI();
+            _canvas.UpdateItemContainer();
+            _canvas.PopulateConsumableItemsUI();
 
             return true;
         }
@@ -147,8 +152,8 @@ public class PlayerInventory : MonoBehaviour, ICrafting
             Vector3 position = transform.position + 2.0f * (Vector3.up * Mathf.Sin(randomAngleRad) + Vector3.right * Mathf.Cos(randomAngleRad));
             _itemSpawner.SpawnItem(position, item);
 
-            _uiCanvas.UpdateItemContainer();
-            _uiCanvas.PopulateConsumableItemsUI();
+            _canvas.UpdateItemContainer();
+            _canvas.PopulateConsumableItemsUI();
 
             return true;
         }
@@ -158,18 +163,18 @@ public class PlayerInventory : MonoBehaviour, ICrafting
 
     public static bool DeleteItemFromInventoryStatic(Item item)
     {
-        return _instance.deleteItemFromInventory(item);
+        return _instance.DeleteItemFromInventory(item);
     }
 
-    private bool deleteItemFromInventory(Item item)
+    public bool DeleteItemFromInventory(Item item)
     {
         if (item == null)
             return false;
 
         if (_items.Remove(item))
         {
-            _uiCanvas.UpdateItemContainer();
-            _uiCanvas.PopulateConsumableItemsUI();
+            _canvas.UpdateItemContainer();
+            _canvas.PopulateConsumableItemsUI();
             return true;
         }
         else
