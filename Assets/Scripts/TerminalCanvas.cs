@@ -33,11 +33,11 @@ public class TerminalCanvas : MonoBehaviour
 
         _hackingCompletionSlider.value = percentageValue;
 
-        if (_hackingCompletionSlider.value >= 1.0f)
-        {
-            Activate(false);
-            FloatingTextSpawner.CreateFloatingTextStatic
-                (PlayerStats.Instance.transform.position, "Cracked!", Color.white, 2.0f, 7, 0.8f, true, FloatDirection.Up);
-        }
+        if (_hackingCompletionSlider.value < 1.0f)
+            return;
+
+        Activate(false);
+        FloatingTextSpawner.CreateFloatingTextStatic
+            (PlayerStats.Instance.transform.position, "Cracked!", Color.white, 2.0f, 7, 0.8f, true, FloatDirection.Up);
     }
 }

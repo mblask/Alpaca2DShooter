@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Door : Box2dCollider, IInteractable
@@ -5,28 +6,59 @@ public class Door : Box2dCollider, IInteractable
     private SpriteRenderer _spriteRenderer;
     private BoxCollider2D _boxCollider;
 
-    [SerializeField] private Item _keyItem;
-
     [SerializeField] private Color _defaultColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
     [SerializeField] private Color _highlightColor = new Color(0.6f, 1.0f, 0.6f, 1.0f);
     public string InteractableName { get; } = "Door";
 
-    [SerializeField] private bool _isLocked = true;
+    private bool _isLocked = false;
+    private bool _isLockpicking = false;
+    private FloatingTextSingle _floatingText;
     private bool _isClosed = true;
+    private TimerObject _lockpickingTimer;
 
-    [SerializeField] [TextArea] private string _lockedDoorMessage;
+    private PlayerInventory _playerInventory;
+    private DoorCanvas _doorCanvas;
 
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _boxCollider = GetComponent<BoxCollider2D>();
+        _doorCanvas = transform.Find("DoorCanvas").GetComponent<DoorCanvas>();
+    }
+
+    private void Start()
+    {
+        _playerInventory = PlayerInventory.Instance;
+        
+    }
+
+    private void Update()
+    {
+        lockpickingProcedure();
+    }
+
+    private void lockpickingProcedure()
+    {
+        if (!_isLockpicking)
+            return;
+
+        if (!_isLocked)
+            return;
+
+        if (!_lockpickingTimer.Update())
+        {
+            _doorCanvas.UpdateSlider(_lockpickingTimer.Timer);
+            return;
+        }
+
+        _doorCanvas.Activate(false);
+        _isLockpicking = false;
+        _isLocked = false;
+        openDoor();
     }
 
     private void openDoor()
     {
-        if (_isLocked)
-            return;
-
         _isClosed = false;
 
         float alfa = 0.3f;
@@ -42,18 +74,39 @@ public class Door : Box2dCollider, IInteractable
         _boxCollider.isTrigger = true;
     }
 
-    private void unlockAndOpenDoor()
+    public void StartLockpicking()
     {
-        if (!PlayerInventory.GetItemsStatic().Contains(_keyItem) && _keyItem != null)
-        {
-            string message = _lockedDoorMessage != null ? _lockedDoorMessage : "It's locked!";
-            return;
-        }
-        
-        PlayerInventory.DeleteItemFromInventoryStatic(_keyItem);
-        _isLocked = false;
+        _isLockpicking = true;
 
-        openDoor();
+        float lockpickingDuration = 1.0f;
+        _lockpickingTimer = new TimerObject(lockpickingDuration);
+        _doorCanvas.Activate(true);
+    }
+
+    private bool checkForLockpick()
+    {
+        bool lockpickAvailable = false;
+        List<Item> items = _playerInventory.GetItems();
+        foreach (Item item in items)
+        {
+            InventoryItem inventoryItem = item as InventoryItem;
+            if (inventoryItem == null)
+                continue;
+
+            if (!inventoryItem.ItemName.Equals("Lockpick"))
+                continue;
+
+            lockpickAvailable = true;
+            break;
+        }
+
+        return lockpickAvailable;
+    }
+
+    public void BreakLockpicking()
+    {
+        _isLockpicking = false;
+        _lockpickingTimer.Reset();
     }
 
     public void Highlight()
@@ -66,7 +119,24 @@ public class Door : Box2dCollider, IInteractable
     {
         if (_isLocked)
         {
-            unlockAndOpenDoor();
+            if (_isLockpicking)
+            {
+                _floatingText = FloatingTextSpawner
+                .CreateFloatingTextStatic(transform.position, "Still picking the lock!", Color.yellow, 1.0f, 8.0f, 1.5f);
+                return;
+            }
+
+            if (checkForLockpick())
+            {
+                StartLockpicking();
+                return;
+            }
+
+            if (_floatingText != null)
+                return;
+
+            _floatingText = FloatingTextSpawner
+                .CreateFloatingTextStatic(transform.position, "Door locked", Color.yellow, 1.0f, 8.0f, 1.5f);
             return;
         }
 
@@ -77,6 +147,11 @@ public class Door : Box2dCollider, IInteractable
     public void RemoveHighlight()
     {
         _spriteRenderer.color = _defaultColor;
+    }
+
+    public void LockDoor(bool value)
+    {
+        _isLocked = value;
     }
 
     public bool IsLocked()

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AlpacaMyGames;
+using System.Linq;
 
 public class LevelObject : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class LevelObject : MonoBehaviour
     private List<SpawnPoint> _trapsSpawnPoints = new List<SpawnPoint>();
     private List<Transform> _spawnedTraps = new List<Transform>();
     private List<SpawnPoint> _playerSpawnPoints = new List<SpawnPoint>();
+    private List<Door> _spawnedDoors = new List<Door>();
     [SerializeField] private List<SpawnPoint> _portalSpawnPoints;
     private Portal _spawnPortal;
     private Portal _exitPortal;
@@ -68,6 +70,7 @@ public class LevelObject : MonoBehaviour
         spawnPortals(levelNeedsSpawnPortal);
         spawnEnemies();
         spawnTraps();
+        setupDoors();
 
         _isReady = true;
         _wasPlayed = true;
@@ -82,6 +85,24 @@ public class LevelObject : MonoBehaviour
         clearTraps();
 
         _isReady = false;
+    }
+
+    private void setupDoors()
+    {
+        if (_levelNumber < 5)
+            return;
+
+        _spawnedDoors = _environmentContainer.GetComponentsInChildren<Door>().ToList();
+        if (_spawnedDoors.Count == 0)
+            return;
+
+        foreach (Door door in _spawnedDoors)
+        {
+            if (Utilities.ChanceFunc(10))
+                continue;
+
+            door.LockDoor(true);
+        }
     }
 
     private void clearPortals()

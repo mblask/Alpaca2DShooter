@@ -35,7 +35,7 @@ public class LevelsManager : MonoBehaviour
 
     [Header("NPC weapons")]
     [Tooltip("On level number X, enemies get a chance of carrying certain weapon")]
-    [SerializeField] private List<LevelWeapons> _avaialableEnemyWeapons = new List<LevelWeapons>();
+    [SerializeField] private List<LevelWeapons> _enemyLeveledWeapons = new List<LevelWeapons>();
 
     private LevelObject _currentLevel;
 
@@ -65,7 +65,7 @@ public class LevelsManager : MonoBehaviour
     public List<WeaponItem> GetAvailableNpcWeapons()
     {
         List<WeaponItem> weapons = new List<WeaponItem>();
-        foreach (LevelWeapons levelWeapon in _avaialableEnemyWeapons)
+        foreach (LevelWeapons levelWeapon in _enemyLeveledWeapons)
             if (_levelNumber >= levelWeapon.Level)
                 weapons.AddRange(levelWeapon.AvailableWeapons);
 

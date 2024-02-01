@@ -47,5 +47,6 @@ public class PossibleCraftUI : MonoBehaviour
         _possibleProductItem = recipe.ProductItem;
         _image.sprite = recipe.ProductItem.ItemSprite;
         _image.enabled = true;
+        _image.preserveAspect = true;
     }
 }

@@ -12,10 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9590f8ee09418d6408edbbb755873f4f, type: 3}
   m_Name: LockpickRecipe
   m_EditorClassIdentifier: 
-  Ingredients:
-  - {fileID: 11400000, guid: c92af50a24538ad4ca5c9c66674ed87e, type: 2}
-  - {fileID: 11400000, guid: 4fc2ea3ea9b24ed4fb6e5949c14d74e2, type: 2}
-  - {fileID: 0}
   CraftingIngredients:
   - Item: {fileID: 11400000, guid: c92af50a24538ad4ca5c9c66674ed87e, type: 2}
     DestroyedOnCrafting: 0

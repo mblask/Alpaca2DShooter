@@ -16,8 +16,10 @@ public class CraftingSlotUI : MonoBehaviour
     public void AddItemToSlot(Item item)
     {
         _item = item;
+        _image.preserveAspect = true;
         _image.sprite = item.ItemSprite;
         _image.enabled = true;
+        _image.preserveAspect = true;
     }
 
     public void RemoveItemFromSlot()
