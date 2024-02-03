@@ -1,3 +1,4 @@
+using AlpacaMyGames;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ public class Door : Box2dCollider, IInteractable
     private FloatingTextSingle _floatingText;
     private bool _isClosed = true;
     private TimerObject _lockpickingTimer;
+    
+    private int _hitPoints = 0;
 
     private PlayerInventory _playerInventory;
     private DoorCanvas _doorCanvas;
@@ -47,6 +50,12 @@ public class Door : Box2dCollider, IInteractable
 
         if (!_lockpickingTimer.Update())
         {
+            if (checkPlayerTooFar())
+            {
+                breakLockpicking();
+                return;
+            }
+
             _doorCanvas.UpdateSlider(_lockpickingTimer.Timer);
             return;
         }
@@ -55,6 +64,12 @@ public class Door : Box2dCollider, IInteractable
         _isLockpicking = false;
         _isLocked = false;
         openDoor();
+    }
+
+    private bool checkPlayerTooFar()
+    {
+        float distance = Vector2.Distance(_playerInventory.transform.position, transform.position);
+        return distance >= Constants.SHORT_INTERACTION_DISTANCE;
     }
 
     private void openDoor()
@@ -103,10 +118,12 @@ public class Door : Box2dCollider, IInteractable
         return lockpickAvailable;
     }
 
-    public void BreakLockpicking()
+    private void breakLockpicking()
     {
+        _isLocked = true;
         _isLockpicking = false;
         _lockpickingTimer.Reset();
+        _doorCanvas.Activate(false);
     }
 
     public void Highlight()
@@ -149,9 +166,28 @@ public class Door : Box2dCollider, IInteractable
         _spriteRenderer.color = _defaultColor;
     }
 
+    public void DamageDoor()
+    {
+        if (!_isLocked)
+            return;
+
+        _hitPoints--;
+
+        if (_hitPoints <= 0)
+        {
+            FloatingTextSpawner.CreateFloatingTextStatic
+                (transform.position, "Lock broken", Color.green, 1.5f, 8.0f, 1.5f);
+            _isLocked = false;
+        }
+    }
+
     public void LockDoor(bool value)
     {
         _isLocked = value;
+
+        Vector2Int hitPointInterval = new Vector2Int(3, 6);
+        if (_isLocked)
+            _hitPoints = hitPointInterval.GetRandom();
     }
 
     public bool IsLocked()

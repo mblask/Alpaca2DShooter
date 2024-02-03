@@ -1,7 +1,7 @@
-public enum NPCState
+public enum NpcState
 {
     Idle,
     Patrol,
     Chase,
-    GoBack
+    Blinded
 }

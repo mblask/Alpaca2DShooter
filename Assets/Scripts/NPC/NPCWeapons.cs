@@ -6,7 +6,7 @@ public class NPCWeapons : MonoBehaviour
 {
     private Transform _shootingSpot;
     private Animator _animator;
-    private NPC_AI _npcAI;
+    private NpcAi _npcAI;
 
     private string _removeWeaponTriggerName = "RemoveWeapon";
 
@@ -38,7 +38,7 @@ public class NPCWeapons : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _shootingSpot = transform.Find("ShootingSpot");
-        _npcAI = GetComponent<NPC_AI>();
+        _npcAI = GetComponent<NpcAi>();
     }
 
     private void Start()

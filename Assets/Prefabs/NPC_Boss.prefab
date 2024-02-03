@@ -9817,10 +9817,10 @@ GameObject:
   - component: {fileID: 7598171205730293080}
   - component: {fileID: 3560616791064837435}
   - component: {fileID: 1211367572513094729}
-  - component: {fileID: 5721888650467673745}
   - component: {fileID: 7270363628272429560}
   - component: {fileID: 8874459827295818487}
   - component: {fileID: 8874459827295818480}
+  - component: {fileID: 3802589092304300310}
   m_Layer: 7
   m_Name: NPC_Boss
   m_TagString: Enemy
@@ -10006,19 +10006,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyType: 1
   _bossLevel: 0
---- !u!114 &5721888650467673745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8874459827295818481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3248e5895e6eea4caa6c6596ace0726, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _npcAllegiance: 0
 --- !u!114 &7270363628272429560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10075,6 +10062,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _highlightColor: {r: 0, g: 1, b: 0, a: 1}
   _defaultColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &3802589092304300310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8874459827295818481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a38e5b122276f0a41adf11e5661bb935, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _npcAllegiance: 0
 --- !u!1 &9020466695495653906
 GameObject:
   m_ObjectHideFlags: 0

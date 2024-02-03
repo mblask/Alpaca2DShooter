@@ -89,7 +89,7 @@ public class LevelObject : MonoBehaviour
 
     private void setupDoors()
     {
-        if (_levelNumber < 5)
+        if (_levelNumber > 5)
             return;
 
         _spawnedDoors = _environmentContainer.GetComponentsInChildren<Door>().ToList();

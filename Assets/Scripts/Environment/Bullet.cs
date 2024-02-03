@@ -46,8 +46,12 @@ public class Bullet : MonoBehaviour
         if (collision.GetComponent<TilemapCollider2D>() != null)
             Destroy(gameObject);
 
-        if (collision.GetComponent<Door>() != null && collision.GetComponent<Door>().IsClosed())
+        Door door = collision.GetComponent<Door>();
+        if (door != null && door.IsClosed())
+        {
+            door.DamageDoor();
             Destroy(gameObject);
+        }
 
         IDamagable damagable = collision.GetComponent<IDamagable>();
         if (damagable != null)

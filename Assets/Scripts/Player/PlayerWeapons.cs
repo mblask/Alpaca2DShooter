@@ -474,7 +474,7 @@ public class PlayerWeapons : MonoBehaviour
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, soundRadius);
         foreach (Collider2D collider in colliders)
         {
-            NPC_AI npc2 = collider.GetComponent<NPC_AI>();
+            NpcAi npc2 = collider.GetComponent<NpcAi>();
             if (npc2 != null)
                 npc2.AlertNPC();
         }

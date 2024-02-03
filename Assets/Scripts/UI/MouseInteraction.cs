@@ -78,7 +78,7 @@ public class MouseInteraction : MonoBehaviour
 
         _playerWeapons.EnableShooting(false);
 
-        if (collider.GetComponent<NPC_AI>() != null)
+        if (collider.GetComponent<NpcAi>() != null)
             _playerWeapons.EnableShooting(true);
     }
 
@@ -95,7 +95,13 @@ public class MouseInteraction : MonoBehaviour
             return;
         }
 
-        if (collider.GetComponent<NPC_AI>() != null)
+        if (collider.GetComponent<Door>() != null)
+        {
+            _playerWeapons.EnableShooting(true);
+            return;
+        }
+
+        if (collider.GetComponent<NpcAi>() != null)
         {
             _playerWeapons.EnableShooting(true);
             return;

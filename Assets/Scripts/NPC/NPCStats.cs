@@ -36,7 +36,7 @@ public class NPCStats : MonoBehaviour, IDamagable
     private NPCHealthCanvas _enemyHealthCanvas;
 
     private NPCBase _npcBase;
-    private NPC_AI _enemyAI;
+    private NpcAi _enemyAI;
     private NPCWeapons _npcWeapons;
     private Light2D _bossLight;
     private ParticleSystem _burstParticleSystem;
@@ -55,7 +55,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         _gameManager = GameManager.Instance;
         _playerWeapons = PlayerWeapons.Instance;
         _npcBase = GetComponent<NPCBase>();
-        _enemyAI = GetComponent<NPC_AI>();
+        _enemyAI = GetComponent<NpcAi>();
         _npcWeapons = GetComponent<NPCWeapons>();
     }
 

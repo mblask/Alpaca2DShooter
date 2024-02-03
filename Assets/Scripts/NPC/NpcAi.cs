@@ -1,19 +1,11 @@
 using AlpacaMyGames;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public enum NpcState
-{
-    Idle,
-    Patrol,
-    Chase,
-    Blinded
-}
-
-public class NPC_AI : MonoBehaviour, IBlindable
+public class NpcAi : MonoBehaviour, IBlindable
 {
     [SerializeField] private NPCAllegiance _npcAllegiance;
     private NpcState _state = NpcState.Patrol;
@@ -177,7 +169,7 @@ public class NPC_AI : MonoBehaviour, IBlindable
 
             moveThroughWaypoints(() => { _pathFound = false; });
         }
-        
+
         if (distanceToPlayer <= _attackDistance)
         {
             //attack
@@ -279,7 +271,7 @@ public class NPC_AI : MonoBehaviour, IBlindable
     public bool ObstaclesInRaycast(Vector2 targetPosition)
     {
         Vector2 direction = targetPosition - (Vector2)transform.position;
-        List<RaycastHit2D> hits = 
+        List<RaycastHit2D> hits =
             Physics2D.RaycastAll(transform.position, direction.normalized, direction.magnitude).ToList();
 
         foreach (RaycastHit2D hit in hits)
@@ -302,7 +294,7 @@ public class NPC_AI : MonoBehaviour, IBlindable
         Vector3 direction = position - (Vector2)transform.position;
         direction.Normalize();
 
-        Vector3 positionIncrement = 
+        Vector3 positionIncrement =
             _npcStats.EnemySpeed.GetCurrentValue() * direction * Time.deltaTime;
         transform.position += positionIncrement;
 

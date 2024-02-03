@@ -8,12 +8,12 @@ public class NPCInteraction : MonoBehaviour, IInteractable
 
     private SpriteRenderer _renderer;
 
-    private NPC_AI _npcAi;
+    private NpcAi _npcAi;
 
     private void Awake()
     {
         _renderer = GetComponent<SpriteRenderer>();
-        _npcAi = GetComponent<NPC_AI>();
+        _npcAi = GetComponent<NpcAi>();
     }
 
     public void Highlight()
