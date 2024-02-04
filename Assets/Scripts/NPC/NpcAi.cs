@@ -20,6 +20,8 @@ public class NpcAi : MonoBehaviour, IBlindable
     private const float STOP_DISTANCE = 0.5f;
 
     private bool _isBlinded = false;
+    private float _defaultBlindnessTime = 5.0f;
+    private TimerObject _blindnessTimer;
 
     private float _attackDistance = 0.0f;
     private float _viewDistance = 0.0f;
@@ -123,14 +125,19 @@ public class NpcAi : MonoBehaviour, IBlindable
 
     private void blindedState()
     {
+        if (!_isBlinded)
+            return;
+
         moveTo(_waypoint);
         rotateTowards(_waypoint);
 
-        if (Mathf.Abs(_viewDistance - DEFAULT_VIEW_DISTANCE * 0.75f) < 0.0f)
+        if (_blindnessTimer.Update())
+        {
             _isBlinded = false;
-
-        if (!_isBlinded)
             _state = NpcState.Patrol;
+        }
+
+        _viewDistance = _blindnessTimer.Timer / _blindnessTimer.Duration * DEFAULT_VIEW_DISTANCE;
     }
 
     private void chaseState()
@@ -193,8 +200,8 @@ public class NpcAi : MonoBehaviour, IBlindable
 
         float sign = Mathf.Sign(_viewDistance - DEFAULT_VIEW_DISTANCE);
 
-        if (Mathf.Abs(_viewDistance - DEFAULT_VIEW_DISTANCE) > toleranceMagnitude)
-            _viewDistance -= sign * normalizationFactor * DEFAULT_VIEW_DISTANCE * Time.deltaTime;
+        //if (Mathf.Abs(_viewDistance - DEFAULT_VIEW_DISTANCE) > toleranceMagnitude)
+        //    _viewDistance -= sign * normalizationFactor * DEFAULT_VIEW_DISTANCE * Time.deltaTime;
 
         if (Mathf.Abs(_attackDistance - DEFAULT_ATTACK_DISTANCE) > toleranceMagnitude)
             _attackDistance -= sign * normalizationFactor * DEFAULT_ATTACK_DISTANCE * Time.deltaTime;
@@ -214,6 +221,8 @@ public class NpcAi : MonoBehaviour, IBlindable
         float blindingFactor = 0.1f;
 
         _isBlinded = true;
+        _blindnessTimer = new TimerObject(_defaultBlindnessTime);
+        _npcStats.TemporaryModifyStat(StatType.Defense, -15.0f, 1.0f, _defaultBlindnessTime);
         _state = NpcState.Blinded;
         _npcWeapons.StopAttack();
 

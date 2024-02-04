@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName: Mine
   ItemSprite: {fileID: 21300000, guid: 29b6598b6a25bc44090da82fd7c31043, type: 3}
+  ItemPrefab: {fileID: 7346663964101727337, guid: 49a39b89380eae64d83a7baf168ebd97,
+    type: 3}
   ChanceToDrop: 5
   IsCollectible: 0
   Color: {r: 0.32156864, g: 0.45882353, b: 0.4627451, a: 1}

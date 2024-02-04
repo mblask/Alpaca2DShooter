@@ -112,6 +112,13 @@ public class TerminalUI : MonoBehaviour
 
     private void showExistingDataItems()
     {
+        if (_dataItems.Count == 0)
+        {
+            FloatingTextSpawner.CreateFloatingTextStatic
+                (transform.position, "I have nothing to insert", new Color(1.0f, 1.0f, 0.0f), 1.5f);
+            return;
+        }
+
         _inventoryItemSelector.gameObject.SetActive(true);
 
         foreach (Transform child in _itemButtonsContainer)

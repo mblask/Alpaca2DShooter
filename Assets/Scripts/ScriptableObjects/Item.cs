@@ -5,6 +5,7 @@ public class Item : ScriptableObject
     [Header("Item characteristics")]
     public string ItemName;
     public Sprite ItemSprite;
+    public GameObject ItemPrefab;
     [Range(0.0f, 100.0f)] public float ChanceToDrop;
     public bool IsCollectible;
     public Color Color;

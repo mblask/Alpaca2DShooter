@@ -35,7 +35,11 @@ public class ItemSpawner : MonoBehaviour
 
     public Transform SpawnItem(Vector3 position, Item item)
     {
-        Transform spawnedItem = Instantiate(_gameAssets.ItemTemplate, position, Quaternion.identity, null);
+        Transform itemToSpawn = _gameAssets.ItemTemplate;
+        if (item.ItemPrefab != null)
+            itemToSpawn = item.ItemPrefab.transform;
+
+        Transform spawnedItem = Instantiate(itemToSpawn, position, Quaternion.identity, null);
         PickupItem pickup = spawnedItem.GetComponent<PickupItem>();
         pickup.SetItem(item);
 

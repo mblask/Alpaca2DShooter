@@ -105,7 +105,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         }
     }
 
-    private void rollWoundsDice()
+    private void rollWounds()
     {
         List<StatModifyingData> injuryPool = new List<StatModifyingData>();
         rollLegsInjury(injuryPool);
@@ -262,6 +262,12 @@ public class NPCStats : MonoBehaviour, IDamagable
         stat.AddBaseMultiplier(multiplier);
     }
 
+    public void TemporaryModifyStat(StatType statType, float modifier, float multiplier, float duration)
+    {
+        Stat stat = getStatByType(statType);
+        temporaryModifyStat(stat, modifier, multiplier, duration);
+    }
+
     private void playBurstParticleSystem()
     {
         if (_burstParticleSystem == null)
@@ -335,7 +341,7 @@ public class NPCStats : MonoBehaviour, IDamagable
 
         if (_npcBase.EnemyType.Equals(NPCEnemyType.Boss))
         {
-            rollWoundsDice();
+            rollWounds();
         }
 
         rollBleeding(damageData.BleedingChance);

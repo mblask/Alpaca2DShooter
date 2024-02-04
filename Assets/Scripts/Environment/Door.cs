@@ -9,7 +9,8 @@ public class Door : Box2dCollider, IInteractable
 
     [SerializeField] private Color _defaultColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
     [SerializeField] private Color _highlightColor = new Color(0.6f, 1.0f, 0.6f, 1.0f);
-    public string InteractableName { get; } = "Door";
+    private const string DEFAULT_DOOR_NAME = "Door";
+    public string InteractableName { get; private set; } = DEFAULT_DOOR_NAME;
 
     private bool _isLocked = false;
     private bool _isLockpicking = false;
@@ -60,6 +61,7 @@ public class Door : Box2dCollider, IInteractable
             return;
         }
 
+        InteractableName = "Unlocked " + DEFAULT_DOOR_NAME;
         _doorCanvas.Activate(false);
         _isLockpicking = false;
         _isLocked = false;
@@ -184,6 +186,8 @@ public class Door : Box2dCollider, IInteractable
     public void LockDoor(bool value)
     {
         _isLocked = value;
+
+        InteractableName = "Locked " + DEFAULT_DOOR_NAME;
 
         Vector2Int hitPointInterval = new Vector2Int(3, 6);
         if (_isLocked)
