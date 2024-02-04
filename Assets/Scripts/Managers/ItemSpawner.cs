@@ -1,6 +1,7 @@
 using AlpacaMyGames;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 
 public class ItemSpawner : MonoBehaviour
@@ -43,33 +44,42 @@ public class ItemSpawner : MonoBehaviour
         PickupItem pickup = spawnedItem.GetComponent<PickupItem>();
         pickup.SetItem(item);
 
+        Light2D light = spawnedItem.GetComponentInChildren<Light2D>();
+        if (light != null)
+            light.color = item.Color;
+
         switch (item)
         {
             case InventoryItem:
                 pickup.SetRotationSpeed(0.0f);
-                spawnedItem.GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>().intensity = 0.0f;
+                spawnedItem.GetComponentInChildren<Light2D>().intensity = 0.0f;
                 break;
             case NonInventoryItem:
                 spawnedItem.GetComponent<SpriteRenderer>().color = (item as NonInventoryItem).Color;
-                spawnedItem.GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>().color = (item as NonInventoryItem).Color;
 
-                if (item is ThrowableItem)
-                {
-                    ThrowableItem throwable = item as ThrowableItem;
+                ThrowableItem throwable = item as ThrowableItem;
+                if (throwable == null)
+                    break;
+
+                if (spawnedItem.GetComponent<Rigidbody2D>() == null)
                     spawnedItem.gameObject.AddComponent<Rigidbody2D>();
-                    switch (throwable.Type)
-                    {
-                        case ThrowableWeaponType.Mine:
-                            spawnedItem.gameObject.AddComponent<Mine>();
-                            spawnedItem.GetComponent<Mine>().SetItem(throwable);
-                            break;
-                        case ThrowableWeaponType.Grenade:
-                            spawnedItem.gameObject.AddComponent<Grenade>();
-                            spawnedItem.GetComponent<Grenade>().SetItem(throwable);
-                            break;
-                        default:
-                            break;
-                    }
+
+                switch (throwable.Type)
+                {
+                    case ThrowableWeaponType.Mine:
+                        spawnedItem.gameObject.AddComponent<Mine>();
+                        spawnedItem.GetComponent<Mine>().SetItem(throwable);
+                        break;
+                    case ThrowableWeaponType.Grenade:
+                        spawnedItem.gameObject.AddComponent<Grenade>();
+                        spawnedItem.GetComponent<Grenade>().SetItem(throwable);
+                        break;
+                    case ThrowableWeaponType.FlashGrenade:
+                        spawnedItem.gameObject.AddComponent<FlashGrenade>();
+                        spawnedItem.GetComponent<FlashGrenade>().SetItem(throwable);
+                        break;
+                    default:
+                        break;
                 }
                 break;
             default:
