@@ -12,6 +12,8 @@ public class NpcAi : MonoBehaviour, IBlindable
     private Vector2 _originalPosition;
     private Vector2 _waypoint;
 
+    private FloatingTextSingle _alertedText;
+
     private float _idleTimer = 0.0f;
 
     private const float MIN_IDLE_TIME = 1.0f;
@@ -200,9 +202,6 @@ public class NpcAi : MonoBehaviour, IBlindable
 
         float sign = Mathf.Sign(_viewDistance - DEFAULT_VIEW_DISTANCE);
 
-        //if (Mathf.Abs(_viewDistance - DEFAULT_VIEW_DISTANCE) > toleranceMagnitude)
-        //    _viewDistance -= sign * normalizationFactor * DEFAULT_VIEW_DISTANCE * Time.deltaTime;
-
         if (Mathf.Abs(_attackDistance - DEFAULT_ATTACK_DISTANCE) > toleranceMagnitude)
             _attackDistance -= sign * normalizationFactor * DEFAULT_ATTACK_DISTANCE * Time.deltaTime;
 
@@ -251,7 +250,8 @@ public class NpcAi : MonoBehaviour, IBlindable
         if (_npcWeapons.HasShootingTarget)
             return;
 
-        _waypoint = _playerStats.transform.position;
+        if (!ObstaclesInRaycast(_playerStats.transform.position))
+            _waypoint = _playerStats.transform.position;
 
         if (Utilities.ChanceFunc(50))
             npcAlerted();
@@ -260,9 +260,10 @@ public class NpcAi : MonoBehaviour, IBlindable
     private void npcAlerted()
     {
         string randomAlert = Constants.NPC_ALERT_MESSAGES.GetRandomElement();
-        FloatingTextSpawner
-            .CreateFloatingTextStatic
-            (transform.position, randomAlert, Color.red, destroyAfter: 0.8f, fontSize: 8, floatSpeed: 0.5f);
+        
+        if (_alertedText == null)
+            FloatingTextSpawner.CreateFloatingTextStatic
+                (transform.position, randomAlert, Color.red, destroyAfter: 0.8f, fontSize: 8, floatSpeed: 0.5f);
     }
 
     private void getNextWaypoint()

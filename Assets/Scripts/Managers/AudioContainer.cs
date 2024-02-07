@@ -17,5 +17,10 @@ public class AudioContainer : MonoBehaviour
     [Header("Other")]
     public AudioClip ItemPickup;
     public AudioClip Bandaging;
-    public List<AudioClip> BulletHitsCharacter;
+    public AudioClip BoxSmash;
+    public AudioClip KeyboardTypeing3s;
+    public AudioClip PortalSound;
+    public List<AudioClip> CraftingSound = new List<AudioClip>();
+    public List<AudioClip> WoodenDoorHits = new List<AudioClip>();
+    public List<AudioClip> BulletHitsCharacter = new List<AudioClip>();
 }

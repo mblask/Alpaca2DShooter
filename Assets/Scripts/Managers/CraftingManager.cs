@@ -26,6 +26,7 @@ public class CraftingManager : MonoBehaviour
     {
         if (_instance.craftItem(craftingRecipe))
         {
+            AudioManager.Instance.PlayClip(SFXClip.Crafting);
             _instance._achievementManager.CheckOnItemCrafted();
             return true;
         }

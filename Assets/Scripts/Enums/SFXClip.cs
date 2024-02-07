@@ -11,5 +11,10 @@ public enum SFXClip
     Bandaging,
     BulletHitsCharacter,
     GrenadeThrow,
+    Crafting,
+    BulletToDoorHit,
+    KeyboardTyping,
+    BoxSmash,
+    PortalSound,
     None = 99999
 }

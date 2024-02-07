@@ -133,6 +133,18 @@ public class AudioManager : MonoBehaviour
             case SFXClip.BulletHitsCharacter:
                 clipToPlay = _audioContainer.BulletHitsCharacter.GetRandomElement();
                 break;
+            case SFXClip.Crafting:
+                clipToPlay = _audioContainer.CraftingSound.GetRandomElement();
+                break;
+            case SFXClip.KeyboardTyping:
+                clipToPlay = _audioContainer.KeyboardTypeing3s;
+                break;
+            case SFXClip.BoxSmash:
+                clipToPlay = _audioContainer.BoxSmash;
+                break;
+            case SFXClip.PortalSound:
+                clipToPlay = _audioContainer.PortalSound;
+                break;
             default:
                 clipToPlay = null;
                 break;
@@ -140,5 +152,10 @@ public class AudioManager : MonoBehaviour
 
         if (clipToPlay != null)
             _sfxAudioSource.PlayOneShot(clipToPlay);
+    }
+
+    public void StopPlaying()
+    {
+        _sfxAudioSource.Stop();
     }
 }

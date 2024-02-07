@@ -24,7 +24,8 @@ public class Box : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        _objectDestroy.DamageObject(new DamageData());
+        AudioManager.Instance.PlayClip(SFXClip.BoxSmash);
+        _objectDestroy.DamageObject(new DamageData { Damage = 10.0f });
     }
 
     public void RemoveHighlight()

@@ -75,14 +75,17 @@ public class Terminal : Box2dCollider, IInteractable
 
         if (checkPlayerTooFar())
         {
+            AudioManager.Instance.StopPlaying();
             stopHacking();
             return;
         }
 
+        AudioManager.Instance.PlayClip(SFXClip.KeyboardTyping);
         _stopwatch += _hackingSpeed * Time.deltaTime;
         _terminalCanvas.UpdateSlider(_stopwatch / _hackingTime);
         if (_stopwatch >= _hackingTime)
         {
+            AudioManager.Instance.StopPlaying();
             _hackingInProgress = false;
             _isHacked = true;
             _achievementManager.CheckOnTerminalHacked();

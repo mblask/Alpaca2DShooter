@@ -271,6 +271,7 @@ public class LevelsManager : MonoBehaviour
 
         _currentLevel.ClearLevel();
         _currentLevel = level;
+        AudioManager.Instance.PlayClip(SFXClip.PortalSound);
     }
 
     private void groupCompleted()
