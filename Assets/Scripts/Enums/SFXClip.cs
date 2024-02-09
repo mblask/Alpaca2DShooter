@@ -16,5 +16,6 @@ public enum SFXClip
     KeyboardTyping,
     BoxSmash,
     PortalSound,
+    BushRattle,
     None = 99999
 }

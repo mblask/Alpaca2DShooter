@@ -9,9 +9,9 @@ public class AmmoItem : InventoryItem
 
     public override bool UseItem()
     {
-        if (!PlayerWeapons.AddAmmoStatic(this))
-            return PlayerInventory.AddToInventoryStatic(this);
+        if (PlayerWeapons.AddAmmoStatic(this))
+            return PlayerInventory.DeleteItemFromInventoryStatic(this);
 
-        return true;
+        return false;
     }
 }

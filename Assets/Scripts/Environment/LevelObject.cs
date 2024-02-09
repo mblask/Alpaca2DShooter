@@ -96,9 +96,10 @@ public class LevelObject : MonoBehaviour
         if (_spawnedDoors.Count == 0)
             return;
 
+        int doorLockedChance = 10;
         foreach (Door door in _spawnedDoors)
         {
-            if (Utilities.ChanceFunc(10))
+            if (!Utilities.ChanceFunc(doorLockedChance))
                 continue;
 
             door.LockDoor(true);

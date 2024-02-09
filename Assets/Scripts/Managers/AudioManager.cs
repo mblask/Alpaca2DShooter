@@ -145,6 +145,9 @@ public class AudioManager : MonoBehaviour
             case SFXClip.PortalSound:
                 clipToPlay = _audioContainer.PortalSound;
                 break;
+            case SFXClip.BushRattle:
+                clipToPlay = _audioContainer.BushRattle.GetRandomElement();
+                break;
             default:
                 clipToPlay = null;
                 break;

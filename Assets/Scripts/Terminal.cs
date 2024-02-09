@@ -80,7 +80,6 @@ public class Terminal : Box2dCollider, IInteractable
             return;
         }
 
-        AudioManager.Instance.PlayClip(SFXClip.KeyboardTyping);
         _stopwatch += _hackingSpeed * Time.deltaTime;
         _terminalCanvas.UpdateSlider(_stopwatch / _hackingTime);
         if (_stopwatch >= _hackingTime)
@@ -161,6 +160,7 @@ public class Terminal : Box2dCollider, IInteractable
             (transform.parent?.parent?.Find("NPCs").GetComponentsInChildren<Hackable>() ?? new Hackable[0]);
         _exitPortal = transform.parent?.GetComponentsInChildren<Portal>()
             .Where(portal => portal.PortalType.Equals(PortalType.Exit)).First();
+        AudioManager.Instance.PlayClip(SFXClip.KeyboardTyping);
     }
 
     public void ShowExitPortal()

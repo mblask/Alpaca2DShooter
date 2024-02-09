@@ -6,11 +6,32 @@ public class CraftingSlotUI : MonoBehaviour
     private Image _image;
     private Item _item;
     private AlpacaButtonUI _button;
+    private GamePlayCanvas _canvas;
 
     private void Awake()
     {
         _image = transform.Find("Image").GetComponent<Image>();
         _button = transform.Find("Image").GetComponent<AlpacaButtonUI>();
+    }
+
+    private void Start()
+    {
+        _canvas = GamePlayCanvas.Instance;
+        _button.onCursorEnter = () =>
+        {
+            if (_item != null)
+            {
+                _canvas.SetupItemTooltip(_item);
+            }
+        };
+
+        _button.onCursorExit = () =>
+        {
+            if (_item != null)
+            {
+                _canvas.RemoveItemTooltip();
+            }
+        };
     }
 
     public void AddItemToSlot(Item item)

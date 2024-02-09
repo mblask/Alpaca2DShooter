@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ObjectAnimation : MonoBehaviour, IDisturbable
@@ -15,6 +13,7 @@ public class ObjectAnimation : MonoBehaviour, IDisturbable
 
     public void DisturbAnimation()
     {
+        AudioManager.Instance.PlayClip(SFXClip.BushRattle);
         _animator.SetTrigger(_disturbTriggerName);
     }
 }

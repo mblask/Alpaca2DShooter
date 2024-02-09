@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AlpacaMyGames;
+using System.Linq;
+using UnityEngine.Tilemaps;
 
 public class PlayerWeapons : MonoBehaviour
 {
@@ -60,10 +62,7 @@ public class PlayerWeapons : MonoBehaviour
     private int _shotsFired;
     private int _shotsHit;
 
-    private WeaponImage _weaponImage;
-    private ThrowableImage _throwableImage;
     private AmmoPanel _ammoPanel;
-    private ThrowableAmmoPanel _throwableAmmoPanel;
     private AccuracyPanel _accuracyPanel;
     private MouseCursor _mouseCursor;
     private AudioManager _audioManager;
@@ -84,10 +83,7 @@ public class PlayerWeapons : MonoBehaviour
         _gameManager = GameManager.Instance;
         _cameraController = CameraController.Instance;
         _pointerOver = PointerOver.GetInstance();
-        _weaponImage = WeaponImage.Instance;
-        _throwableImage = ThrowableImage.Instance;
         _ammoPanel = AmmoPanel.Instance;
-        _throwableAmmoPanel = ThrowableAmmoPanel.Instance;
 
         _accuracyPanel = AccuracyPanel.Instance;
         _mouseCursor = MouseCursor.Instance;
@@ -555,7 +551,6 @@ public class PlayerWeapons : MonoBehaviour
             if (_currentWeapon == weapon)
                 _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
 
-            PlayerInventory.DeleteItemFromInventoryStatic(ammo);
             return true;
         }
 

@@ -44,7 +44,13 @@ public class CraftingManager : MonoBehaviour
                 _playerInventory.DeleteItemFromInventory(ingredient.Item);
 
         if (craftingRecipe.ProductItem is AmmoItem)
-            return (craftingRecipe.ProductItem as AmmoItem).UseItem();
+        {
+            AmmoItem ammo = (craftingRecipe.ProductItem as AmmoItem);
+            if (PlayerWeapons.AddAmmoStatic(ammo))
+                return true;
+            
+            return _playerInventory.AddToInventory(craftingRecipe.ProductItem);
+        }
 
         if (craftingRecipe.ProductItem is InstantaneousItem)
             return (craftingRecipe.ProductItem as InstantaneousItem).UseItem();

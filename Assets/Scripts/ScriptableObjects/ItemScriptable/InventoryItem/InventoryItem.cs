@@ -13,9 +13,13 @@ public class InventoryItem : Item
         return sb.ToString();
     }
 
+    public override bool UseItem()
+    {
+        return true;
+    }
+
     public virtual bool StoreItem()
     {
-        //store item in player inventory
         return PlayerInventory.AddToInventoryStatic(this);
     }
 }
