@@ -1,4 +1,5 @@
 using AlpacaMyGames;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,6 +13,8 @@ public class GameManager : MonoBehaviour
             return _instance;
         }
     }
+
+    private Guid _gameId = Guid.Empty;
 
     [Header("Read-only")]
     [SerializeField] private float _gameTime;
@@ -30,35 +33,61 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        _instance = this;
-    }
+        DontDestroyOnLoad(this);
 
-    private void Start()
-    {
-        _mouseCursorTransform = MouseCursor.Instance.transform;
-        _achievementsManager = AchievementManager.Instance;
-        _gameAssets = GameAssets.Instance;
-        _uiCanvas = GamePlayCanvas.Instance;
+        if (_instance != null)
+            Destroy(_instance.gameObject);
+
+        _instance = this;
+        initializeGameId();
     }
 
     private void Update()
     {
-        if (_gameIsRunning)
-        {
-            timeManager();
-            checkMouseCursor();
+        if (!_gameIsRunning)
+            return;
 
-            if (Input.GetKeyDown(KeyCode.Escape))
-                _uiCanvas.TogglePauseUI();
+        timeManager();
+        checkMouseCursor();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (_uiCanvas == null)
+                _uiCanvas = GamePlayCanvas.Instance;
+
+            _uiCanvas.TogglePauseUI();
         }
+    }
+
+    private void initializeGameId()
+    {
+        _gameId = SaveManager.LoadGameId();
+
+        if (_gameId != Guid.Empty)
+            return;
+        
+        _gameId = Guid.NewGuid();
+        SaveManager.SaveGameId(_gameId);
     }
 
     private void checkMouseCursor()
     {
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+            return;
+
         if (_mouseCursorTransform != null)
             return;
-        
-        _mouseCursorTransform = Instantiate(_gameAssets.MouseCursorObject, Utilities.GetMouseWorldLocation(), Quaternion.identity, transform.parent);
+
+        if (_gameAssets == null)
+            _gameAssets = GameAssets.Instance;
+
+        _mouseCursorTransform = MouseCursor.Instance.transform;
+
+        if (_mouseCursorTransform == null)
+        {
+            _mouseCursorTransform = Instantiate
+                (_gameAssets.MouseCursorObject, Utilities.GetMouseWorldLocation(), Quaternion.identity, null);
+        }
     }
 
     public float GetGameTime()
@@ -74,6 +103,10 @@ public class GameManager : MonoBehaviour
     public void IncrementEnemiesKilled()
     {
         _enemiesKilled++;
+
+        if (_achievementsManager == null)
+            _achievementsManager = AchievementManager.Instance;
+
         _achievementsManager.CheckOnNpcKilled(_enemiesKilled);
     }
 
@@ -91,6 +124,9 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Game finished!");
         _gameIsRunning = false;
+
+        if (_achievementsManager == null)
+            _achievementsManager = AchievementManager.Instance;
         _achievementsManager.CheckOnGameFinished();
     }
 

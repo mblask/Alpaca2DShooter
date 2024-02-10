@@ -101,6 +101,8 @@ public class NPCStats : MonoBehaviour, IDamagable
             Stat enemyStat = getStatByType(statModifier.StatAffected);
             enemyStat.RemoveBaseMultiplier(statModifier.StatMultiplier);
             enemyStat.RemoveModifier(statModifier.StatModifier);
+            if (enemyStat.IsHandicaped())
+                enemyStat.SetHandicaped(false);
             _statModifyingData.Remove(statModifier);
         }
     }
@@ -242,20 +244,24 @@ public class NPCStats : MonoBehaviour, IDamagable
         float speedMultiplier = 1.5f;
         float defenceModifier = 25.0f;
         float shootingTimerMultiplier = 0.75f;
-        temporaryModifyStat(EnemySpeed, 0.0f, speedMultiplier, buffDuration);
-        temporaryModifyStat(EnemyDefence, defenceModifier, 0.0f, buffDuration);
+        temporaryModifyStat(EnemySpeed, 0.0f, speedMultiplier, buffDuration, true);
+        temporaryModifyStat(EnemyDefence, defenceModifier, 0.0f, buffDuration, true);
         _npcWeapons.SetTemporaryShootingMultiplier(shootingTimerMultiplier, buffDuration);
     }
 
-    private void temporaryModifyStat(Stat stat, float modifier, float multiplier, float duration)
+    private void temporaryModifyStat(Stat stat, float modifier, float multiplier, float duration, bool statHandicaped = false)
     {
+        if (stat.IsHandicaped())
+            return;
+
         _statModifyingData.Add(new StatModifyingData
-        { 
+        {
             Duration = duration,
             IsInjury = false,
             StatAffected = stat.StatType,
             StatModifier = modifier,
-            StatMultiplier = multiplier
+            StatMultiplier = multiplier,
+            StatHandicaped = statHandicaped
         });
 
         stat.AddModifier(modifier);
@@ -317,9 +323,12 @@ public class NPCStats : MonoBehaviour, IDamagable
         if (damageData.Damage == 0.0f)
             return;
 
-        EnemyHealth.UpdateCurrentValue(-damageData.Damage * (1.0f - EnemyDefence.GetFinalValue() / 100.0f));
+        float totalDamage = damageData.Damage * (1.0f - EnemyDefence.GetFinalValue() / 100.0f);
+        if (totalDamage < 0.0f)
+            Debug.Log("Damage: " + totalDamage + ", Defence: " + EnemyDefence.GetFinalValue());
+        EnemyHealth.UpdateCurrentValue(-1.0f * totalDamage);
         FloatingTextSpawner.CreateFloatingTextStatic
-            (transform.position, damageData.Damage.ToString("F0"), new Color(1.0f, 0.5f, 0.0f));
+            (transform.position, totalDamage.ToString("F0"), new Color(1.0f, 0.5f, 0.0f));
 
         bossEnrage();
 

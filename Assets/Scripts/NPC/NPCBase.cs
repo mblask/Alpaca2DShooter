@@ -15,6 +15,7 @@ public class NPCBase : MonoBehaviour
     private Animator _animator;
     private NPCStats _npcStats;
     private NPCWeapons _npcWeapons;
+    private NPCInteraction _npcInteraction;
 
     private CharacterBaseScriptable _npcCharacterBase;
 
@@ -25,6 +26,7 @@ public class NPCBase : MonoBehaviour
         _animator = GetComponent<Animator>();
         _npcStats = GetComponent<NPCStats>();
         _npcWeapons = GetComponent<NPCWeapons>();
+        _npcInteraction = GetComponent<NPCInteraction>();
     }
 
     private void Start()
@@ -70,6 +72,7 @@ public class NPCBase : MonoBehaviour
                     Debug.LogError("There are no scriptable character bases!");
                 _npcWeapons.InitializeBossWeapon(bossScriptable.WeaponOfChoice);
                 _npcCharacterBase = bossScriptable;
+                _npcInteraction.SetBossName(bossScriptable.Name);
                 break;
         }
 
