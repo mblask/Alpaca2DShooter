@@ -6,6 +6,7 @@ public class AmmoItem : InventoryItem
     [Header("Ammo characterstics")]
     public AmmoType AmmoType;
     public int Amount;
+    public SFXClip LoadAudio;
 
     public override bool UseItem()
     {

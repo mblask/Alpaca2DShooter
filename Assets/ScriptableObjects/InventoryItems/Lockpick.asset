@@ -15,7 +15,9 @@ MonoBehaviour:
   ItemName: Lockpick
   ItemSprite: {fileID: -8233504766059196747, guid: 62739e5141ba5274197550cdd9761bf7,
     type: 3}
+  ItemPrefab: {fileID: 0}
   ChanceToDrop: 5
   IsCollectible: 0
   Color: {r: 0.58431375, g: 0.58431375, b: 0.58431375, a: 1}
   PickupAudio: 7
+  ItemTooltipText: Used for picking locked doors

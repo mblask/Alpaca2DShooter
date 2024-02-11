@@ -120,91 +120,30 @@ public class ItemTooltip : MonoBehaviour
             case DataItem dataItem:
                 readDataItem(dataItem);
                 break;
+            case InventoryItem inventoryItem:
+                readInventoryItem(inventoryItem);
+                break;
         }
     }
 
-    //CLEAN METHODS IF THE UPDATE WORKS WELL!!
+    private void readInventoryItem(InventoryItem inventoryItem)
+    {
+        _sb.Append(inventoryItem.GetItemTooltipText());
+    }
+
     private void readConsumableItem(ConsumableItem consumable)
     {
-        /*if (consumable.LifeRestored != Vector2.zero)
-        {
-            _sb.Append("Restores Life:");
-            _sb.AppendLine();
-            _sb.Append(consumable.LifeRestored.x.ToString() + " to " + consumable.LifeRestored.y.ToString());
-            _sb.AppendLine();
-        }
-
-        if (consumable.StaminaRestored != Vector2.zero)
-        {
-            _sb.Append("Restores Stamina:");
-            _sb.AppendLine();
-            _sb.Append(consumable.StaminaRestored.x.ToString() + " to " + consumable.StaminaRestored.y.ToString());
-        }
-
-        if (consumable.LimbPatcher)
-        {
-            _sb.Append("Limb Patcher");
-            _sb.AppendLine();
-        }
-
-        if (consumable.LimbToughnessDuration != Vector2.zero)
-        {
-            char sign = Mathf.Sign(consumable.LimbToughnessDuration.x) > 0.0f ? '+' : '-';
-            _sb.Append("Toughness " + sign + consumable.LimbToughnessDuration.x * 100.0f + "% (" + consumable.LimbToughnessDuration.y + "s)");
-        }*/
-
         _sb.Append(consumable.GetItemTooltipText());
     }
 
     private void readInstantaneousItem(InstantaneousItem instantaneous)
     {
-        /*if (instantaneous.LifeRestored != Vector2.zero)
-        {
-            _sb.Append("Restores Life:");
-            _sb.AppendLine();
-            _sb.Append(instantaneous.LifeRestored.x.ToString() + " to " + instantaneous.LifeRestored.y.ToString());
-            _sb.AppendLine();
-        }
-
-        if (instantaneous.StaminaRestored != Vector2.zero)
-        {
-            _sb.Append("Restores Stamina:");
-            _sb.AppendLine();
-            _sb.Append(instantaneous.StaminaRestored.x.ToString() + " to " + instantaneous.StaminaRestored.y.ToString());
-        }*/
-
         _sb.Append(instantaneous.GetItemTooltipText());
     }
 
     private void readWeaponItem(WeaponItem weaponItem)
     {
-        /*_sb.Append("Damage: ");
-        _sb.Append(weaponItem.WeaponDamage.x.ToString());
-        _sb.Append(" - ");
-        _sb.Append(weaponItem.WeaponDamage.y.ToString());
-
-        if (weaponItem.MagazineBullets > 0)
-        {
-            _sb.AppendLine();
-            _sb.Append("Mag. Capacity: ");
-            _sb.Append(weaponItem.MagazineBullets.ToString());
-        }
-
-        if (weaponItem.Automatic)
-        {
-            _sb.AppendLine();
-            _sb.Append("Automatic");
-        }
-
-        if (weaponItem.StrengthRequired > 0)
-        {
-            _sb.AppendLine();
-            _sb.Append("Strength: ");
-            _sb.Append(weaponItem.StrengthRequired.ToString());
-        }*/
-
         _sb.Append(weaponItem.GetItemTooltipText());
-
         requiredStats(weaponItem);
     }
 
@@ -215,19 +154,11 @@ public class ItemTooltip : MonoBehaviour
 
     private void readJunkItem(JunkItem junkItem)
     {
-        /*_sb.AppendLine();
-        _sb.AppendLine("Junk item");
-        _sb.AppendLine("Used in crafting");*/
-
         _sb.Append(junkItem.GetItemTooltipText());
     }
 
     private void readDataItem(DataItem dataItem)
     {
-        /*_sb.AppendLine();
-        _sb.AppendLine("Data item");
-        _sb.AppendLine("Can be read or\nrun on terminals");*/
-
         _sb.Append(dataItem.GetItemTooltipText());
     }
 

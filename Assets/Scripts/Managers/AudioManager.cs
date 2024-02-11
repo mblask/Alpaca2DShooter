@@ -148,6 +148,12 @@ public class AudioManager : MonoBehaviour
             case SFXClip.BushRattle:
                 clipToPlay = _audioContainer.BushRattle.GetRandomElement();
                 break;
+            case SFXClip.PatchingSound:
+                clipToPlay = _audioContainer.PatchingSounds.GetRandomElement();
+                break;
+            case SFXClip.GunLoad:
+                clipToPlay = _audioContainer.GunLoading.GetRandomElement();
+                break;
             default:
                 clipToPlay = null;
                 break;

@@ -10,6 +10,9 @@ public class InventoryItem : Item
         sb.AppendLine();
         sb.AppendLine("Inventory item");
 
+        if (!string.IsNullOrWhiteSpace(ItemTooltipText))
+            sb.AppendLine(ItemTooltipText);
+
         return sb.ToString();
     }
 

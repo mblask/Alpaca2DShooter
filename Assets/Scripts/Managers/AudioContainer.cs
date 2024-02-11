@@ -11,7 +11,9 @@ public class AudioContainer : MonoBehaviour
 
     [Header("Weapon reloading")]
     public AudioClip GunReload;
+    public List<AudioClip> GunLoading = new List<AudioClip>();
     public AudioClip MachineGunReload;
+    public List<AudioClip> MachineGunLoading = new List<AudioClip>();
     public AudioClip ShotgunReload;
 
     [Header("Other")]
@@ -20,6 +22,7 @@ public class AudioContainer : MonoBehaviour
     public AudioClip BoxSmash;
     public AudioClip KeyboardTypeing3s;
     public AudioClip PortalSound;
+    public List<AudioClip> PatchingSounds = new List<AudioClip>();
     public List<AudioClip> BushRattle = new List<AudioClip>();
     public List<AudioClip> CraftingSound = new List<AudioClip>();
     public List<AudioClip> WoodenDoorHits = new List<AudioClip>();

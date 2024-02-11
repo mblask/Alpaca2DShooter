@@ -17,5 +17,9 @@ public enum SFXClip
     BoxSmash,
     PortalSound,
     BushRattle,
+    PatchingSound,
+    GunLoad,
+    MachineGunLoad,
+    ShotgunLoad,
     None = 99999
 }

@@ -243,6 +243,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
         {
             ConsumableItem consumable = item as ConsumableItem;
             healing(consumable.LifeRestored, consumable.StaminaRestored, consumable.LimbToughnessDuration, consumable.LimbPatcher);
+            AudioManager.Instance.PlayClip(SFXClip.PatchingSound);
 
             return true;
         }

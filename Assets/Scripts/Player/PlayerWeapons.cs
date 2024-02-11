@@ -551,6 +551,7 @@ public class PlayerWeapons : MonoBehaviour
             if (_currentWeapon == weapon)
                 _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
 
+            AudioManager.Instance.PlayClip(ammo.LoadAudio);
             return true;
         }
 

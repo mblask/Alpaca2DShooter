@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName: Shotgun Ammo
   ItemSprite: {fileID: 21300000, guid: 98bea5a1806dbd24f8a6a1c73f93f9d3, type: 3}
+  ItemPrefab: {fileID: 0}
   ChanceToDrop: 4
   IsCollectible: 0
   Color: {r: 1, g: 1, b: 1, a: 1}
   PickupAudio: 7
   AmmoType: 3
   Amount: 15
+  LoadAudio: 18

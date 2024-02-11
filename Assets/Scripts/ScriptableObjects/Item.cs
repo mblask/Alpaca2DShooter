@@ -10,6 +10,7 @@ public class Item : ScriptableObject
     public bool IsCollectible;
     public Color Color;
     public SFXClip PickupAudio;
+    public string ItemTooltipText = string.Empty;
 
     public virtual string GetItemTooltipText()
     {

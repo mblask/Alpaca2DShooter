@@ -22,6 +22,13 @@ public class PlayerController : MonoBehaviour
     private Vector2 _movement;
     private Vector2 _mousePosition;
 
+    [SerializeField]
+    private KeyCode _herbalBoosterKey = KeyCode.Alpha1;
+    [SerializeField]
+    private KeyCode _limbProtectorKey = KeyCode.Alpha2;
+    [SerializeField]
+    private KeyCode _limbPatcherKey = KeyCode.Alpha3;
+
     private PlayerStats _playerStats;
 
     public void Awake()
@@ -55,19 +62,19 @@ public class PlayerController : MonoBehaviour
             _movement.x = Input.GetAxisRaw("Horizontal");
             _movement.y = Input.GetAxisRaw("Vertical");
 
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (Input.GetKeyDown(_herbalBoosterKey))
             {
                 PlayerInventory.Instance.UseConsumable(ConsumableType.HerbalBooster);
             }
 
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                PlayerInventory.Instance.UseConsumable(ConsumableType.LimbPatcher);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha3))
+            if (Input.GetKeyDown(_limbProtectorKey))
             {
                 PlayerInventory.Instance.UseConsumable(ConsumableType.LimbProtector);
+            }
+
+            if (Input.GetKeyDown(_limbPatcherKey))
+            {
+                PlayerInventory.Instance.UseConsumable(ConsumableType.LimbPatcher);
             }
         }
 
