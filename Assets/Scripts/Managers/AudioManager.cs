@@ -70,7 +70,11 @@ public class AudioManager : MonoBehaviour
 
     public void Awake()
     {
+        if (_instance != null)
+            Destroy(_instance.gameObject);
+
         _instance = this;
+        DontDestroyOnLoad(this);
 
         _audioContainer = transform.Find("AudioContainer").GetComponent<AudioContainer>();
 

@@ -72,7 +72,11 @@ public class GameAssets : MonoBehaviour
 
     private void Awake()
     {
+        if (_instance != null)
+            Destroy(_instance.gameObject);
+
         _instance = this;
+        DontDestroyOnLoad(this);
     }
 
     public CharacterBaseScriptable GetBaseScriptabeByType(CharacterBaseType type)
