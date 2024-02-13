@@ -367,6 +367,10 @@ MonoBehaviour:
   BoxSmash: {fileID: 8300000, guid: cd54d40459c4ad04f92b7c5d02c51c5b, type: 3}
   KeyboardTypeing3s: {fileID: 8300000, guid: dcfb44244d0cc0140a8ca322600eef2e, type: 3}
   PortalSound: {fileID: 8300000, guid: 8c4b6d8aba0c68145bd871fad7c5e2b3, type: 3}
+  Lockpicking:
+  - {fileID: 8300000, guid: b9813218c70e357419a128b4e6f554b7, type: 3}
+  - {fileID: 8300000, guid: f0c3dacbfaddc1d489cc2b4a78b81296, type: 3}
+  - {fileID: 8300000, guid: 3f40dea6c52686943a7ff4ecafec99ed, type: 3}
   PatchingSounds:
   - {fileID: 8300000, guid: 133bc7b8f3d6b4a408eaf3861dab0d48, type: 3}
   BushRattle:

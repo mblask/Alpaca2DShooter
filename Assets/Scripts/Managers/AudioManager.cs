@@ -158,6 +158,9 @@ public class AudioManager : MonoBehaviour
             case SFXClip.GunLoad:
                 clipToPlay = _audioContainer.GunLoading.GetRandomElement();
                 break;
+            case SFXClip.Lockpicking:
+                clipToPlay = _audioContainer.Lockpicking.GetRandomElement();
+                break;
             default:
                 clipToPlay = null;
                 break;

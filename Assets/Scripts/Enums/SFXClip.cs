@@ -21,5 +21,6 @@ public enum SFXClip
     GunLoad,
     MachineGunLoad,
     ShotgunLoad,
+    Lockpicking,
     None = 99999
 }

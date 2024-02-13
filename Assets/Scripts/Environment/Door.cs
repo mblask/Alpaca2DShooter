@@ -95,8 +95,9 @@ public class Door : Box2dCollider, IInteractable
     {
         _isLockpicking = true;
 
-        float lockpickingDuration = 1.0f;
+        float lockpickingDuration = 1.5f;
         _lockpickingTimer = new TimerObject(lockpickingDuration);
+        AudioManager.Instance.PlayClip(SFXClip.Lockpicking);
         _doorCanvas.Activate(true);
     }
 
