@@ -14,12 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName: Limb protector
   ItemSprite: {fileID: 21300000, guid: 3e0c8d262ce9ae94593709dde1a52be8, type: 3}
+  ItemPrefab: {fileID: 0}
   ChanceToDrop: 10
   IsCollectible: 0
   Color: {r: 1, g: 1, b: 1, a: 1}
   PickupAudio: 7
+  ItemTooltipText: 
   ConsumableType: 2
   LifeRestored: {x: 0, y: 0}
   StaminaRestored: {x: 0, y: 0}
   LimbPatcher: 0
-  LimbToughnessDuration: {x: 50, y: 20}
+  LimbToughnessDuration: {x: 50, y: 30}

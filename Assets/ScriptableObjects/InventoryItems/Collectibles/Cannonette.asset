@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c625e3c1015fff54a8e381336a0347d1, type: 3}
+  m_Name: Cannonette
+  m_EditorClassIdentifier: 
+  ItemName: Cannonette
+  ItemSprite: {fileID: 21300000, guid: ec5e1cc401dc50146b42882c4f53cf20, type: 3}
+  ItemPrefab: {fileID: 0}
+  ChanceToDrop: 1
+  IsCollectible: 1
+  Color: {r: 1, g: 0.9747954, b: 0, a: 0}
+  PickupAudio: 7
+  ItemTooltipText: 'Legendary gun
+
+    Burki''s first weapon
+
+    Not functional'
