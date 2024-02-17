@@ -6,8 +6,4 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 public class Box2dCollider : BaseCollider
 {
-    public Box2dCollider()
-    {
-        gameObject.AddComponent<Box2dCollider>();
-    }
 }
