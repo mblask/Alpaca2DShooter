@@ -62,6 +62,11 @@ public class LevelsManager : MonoBehaviour
             spawnPlayerInPlayersLevel();
     }
 
+    public int GetLevelNumber()
+    {
+        return _levelNumber;
+    }
+
     public List<WeaponItem> GetAvailableNpcWeapons()
     {
         List<WeaponItem> weapons = new List<WeaponItem>();

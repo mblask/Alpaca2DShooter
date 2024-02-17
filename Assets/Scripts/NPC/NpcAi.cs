@@ -14,7 +14,7 @@ public class NpcAi : MonoBehaviour, IBlindable
 
     private FloatingTextSingle _alertedText;
 
-    private float _idleTimer = 0.0f;
+    private float _idleTimer;
 
     private const float MIN_IDLE_TIME = 1.0f;
     private const float MAX_IDLE_TIME = 3.0f;
@@ -25,11 +25,11 @@ public class NpcAi : MonoBehaviour, IBlindable
     private float _defaultBlindnessTime = 5.0f;
     private TimerObject _blindnessTimer;
 
-    private float _attackDistance = 0.0f;
-    private float _viewDistance = 0.0f;
-    private float _stopFollowingDistance = 0.0f;
-    private float _patrolRadius = 0.0f;
-    private float _maxIdleTime = 0.0f;
+    private float _attackDistance;
+    private float _viewDistance;
+    private float _stopFollowingDistance;
+    private float _patrolRadius;
+    private float _maxIdleTime;
 
     private const float DEFAULT_ATTACK_DISTANCE = 6.0f;
     private const float DEFAULT_VIEW_DISTANCE = 8.0f;

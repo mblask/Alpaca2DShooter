@@ -91,7 +91,8 @@ public class PlayerStats : MonoBehaviour, IDamagable
         float modifiedValue = -damageData.Damage * (1.0f - Defense.GetFinalValue() / 100.0f);
         Health.UpdateCurrentValue(modifiedValue);
         _accumulatedHealthLoss += MathF.Abs(modifiedValue);
-        FloatingTextSpawner.CreateFloatingTextStatic(transform.position, damageData.Damage.ToString("F0"), new Color(1.0f, 0.5f, 0.0f));
+        FloatingTextSpawner.CreateFloatingTextStatic
+            (transform.position, damageData.Damage.ToString("F0"), new Color(1.0f, 0.5f, 0.0f), 0.7f, 8.0f, 1.5f);
 
         ParticleSystem bloodPSObject = Instantiate(_gameAssets.BloodPS, transform.position, Quaternion.identity, null);
         Transform bloodTransform = Instantiate(_gameAssets.Blood, transform.position, Quaternion.identity, null);

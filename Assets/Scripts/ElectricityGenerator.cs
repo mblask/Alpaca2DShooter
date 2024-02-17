@@ -7,7 +7,8 @@ public class ElectricityGenerator : Box2dCollider, IDamagable
     private bool _isBroken = false;
     private float _health = 50.0f;
 
-    [SerializeField] private List<SwitchableObject> _switchables = new List<SwitchableObject>();
+    [SerializeField]
+    private List<SwitchableObject> _switchables = new List<SwitchableObject>();
 
     private void Start()
     {

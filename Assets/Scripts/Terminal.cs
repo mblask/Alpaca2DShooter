@@ -9,8 +9,10 @@ public class Terminal : Box2dCollider, IInteractable
 
     public string InteractableName { get; } = "Terminal";
 
-    [SerializeField] private List<Hackable> _hackables = new List<Hackable>();
-    [SerializeField] private Portal _exitPortal;
+    [SerializeField]
+    private List<Hackable> _hackables = new List<Hackable>();
+    [SerializeField]
+    private Portal _exitPortal;
     private ExitPortalPosition _exitPortalPosition;
 
     private bool _isHacked = false;

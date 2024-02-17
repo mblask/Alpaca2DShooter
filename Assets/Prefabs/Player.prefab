@@ -201,6 +201,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d7a3c71f4263fa45bff906881c215b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _herbalBoosterKey: 49
+  _limbProtectorKey: 50
+  _limbPatcherKey: 51
 --- !u!114 &8196825197066008502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,7 +243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5f890b9998b1c54db70444e3c1950e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _invincible: 1
+  _invincible: 0
   Health:
     _statType: 0
     _currentValue: 0

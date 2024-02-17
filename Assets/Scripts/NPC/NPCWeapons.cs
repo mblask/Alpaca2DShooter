@@ -7,6 +7,7 @@ public class NPCWeapons : MonoBehaviour
     private Transform _shootingSpot;
     private Animator _animator;
     private NpcAi _npcAI;
+    private NPCBase _npcBase;
 
     private string _removeWeaponTriggerName = "RemoveWeapon";
 
@@ -17,6 +18,8 @@ public class NPCWeapons : MonoBehaviour
     private Vector2 _enemyShootingInterval = new Vector2(0.2f, 0.6f);
     private bool _autoShooting = false;
     private float _autoShootingTimer = 0.0f;
+    private float _damageMultiplierBase = 0.5f;
+    private float _damageMultiplier;
 
     [SerializeField] private ThrowableItem _throwable;
 
@@ -39,6 +42,7 @@ public class NPCWeapons : MonoBehaviour
         _animator = GetComponent<Animator>();
         _shootingSpot = transform.Find("ShootingSpot");
         _npcAI = GetComponent<NpcAi>();
+        _npcBase = GetComponent<NPCBase>();
     }
 
     private void Start()
@@ -47,6 +51,7 @@ public class NPCWeapons : MonoBehaviour
         _gameAssets = GameAssets.Instance;
         _audioManager = AudioManager.Instance;
         chooseWeapon();
+        setDamageMultiplier();
     }
 
     private void Update()
@@ -227,6 +232,19 @@ public class NPCWeapons : MonoBehaviour
         grenade.ThrowGrenade(_throwable.ThrowForce * throwDirection);
     }
 
+    private void setDamageMultiplier()
+    {
+        if (_npcBase.EnemyType.Equals(NPCEnemyType.Boss))
+        {
+            _damageMultiplier = 0.75f;
+            return;
+        }
+
+        int currentLevel = _levelsManager.GetLevelNumber();
+        float damageMultiplierIncrement = 0.03f;
+        _damageMultiplier = _damageMultiplierBase + damageMultiplierIncrement * (currentLevel - 1);
+    }
+
     private void shoot()
     {
         if (_shootTarget == null)
@@ -242,7 +260,8 @@ public class NPCWeapons : MonoBehaviour
             Transform bulletObject = Instantiate(_gameAssets.BulletPrefab, _shootingSpot.position, Quaternion.identity, null);
             Bullet bullet = bulletObject.GetComponent<Bullet>();
 
-            DamageData damageData = new DamageData { Damage = _selectedWeapon.WeaponDamage.GetRandom(), BleedingChance = 0.0f };
+            DamageData damageData = new DamageData 
+                { Damage = _selectedWeapon.WeaponDamage.GetRandom() * _damageMultiplier, BleedingChance = 0.0f };
             bullet.SetupBullet(direction, damageData, gameObject.tag);
         }
 

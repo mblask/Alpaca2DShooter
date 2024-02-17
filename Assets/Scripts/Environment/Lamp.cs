@@ -1,11 +1,11 @@
 using UnityEngine;
-
+using UnityEngine.Rendering.Universal;
 using AlpacaMyGames;
 
 public class Lamp : SwitchableObject, IInteractable, IDamagable
 {
     private SpriteRenderer _spriteRenderer;
-    private UnityEngine.Rendering.Universal.Light2D _light;
+    private Light2D _light;
 
     private float _defaultIntensity;
 
@@ -17,7 +17,7 @@ public class Lamp : SwitchableObject, IInteractable, IDamagable
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _light = transform.Find("Light2D").GetComponent<UnityEngine.Rendering.Universal.Light2D>();
+        _light = transform.Find("Light2D").GetComponent<Light2D>();
         _defaultIntensity = _light.intensity;
     }
 

@@ -50,10 +50,6 @@ public class ItemSpawner : MonoBehaviour
 
         switch (item)
         {
-            case InventoryItem:
-                pickup.SetRotationSpeed(0.0f);
-                spawnedItem.GetComponentInChildren<Light2D>().intensity = 0.0f;
-                break;
             case NonInventoryItem:
                 spawnedItem.GetComponent<SpriteRenderer>().color = (item as NonInventoryItem).Color;
 

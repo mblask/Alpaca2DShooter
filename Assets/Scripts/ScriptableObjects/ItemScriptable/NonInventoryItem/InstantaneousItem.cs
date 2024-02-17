@@ -27,6 +27,13 @@ public class InstantaneousItem : NonInventoryItem
             sb.Append(StaminaRestored.x.ToString() + " to " + StaminaRestored.y.ToString());
         }
 
+        if (Armor != 0)
+        {
+            sb.Append("Adds Armor:");
+            sb.AppendLine();
+            sb.Append(Armor.ToString());
+        }
+
         return sb.ToString();
     }
 

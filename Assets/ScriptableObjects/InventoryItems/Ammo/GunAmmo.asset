@@ -19,6 +19,7 @@ MonoBehaviour:
   IsCollectible: 0
   Color: {r: 1, g: 1, b: 1, a: 1}
   PickupAudio: 7
+  ItemTooltipText: "Ammo for a gun \nor a silenced gun"
   AmmoType: 1
   Amount: 24
   LoadAudio: 18
