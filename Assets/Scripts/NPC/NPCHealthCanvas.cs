@@ -5,6 +5,10 @@ public class NPCHealthCanvas : MonoBehaviour
 {
     private Transform _cameraTransform;
 
+    private bool _keepActive = false;
+    private float _activeDuration = 2.0f;
+    private TimerObject _activeTimer = new TimerObject();
+
     private Transform _healthPanel;
     private Slider _healthSlider;
     private NPCStats _enemyStats;
@@ -23,6 +27,11 @@ public class NPCHealthCanvas : MonoBehaviour
         DeactivateHealthSlider();
     }
 
+    private void Update()
+    {
+        activatedProcess();
+    }
+
     public void UpdateHealthSlider(float value)
     {
         if (value < 0.0f)
@@ -34,6 +43,18 @@ public class NPCHealthCanvas : MonoBehaviour
         _healthSlider.value = value;
     }
 
+    private void activatedProcess()
+    {
+        if (_keepActive)
+            return;
+
+        if (!_healthPanel.gameObject.activeSelf)
+            return;
+
+        if (_activeTimer.Update())
+            _healthPanel.gameObject.SetActive(false);
+    }
+
     public void SetPosition(Transform transform)
     {
         if (transform == null)
@@ -43,14 +64,15 @@ public class NPCHealthCanvas : MonoBehaviour
         gameObject.transform.position = transform.position;
     }
 
-    public void ActivateHealthSlider()
+    public void ActivateHealthSlider(bool keepActive = false)
     {
         if (_healthPanel == null)
             return;
 
-        _healthPanel.gameObject.SetActive(true);
+        _keepActive = keepActive;
 
-        Invoke("DeactivateHealthSlider", 2.0f);
+        _healthPanel.gameObject.SetActive(true);
+        _activeTimer = new TimerObject(_activeDuration);
     }
 
     public void DeactivateHealthSlider()
@@ -58,6 +80,7 @@ public class NPCHealthCanvas : MonoBehaviour
         if (_healthPanel == null)
             return;
 
+        _keepActive = false;
         _healthPanel.gameObject.SetActive(false);
     }
 }

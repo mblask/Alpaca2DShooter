@@ -33,7 +33,6 @@ public class Door : MonoBehaviour, IInteractable
     private void Start()
     {
         _playerInventory = PlayerInventory.Instance;
-        
     }
 
     private void Update()
@@ -61,6 +60,8 @@ public class Door : MonoBehaviour, IInteractable
             return;
         }
 
+        FloatingTextSpawner.CreateFloatingTextStatic
+            (PlayerStats.Instance.transform.position, "Lock open!", Color.white, 2.0f, 7, 0.8f, true, FloatDirection.Up);
         InteractableName = "Unlocked " + DEFAULT_DOOR_NAME;
         _doorCanvas.Activate(false);
         _isLockpicking = false;
@@ -142,7 +143,7 @@ public class Door : MonoBehaviour, IInteractable
             if (_isLockpicking)
             {
                 _floatingText = FloatingTextSpawner
-                .CreateFloatingTextStatic(transform.position, "Still picking the lock!", Color.yellow, 1.0f, 8.0f, 1.5f);
+                    .CreateFloatingTextStatic(transform.position, "Still picking the lock!", Color.yellow, 1.0f, 8.0f, 1.5f);
                 return;
             }
 
@@ -176,12 +177,12 @@ public class Door : MonoBehaviour, IInteractable
 
         _hitPoints--;
 
-        if (_hitPoints <= 0)
-        {
-            FloatingTextSpawner.CreateFloatingTextStatic
-                (transform.position, "Lock broken", Color.green, 1.5f, 8.0f, 1.5f);
-            _isLocked = false;
-        }
+        if (_hitPoints > 0)
+            return;
+        
+        _isLocked = false;
+        _floatingText = FloatingTextSpawner.CreateFloatingTextStatic
+            (transform.position, "Lock broken", Color.green, 1.5f, 8.0f, 1.5f);
     }
 
     public void LockDoor(bool value)

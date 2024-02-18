@@ -23,6 +23,7 @@ public class NPCStats : MonoBehaviour, IDamagable
     private float _defaultBleedingTime = 15.0f;
 
     private bool _isEnraged = false;
+    private bool _failedEnrage = false;
     private float _enragedDuration = 10.0f;
     private TimerObject _enragedTimer = new TimerObject();
     private bool _isHealing = false;
@@ -75,10 +76,13 @@ public class NPCStats : MonoBehaviour, IDamagable
 
     public void InitializeStats(CharacterBaseScriptable baseScriptable)
     {
-        float npcHealthModifier = 0.3f;
+        float npcHealthMultiplier = 0.3f;
+        if (baseScriptable is BossScriptable)
+            npcHealthMultiplier = 1.0f;
+
         EnemySpeed.SetBaseValue(baseScriptable.MovementSpeed);
         EnemyAccuracy.SetBaseValue(baseScriptable.Accuracy);
-        EnemyHealth.SetBaseValue(baseScriptable.Health * npcHealthModifier);
+        EnemyHealth.SetBaseValue(baseScriptable.Health * npcHealthMultiplier);
         EnemyDefence.SetBaseValue(baseScriptable.Defense);
         EnemyLimbToughness.SetBaseValue(baseScriptable.LimbToughness);
     }
@@ -106,8 +110,6 @@ public class NPCStats : MonoBehaviour, IDamagable
             _statModifyingData.Remove(statModifier);
 
             enemyStat.SetCurrentToFinalValue();
-            Debug.Log("Stat: " + statModifier.StatAffected + ", current value: " 
-                + enemyStat.GetCurrentValue() + ", final value: " + enemyStat.GetFinalValue());
         }
     }
 
@@ -217,20 +219,32 @@ public class NPCStats : MonoBehaviour, IDamagable
         if (!_isEnraged)
             return;
 
-        _isEnraged = !_enragedTimer.Update(Time.deltaTime);
-
         if (_enragedTimer.IsOver)
+        {
             _bossLight.color = Color.red;
+            return;
+        }
+
+        _enragedTimer.Update(Time.deltaTime);
     }
 
     private void bossEnrage()
     {
+        if (_failedEnrage)
+            return;
+
         if (!_npcBase.EnemyType.Equals(NPCEnemyType.Boss))
             return;
 
-            float rageThreshold = 0.95f;
+            float rageThreshold = 0.05f;
         if (EnemyHealth.GetCurrentValue() / EnemyHealth.GetFinalValue() >= rageThreshold)
             return;
+
+        if (Utilities.ChanceFunc(25))
+        {
+            _failedEnrage = true;
+            return;
+        }
 
         if (_isEnraged)
             return;
@@ -238,8 +252,9 @@ public class NPCStats : MonoBehaviour, IDamagable
         _isEnraged = true;
         playBurstParticleSystem();
         _enragedTimer = new TimerObject(_enragedDuration);
-        Vector2 healthPercentageToHeal = new Vector2(20.0f, 40.0f);
+        Vector2 healthPercentageToHeal = new Vector2(30.0f, 60.0f);
         float healAmount = EnemyHealth.GetFinalValue() * healthPercentageToHeal.GetRandom() / 100.0f;
+        Debug.Log(healAmount);
         float healingDuration = 2.0f;
         healCharacter(healAmount, healingDuration);
 
@@ -303,9 +318,10 @@ public class NPCStats : MonoBehaviour, IDamagable
             return;
         }
 
-        if (!_healingTimer.Update(Time.deltaTime))
+        if (_healingTimer.Update())
         {
             _isHealing = false;
+            _enemyHealthCanvas.DeactivateHealthSlider();
             return;
         }
 
@@ -328,13 +344,12 @@ public class NPCStats : MonoBehaviour, IDamagable
             return;
 
         float totalDamage = damageData.Damage * (1.0f - EnemyDefence.GetFinalValue() / 100.0f);
-        if (totalDamage < 0.0f)
-            Debug.Log("Damage: " + totalDamage + ", Defence: " + EnemyDefence.GetFinalValue());
         EnemyHealth.UpdateCurrentValue(-1.0f * totalDamage);
         FloatingTextSpawner.CreateFloatingTextStatic
             (transform.position, totalDamage.ToString("F0"), new Color(1.0f, 0.5f, 0.0f));
 
-        bossEnrage();
+        if (!_isEnraged && !_failedEnrage)
+            bossEnrage();
 
         _enemyHealthCanvas.UpdateHealthSlider(EnemyHealth.GetCurrentValue());
 

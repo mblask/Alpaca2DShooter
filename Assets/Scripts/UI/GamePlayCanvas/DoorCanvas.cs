@@ -37,7 +37,5 @@ public class DoorCanvas : MonoBehaviour
             return;
 
         Activate(false);
-        FloatingTextSpawner.CreateFloatingTextStatic
-            (PlayerStats.Instance.transform.position, "Lock open!", Color.white, 2.0f, 7, 0.8f, true, FloatDirection.Up);
     }
 }

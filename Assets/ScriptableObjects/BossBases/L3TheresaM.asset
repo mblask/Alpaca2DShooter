@@ -15,7 +15,7 @@ MonoBehaviour:
   CharacterType: 8
   CharacterAOC: {fileID: 22100000, guid: 2c87d373423663f46a30afb601ed7185, type: 2}
   ScoreToUnlock: 0
-  Health: 800
+  Health: 500
   HealthModifier: 1
   Stamina: 100
   MovementSpeed: 3.5

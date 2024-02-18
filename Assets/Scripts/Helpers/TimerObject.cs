@@ -8,17 +8,23 @@ public class TimerObject
     {
         get
         {
-            return Timer >= Duration;
+            return Timer > Duration;
         }
         
         private set { }
     }
 
 
-    public TimerObject() { }
+    public TimerObject()
+    {
+        IsOver = false;
+        Timer = 0.0f;
+    }
 
     public TimerObject(float duration)
     {
+        IsOver = false;
+        Timer = 0.0f;
         Duration = duration;
     }
 
