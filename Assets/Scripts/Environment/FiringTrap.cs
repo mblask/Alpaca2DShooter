@@ -10,6 +10,7 @@ public class FiringTrap : Hackable, IDamagable
     private SpriteRenderer _weaponSpriteRenderer;
 
     [SerializeField] private bool _isWorking = true;
+    private bool _electricityAvailable = true;
     private bool _turnedOn = true;
     private NPCAllegiance _allegiance;
 
@@ -53,6 +54,9 @@ public class FiringTrap : Hackable, IDamagable
         if (!_gameManager.IsGameRunning())
             return;
 
+        if (!_electricityAvailable)
+            return;
+
         if (!_isWorking)
             return;
 
@@ -84,7 +88,7 @@ public class FiringTrap : Hackable, IDamagable
         //Particle System and/or Light up object
     }
 
-    public override void Hack()
+    public override void SwitchAllegiance()
     {
         _allegiance = _allegiance.Equals(NPCAllegiance.Enemy) ? 
             NPCAllegiance.Ally : NPCAllegiance.Enemy;
@@ -92,9 +96,25 @@ public class FiringTrap : Hackable, IDamagable
         _trapState = FiringTrapState.Search;
     }
 
-    public override void TurnOnOff()
+    public override void ElectricityAvailable(bool value)
+    {
+        _electricityAvailable = value;
+    }
+
+    public override bool Toggle()
     {
         _turnedOn = !_turnedOn;
+        return _turnedOn;
+    }
+
+    public override void TurnOn()
+    {
+        _turnedOn = true;
+    }
+
+    public override void TurnOff()
+    {
+        _turnedOn = false;
     }
 
     private void rotation2DTransform()
@@ -225,7 +245,7 @@ public class FiringTrap : Hackable, IDamagable
             if (_allegiance.Equals(NPCAllegiance.Ally) && hit.collider.GetComponent<NPCBase>() != null)
                 return false;
 
-            if (hit.collider.GetComponent<BaseCollider>() != null)
+            if (hit.collider != null)
                 return true;
         }
 

@@ -58,10 +58,7 @@ public class Pathfinding
             if (hit.isTrigger)
                 continue;
 
-            if (hit.GetComponent<TilemapCollider2D>() != null)
-                node.SetObstacle(true);
-
-            if (hit.GetComponent<BaseCollider>() != null)
+            if (hit != null)
                 node.SetObstacle(true);
         }
     }

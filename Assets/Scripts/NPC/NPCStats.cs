@@ -104,6 +104,10 @@ public class NPCStats : MonoBehaviour, IDamagable
             if (enemyStat.IsHandicaped())
                 enemyStat.SetHandicaped(false);
             _statModifyingData.Remove(statModifier);
+
+            enemyStat.SetCurrentToFinalValue();
+            Debug.Log("Stat: " + statModifier.StatAffected + ", current value: " 
+                + enemyStat.GetCurrentValue() + ", final value: " + enemyStat.GetFinalValue());
         }
     }
 

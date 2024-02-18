@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ElectricityGenerator : Box2dCollider, IDamagable
+public class ElectricityGenerator : MonoBehaviour, IDamagable
 {
     private bool _isBroken = false;
     private float _health = 50.0f;

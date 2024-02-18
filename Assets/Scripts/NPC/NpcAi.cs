@@ -291,9 +291,6 @@ public class NpcAi : MonoBehaviour, IBlindable
 
             if (hit.transform.GetComponent<TilemapCollider2D>() != null)
                 return true;
-
-            if (hit.transform.GetComponent<BaseCollider>() != null)
-                return true;
         }
 
         return false;

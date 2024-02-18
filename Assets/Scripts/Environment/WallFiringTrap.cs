@@ -10,6 +10,7 @@ public class WallFiringTrap : Hackable
 
     private Vector2 _damageInterval = new Vector2(3.0f, 6.0f);
 
+    private bool _electricityAvailable = false;
     private bool _turnedOn = true;
     private bool _isShooting = false;
 
@@ -34,21 +35,40 @@ public class WallFiringTrap : Hackable
 
     private void Update()
     {
+        if (!_electricityAvailable)
+            return;
+
         if (!_turnedOn)
             return;
 
         shoot();
     }
 
-    public override void Hack()
+    public override void SwitchAllegiance()
     {
         _allegiance = _allegiance.Equals(NPCAllegiance.Enemy) ?
             NPCAllegiance.Ally : NPCAllegiance.Enemy;
     }
 
-    public override void TurnOnOff()
+    public override void ElectricityAvailable(bool value)
+    {
+        _electricityAvailable = value;
+    }
+
+    public override void TurnOn()
+    {
+        _turnedOn = true;
+    }
+
+    public override void TurnOff()
+    {
+        _turnedOn = false;
+    }
+
+    public override bool Toggle()
     {
         _turnedOn = !_turnedOn;
+        return _turnedOn;
     }
 
     private void shoot()

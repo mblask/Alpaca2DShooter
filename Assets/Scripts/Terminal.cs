@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Terminal : Box2dCollider, IInteractable
+public class Terminal : MonoBehaviour, IInteractable
 {
     private SpriteRenderer _spriteRenderer;
     private TerminalCanvas _terminalCanvas;
@@ -177,7 +177,7 @@ public class Terminal : Box2dCollider, IInteractable
             if (hackable == null)
                 continue;
 
-            hackable.Hack();
+            hackable.SwitchAllegiance();
         }
     }
 
@@ -188,7 +188,7 @@ public class Terminal : Box2dCollider, IInteractable
             if (hackable == null)
                 continue;
 
-            hackable.TurnOnOff();
+            hackable.Toggle();
         }
     }
 

@@ -2,7 +2,7 @@ using AlpacaMyGames;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Door : Box2dCollider, IInteractable
+public class Door : MonoBehaviour, IInteractable
 {
     private SpriteRenderer _spriteRenderer;
     private BoxCollider2D _boxCollider;
