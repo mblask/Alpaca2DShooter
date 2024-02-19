@@ -156,10 +156,8 @@ public class Terminal : MonoBehaviour, IInteractable
 
         _hackingInProgress = true;
         _hackingSpeed = _playerStats.Hacking.GetFinalValue();
-        _hackables.AddRange
-            (transform.parent?.GetComponentsInChildren<Hackable>() ?? new Hackable[0]);
-        _hackables.AddRange
-            (transform.parent?.parent?.Find("NPCs").GetComponentsInChildren<Hackable>() ?? new Hackable[0]);
+        _hackables.AddRange(transform.parent?.GetComponentsInChildren<Hackable>() ?? new Hackable[0]);
+        _hackables.AddRange(transform.parent?.parent?.Find("NPCs").GetComponentsInChildren<Hackable>() ?? new Hackable[0]);
         _exitPortal = transform.parent?.GetComponentsInChildren<Portal>()
             .Where(portal => portal.PortalType.Equals(PortalType.Exit)).First();
         AudioManager.Instance.PlayClip(SFXClip.KeyboardTyping);

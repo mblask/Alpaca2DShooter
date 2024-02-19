@@ -12,8 +12,9 @@ public class ElectricityGenerator : MonoBehaviour, IDamagable
 
     private void Start()
     {
-        _switchables.AddRange(transform.parent != null ? 
-            transform.parent.GetComponentsInParent<SwitchableObject>().ToList() : new List<SwitchableObject>());
+        List<SwitchableObject> switchables = transform.parent != null ?
+            transform.parent.GetComponentsInParent<SwitchableObject>().ToList() : new List<SwitchableObject>();
+        _switchables.AddRange(switchables);
     }
 
     public void DamageObject(DamageData damageData)
