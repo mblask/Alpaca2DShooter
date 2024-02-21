@@ -1,4 +1,5 @@
 using AlpacaMyGames;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -97,74 +98,12 @@ public class AudioManager : MonoBehaviour
     public float GetSFXVolume()
     {
         _mainAudioMixer.GetFloat(SFX_VOLUME_STRING, out float sfxVolume);
-
         return sfxVolume;
     }
 
     public void PlayClip(SFXClip audioClip)
     {
-        AudioClip clipToPlay;
-
-        switch (audioClip)
-        {
-            case SFXClip.GunShot:
-                clipToPlay = _audioContainer.Gunshot1;
-                break;
-            case SFXClip.SilencerShot:
-                clipToPlay = _audioContainer.SilencedShot;
-                break;
-            case SFXClip.MachinegunShot:
-                clipToPlay = _audioContainer.Gunshot2;
-                break;
-            case SFXClip.ShotgunShot:
-                clipToPlay = _audioContainer.ShotgunShot;
-                break;
-            case SFXClip.GunReload:
-                clipToPlay = _audioContainer.GunReload;
-                break;
-            case SFXClip.MachinegunReload:
-                clipToPlay = _audioContainer.MachineGunReload;
-                break;
-            case SFXClip.ShotgunReload:
-                clipToPlay = _audioContainer.ShotgunReload;
-                break;
-            case SFXClip.ItemPickup:
-                clipToPlay = _audioContainer.ItemPickup;
-                break;
-            case SFXClip.Bandaging:
-                clipToPlay = _audioContainer.Bandaging;
-                break;
-            case SFXClip.BulletHitsCharacter:
-                clipToPlay = _audioContainer.BulletHitsCharacter.GetRandomElement();
-                break;
-            case SFXClip.Crafting:
-                clipToPlay = _audioContainer.CraftingSound.GetRandomElement();
-                break;
-            case SFXClip.KeyboardTyping:
-                clipToPlay = _audioContainer.KeyboardTypeing3s;
-                break;
-            case SFXClip.BoxSmash:
-                clipToPlay = _audioContainer.BoxSmash;
-                break;
-            case SFXClip.PortalSound:
-                clipToPlay = _audioContainer.PortalSound;
-                break;
-            case SFXClip.BushRattle:
-                clipToPlay = _audioContainer.BushRattle.GetRandomElement();
-                break;
-            case SFXClip.PatchingSound:
-                clipToPlay = _audioContainer.PatchingSounds.GetRandomElement();
-                break;
-            case SFXClip.GunLoad:
-                clipToPlay = _audioContainer.GunLoading.GetRandomElement();
-                break;
-            case SFXClip.Lockpicking:
-                clipToPlay = _audioContainer.Lockpicking.GetRandomElement();
-                break;
-            default:
-                clipToPlay = null;
-                break;
-        }
+        AudioClip clipToPlay = getSfxClip(audioClip);
 
         if (clipToPlay != null)
             _sfxAudioSource.PlayOneShot(clipToPlay);
@@ -173,5 +112,50 @@ public class AudioManager : MonoBehaviour
     public void StopPlaying()
     {
         _sfxAudioSource.Stop();
+    }
+
+    private AudioClip getSfxClip(SFXClip audioClip)
+    {
+        switch (audioClip)
+        {
+            case SFXClip.GunShot:
+                return _audioContainer.Gunshot1;
+            case SFXClip.SilencerShot:
+                return _audioContainer.SilencedShot;
+            case SFXClip.MachinegunShot:
+                return _audioContainer.Gunshot2;
+            case SFXClip.ShotgunShot:
+                return _audioContainer.ShotgunShot;
+            case SFXClip.GunReload:
+                return _audioContainer.GunReload;
+            case SFXClip.MachinegunReload:
+                return _audioContainer.MachineGunReload;
+            case SFXClip.ShotgunReload:
+                return _audioContainer.ShotgunReload;
+            case SFXClip.ItemPickup:
+                return _audioContainer.ItemPickup;
+            case SFXClip.Bandaging:
+                return _audioContainer.Bandaging;
+            case SFXClip.BulletHitsCharacter:
+                return _audioContainer.BulletHitsCharacter.GetRandomElement();
+            case SFXClip.Crafting:
+                return _audioContainer.CraftingSound.GetRandomElement();
+            case SFXClip.KeyboardTyping:
+                return _audioContainer.KeyboardTypeing3s;
+            case SFXClip.BoxSmash:
+                return _audioContainer.BoxSmash;
+            case SFXClip.PortalSound:
+                return _audioContainer.PortalSound;
+            case SFXClip.BushRattle:
+                return _audioContainer.BushRattle.GetRandomElement();
+            case SFXClip.PatchingSound:
+                return _audioContainer.PatchingSounds.GetRandomElement();
+            case SFXClip.GunLoad:
+                return _audioContainer.GunLoading.GetRandomElement();
+            case SFXClip.Lockpicking:
+                return _audioContainer.Lockpicking.GetRandomElement();
+            default:
+                return null;
+        }
     }
 }
