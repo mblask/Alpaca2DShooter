@@ -52,6 +52,9 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            if (SceneManager.GetActiveScene().buildIndex == 0)
+                return;
+
             if (_uiCanvas == null)
                 _uiCanvas = GamePlayCanvas.Instance;
 
@@ -122,8 +125,8 @@ public class GameManager : MonoBehaviour
 
     public void TriggerVictory()
     {
-        Debug.Log("Game finished!");
         _gameIsRunning = false;
+        _uiCanvas.ActivateInstanceCompleteUI();
 
         if (_achievementsManager == null)
             _achievementsManager = AchievementManager.Instance;

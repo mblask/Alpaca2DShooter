@@ -12,6 +12,8 @@ public class GamePlayCanvas : MonoBehaviour
         }
     }
 
+    private GameManager _gameManager;
+
     private AmmoPanel _ammoPanel;
     private PlayerArmorSlider _armorSlider;
     private PlayerHealthSlider _healthSlider;
@@ -32,6 +34,9 @@ public class GamePlayCanvas : MonoBehaviour
     private AchievementUI _achievementUI;
     private TextConsoleUI _textConsoleUI;
     private PauseMenu _pauseMenu;
+    private InstanceCompleteUI _instanceCompleteUI;
+
+    private bool _isPaused = false;
 
     private void Awake()
     {
@@ -57,6 +62,12 @@ public class GamePlayCanvas : MonoBehaviour
         _achievementUI = transform.GetComponentInChildren<AchievementUI>();
         _textConsoleUI = transform.GetComponentInChildren<TextConsoleUI>();
         _pauseMenu = transform.GetComponentInChildren<PauseMenu>();
+        _instanceCompleteUI = transform.GetComponentInChildren<InstanceCompleteUI>();
+    }
+
+    private void Start()
+    {
+        _gameManager = GameManager.Instance;
     }
 
     public void UpdateAmmoText(int value, int total)
@@ -212,5 +223,21 @@ public class GamePlayCanvas : MonoBehaviour
     public void TogglePauseUI()
     {
         _pauseMenu.TogglePause();
+    }
+
+    public void ActivateInstanceCompleteUI()
+    {
+        if (_gameManager.IsPaused())
+            return;
+
+        _instanceCompleteUI.ActivateUI(true);
+    }
+
+    public void ToogleInstanceCompleteUI()
+    {
+        if (_gameManager.IsPaused())
+            return;
+        
+        _instanceCompleteUI.ToogleUI();
     }
 }
