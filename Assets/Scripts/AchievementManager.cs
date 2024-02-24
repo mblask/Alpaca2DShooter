@@ -38,26 +38,44 @@ public class AchievementManager : MonoBehaviour
 
     public void CheckOnGameFinished()
     {
+        List<AchievementType> achievementsUnlocked = new List<AchievementType>();
+
         float gameTime = _gameManager.GetGameTime();
-        if (gameTime <= AchievementConstants.LIGHTNING_GOAL)
-            triggerAchievement(AchievementType.Lightning, gameTime.ToString());
+        if (gameTime <= AchievementConstants.LIGHTNING_GOAL &&
+            addAchievement(AchievementType.Lightning, gameTime.ToString()))
+            achievementsUnlocked.Add(AchievementType.Lightning);
 
         int enemiesKilled = _gameManager.GetEnemiesKilled();
-        if (enemiesKilled == AchievementConstants.PACIFIST_GOAL)
-            triggerAchievement(AchievementType.Pacifist);
+        if (enemiesKilled == AchievementConstants.PACIFIST_GOAL &&
+            addAchievement(AchievementType.Pacifist))
+            achievementsUnlocked.Add(AchievementType.Pacifist);
 
         float playerMaxHealth = _playerStats.Health.GetFinalValue();
         float playerHealth = _playerStats.Health.GetCurrentValue();
-        if (playerHealth <= AchievementConstants.SURVIVALIST_GOAL * playerMaxHealth)
-            triggerAchievement(AchievementType.Survivalist, (playerHealth / playerMaxHealth * 100.0f).ToString());
+        if (playerHealth <= AchievementConstants.SURVIVALIST_GOAL * playerMaxHealth &&
+            addAchievement(AchievementType.Survivalist, (playerHealth / playerMaxHealth * 100.0f).ToString()))
+            achievementsUnlocked.Add(AchievementType.Survivalist);
 
         float totalHealthLoss = _playerStats.GetTotalHealthLoss();
-        if (totalHealthLoss <= AchievementConstants.IRONMAN_GOAL * playerMaxHealth)
-            triggerAchievement(AchievementType.Ironman, (totalHealthLoss / playerMaxHealth * 100.0f).ToString());
+        if (totalHealthLoss <= AchievementConstants.IRONMAN_GOAL * playerMaxHealth &&
+            addAchievement(AchievementType.Ironman, (totalHealthLoss / playerMaxHealth * 100.0f).ToString()))
+            achievementsUnlocked.Add(AchievementType.Ironman);
 
         float accuracy = _playerWeapons.GetAccuracy();
-        if (accuracy >= AchievementConstants.SNIPER_GOAL)
-            triggerAchievement(AchievementType.Sniper, accuracy.ToString());
+        if (accuracy >= AchievementConstants.SNIPER_GOAL &&
+            addAchievement(AchievementType.Sniper, accuracy.ToString()))
+            achievementsUnlocked.Add(AchievementType.Sniper);
+
+        if (achievementsUnlocked.Count == 0)
+            return;
+
+        if (achievementsUnlocked.Count == 1)
+        {
+            _uiCanvas.AchievementUnlockedUI(achievementsUnlocked[0]);
+            return;
+        }
+
+        _uiCanvas.ManyAchievementsUnlockedUI(achievementsUnlocked);
     }
 
     public void CheckOnNpcKilled(int enemiesKilled)
@@ -100,10 +118,17 @@ public class AchievementManager : MonoBehaviour
         triggerAchievement(AchievementType.Hacker);
     }
 
-    private void triggerAchievement(AchievementType type, string value = null)
-    { 
+    private bool addAchievement(AchievementType type, string value = null)
+    {
         Achievement achievement = AchievementConstants.GetAchievement(type, value);
-        if (_unlockedAchievements.AddIfNone(achievement))
-            _uiCanvas.UpdateAchievementText(type);
+        return _unlockedAchievements.AddIfNone(achievement);
+    }
+
+    private void triggerAchievement(AchievementType type, string value = null)
+    {
+        if (!addAchievement(type, value))
+            return;
+        
+        _uiCanvas.AchievementUnlockedUI(type);
     }
 }

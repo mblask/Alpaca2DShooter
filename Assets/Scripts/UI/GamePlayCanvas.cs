@@ -205,9 +205,14 @@ public class GamePlayCanvas : MonoBehaviour
         _playerOrBossLevelUI.ActivateUI(value);
     }
 
-    public void UpdateAchievementText(AchievementType type)
+    public void AchievementUnlockedUI(AchievementType type)
     {
-        _achievementUI.UpdateText(type);
+        _achievementUI.AchievementUnlocked(type);
+    }
+
+    public void ManyAchievementsUnlockedUI(List<AchievementType> types)
+    {
+        _achievementUI.ManyAchievementsUnlocked(types);
     }
 
     public void ActivateTextConsoleUI(string text)
