@@ -15,8 +15,9 @@ public class Workshop : MonoBehaviour
         ActivateWorkshopOnCollider(collision, true);
         if (_floatingText == null)
         {
+            string message = "Get close and press C\r\n to activate workshop";
             _floatingText = FloatingTextSpawner.CreateFloatingTextStatic
-                (transform.position, "Press C\r\n to activate workshop", Color.white, 1.0f, 8.0f, 0.5f);
+                (transform.position, message, Color.white, 1.0f, 8.0f, 0.5f);
         }
     }
 

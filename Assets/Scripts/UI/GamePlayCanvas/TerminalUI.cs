@@ -80,6 +80,11 @@ public class TerminalUI : MonoBehaviour
         _dataItems.Clear();
     }
 
+    public void HideUi()
+    {
+        ActivateUI(false);
+    }
+
     public void InsertedDataItem(DataItem dataItem)
     {
         bool dataItemAlreadyInTerminal = dataItem != null;

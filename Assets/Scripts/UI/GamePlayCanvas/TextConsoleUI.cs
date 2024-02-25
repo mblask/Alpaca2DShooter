@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TextConsoleUI : MonoBehaviour
+public class TextConsoleUI : MonoBehaviour, IUiObject
 {
     private static TextConsoleUI _instance;
     public static TextConsoleUI Instance
@@ -77,11 +77,17 @@ public class TextConsoleUI : MonoBehaviour
         _completeTextToWrite = string.Empty;
         _textParagraphs = new string[] { };
         _isActive = false;
+        GamePlayCanvas.RemoveOpenUiStatic(this);
 
         if (instantClose)
             _animator.SetTrigger("Default");
         else
             _animator.SetBool("IsActive", _isActive);
+    }
+
+    public void HideUI()
+    {
+        CloseUI(true);
     }
 
     private void incrementParagraph(int increment)

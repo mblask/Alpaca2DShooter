@@ -1,3 +1,4 @@
+using AlpacaMyGames;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,7 +37,18 @@ public class GamePlayCanvas : MonoBehaviour
     private PauseMenu _pauseMenu;
     private InstanceCompleteUI _instanceCompleteUI;
 
-    private bool _isPaused = false;
+    private readonly static List<IUiObject> _openUis = new List<IUiObject>();
+
+    public static void AddOpenUiStatic(IUiObject uiObject)
+    {
+        _openUis.AddIfNone(uiObject);
+    }
+
+    public static void RemoveOpenUiStatic(IUiObject uiObject)
+    {
+        if (_openUis.Contains(uiObject))
+            _openUis.Remove(uiObject);
+    }
 
     private void Awake()
     {
@@ -227,6 +239,10 @@ public class GamePlayCanvas : MonoBehaviour
 
     public void TogglePauseUI()
     {
+        if (!_pauseMenu.IsPaused)
+            for (int i = _openUis.Count - 1; i >= 0; i--)
+                _openUis[i].HideUI();
+
         _pauseMenu.TogglePause();
     }
 

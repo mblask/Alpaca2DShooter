@@ -7,6 +7,7 @@ public class PauseMenu : MonoBehaviour
     private GameManager _gameManager;
 
     private bool _isPaused = false;
+    public bool IsPaused => _isPaused;
 
     private void Awake()
     {

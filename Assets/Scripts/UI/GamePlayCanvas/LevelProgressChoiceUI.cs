@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelProgressChoiceUI : MonoBehaviour
+public class LevelProgressChoiceUI : MonoBehaviour, IUiObject
 {
     private static LevelProgressChoiceUI _instance;
 
@@ -29,7 +29,7 @@ public class LevelProgressChoiceUI : MonoBehaviour
     private void Start()
     {
         _readyButton.onClick.AddListener(readyButton);
-        _cancelButton.onClick.AddListener(cancelButton);
+        _cancelButton.onClick.AddListener(HideUI);
     }
 
     public void ShowUI(bool value)
@@ -37,10 +37,15 @@ public class LevelProgressChoiceUI : MonoBehaviour
         if (_container == null)
             return;
 
+        if (value)
+            GamePlayCanvas.AddOpenUiStatic(this);
+        else
+            GamePlayCanvas.RemoveOpenUiStatic(this);
+
         _container.gameObject?.SetActive(value);
     }
 
-    private void cancelButton()
+    public void HideUI()
     {
         ShowUI(false);
     }

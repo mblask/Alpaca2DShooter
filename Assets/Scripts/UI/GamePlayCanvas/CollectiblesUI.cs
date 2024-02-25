@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CollectiblesUI : MonoBehaviour
+public class CollectiblesUI : MonoBehaviour, IUiObject
 {
     private Transform _container;
     private Transform _itemContainer;
@@ -31,11 +32,23 @@ public class CollectiblesUI : MonoBehaviour
         _container.gameObject.SetActive(active);
 
         if (active)
+        {
             populateItemContainer();
+            GamePlayCanvas.AddOpenUiStatic(this);
+        }
 
         
         if (!active)
+        {
             _canvas.RemoveItemTooltip();
+            GamePlayCanvas.RemoveOpenUiStatic(this);
+        }
+    }
+
+    public void HideUI()
+    {
+        _container.gameObject.SetActive(false);
+        _canvas.RemoveItemTooltip();
     }
 
     private void populateItemContainer()

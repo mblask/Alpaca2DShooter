@@ -42,7 +42,7 @@ public class ConsumableItem : InventoryItem
         if (LimbToughnessDuration != Vector2.zero)
         {
             char sign = Mathf.Sign(LimbToughnessDuration.x) > 0.0f ? '+' : '-';
-            sb.Append("Toughness " + sign + LimbToughnessDuration.x * 100.0f + "% (" + LimbToughnessDuration.y + "s)");
+            sb.Append("Toughness " + sign + LimbToughnessDuration.x + "% (" + LimbToughnessDuration.y + "s)");
         }
 
         return sb.ToString();

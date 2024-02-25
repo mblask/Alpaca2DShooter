@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerOrBossLevelUI : MonoBehaviour
+public class PlayerOrBossLevelUI : MonoBehaviour, IUiObject
 {
     private static PlayerOrBossLevelUI _instance;
     public static PlayerOrBossLevelUI Instance
@@ -55,9 +55,19 @@ public class PlayerOrBossLevelUI : MonoBehaviour
         if (_container == null)
             return;
 
+        if (value)
+            GamePlayCanvas.AddOpenUiStatic(this);
+        else
+            GamePlayCanvas.RemoveOpenUiStatic(this);
+
         if (value.Equals(_container.gameObject.activeSelf))
             return;
 
         _container.gameObject.SetActive(value);
+    }
+
+    public void HideUI()
+    {
+        ActivateUI(false);
     }
 }

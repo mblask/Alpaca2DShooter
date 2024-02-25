@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class ItemTooltip : MonoBehaviour
+public class ItemTooltip : MonoBehaviour, IUiObject
 {
     private static ItemTooltip _instance;
 
@@ -78,17 +78,19 @@ public class ItemTooltip : MonoBehaviour
         _itemImage.color = _lastItem.Color;
 
         _animator.SetBool(IS_ACTIVE_STRING, true);
-    }
-
-    public static void RemoveTooltipStatic()
-    {
-        _instance?.RemoveTooltip();
+        GamePlayCanvas.AddOpenUiStatic(this);
     }
     
     public void RemoveTooltip()
     {
+        GamePlayCanvas.RemoveOpenUiStatic(this);
         if (_animator.GetBool(IS_ACTIVE_STRING))
             _animator.SetBool(IS_ACTIVE_STRING, false);
+    }
+
+    public void HideUI()
+    {
+        RemoveTooltip();
     }
 
     public Item GetTooltipItem()

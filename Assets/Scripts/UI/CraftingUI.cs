@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CraftingUI : MonoBehaviour
+public class CraftingUI : MonoBehaviour, IUiObject
 {
 
     private Transform _container;
@@ -92,8 +92,19 @@ public class CraftingUI : MonoBehaviour
         bool showPossibleCrafts = _container.gameObject.activeSelf && CraftingManager.GetPossibleCraftsStatic().Count > 0;
         showPossibleCraftsScreen(showPossibleCrafts);
 
+        if (value)
+            GamePlayCanvas.AddOpenUiStatic(this);
+
         if (!value)
+        {
+            GamePlayCanvas.RemoveOpenUiStatic(this);
             _canvas.RemoveItemTooltip();
+        }
+    }
+
+    public void HideUI()
+    {
+        ShowCraftingUI(false);
     }
     
     private void showPossibleCraftsScreen(bool value)

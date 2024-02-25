@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryUI : MonoBehaviour
+public class InventoryUI : MonoBehaviour, IUiObject
 {
     private Transform _container;
     private Transform _itemSlotContainer;
@@ -30,8 +30,17 @@ public class InventoryUI : MonoBehaviour
     {
         bool isActive = !_container.gameObject.activeSelf;
         _container.gameObject.SetActive(isActive);
-        
+
+        if (isActive)
+            GamePlayCanvas.AddOpenUiStatic(this);
+
         UpdateItemContainer();
+    }
+
+    public void HideUI()
+    {
+        GamePlayCanvas.RemoveOpenUiStatic(this);
+        _container.gameObject.SetActive(false);
     }
 
     public void UpdateItemContainer()
