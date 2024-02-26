@@ -41,15 +41,14 @@ public class TextConsoleUI : MonoBehaviour, IUiObject
 
     private void Update()
     {
-        switchParagraphs();
+        if (Input.GetKeyUp(KeyCode.Space))
+            switchParagraphs();
+        
         closeUiOnInput();
     }
     
     private void switchParagraphs()
     {
-        if (!Input.GetKeyUp(KeyCode.Space))
-            return;
-
         if (_textParagraphs == null || _textParagraphs.Length == 0)
             return;
 

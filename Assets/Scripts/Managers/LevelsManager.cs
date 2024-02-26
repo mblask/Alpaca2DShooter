@@ -62,12 +62,6 @@ public class LevelsManager : MonoBehaviour
             spawnPlayerInPlayersLevel();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.V))
-            _uiCanvas.ToogleInstanceCompleteUI();
-    }
-
     public int GetLevelNumber()
     {
         return _levelNumber;

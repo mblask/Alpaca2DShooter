@@ -63,16 +63,6 @@ public class MainMenuCanvas : MonoBehaviour
 
             _audioSource.Play();
         }
-
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            _currentResolutionIndex++;
-
-            if (_currentResolutionIndex >= Resolutions.Count)
-                _currentResolutionIndex = 0;
-
-            _canvasScaler.referenceResolution = Resolutions[_currentResolutionIndex];
-        }
     }
 
     public IEnumerator ActivateLoadingScreen()

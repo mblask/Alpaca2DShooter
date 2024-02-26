@@ -50,16 +50,19 @@ public class GameManager : MonoBehaviour
         timeManager();
         checkMouseCursor();
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (SceneManager.GetActiveScene().buildIndex == 0)
-                return;
+        if (Input.GetKeyUp(KeyCode.Escape))
+            togglePauseUI();
+    }
 
-            if (_uiCanvas == null)
-                _uiCanvas = GamePlayCanvas.Instance;
+    private void togglePauseUI()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+            return;
 
-            _uiCanvas.TogglePauseUI();
-        }
+        if (_uiCanvas == null)
+            _uiCanvas = GamePlayCanvas.Instance;
+
+        _uiCanvas.TogglePauseUI();
     }
 
     private void initializeGameId()

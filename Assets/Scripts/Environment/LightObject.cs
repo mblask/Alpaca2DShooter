@@ -1,13 +1,13 @@
-
+using UnityEngine.Rendering.Universal;
 
 public class LightObject : SwitchableObject
 {
-    private UnityEngine.Rendering.Universal.Light2D _light;
+    private Light2D _light;
     private float _defaultIntensity;
 
     private void Awake()
     {
-        _light = GetComponent<UnityEngine.Rendering.Universal.Light2D>();
+        _light = GetComponent<Light2D>();
         _defaultIntensity = _light.intensity;
     }
 

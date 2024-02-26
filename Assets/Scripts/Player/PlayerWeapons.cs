@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AlpacaMyGames;
-using System.Linq;
-using UnityEngine.Tilemaps;
 
 public class PlayerWeapons : MonoBehaviour
 {

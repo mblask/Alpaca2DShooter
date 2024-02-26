@@ -45,8 +45,20 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        getInput();
-        triggerRunning();
+        getMovement();
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+            triggerRunning();
+
+        if (Input.GetKeyDown(_herbalBoosterKey))
+            herbalBooster();
+
+        if (Input.GetKeyDown(_limbProtectorKey))
+            limbProtector();
+
+        if (Input.GetKeyDown(_limbPatcherKey))
+            limbPatcher();
+
     }
 
     private void FixedUpdate()
@@ -55,30 +67,39 @@ public class PlayerController : MonoBehaviour
         movePlayer(_movement.normalized);
     }
 
-    private void getInput()
+    private void herbalBooster()
     {
-        if (_inputActive)
-        {
-            _movement.x = Input.GetAxisRaw("Horizontal");
-            _movement.y = Input.GetAxisRaw("Vertical");
+        if (!_inputActive)
+            return;
 
-            if (Input.GetKeyDown(_herbalBoosterKey))
-            {
-                PlayerInventory.Instance.UseConsumable(ConsumableType.HerbalBooster);
-            }
+        PlayerInventory.Instance.UseConsumable(ConsumableType.HerbalBooster);
+    }
 
-            if (Input.GetKeyDown(_limbProtectorKey))
-            {
-                PlayerInventory.Instance.UseConsumable(ConsumableType.LimbProtector);
-            }
+    private void limbProtector()
+    {
+        if (!_inputActive)
+            return;
 
-            if (Input.GetKeyDown(_limbPatcherKey))
-            {
-                PlayerInventory.Instance.UseConsumable(ConsumableType.LimbPatcher);
-            }
-        }
+        PlayerInventory.Instance.UseConsumable(ConsumableType.LimbProtector);
+    }
 
+    private void limbPatcher()
+    {
+        if (!_inputActive)
+            return;
+
+        PlayerInventory.Instance.UseConsumable(ConsumableType.LimbPatcher);
+    }
+
+    private void getMovement()
+    {
         _mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition);
+        
+        if (!_inputActive)
+            return;
+
+        _movement.x = Input.GetAxisRaw("Horizontal");
+        _movement.y = Input.GetAxisRaw("Vertical");
     }
 
     public void DeactivateInput()
@@ -122,7 +143,7 @@ public class PlayerController : MonoBehaviour
         float runningSpeedMultiplier = 1.5f;
 
         _canRun = _playerStats.Stamina.GetCurrentValue() > 0.0f;
-        
+
         if (!_canRun && _isRunning)
         {
             _isRunning = false;
@@ -130,21 +151,17 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (_isRunning)
         {
-            if (!_isRunning)
-            {
-                if (_movement.magnitude > 0.0f)
-                {
-                    _isRunning = true;
-                    _playerStats.Speed.AddBaseMultiplier(runningSpeedMultiplier);
-                }
-            }
-            else
-            {
-                _isRunning = false;
-                _playerStats.Speed.RemoveBaseMultiplier(runningSpeedMultiplier);
-            }
+            _isRunning = false;
+            _playerStats.Speed.RemoveBaseMultiplier(runningSpeedMultiplier);
+            return;
+        }
+
+        if (_movement.magnitude > 0.0f)
+        {
+            _isRunning = true;
+            _playerStats.Speed.AddBaseMultiplier(runningSpeedMultiplier);
         }
     }
 
