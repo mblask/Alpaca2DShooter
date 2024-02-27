@@ -40,14 +40,14 @@ public class PlayerInventory : MonoBehaviour, ICrafting
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I))
-            toggleInventoryUI();
-
-        if (Input.GetKeyUp(KeyCode.T))
-            toggleCollectiblesUI();
-
-        if (Input.GetKeyDown(KeyCode.C))
-            toggleCraftingUI();
+        //if (Input.GetKeyDown(KeyCode.I))
+        //    toggleInventoryUI();
+        //
+        //if (Input.GetKeyUp(KeyCode.T))
+        //    toggleCollectiblesUI();
+        //
+        //if (Input.GetKeyDown(KeyCode.C))
+        //    ToggleCraftingUI();
     }
 
     private bool addCollectible(Item item)
@@ -72,17 +72,17 @@ public class PlayerInventory : MonoBehaviour, ICrafting
         return _collectibles.Remove(item);
     }
 
-    private void toggleCollectiblesUI()
-    {
-        _canvas.ShowCollectiblesUI();
-    }
+    //private void toggleCollectiblesUI()
+    //{
+    //    _canvas.ShowCollectiblesUI();
+    //}
+    //
+    //private void toggleInventoryUI()
+    //{
+    //    _canvas.ShowInventory();
+    //}
 
-    private void toggleInventoryUI()
-    {
-        _canvas.ShowInventory();
-    }
-
-    private void toggleCraftingUI()
+    public void ToggleCraftingUI()
     {
         if (!_craftingPossible)
             return;

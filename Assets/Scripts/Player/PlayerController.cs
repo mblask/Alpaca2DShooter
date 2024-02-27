@@ -47,18 +47,17 @@ public class PlayerController : MonoBehaviour
     {
         getMovement();
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-            triggerRunning();
-
-        if (Input.GetKeyDown(_herbalBoosterKey))
-            herbalBooster();
-
-        if (Input.GetKeyDown(_limbProtectorKey))
-            limbProtector();
-
-        if (Input.GetKeyDown(_limbPatcherKey))
-            limbPatcher();
-
+        //if (Input.GetKeyDown(KeyCode.LeftShift))
+        //    TriggerRunning();
+        //
+        //if (Input.GetKeyDown(_herbalBoosterKey))
+        //    HerbalBooster();
+        //
+        //if (Input.GetKeyDown(_limbProtectorKey))
+        //    LimbProtector();
+        //
+        //if (Input.GetKeyDown(_limbPatcherKey))
+        //    LimbPatcher();
     }
 
     private void FixedUpdate()
@@ -67,7 +66,7 @@ public class PlayerController : MonoBehaviour
         movePlayer(_movement.normalized);
     }
 
-    private void herbalBooster()
+    public void HerbalBooster()
     {
         if (!_inputActive)
             return;
@@ -75,7 +74,7 @@ public class PlayerController : MonoBehaviour
         PlayerInventory.Instance.UseConsumable(ConsumableType.HerbalBooster);
     }
 
-    private void limbProtector()
+    public void LimbProtector()
     {
         if (!_inputActive)
             return;
@@ -83,7 +82,7 @@ public class PlayerController : MonoBehaviour
         PlayerInventory.Instance.UseConsumable(ConsumableType.LimbProtector);
     }
 
-    private void limbPatcher()
+    public void LimbPatcher()
     {
         if (!_inputActive)
             return;
@@ -135,7 +134,7 @@ public class PlayerController : MonoBehaviour
         _legsInjured = value;
     }
 
-    private void triggerRunning()
+    public void TriggerRunning()
     {
         if (_legsInjured)
             return;
