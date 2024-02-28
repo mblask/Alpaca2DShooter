@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TerminalUI : MonoBehaviour
+public class TerminalUI : MonoBehaviour, IUiObject
 {
     private static TerminalUI _instance;
     public static TerminalUI Instance
@@ -78,9 +78,14 @@ public class TerminalUI : MonoBehaviour
         _container.gameObject.SetActive(value);
         _inventoryItemSelector.gameObject.SetActive(false);
         _dataItems.Clear();
+
+        if (value)
+            GamePlayCanvas.AddOpenUiStatic(this);
+        else
+            GamePlayCanvas.RemoveOpenUiStatic(this);
     }
 
-    public void HideUi()
+    public void HideUI()
     {
         ActivateUI(false);
     }

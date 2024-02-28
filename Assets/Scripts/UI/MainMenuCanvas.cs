@@ -33,7 +33,6 @@ public class MainMenuCanvas : MonoBehaviour
     private AudioSource _audioSource;
 
     private CanvasScaler _canvasScaler;
-    private int _currentResolutionIndex = 0;
 
     public void Awake()
     {

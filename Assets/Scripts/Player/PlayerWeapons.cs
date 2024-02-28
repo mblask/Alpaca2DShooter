@@ -28,7 +28,6 @@ public class PlayerWeapons : MonoBehaviour
 
     private Transform _shootingSpot;
     private Camera _camera;
-    private GameManager _gameManager;
     private PlayerAnimations _playerAnimations;
     private PlayerStats _playerStats;
     private CameraController _cameraController;
@@ -78,7 +77,6 @@ public class PlayerWeapons : MonoBehaviour
     private void Start()
     {
         _camera = Camera.main;
-        _gameManager = GameManager.Instance;
         _cameraController = CameraController.Instance;
         _pointerOver = PointerOver.GetInstance();
         _ammoPanel = AmmoPanel.Instance;
@@ -94,7 +92,6 @@ public class PlayerWeapons : MonoBehaviour
     private void Update()
     {
         _mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition);
-        keyboardInput();
         autoShootingProcedure();
         intervalWeaponProcedure();
     }
@@ -112,37 +109,16 @@ public class PlayerWeapons : MonoBehaviour
             _uiCanvas.UpdateThrowableAmmoText(_currentThrowable.TotalAmmo);
     }
 
-    private void keyboardInput()
+    public void ShowWeapon()
     {
-        if (_playerStats == null || _gameManager == null)
+        if (!_canPutWeaponAway)
             return;
 
-        if (!_playerStats.IsAlive() || !_gameManager.IsGameRunning() || _gameManager.IsPaused())
+        if (_weapons.Count == 0)
             return;
 
-        if (Input.GetKeyDown(KeyCode.R) && _weaponEquipped)
-            reloadWeapon();
-
-        if (Input.GetKeyDown(KeyCode.E) && _canSwitchWeapons)
-            switchWeapon(1);
-
-        if (Input.GetKeyDown(KeyCode.Q) && _canSwitchWeapons)
-            switchWeapon(-1);
-
-        if (Input.GetKeyDown(KeyCode.Tab) && _canSwitchWeapons)
-            switchThrowables();
-
-        if (Input.GetKeyDown(KeyCode.F) && _canPutWeaponAway)
-        {
-            if (_weapons.Count == 0)
-                return;
-
-            _weaponEquipped = !_weaponEquipped;
-            presentWeapon();
-        }
-
-        if (Input.GetKeyDown(KeyCode.G))
-            useThrowable();
+        _weaponEquipped = !_weaponEquipped;
+        presentWeapon();
     }
 
     public void LeftClickDown()
@@ -229,7 +205,7 @@ public class PlayerWeapons : MonoBehaviour
         _canPutWeaponAway = true;
     }
 
-    private void useThrowable()
+    public void UseThrowable()
     {
         if (_throwables.Count == 0)
         {
@@ -291,8 +267,11 @@ public class PlayerWeapons : MonoBehaviour
         }
     }
 
-    private void switchThrowables()
+    public void SwitchThrowables()
     {
+        if (!_canSwitchWeapons)
+            return;
+
         if (_throwables.Count == 0)
             return;
 
@@ -333,8 +312,11 @@ public class PlayerWeapons : MonoBehaviour
             _playerAnimations.PlayAnimation(AnimationType.RemoveWeapon);
     }
 
-    private void switchWeapon(int leftRight)
+    public void SwitchWeapon(int leftRight)
     {
+        if (!_canSwitchWeapons)
+            return;
+
         if (_weapons.Count <= 1)
             return;
 
@@ -490,15 +472,18 @@ public class PlayerWeapons : MonoBehaviour
 
     private Vector3 getRandomOffset(float shootingOffset, float accuracy)
     {
-        Vector2 right = Vector2.right * UnityEngine.Random.Range(-1.0f, 1.0f);
-        Vector2 up = Vector2.up * UnityEngine.Random.Range(-1.0f, 1.0f);
+        Vector2 right = Vector2.right * Random.Range(-1.0f, 1.0f);
+        Vector2 up = Vector2.up * Random.Range(-1.0f, 1.0f);
         Vector2 randomOffset = (right + up) * shootingOffset / accuracy;
 
         return randomOffset;
     }
 
-    private void reloadWeapon()
+    public void ReloadWeapon()
     {
+        if (!_weaponEquipped)
+            return;
+
         if (_currentWeapon == null)
             return;
 

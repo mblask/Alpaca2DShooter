@@ -2,12 +2,14 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
+    private KeyCode _pauseAndExit = KeyCode.Escape;
     private KeyCode _reloadWeapon = KeyCode.R;
-    private KeyCode _prepareWeapon = KeyCode.F;
+    private KeyCode _showWeapon = KeyCode.F;
     private KeyCode _nextWeapon = KeyCode.E;
     private KeyCode _previousWeapon = KeyCode.Q;
     private KeyCode _nextThrowable = KeyCode.Tab;
-    private KeyCode _switchTextConsole = KeyCode.Space;
+    private KeyCode _useThrowable = KeyCode.G;
+    private KeyCode _textConsoleSwitchParagraph = KeyCode.Space;
     private KeyCode _toggleCrafting = KeyCode.C;
     private KeyCode _inventory = KeyCode.I;
     private KeyCode _collectibles = KeyCode.T;
@@ -16,68 +18,91 @@ public class InputManager : MonoBehaviour
     private KeyCode _limbPatcher = KeyCode.Alpha3;
 
     private GamePlayCanvas _canvas;
-    private PlayerInventory _playerInventory;
     private PlayerController _playerController;
+    private PlayerStats _playerStats;
+    private GameManager _gameManager;
     private PlayerWeapons _playerWeapons;
+    private TextConsoleUI _textConsoleUI;
 
     private void Start()
     {
         _canvas = GamePlayCanvas.Instance;
-        _playerInventory = PlayerInventory.Instance;
         _playerController = PlayerController.Instance;
         _playerWeapons = PlayerWeapons.Instance;
+        _textConsoleUI = TextConsoleUI.Instance;
+        _playerStats = PlayerStats.Instance;
+        _gameManager = GameManager.Instance;
     }
 
     private void Update()
     {
-        togglePlayerInventory();
-        toggleCollectibles();
-        toggleCrafting();
-        triggerRunning();
-        herbalBooster();
-        limbProtector();
-        limbPatcher();
+        togglePauseUI();
+        playerInventoryInput();
+        playerControllerInput();
+        textConsoleSwitchParagraphs();
+        playerWeaponsInput();
     }
 
-    private void togglePlayerInventory()
+    private void playerInventoryInput()
     {
         if (Input.GetKeyDown(_inventory))
             _canvas.ShowInventory();
-    }
 
-    private void toggleCollectibles()
-    {
         if (Input.GetKeyUp(_collectibles))
             _canvas.ShowCollectiblesUI();
-    }
 
-    private void toggleCrafting()
-    {
         if (Input.GetKeyUp(_toggleCrafting))
-            _playerInventory.ToggleCraftingUI();
+            _canvas.ToggleCraftingUI();
     }
 
-    private void triggerRunning()
+    private void playerControllerInput()
     {
         if (Input.GetKeyDown(KeyCode.LeftShift))
             _playerController.TriggerRunning();
-    }
 
-    private void herbalBooster()
-    {
         if (Input.GetKeyDown(_herbalBooster))
             _playerController.HerbalBooster();
-    }
 
-    private void limbProtector()
-    {
         if (Input.GetKeyDown(_limbProtector))
             _playerController.LimbProtector();
-    }
 
-    private void limbPatcher()
-    {
         if (Input.GetKeyDown(_limbPatcher))
             _playerController.LimbPatcher();
+    }
+
+    private void togglePauseUI()
+    {
+        if (Input.GetKeyUp(_pauseAndExit))
+            _canvas.TogglePauseUI();
+    }
+
+    private void textConsoleSwitchParagraphs()
+    {
+        if (Input.GetKeyUp(_textConsoleSwitchParagraph))
+            _textConsoleUI.SwitchParagraphs();
+    }
+
+    private void playerWeaponsInput()
+    {
+        if (!_playerStats.IsAlive() || !_gameManager.IsGameRunning() || _gameManager.IsPaused())
+            return;
+
+        if (Input.GetKeyDown(_reloadWeapon))
+            _playerWeapons.ReloadWeapon();
+
+        if (Input.GetKeyDown(_nextWeapon))
+            _playerWeapons.SwitchWeapon(1);
+
+        if (Input.GetKeyDown(_previousWeapon))
+            _playerWeapons.SwitchWeapon(-1);
+
+        if (Input.GetKeyDown(_nextThrowable))
+            _playerWeapons.SwitchThrowables();
+
+        if (Input.GetKeyDown(_showWeapon))
+            _playerWeapons.ShowWeapon();
+
+        if (Input.GetKeyDown(_useThrowable))
+            _playerWeapons.UseThrowable();
     }
 }

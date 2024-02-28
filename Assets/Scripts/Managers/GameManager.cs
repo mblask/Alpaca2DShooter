@@ -49,20 +49,6 @@ public class GameManager : MonoBehaviour
 
         timeManager();
         checkMouseCursor();
-
-        if (Input.GetKeyUp(KeyCode.Escape))
-            togglePauseUI();
-    }
-
-    private void togglePauseUI()
-    {
-        if (SceneManager.GetActiveScene().buildIndex == 0)
-            return;
-
-        if (_uiCanvas == null)
-            _uiCanvas = GamePlayCanvas.Instance;
-
-        _uiCanvas.TogglePauseUI();
     }
 
     private void initializeGameId()

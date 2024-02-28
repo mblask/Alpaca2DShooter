@@ -260,9 +260,11 @@ public class NpcAi : MonoBehaviour, IBlindable
     private void npcAlerted()
     {
         string randomAlert = Constants.NPC_ALERT_MESSAGES.GetRandomElement();
+
+        if (_alertedText != null)
+            return;
         
-        if (_alertedText == null)
-            FloatingTextSpawner.CreateFloatingTextStatic
+        _alertedText = FloatingTextSpawner.CreateFloatingTextStatic
                 (transform.position, randomAlert, Color.red, destroyAfter: 0.8f, fontSize: 8, floatSpeed: 0.5f);
     }
 

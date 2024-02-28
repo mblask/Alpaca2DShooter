@@ -41,13 +41,11 @@ public class TextConsoleUI : MonoBehaviour, IUiObject
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Space))
-            switchParagraphs();
-        
-        closeUiOnInput();
+        if (Input.GetMouseButtonUp(0) && !_pointerOver.OverUI())
+            clickAndClose();
     }
     
-    private void switchParagraphs()
+    public void SwitchParagraphs()
     {
         if (_textParagraphs == null || _textParagraphs.Length == 0)
             return;
@@ -57,18 +55,12 @@ public class TextConsoleUI : MonoBehaviour, IUiObject
         _textMesh.SetText(nextParagraph);
     }
 
-    private void closeUiOnInput()
+    private void clickAndClose()
     {
         if (!_isActive)
             return;
 
-        bool clickAndClose = Input.GetMouseButtonUp(0) && !_pointerOver.OverUI();
-        bool escapeClose = Input.GetKeyUp(KeyCode.Escape);
-
-        if (!clickAndClose && !escapeClose)
-            return;
-
-        CloseUI(escapeClose);
+        CloseUI(false);
     }
 
     public void CloseUI(bool instantClose)
@@ -123,5 +115,7 @@ public class TextConsoleUI : MonoBehaviour, IUiObject
         _textMesh.SetText(_textParagraphs[0]);
         _animator.SetBool("IsActive", _isActive);
         _animator.SetTrigger("TriggerAnimation");
+
+        GamePlayCanvas.AddOpenUiStatic(this);
     }
 }

@@ -22,12 +22,12 @@ public class PlayerController : MonoBehaviour
     private Vector2 _movement;
     private Vector2 _mousePosition;
 
-    [SerializeField]
-    private KeyCode _herbalBoosterKey = KeyCode.Alpha1;
-    [SerializeField]
-    private KeyCode _limbProtectorKey = KeyCode.Alpha2;
-    [SerializeField]
-    private KeyCode _limbPatcherKey = KeyCode.Alpha3;
+    //[SerializeField]
+    //private KeyCode _herbalBoosterKey = KeyCode.Alpha1;
+    //[SerializeField]
+    //private KeyCode _limbProtectorKey = KeyCode.Alpha2;
+    //[SerializeField]
+    //private KeyCode _limbPatcherKey = KeyCode.Alpha3;
 
     private PlayerStats _playerStats;
 

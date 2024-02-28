@@ -1,6 +1,7 @@
 using AlpacaMyGames;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GamePlayCanvas : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class GamePlayCanvas : MonoBehaviour
     }
 
     private GameManager _gameManager;
+    private PlayerInventory _playerInventory;
 
     private AmmoPanel _ammoPanel;
     private PlayerArmorSlider _armorSlider;
@@ -80,6 +82,7 @@ public class GamePlayCanvas : MonoBehaviour
     private void Start()
     {
         _gameManager = GameManager.Instance;
+        _playerInventory = PlayerInventory.Instance;
     }
 
     public void UpdateAmmoText(int value, int total)
@@ -150,6 +153,17 @@ public class GamePlayCanvas : MonoBehaviour
     public void ShowCraftingUI(bool value)
     {
         _craftingUI.ShowCraftingUI(value);
+    }
+
+    public void ToggleCraftingUI()
+    {
+        if (!_playerInventory.CraftingPossible)
+            return;
+
+        if (_craftingUI.IsActive())
+            _craftingUI.ShowCraftingUI(false);
+        else
+            _craftingUI.ShowCraftingUI(true);
     }
 
     public void PopulateCraftingSlots(CraftingRecipe recipe)
@@ -239,6 +253,9 @@ public class GamePlayCanvas : MonoBehaviour
 
     public void TogglePauseUI()
     {
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+            return;
+
         if (!_pauseMenu.IsPaused)
             for (int i = _openUis.Count - 1; i >= 0; i--)
                 _openUis[i].HideUI();
