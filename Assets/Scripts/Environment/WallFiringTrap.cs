@@ -10,7 +10,7 @@ public class WallFiringTrap : Hackable
 
     private Vector2 _damageInterval = new Vector2(3.0f, 6.0f);
 
-    private bool _electricityAvailable = false;
+    private bool _electricityAvailable = true;
     private bool _turnedOn = true;
     private bool _isShooting = false;
 

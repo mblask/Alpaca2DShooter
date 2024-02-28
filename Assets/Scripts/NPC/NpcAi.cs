@@ -293,6 +293,10 @@ public class NpcAi : MonoBehaviour, IBlindable
 
             if (hit.transform.GetComponent<TilemapCollider2D>() != null)
                 return true;
+
+            Door door = hit.collider.GetComponent<Door>();
+            if (door != null)
+                return door.IsClosed();
         }
 
         return false;
