@@ -1,0 +1,19 @@
+public enum ControlKeyType
+{
+    None,
+    PauseExit,
+    Reload,
+    ShowWeapon,
+    NextWeapon,
+    PreviousWeapon,
+    NextThrowable,
+    TextConsoleSwitchParagraph,
+    ToggleCrafting,
+    Inventory,
+    Collectibles,
+    HerbalBooster,
+    LimbProtector,
+    LimbPatcher,
+    UseThrowable,
+    TriggerRunning
+}

@@ -70,6 +70,9 @@ public class GameAssets : MonoBehaviour
     [Header("Mouse cursor")]
     public Transform MouseCursorObject;
 
+    [Header("Controls")]
+    public ControlKeyListScriptable ControlList;
+
     private void Awake()
     {
         if (_instance != null)

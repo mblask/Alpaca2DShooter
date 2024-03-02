@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Controls
+  m_EditorClassIdentifier: Assembly-CSharp::ControlKeyListScriptable
+  controls:
+  - ControlKeyType: 1
+    KeyCode: 27
+  - ControlKeyType: 2
+    KeyCode: 114
+  - ControlKeyType: 3
+    KeyCode: 102
+  - ControlKeyType: 4
+    KeyCode: 101
+  - ControlKeyType: 5
+    KeyCode: 113
+  - ControlKeyType: 6
+    KeyCode: 9
+  - ControlKeyType: 7
+    KeyCode: 32
+  - ControlKeyType: 8
+    KeyCode: 99
+  - ControlKeyType: 9
+    KeyCode: 61
+  - ControlKeyType: 10
+    KeyCode: 116
+  - ControlKeyType: 11
+    KeyCode: 49
+  - ControlKeyType: 12
+    KeyCode: 50
+  - ControlKeyType: 13
+    KeyCode: 51
+  - ControlKeyType: 14
+    KeyCode: 103
+  - ControlKeyType: 15
+    KeyCode: 304

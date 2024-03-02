@@ -26,6 +26,7 @@ public class MainMenuCanvas : MonoBehaviour
     private Transform _howToPlaTransform;
     private Transform _creditsTransform;
     private Transform _loadingScreenTransform;
+    private Transform _scoreInfoTransform;
 
     private Slider _loadingSlider;
 
@@ -45,6 +46,7 @@ public class MainMenuCanvas : MonoBehaviour
         _howToPlaTransform = transform.Find("HowToPlay");
         _creditsTransform = transform.Find("Credits");
         _loadingScreenTransform = transform.Find("LoadingScreen");
+        _scoreInfoTransform = transform.Find("ScoreInfo").Find("Container");
 
         _loadingSlider = _loadingScreenTransform.Find("LoadingBar").Find("Slider").GetComponent<Slider>();
 
@@ -57,7 +59,8 @@ public class MainMenuCanvas : MonoBehaviour
         {
             _activeScreen = getActiveScreen();
             _activeScreen.gameObject.SetActive(false);
-            
+            _scoreInfoTransform.gameObject.SetActive(false);
+
             _mainMenuTransform.gameObject.SetActive(true);
 
             _audioSource.Play();
