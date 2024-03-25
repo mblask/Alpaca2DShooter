@@ -42,6 +42,11 @@ public class GameManager : MonoBehaviour
         initializeGameId();
     }
 
+    private void Start()
+    {
+        _uiCanvas = GamePlayCanvas.Instance;
+    }
+
     private void Update()
     {
         if (!_gameIsRunning)
@@ -120,6 +125,12 @@ public class GameManager : MonoBehaviour
         if (_achievementsManager == null)
             _achievementsManager = AchievementManager.Instance;
         _achievementsManager.CheckOnGameFinished();
+    }
+
+    public void TriggerFailure()
+    {
+        _gameIsRunning = false;
+        _uiCanvas.ActivateFailureUI();
     }
 
     public void SetPaused(bool value)

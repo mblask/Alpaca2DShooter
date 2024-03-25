@@ -49,6 +49,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
     private PlayerArmorSlider _playerArmorSlider;
     private PostProcessingManager _postProcessingManager;
     private GamePlayCanvas _uiCanvas;
+    private GameManager _gameManager;
 
     public void Awake()
     {
@@ -62,6 +63,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
     private void Start()
     {
         _gameAssets = GameAssets.Instance;
+        _gameManager = GameManager.Instance;
         _cameraController = CameraController.Instance;
         _postProcessingManager = PostProcessingManager.Instance;
         _playerArmorSlider = PlayerArmorSlider.Instance;
@@ -308,6 +310,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
 
     private void die()
     {
+        _gameManager.TriggerFailure();
         GetComponent<BoxCollider2D>().enabled = false;
         GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
         GetComponent<SpriteRenderer>().enabled = false;

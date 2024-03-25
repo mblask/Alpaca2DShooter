@@ -278,4 +278,13 @@ public class GamePlayCanvas : MonoBehaviour
         
         _instanceCompleteUI.ToogleUI();
     }
+
+    public void ActivateFailureUI()
+    {
+        if (_gameManager.IsPaused())
+            return;
+
+        _instanceCompleteUI.SetText("You died");
+        _instanceCompleteUI.ActivateUI(true);
+    }
 }
