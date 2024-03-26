@@ -58,6 +58,9 @@ public class Pathfinding
             if (hit.isTrigger)
                 continue;
 
+            if (hit.GetComponent<PlayerController>() != null)
+                continue;
+
             if (hit != null)
                 node.SetObstacle(true);
         }

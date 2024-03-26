@@ -150,7 +150,7 @@ public class NpcAi : MonoBehaviour, IBlindable
         rotateTowards(_playerStats.transform.position);
 
         float distanceToPlayer = Vector2.Distance(transform.position, _playerStats.transform.position);
-        if (distanceToPlayer > _stopFollowingDistance)
+        if (distanceToPlayer >= _stopFollowingDistance)
         {
             //go to idle
             _npcWeapons.StopAttack();
@@ -164,7 +164,7 @@ public class NpcAi : MonoBehaviour, IBlindable
             }
         }
 
-        if (distanceToPlayer <= _stopFollowingDistance && distanceToPlayer > _attackDistance)
+        if (distanceToPlayer < _stopFollowingDistance && distanceToPlayer > _attackDistance)
         {
             //follow player
             if (!_pathFound)
@@ -354,8 +354,12 @@ public class NpcAi : MonoBehaviour, IBlindable
         transform.rotation = Quaternion.Lerp(transform.rotation, quaternion, 0.3f);
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.DrawWireSphere(transform.position, _viewDistance);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, _attackDistance);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, _stopFollowingDistance);
     }
 }
