@@ -58,7 +58,8 @@ public class Pathfinding
             if (hit.isTrigger)
                 continue;
 
-            if (hit.GetComponent<ObstacleIgnore>() != null)
+            PathfindingObject pObject = hit.GetComponent<PathfindingObject>();
+            if (pObject != null)
                 continue;
 
             if (hit != null)
