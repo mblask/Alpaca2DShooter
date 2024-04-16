@@ -78,13 +78,12 @@ public class GameManager : MonoBehaviour
         if (_gameAssets == null)
             _gameAssets = GameAssets.Instance;
 
-        _mouseCursorTransform = MouseCursor.Instance.transform;
+        if (MouseCursor.Instance != null)
+            _mouseCursorTransform = MouseCursor.Instance.transform;
 
         if (_mouseCursorTransform == null)
-        {
             _mouseCursorTransform = Instantiate
                 (_gameAssets.MouseCursorObject, Utilities.GetMouseWorldLocation(), Quaternion.identity, null);
-        }
     }
 
     public float GetGameTime()
