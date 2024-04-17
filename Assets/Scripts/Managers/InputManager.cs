@@ -87,7 +87,7 @@ public class InputManager : MonoBehaviour
 
     public bool KeyInUse(KeyCode chosenKeyCode)
     {
-        foreach (var value in _controlsDictionary.Values)
+        foreach (KeyCode value in _controlsDictionary.Values)
             if (value == chosenKeyCode)
                 return true;
 
