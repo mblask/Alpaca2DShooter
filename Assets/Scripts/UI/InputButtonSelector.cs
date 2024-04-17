@@ -1,10 +1,9 @@
-using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 
 public class InputButtonSelector : MonoBehaviour
 {
+    [SerializeField]
     private ControlKeyType _control;
     private AlpacaButtonUI _inputButton;
     private TextMeshProUGUI _characterText;
@@ -29,6 +28,9 @@ public class InputButtonSelector : MonoBehaviour
     private void Update()
     {
         if (!_keySelectionOpen)
+            return;
+
+        if (Input.GetMouseButton(0))
             return;
 
         keySelectionProcess();
@@ -62,7 +64,9 @@ public class InputButtonSelector : MonoBehaviour
 
     private void changeKey(KeyCode chosenKey)
     {
-        _inputManager.SetControlKey(_control, chosenKey);
+        if (!_inputManager.SetControlKey(_control, chosenKey))
+            return;
+
         _characterText.SetText(chosenKey.ToString());
         _keySelectionOpen = false;
     }

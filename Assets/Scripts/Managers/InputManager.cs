@@ -81,7 +81,8 @@ public class InputManager : MonoBehaviour
         if (keyCode == KeyCode.None)
             return false;
 
-        _controlsDictionary[controlKeyType] = chosenKeyCode;
+        _controlsDictionary.Remove(controlKeyType);
+        _controlsDictionary.Add(controlKeyType, chosenKeyCode);
         return true;
     }
 
@@ -159,7 +160,7 @@ public class InputManager : MonoBehaviour
         if (Input.GetKeyDown(_controlsDictionary[ControlKeyType.PreviousWeapon]))
             _playerWeapons.SwitchWeapon(-1);
 
-        if (Input.GetKeyDown(_controlsDictionary[ControlKeyType.NextThrowable]))
+        if (Input.GetKeyDown(_controlsDictionary[ControlKeyType.SwitchThrowable]))
             _playerWeapons.SwitchThrowables();
 
         if (Input.GetKeyDown(_controlsDictionary[ControlKeyType.ShowWeapon]))
