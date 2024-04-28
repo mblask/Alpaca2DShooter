@@ -16,5 +16,9 @@ public enum ControlKeyType
     LimbProtector,
     LimbPatcher,
     UseThrowable,
-    TriggerRunning
+    TriggerRunning,
+    Forward,
+    Backward,
+    StrafeLeft,
+    StrafeRight
 }

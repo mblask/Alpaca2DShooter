@@ -13,6 +13,7 @@ public class InputManager : MonoBehaviour
 
     private Dictionary<ControlKeyType, KeyCode> _controlsDictionary = new Dictionary<ControlKeyType, KeyCode>();
 
+    private Camera _camera;
     private GameAssets _gameAssets;
     private GamePlayCanvas _canvas;
     private PlayerController _playerController;
@@ -20,6 +21,9 @@ public class InputManager : MonoBehaviour
     private GameManager _gameManager;
     private PlayerWeapons _playerWeapons;
     private TextConsoleUI _textConsoleUI;
+
+    private Vector2 _movement = new Vector2();
+    private Vector2 _mousePosition = new Vector2();
 
     private void Awake()
     {
@@ -32,6 +36,7 @@ public class InputManager : MonoBehaviour
 
     private void Start()
     {
+        _camera = Camera.main;
         _gameAssets = GameAssets.Instance;
         _canvas = GamePlayCanvas.Instance;
         _playerController = PlayerController.Instance;
@@ -102,6 +107,7 @@ public class InputManager : MonoBehaviour
 
         togglePauseUI();
         playerInventoryInput();
+        playerMovementInput();
         playerControllerInput();
         textConsoleSwitchParagraphs();
         playerWeaponsInput();
@@ -117,6 +123,35 @@ public class InputManager : MonoBehaviour
 
         if (Input.GetKeyUp(_controlsDictionary[ControlKeyType.ToggleCrafting]))
             _canvas.ToggleCraftingUI();
+    }
+
+    private void playerMovementInput()
+    {
+        _mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition);
+
+        _movement.x = 0.0f;
+        if (Input.GetKey(_controlsDictionary[ControlKeyType.StrafeLeft]))
+        {
+            _movement.x = -1.0f;
+        }
+
+        if (Input.GetKey(_controlsDictionary[ControlKeyType.StrafeRight]))
+        {
+            _movement.x = +1.0f;
+        }
+
+        _movement.y = 0.0f;
+        if (Input.GetKey(_controlsDictionary[ControlKeyType.Forward]))
+        {
+            _movement.y = +1.0f;
+        }
+
+        if (Input.GetKey(_controlsDictionary[ControlKeyType.Backward]))
+        {
+            _movement.y = -1.0f;
+        }
+
+        _playerController.SetMovement(_movement.normalized, _mousePosition);
     }
 
     private void playerControllerInput()

@@ -11,8 +11,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private Camera _camera;
-
     private bool _isRunning = false;
     private bool _canRun = true;
     private bool _legsInjured = false;
@@ -21,13 +19,6 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _rigidBody;
     private Vector2 _movement;
     private Vector2 _mousePosition;
-
-    //[SerializeField]
-    //private KeyCode _herbalBoosterKey = KeyCode.Alpha1;
-    //[SerializeField]
-    //private KeyCode _limbProtectorKey = KeyCode.Alpha2;
-    //[SerializeField]
-    //private KeyCode _limbPatcherKey = KeyCode.Alpha3;
 
     private PlayerStats _playerStats;
 
@@ -40,24 +31,6 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         _playerStats = GetComponent<PlayerStats>();
-        _camera = Camera.main;
-    }
-
-    private void Update()
-    {
-        getMovement();
-
-        //if (Input.GetKeyDown(KeyCode.LeftShift))
-        //    TriggerRunning();
-        //
-        //if (Input.GetKeyDown(_herbalBoosterKey))
-        //    HerbalBooster();
-        //
-        //if (Input.GetKeyDown(_limbProtectorKey))
-        //    LimbProtector();
-        //
-        //if (Input.GetKeyDown(_limbPatcherKey))
-        //    LimbPatcher();
     }
 
     private void FixedUpdate()
@@ -90,15 +63,13 @@ public class PlayerController : MonoBehaviour
         PlayerInventory.Instance.UseConsumable(ConsumableType.LimbPatcher);
     }
 
-    private void getMovement()
+    public void SetMovement(Vector2 movement, Vector2 mousePosition)
     {
-        _mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition);
-        
+        _mousePosition = mousePosition;
         if (!_inputActive)
             return;
 
-        _movement.x = Input.GetAxisRaw("Horizontal");
-        _movement.y = Input.GetAxisRaw("Vertical");
+        _movement = movement;
     }
 
     public void DeactivateInput()

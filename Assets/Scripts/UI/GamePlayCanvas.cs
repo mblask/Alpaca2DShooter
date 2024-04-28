@@ -38,6 +38,7 @@ public class GamePlayCanvas : MonoBehaviour
     private TextConsoleUI _textConsoleUI;
     private PauseMenu _pauseMenu;
     private InstanceCompleteUI _instanceCompleteUI;
+    private SelectKeyUI _keyUsedUI;
 
     private readonly static List<IUiObject> _openUis = new List<IUiObject>();
 
@@ -77,12 +78,28 @@ public class GamePlayCanvas : MonoBehaviour
         _textConsoleUI = transform.GetComponentInChildren<TextConsoleUI>();
         _pauseMenu = transform.GetComponentInChildren<PauseMenu>();
         _instanceCompleteUI = transform.GetComponentInChildren<InstanceCompleteUI>();
+        _keyUsedUI = transform.GetComponentInChildren<SelectKeyUI>();
     }
 
     private void Start()
     {
         _gameManager = GameManager.Instance;
         _playerInventory = PlayerInventory.Instance;
+    }
+
+    public void ShowKeyUsedUI()
+    {
+        _keyUsedUI.ShowKeyUsedUI();
+    }
+
+    public void ShowSelectKeyUI()
+    {
+        _keyUsedUI.ShowSelectKeyUI();
+    }
+
+    public void HideKeyUsedUI()
+    {
+        _keyUsedUI.HideUI();
     }
 
     public void UpdateAmmoText(int value, int total)

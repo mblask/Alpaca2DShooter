@@ -13,6 +13,8 @@ public class InputButtonSelector : MonoBehaviour
     private bool _keySelectionOpen = false;
     public bool KeySelectionOpen { get { return _keySelectionOpen; } set { _keySelectionOpen = value; } }
 
+    private GamePlayCanvas _canvas;
+
     private void Awake()
     {
         _inputButton = transform.Find("Button").GetComponent<AlpacaButtonUI>();
@@ -22,6 +24,7 @@ public class InputButtonSelector : MonoBehaviour
     private void Start()
     {
         _inputManager = InputManager.Instance;
+        _canvas = GamePlayCanvas.Instance;
         _inputButton.onLeftClick = () => { openKeySelection(); };
     }
 
@@ -45,6 +48,7 @@ public class InputButtonSelector : MonoBehaviour
     {
         _selectorContainer.DisableAllSelectors();
         _keySelectionOpen = true;
+        _canvas.ShowSelectKeyUI();
     }
 
     private void keySelectionProcess()
@@ -55,11 +59,12 @@ public class InputButtonSelector : MonoBehaviour
 
         if (_inputManager.KeyInUse(chosenKeyCode))
         {
-            Debug.Log("Key already used");
+            _canvas.ShowKeyUsedUI();
             return;
         }
 
         changeKey(chosenKeyCode);
+        _canvas.HideKeyUsedUI();
     }
 
     private void changeKey(KeyCode chosenKey)

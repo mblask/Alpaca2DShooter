@@ -45,3 +45,11 @@ MonoBehaviour:
     KeyCode: 103
   - ControlKeyType: 16
     KeyCode: 304
+  - ControlKeyType: 17
+    KeyCode: 119
+  - ControlKeyType: 18
+    KeyCode: 115
+  - ControlKeyType: 19
+    KeyCode: 97
+  - ControlKeyType: 20
+    KeyCode: 100
