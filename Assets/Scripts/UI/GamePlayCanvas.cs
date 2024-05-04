@@ -1,7 +1,6 @@
 using AlpacaMyGames;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GamePlayCanvas : MonoBehaviour
 {
@@ -268,11 +267,8 @@ public class GamePlayCanvas : MonoBehaviour
         _textConsoleUI.CloseUI(instantClose);
     }
 
-    public void TogglePauseUI()
+    public void ToggleGamePauseUI()
     {
-        if (SceneManager.GetActiveScene().buildIndex == 0)
-            return;
-
         if (!_pauseMenu.IsPaused)
             for (int i = _openUis.Count - 1; i >= 0; i--)
                 _openUis[i].HideUI();

@@ -54,6 +54,9 @@ public class InputButtonSelector : MonoBehaviour
     private void keySelectionProcess()
     {
         KeyCode chosenKeyCode = InputManager.GetKeyPressed();
+        if (chosenKeyCode == KeyCode.Escape)
+            return;
+
         if (chosenKeyCode == KeyCode.None || chosenKeyCode == KeyCode.Mouse0)
             return;
 

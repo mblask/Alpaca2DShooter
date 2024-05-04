@@ -43,7 +43,7 @@ public class MainMenuCanvas : MonoBehaviour
         _mainMenuTransform = transform.Find("MainMenu");
         _characterMenuTransform = transform.Find("CharacterMenu");
         _highscoresTransform = transform.Find("Highscores");
-        _howToPlaTransform = transform.Find("HowToPlay");
+        _howToPlaTransform = transform.Find("HowToPlay (1)");
         _creditsTransform = transform.Find("Credits");
         _loadingScreenTransform = transform.Find("LoadingScreen");
         _scoreInfoTransform = transform.Find("ScoreInfo").Find("Container");

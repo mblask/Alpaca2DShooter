@@ -12,6 +12,8 @@ public class SelectKeyUI : MonoBehaviour, IUiObject
     private TimerObject _timerObject;
     private float _uiDuration = 1.0f;
 
+    public bool IsActive => gameObject.activeSelf;
+ 
     private void Awake()
     {
         _containerTransform = transform.Find("Container");
@@ -39,11 +41,13 @@ public class SelectKeyUI : MonoBehaviour, IUiObject
     public void ShowSelectKeyUI()
     {
         _textMesh.SetText(_selectKeyString);
-        _containerTransform.gameObject.SetActive(true); 
+        _containerTransform.gameObject.SetActive(true);
+        GamePlayCanvas.AddOpenUiStatic(this);
     }
 
     public void HideUI()
     {
         _containerTransform.gameObject.SetActive(false);
+        GamePlayCanvas.RemoveOpenUiStatic(this);
     }
 }

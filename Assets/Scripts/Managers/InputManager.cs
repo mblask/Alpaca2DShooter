@@ -103,14 +103,20 @@ public class InputManager : MonoBehaviour
     private void gameplayInput()
     {
         if (SceneManager.GetActiveScene().buildIndex == 0)
-            return;
+        {
+            if (Input.GetKeyUp(_controlsDictionary[ControlKeyType.PauseExit]))
+                _canvas.HideKeyUsedUI();
+        }
 
-        togglePauseUI();
-        playerInventoryInput();
-        playerMovementInput();
-        playerControllerInput();
-        textConsoleSwitchParagraphs();
-        playerWeaponsInput();
+        if (SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            toggleGamePauseUI();
+            playerInventoryInput();
+            playerMovementInput();
+            playerControllerInput();
+            textConsoleSwitchParagraphs();
+            playerWeaponsInput();
+        }
     }
 
     private void playerInventoryInput()
@@ -169,10 +175,10 @@ public class InputManager : MonoBehaviour
             _playerController.LimbPatcher();
     }
 
-    private void togglePauseUI()
+    private void toggleGamePauseUI()
     {
         if (Input.GetKeyUp(_controlsDictionary[ControlKeyType.PauseExit]))
-            _canvas.TogglePauseUI();
+            _canvas.ToggleGamePauseUI();
     }
 
     private void textConsoleSwitchParagraphs()
