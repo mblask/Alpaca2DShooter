@@ -16,11 +16,13 @@ public class InputManager : MonoBehaviour
     private Camera _camera;
     private GameAssets _gameAssets;
     private GamePlayCanvas _canvas;
+    private MainMenuCanvas _mainMenuCanvas;
     private PlayerController _playerController;
     private PlayerStats _playerStats;
     private GameManager _gameManager;
     private PlayerWeapons _playerWeapons;
     private TextConsoleUI _textConsoleUI;
+    private SelectKeyUI _selectKeyUI;
 
     private Vector2 _movement = new Vector2();
     private Vector2 _mousePosition = new Vector2();
@@ -39,11 +41,13 @@ public class InputManager : MonoBehaviour
         _camera = Camera.main;
         _gameAssets = GameAssets.Instance;
         _canvas = GamePlayCanvas.Instance;
+        _mainMenuCanvas = MainMenuCanvas.Instance;
         _playerController = PlayerController.Instance;
         _playerWeapons = PlayerWeapons.Instance;
         _textConsoleUI = TextConsoleUI.Instance;
         _playerStats = PlayerStats.Instance;
         _gameManager = GameManager.Instance;
+        _selectKeyUI = SelectKeyUI.Instance;
 
         setupInitialControls();
     }
@@ -104,8 +108,7 @@ public class InputManager : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
-            if (Input.GetKeyUp(_controlsDictionary[ControlKeyType.PauseExit]))
-                _canvas.HideKeyUsedUI();
+            toggleMainMenuEscape();
         }
 
         if (SceneManager.GetActiveScene().buildIndex == 1)
@@ -173,6 +176,20 @@ public class InputManager : MonoBehaviour
 
         if (Input.GetKeyDown(_controlsDictionary[ControlKeyType.LimbPatcher]))
             _playerController.LimbPatcher();
+    }
+
+    private void toggleMainMenuEscape()
+    {
+        if (!Input.GetKeyUp(_controlsDictionary[ControlKeyType.PauseExit]))
+            return;
+        
+        if (_selectKeyUI.IsActive)
+        {
+            _canvas.HideKeyUsedUI();
+            return;
+        }
+
+        _mainMenuCanvas.CloseActiveUi();
     }
 
     private void toggleGamePauseUI()

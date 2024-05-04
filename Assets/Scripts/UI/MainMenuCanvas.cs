@@ -23,7 +23,7 @@ public class MainMenuCanvas : MonoBehaviour
     private Transform _mainMenuTransform;
     private Transform _characterMenuTransform;
     private Transform _highscoresTransform;
-    private Transform _howToPlaTransform;
+    private Transform _controlsTransform;
     private Transform _creditsTransform;
     private Transform _loadingScreenTransform;
     private Transform _scoreInfoTransform;
@@ -33,7 +33,8 @@ public class MainMenuCanvas : MonoBehaviour
     private Transform _activeScreen;
     private AudioSource _audioSource;
 
-    private CanvasScaler _canvasScaler;
+    private bool _sceneLoading = false;
+    private float _loadingSliderFactor = 2.5f;
 
     public void Awake()
     {
@@ -41,45 +42,50 @@ public class MainMenuCanvas : MonoBehaviour
 
         _audioSource = Camera.main.GetComponent<AudioSource>();
         _mainMenuTransform = transform.Find("MainMenu");
-        _characterMenuTransform = transform.Find("CharacterMenu");
-        _highscoresTransform = transform.Find("Highscores");
-        _howToPlaTransform = transform.Find("HowToPlay (1)");
-        _creditsTransform = transform.Find("Credits");
-        _loadingScreenTransform = transform.Find("LoadingScreen");
+        _characterMenuTransform = transform.Find("CharacterMenu").Find("Container");
+        _highscoresTransform = transform.Find("Highscores").Find("Container");
+        _controlsTransform = transform.Find("Controls").Find("Container");
+        _creditsTransform = transform.Find("Credits").Find("Container");
+        _loadingScreenTransform = transform.Find("LoadingScreen").Find("Container");
         _scoreInfoTransform = transform.Find("ScoreInfo").Find("Container");
 
         _loadingSlider = _loadingScreenTransform.Find("LoadingBar").Find("Slider").GetComponent<Slider>();
-
-        _canvasScaler = GetComponent<CanvasScaler>();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            _activeScreen = getActiveScreen();
-            _activeScreen.gameObject.SetActive(false);
-            _scoreInfoTransform.gameObject.SetActive(false);
-
-            _mainMenuTransform.gameObject.SetActive(true);
-
-            _audioSource.Play();
-        }
+        loadingScreenProcedure();
     }
 
-    public IEnumerator ActivateLoadingScreen()
+    public void CloseActiveUi()
+    {
+        _activeScreen = getActiveScreen();
+        _activeScreen.gameObject.SetActive(false);
+        _scoreInfoTransform.gameObject.SetActive(false);
+        
+        _mainMenuTransform.gameObject.SetActive(true);
+        
+        _audioSource.Play();
+    }
+
+    public void ActivateLoading()
     {
         _loadingScreenTransform.gameObject.SetActive(true);
-
         _loadingSlider.value = 0.0f;
+        _sceneLoading = true;
+    }
 
-        while (_loadingSlider.value < _loadingSlider.maxValue)
-        {
-            _loadingSlider.value += Time.deltaTime * 2.5f;
+    private void loadingScreenProcedure()
+    {
+        if (!_sceneLoading)
+            return;
 
-            yield return null;
-        }
+        _loadingSlider.value += Time.deltaTime * _loadingSliderFactor;
 
+        if (_loadingSlider.value < _loadingSlider.maxValue)
+            return;
+        
+        _loadingSlider.value = 0.0f;
         SceneManager.LoadScene(1);
     }
 
@@ -87,7 +93,9 @@ public class MainMenuCanvas : MonoBehaviour
     {
         _mainMenuTransform.gameObject.SetActive(false);
 
-        StartCoroutine("ActivateLoadingScreen");
+        _loadingScreenTransform.gameObject.SetActive(true);
+        _loadingSlider.value = 0.0f;
+        _sceneLoading = true;
     }
 
     private Transform getActiveScreen()
@@ -101,8 +109,8 @@ public class MainMenuCanvas : MonoBehaviour
         if (_highscoresTransform.gameObject.activeSelf)
             return _highscoresTransform;
 
-        if (_howToPlaTransform.gameObject.activeSelf)
-            return _howToPlaTransform;
+        if (_controlsTransform.gameObject.activeSelf)
+            return _controlsTransform;
 
         if (_creditsTransform.gameObject.activeSelf)
             return _creditsTransform;
@@ -138,7 +146,7 @@ public class MainMenuCanvas : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
-      Application.Quit();
+        Application.Quit();
 #endif
     }
 }

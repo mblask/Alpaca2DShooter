@@ -59,7 +59,8 @@ public class CharacterButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public void SelectAndStartGame()
     {
         _playerSelector.SelectPlayerBase(_character.CharacterType);
-        StartCoroutine(MainMenuCanvas.Instance.ActivateLoadingScreen());
+        MainMenuCanvas.Instance.ActivateLoading();
+        //StartCoroutine(MainMenuCanvas.Instance.ActivateLoadingScreen());
     }
 
     private void setButtonActive(bool value)
