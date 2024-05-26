@@ -51,6 +51,9 @@ public class AchievementUI : MonoBehaviour, IUiObject
 
     public void HideUI()
     {
+        if (_animator == null)
+            return;
+
         _animator.SetTrigger(_defaultTriggerString);
         GamePlayCanvas.RemoveOpenUiStatic(this);
     }

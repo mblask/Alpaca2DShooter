@@ -119,6 +119,9 @@ public class Terminal : MonoBehaviour, IInteractable
 
     private bool checkPlayerTooFar()
     {
+        if (_playerStats == null)
+            return true;
+
         float distance = Vector2.Distance(_playerStats.transform.position, transform.position);
         return distance >= Constants.SHORT_INTERACTION_DISTANCE;
     }
