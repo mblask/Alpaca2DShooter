@@ -1,5 +1,6 @@
 using AlpacaMyGames;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class GamePlayCanvas : MonoBehaviour
@@ -38,6 +39,7 @@ public class GamePlayCanvas : MonoBehaviour
     private PauseMenu _pauseMenu;
     private InstanceCompleteUI _instanceCompleteUI;
     private SelectKeyUI _keyUsedUI;
+    private AchievementInfo _achievementInfo;
 
     private readonly static List<IUiObject> _openUis = new List<IUiObject>();
 
@@ -78,12 +80,23 @@ public class GamePlayCanvas : MonoBehaviour
         _pauseMenu = transform.GetComponentInChildren<PauseMenu>();
         _instanceCompleteUI = transform.GetComponentInChildren<InstanceCompleteUI>();
         _keyUsedUI = transform.GetComponentInChildren<SelectKeyUI>();
+        _achievementInfo = transform.GetComponentInChildren<AchievementInfo>();
     }
 
     private void Start()
     {
         _gameManager = GameManager.Instance;
         _playerInventory = PlayerInventory.Instance;
+    }
+
+    public void ShowAchievementInfo(Achievement achievement)
+    {
+        _achievementInfo.ActivateUI(achievement);
+    }
+
+    public void HideAchievementInfo()
+    {
+        _achievementInfo.HideUI();
     }
 
     public void ShowKeyUsedUI()

@@ -43,7 +43,6 @@ public class MainMenuCanvas : MonoBehaviour
         _audioSource = Camera.main.GetComponent<AudioSource>();
         _mainMenuTransform = transform.Find("MainMenu");
         _characterMenuTransform = transform.Find("CharacterMenu").Find("Container");
-        _highscoresTransform = transform.Find("Highscores").Find("Container");
         _controlsTransform = transform.Find("Controls").Find("Container");
         _creditsTransform = transform.Find("Credits").Find("Container");
         _loadingScreenTransform = transform.Find("LoadingScreen").Find("Container");

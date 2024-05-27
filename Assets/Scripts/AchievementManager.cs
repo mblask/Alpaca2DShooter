@@ -13,7 +13,8 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
-    [SerializeField] private List<Achievement> _unlockedAchievements = new List<Achievement>();
+    [SerializeField]
+    private List<Achievement> _unlockedAchievements = new List<Achievement>();
     private int _itemsCrafted;
     private int _medicItemsUsed;
     private int _terminalsHacked;
@@ -25,6 +26,11 @@ public class AchievementManager : MonoBehaviour
 
     private void Awake()
     {
+        DontDestroyOnLoad(this);
+
+        if (_instance != null)
+            Destroy(_instance.gameObject);
+
         _instance = this;
     }
 
@@ -130,5 +136,10 @@ public class AchievementManager : MonoBehaviour
             return;
         
         _uiCanvas.AchievementUnlockedUI(type);
+    }
+
+    public List<Achievement> GetUnlockedAchievements()
+    {
+        return _unlockedAchievements;
     }
 }
