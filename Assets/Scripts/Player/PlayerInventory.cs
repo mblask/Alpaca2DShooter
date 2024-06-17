@@ -66,6 +66,19 @@ public class PlayerInventory : MonoBehaviour, ICrafting
         return _instance.getItems();
     }
 
+    public static List<ConsumableItem> GetConsumables()
+    {
+        List<ConsumableItem> consumables = new List<ConsumableItem>();
+        foreach (Item item in _instance.getItems())
+        {
+            ConsumableItem consumable = item as ConsumableItem;
+            if (consumable != null)
+                consumables.Add(consumable);
+        }
+
+        return consumables;
+    }
+
     public List<Item> GetItems()
     {
         return _items;

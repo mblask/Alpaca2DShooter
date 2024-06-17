@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ConsumableItemUI : MonoBehaviour
 {
     private Image _image;
-    [SerializeField] private Item _item;
+    [SerializeField] private ConsumableItem _item;
 
     private Color _partiallyTransparent = new Color(1.0f, 1.0f, 1.0f, 0.2f);
     private Color _opaque = Color.white;
@@ -38,7 +36,7 @@ public class ConsumableItemUI : MonoBehaviour
         _image.color = _partiallyTransparent;
     }
 
-    public Item GetItem()
+    public ConsumableItem GetItem()
     {
         return _item;
     }

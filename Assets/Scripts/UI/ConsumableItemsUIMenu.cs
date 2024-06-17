@@ -20,22 +20,10 @@ public class ConsumableItemsUIMenu : MonoBehaviour
 
     public void PopulateConsumableItemsUI()
     {
-        List<Item> items = PlayerInventory.GetItemsStatic();
-        List<ConsumableItem> consumableItems = new List<ConsumableItem>();
-
-        foreach (Item item in items)
-        {
-            if (item is ConsumableItem)
-            {
-                ConsumableItem consumable = item as ConsumableItem;
-                if (!consumableItems.Contains(consumable))
-                    consumableItems.Add(consumable);
-            }
-        }
-
+        List<ConsumableItem> consumableItems = PlayerInventory.GetConsumables();
         foreach (ConsumableItemUI itemUI in _consumableItemsUI)
         {
-            ConsumableItem consumableItem = itemUI.GetItem() as ConsumableItem;
+            ConsumableItem consumableItem = itemUI.GetItem();
             if (consumableItems.Contains(consumableItem))
                 itemUI.EnableUI();
             else
