@@ -222,10 +222,6 @@ MonoBehaviour:
   _weapons:
   - WeaponItem: {fileID: 11400000, guid: 8e403aae5daf09c49a7cc32cfef2d5d2, type: 2}
     TotalAmmo: 100
-  - WeaponItem: {fileID: 11400000, guid: 347dff94e829f684dbc2ea07a9ffb197, type: 2}
-    TotalAmmo: 200
-  - WeaponItem: {fileID: 11400000, guid: 27da57185e6a67d4d9732d5ab8efa4eb, type: 2}
-    TotalAmmo: 200
   _throwables:
   - ThrowableItem: {fileID: 11400000, guid: fdcfedac81c46364898eacd816cdc14f, type: 2}
     TotalAmmo: 1
@@ -322,17 +318,9 @@ MonoBehaviour:
   _collectibles: []
   _items:
   - {fileID: 11400000, guid: c0bb4237c9fd0b849a55738186624d30, type: 2}
-  - {fileID: 11400000, guid: c92af50a24538ad4ca5c9c66674ed87e, type: 2}
   - {fileID: 11400000, guid: 4fc2ea3ea9b24ed4fb6e5949c14d74e2, type: 2}
-  - {fileID: 11400000, guid: 9bc7020aeb16a754f9732dc9697185bf, type: 2}
   - {fileID: 11400000, guid: 4fd7262a0d0263f4cb86420fae357052, type: 2}
-  - {fileID: 11400000, guid: c92af50a24538ad4ca5c9c66674ed87e, type: 2}
-  - {fileID: 11400000, guid: da573ce269e01f543a8b54f80c3db4e3, type: 2}
-  - {fileID: 11400000, guid: 9bc7020aeb16a754f9732dc9697185bf, type: 2}
-  - {fileID: 11400000, guid: fe7f209bd2ecd7e4e964ac24c4f2fede, type: 2}
   - {fileID: 11400000, guid: 309cc1aefcd98da4e9f2709029948105, type: 2}
-  - {fileID: 11400000, guid: 4ce150cc01079ae4fb80ade66c4265b1, type: 2}
-  - {fileID: 11400000, guid: 056ff76defa9a164ba36234b5ed85635, type: 2}
 --- !u!114 &-8563673696494485659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -442,8 +430,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0
   m_LocalBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
+    m_Center: {x: 0, y: -0.00000011920929, z: 0}
+    m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0

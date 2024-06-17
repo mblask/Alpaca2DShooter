@@ -102,20 +102,20 @@ public class TerminalUI : MonoBehaviour, IUiObject
     public void UpdateButtonAvailability(float hackingSkill)
     {
         if (hackingSkill < 2.0f)
-        {
             _switchAllegianceButton?.Disabled(true);
-        }
 
         if (hackingSkill < 3.0f)
-        {
             _turnOffTrapsButton?.Disabled(true);
-        }
     }
 
     public void AddDataItemsUI(List<DataItem> dataItems)
     {
+        _insertDriveButton.Disabled(false);
         if (dataItems == null || dataItems.Count == 0)
+        {
+            _insertDriveButton.Disabled(true);
             return;
+        }
 
         _dataItems = dataItems;
     }
