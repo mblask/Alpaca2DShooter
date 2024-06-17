@@ -22,7 +22,7 @@ public class MainMenuCanvas : MonoBehaviour
 
     private Transform _mainMenuTransform;
     private Transform _characterMenuTransform;
-    private Transform _highscoresTransform;
+    private Transform _achievementsTransform;
     private Transform _controlsTransform;
     private Transform _creditsTransform;
     private Transform _loadingScreenTransform;
@@ -43,6 +43,7 @@ public class MainMenuCanvas : MonoBehaviour
         _audioSource = Camera.main.GetComponent<AudioSource>();
         _mainMenuTransform = transform.Find("MainMenu");
         _characterMenuTransform = transform.Find("CharacterMenu").Find("Container");
+        _achievementsTransform = transform.Find("Achievements").Find("Container");
         _controlsTransform = transform.Find("Controls").Find("Container");
         _creditsTransform = transform.Find("Credits").Find("Container");
         _loadingScreenTransform = transform.Find("LoadingScreen").Find("Container");
@@ -105,8 +106,8 @@ public class MainMenuCanvas : MonoBehaviour
         if (_characterMenuTransform.gameObject.activeSelf)
             return _characterMenuTransform;
 
-        if (_highscoresTransform.gameObject.activeSelf)
-            return _highscoresTransform;
+        if (_achievementsTransform.gameObject.activeSelf)
+            return _achievementsTransform;
 
         if (_controlsTransform.gameObject.activeSelf)
             return _controlsTransform;
@@ -124,7 +125,7 @@ public class MainMenuCanvas : MonoBehaviour
     {
         List<Highscore> highscoreList = SaveManager.Load();
 
-        Transform highscoresContainer = _highscoresTransform.Find("Container").Find("HighscoresContainer");
+        Transform highscoresContainer = _achievementsTransform.Find("Container").Find("HighscoresContainer");
         for (int i = 0; i < highscoresContainer.childCount; i++)
         {
             Destroy(highscoresContainer.GetChild(i).gameObject);
