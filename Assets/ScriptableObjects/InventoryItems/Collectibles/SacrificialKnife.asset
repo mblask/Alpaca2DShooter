@@ -18,7 +18,7 @@ MonoBehaviour:
   ChanceToDrop: 5
   IsCollectible: 1
   Color: {r: 1, g: 0, b: 0, a: 1}
-  PickupAudio: 0
+  PickupAudio: 7
   ItemTooltipText: 'Sacrificial knife
 
     Handle writing:
