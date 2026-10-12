@@ -56,7 +56,7 @@ public class Bullet : MonoBehaviour
         IDamagable damagable = collision.GetComponent<IDamagable>();
         if (damagable != null)
         {
-            damagable.DamageObject(_bulletDamageData);
+            damagable.ReceiveDamage(_bulletDamageData);
             AudioManager.Instance.PlayClip(SFXClip.BulletHitsCharacter);
 
             Destroy(gameObject);

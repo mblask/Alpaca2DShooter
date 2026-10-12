@@ -75,7 +75,7 @@ public class PlayerStats : MonoBehaviour, IDamagable
         staminaManager();
     }
 
-    public void DamageObject(DamageData damageData)
+    public void ReceiveDamage(DamageData damageData)
     {
         if (_invincible)
             return;

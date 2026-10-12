@@ -14,6 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName: Knife
   ItemSprite: {fileID: 21300000, guid: 9b91bcfcd9ae4ad47bcfe8117600fbd2, type: 3}
+  ItemPrefab: {fileID: 0}
   ChanceToDrop: 30
+  Price: 0
+  ForAmount: 1
+  IsCollectible: 0
   Color: {r: 1, g: 1, b: 1, a: 1}
   PickupAudio: 7
+  ItemTooltipText: 

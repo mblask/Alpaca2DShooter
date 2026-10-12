@@ -15,6 +15,7 @@ MonoBehaviour:
   CharacterType: 4
   CharacterAOC: {fileID: 22100000, guid: bdcba94b8ea006645b3ac2faa90af47c, type: 2}
   ScoreToUnlock: 600
+  CreditsOnKill: 0.8
   Health: 90
   HealthModifier: 1
   Stamina: 80

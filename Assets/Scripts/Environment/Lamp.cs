@@ -87,7 +87,7 @@ public class Lamp : SwitchableObject, IInteractable, IDamagable
         _spriteRenderer.color = _defaultColor;
     }
 
-    public void DamageObject(DamageData damageData)
+    public void ReceiveDamage(DamageData damageData)
     {
         IsBroken = true;
         IsOn = false;

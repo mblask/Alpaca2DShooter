@@ -17,7 +17,7 @@ public class ElectricityGenerator : MonoBehaviour, IDamagable
         _switchables.AddRange(switchables);
     }
 
-    public void DamageObject(DamageData damageData)
+    public void ReceiveDamage(DamageData damageData)
     {
         if (_isBroken)
             return;

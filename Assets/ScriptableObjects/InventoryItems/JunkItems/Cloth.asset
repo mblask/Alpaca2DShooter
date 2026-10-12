@@ -14,7 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName: Cloth
   ItemSprite: {fileID: 21300000, guid: 652feaac59590a342a69973c9d25fcf6, type: 3}
+  ItemPrefab: {fileID: 0}
   ChanceToDrop: 40
+  Price: 0
+  ForAmount: 1
   IsCollectible: 0
   Color: {r: 0.69411767, g: 0.7607843, b: 1, a: 1}
   PickupAudio: 7
+  ItemTooltipText: 

@@ -18,6 +18,7 @@ public class GamePlayCanvas : MonoBehaviour
     private PlayerInventory _playerInventory;
 
     private AmmoPanel _ammoPanel;
+    private CreditPanel _creditsPanel;
     private PlayerArmorSlider _armorSlider;
     private PlayerHealthSlider _healthSlider;
     private PlayerStaminaSlider _staminaSlider;
@@ -59,6 +60,7 @@ public class GamePlayCanvas : MonoBehaviour
         _instance = this;
 
         _ammoPanel = transform.GetComponentInChildren<AmmoPanel>();
+        _creditsPanel = transform.GetComponentInChildren<CreditPanel>();
         _armorSlider = transform.GetComponentInChildren<PlayerArmorSlider>();
         _healthSlider = transform.GetComponentInChildren<PlayerHealthSlider>();
         _staminaSlider = transform.GetComponentInChildren<PlayerStaminaSlider>();
@@ -117,6 +119,11 @@ public class GamePlayCanvas : MonoBehaviour
     public void UpdateAmmoText(int value, int total)
     {
         _ammoPanel.UpdateAmmoText(value, total);
+    }
+
+    public void UpdateCreditsText(float value)
+    {
+        _creditsPanel.UpdateCreditsText(value);
     }
 
     public void UpdatePlayerArmorSlider(float value)

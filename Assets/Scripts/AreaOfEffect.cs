@@ -77,7 +77,7 @@ public class AreaOfEffect : MonoBehaviour
 
             _damagableList.Add(damagable);
             float damage = _damage.GetRandom() / Mathf.Pow(transform.localScale.x, 2);
-            damagable.DamageObject(new DamageData { Damage = damage });
+            damagable.ReceiveDamage(new DamageData { Damage = damage });
         }
     }
 

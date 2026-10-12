@@ -27,12 +27,12 @@ public class ObjectDestroy : MonoBehaviour, IDamagable
     {
         if (collision.CompareTag(_bulletTagName))
         {
-            DamageObject(new DamageData { Damage = 1.0f, BleedingChance = 0.0f });
+            ReceiveDamage(new DamageData { Damage = 1.0f, BleedingChance = 0.0f });
             Destroy(collision.gameObject);
         }
     }
 
-    public void DamageObject(DamageData damageData)
+    public void ReceiveDamage(DamageData damageData)
     {
         _hitCount -= (int)damageData.Damage;
 

@@ -7,6 +7,10 @@ public class Item : ScriptableObject
     public Sprite ItemSprite;
     public GameObject ItemPrefab;
     [Range(0.0f, 100.0f)] public float ChanceToDrop;
+    [Header("Market settings")]
+    public float Price = 0;
+    public int ForAmount = 0;
+    [Space]
     public bool IsCollectible;
     public Color Color;
     public SFXClip PickupAudio;

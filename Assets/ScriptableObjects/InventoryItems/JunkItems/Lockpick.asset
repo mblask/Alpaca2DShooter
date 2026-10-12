@@ -15,6 +15,11 @@ MonoBehaviour:
   ItemName: Lockpick
   ItemSprite: {fileID: -8233504766059196747, guid: 62739e5141ba5274197550cdd9761bf7,
     type: 3}
+  ItemPrefab: {fileID: 0}
   ChanceToDrop: 5
+  Price: 0
+  ForAmount: 1
+  IsCollectible: 0
   Color: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
   PickupAudio: 7
+  ItemTooltipText: 

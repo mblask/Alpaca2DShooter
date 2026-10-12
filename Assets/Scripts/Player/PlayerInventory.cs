@@ -18,6 +18,8 @@ public class PlayerInventory : MonoBehaviour, ICrafting
     public int MaxNumberOfItems => MAX_NUMBER_OF_ITEMS;
     [SerializeField] private List<Item> _items = new List<Item>();
 
+    private float _totalCredits = 0.0f;
+
     private bool _craftingPossible = false;
     public bool CraftingPossible => _craftingPossible;
 
@@ -37,6 +39,8 @@ public class PlayerInventory : MonoBehaviour, ICrafting
         _achievementManager = AchievementManager.Instance;
         _collectiblesManager = CollectiblesManager.Instance;
         _canvas = GamePlayCanvas.Instance;
+
+        _canvas.UpdateCreditsText(_totalCredits);
     }
 
     private bool addCollectible(Item item)
@@ -92,6 +96,14 @@ public class PlayerInventory : MonoBehaviour, ICrafting
 
         if (consumable.UseItem())
             _achievementManager.CheckOnItemUsed(consumable);
+    }
+
+    public void AddCredits(float creditsGained)
+    {
+        _totalCredits += creditsGained;
+        _canvas.UpdateCreditsText(_totalCredits);
+        FloatingTextSpawner.CreateFloatingTextStatic
+            (transform.position, creditsGained.ToString("F0"), new Color(0.1f, 1.0f, 0.2f), destroyAfter: 0.7f, fontSize: 8.0f, floatSpeed: 1.5f, storeInSpawner: true, floatDirection: FloatDirection.UpLeft);
     }
 
     public static bool AddToInventoryStatic(Item item)

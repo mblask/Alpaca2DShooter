@@ -7,6 +7,7 @@ public class CharacterBaseScriptable : ScriptableObject
     public CharacterBaseType CharacterType;
     public AnimatorOverrideController CharacterAOC;
     public int ScoreToUnlock;
+    public float CreditsOnKill;
     
     [Header("Base Stats")]
     public float Health;

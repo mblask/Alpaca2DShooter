@@ -82,7 +82,7 @@ public class FiringTrap : Hackable, IDamagable
         }        
     }
 
-    public void DamageObject(DamageData damageData)
+    public void ReceiveDamage(DamageData damageData)
     {
         //non damagable object, though hittable
         //Particle System and/or Light up object

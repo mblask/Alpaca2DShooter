@@ -21,6 +21,7 @@ public class NPCStats : MonoBehaviour, IDamagable
     private float _bloodSpawningStopwatch = 0.0f;
     private float _bleedingStopwatch = 0.0f;
     private float _defaultBleedingTime = 15.0f;
+    private float _creditsOnKill = 0.0f;
 
     private bool _isEnraged = false;
     private bool _failedEnrage = false;
@@ -34,6 +35,7 @@ public class NPCStats : MonoBehaviour, IDamagable
     private GameManager _gameManager;
     private ItemSpawner _itemSpawner;
     private PlayerWeapons _playerWeapons;
+    private PlayerInventory _playerInventory;
     private NPCHealthCanvas _enemyHealthCanvas;
 
     private NPCBase _npcBase;
@@ -55,6 +57,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         _itemSpawner = ItemSpawner.Instance;
         _gameManager = GameManager.Instance;
         _playerWeapons = PlayerWeapons.Instance;
+        _playerInventory = PlayerInventory.Instance;
         _npcBase = GetComponent<NPCBase>();
         _enemyAI = GetComponent<NpcAi>();
         _npcWeapons = GetComponent<NPCWeapons>();
@@ -85,6 +88,8 @@ public class NPCStats : MonoBehaviour, IDamagable
         EnemyHealth.SetBaseValue(baseScriptable.Health * npcHealthMultiplier);
         EnemyDefence.SetBaseValue(baseScriptable.Defense);
         EnemyLimbToughness.SetBaseValue(baseScriptable.LimbToughness);
+
+        _creditsOnKill = baseScriptable.CreditsOnKill;
     }
 
     private void processStatModifyingData()
@@ -338,7 +343,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         _enemyHealthCanvas.ActivateHealthSlider();
     }
 
-    public void DamageObject(DamageData damageData)
+    public void ReceiveDamage(DamageData damageData)
     {
         if (damageData.Damage == 0.0f)
             return;
@@ -434,6 +439,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         
         _isDead = true;
         _gameManager.IncrementEnemiesKilled();
+        _playerInventory.AddCredits(_creditsOnKill);
         _itemSpawner.SpawnRandomItemAt(transform.position);
         Destroy(gameObject);
     }
