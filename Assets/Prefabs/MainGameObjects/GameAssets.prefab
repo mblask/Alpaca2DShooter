@@ -60,6 +60,8 @@ MonoBehaviour:
     type: 3}
   SingleAchievementUI: {fileID: 5755696511679241656, guid: a86610aefa649184187e0fd70731b697,
     type: 3}
+  ShopItemUI: {fileID: 6640334401373939299, guid: fff2bae8926e7054ab7aa1b2372bd4f1,
+    type: 3}
   DestructionArea: {fileID: 8609378906264422291, guid: 84d9d9856c74c274bb1521ff3cb71c44,
     type: 3}
   ItemTemplate: {fileID: 9080969874544118615, guid: 4312b61d953601e48a5486a87b8b6234,

@@ -22,6 +22,7 @@ public class GameAssets : MonoBehaviour
     public Transform SkillButton;
     public Transform ItemSelectorButton;
     public Transform SingleAchievementUI;
+    public Transform ShopItemUI;
 
     [Header("Object Prefabs")]
     public Transform DestructionArea;

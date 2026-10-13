@@ -19,6 +19,7 @@ public class TerminalUI : MonoBehaviour, IUiObject
 
     private AlpacaButtonUI _turnOffTrapsButton;
     private AlpacaButtonUI _showExitButton;
+    private AlpacaButtonUI _shopButton;
     private AlpacaButtonUI _switchAllegianceButton;
     private AlpacaButtonUI _insertDriveButton;
     private AlpacaButtonUI _removeDriveButton;
@@ -41,6 +42,7 @@ public class TerminalUI : MonoBehaviour, IUiObject
 
         _turnOffTrapsButton = _buttonContainer.Find("TurnOffTrapsButton").GetComponent<AlpacaButtonUI>();
         _showExitButton = _buttonContainer.Find("ShowExitButton").GetComponent<AlpacaButtonUI>();
+        _shopButton = _buttonContainer.Find("ShopButton").GetComponent<AlpacaButtonUI>();
         _switchAllegianceButton = _buttonContainer.Find("SwitchAllegianceButton").GetComponent<AlpacaButtonUI>();
         _insertDriveButton = _buttonContainer.Find("InsertDataCarrierButton").GetComponent<AlpacaButtonUI>();
         _removeDriveButton = _buttonContainer.Find("RemoveDataCarrierButton").GetComponent<AlpacaButtonUI>();
@@ -54,6 +56,7 @@ public class TerminalUI : MonoBehaviour, IUiObject
 
         _turnOffTrapsButton.onLeftClick = () => { _terminal?.TurnOnOff(); };
         _showExitButton.onLeftClick = () => { _terminal?.ShowExitPortal(); };
+        _shopButton.onLeftClick = () => { _terminal?.ToggleShoppingUI(); };
         _switchAllegianceButton.onLeftClick = () => { _terminal?.Hack(); };
         _insertDriveButton.onLeftClick = () => { showExistingDataItems(); };
         _removeDriveButton.onLeftClick = () => { removeDataItem(); };

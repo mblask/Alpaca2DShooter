@@ -17,6 +17,8 @@ MonoBehaviour:
     type: 3}
   ItemPrefab: {fileID: 0}
   ChanceToDrop: 5
+  Price: 10
+  ForAmount: 1
   IsCollectible: 0
   Color: {r: 0.58431375, g: 0.58431375, b: 0.58431375, a: 1}
   PickupAudio: 7

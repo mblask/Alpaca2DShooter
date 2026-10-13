@@ -34,6 +34,7 @@ public class GamePlayCanvas : MonoBehaviour
     private LevelProgressChoiceUI _levelProgressChoiceUI;
     private InteractableTooltipUI _interactableTooltipUI;
     private TerminalUI _terminalUI;
+    private ShoppingUI _shoppingUI;
     private PlayerOrBossLevelUI _playerOrBossLevelUI;
     private AchievementUI _achievementUI;
     private TextConsoleUI _textConsoleUI;
@@ -76,6 +77,7 @@ public class GamePlayCanvas : MonoBehaviour
         _levelProgressChoiceUI = transform.GetComponentInChildren<LevelProgressChoiceUI>();
         _interactableTooltipUI = transform.GetComponentInChildren<InteractableTooltipUI>();
         _terminalUI = transform.GetComponentInChildren<TerminalUI>();
+        _shoppingUI = transform.GetComponentInChildren<ShoppingUI>();
         _playerOrBossLevelUI = transform.GetComponentInChildren<PlayerOrBossLevelUI>();
         _achievementUI = transform.GetComponentInChildren<AchievementUI>();
         _textConsoleUI = transform.GetComponentInChildren<TextConsoleUI>();
@@ -230,6 +232,11 @@ public class GamePlayCanvas : MonoBehaviour
     public void HideInteractableTooltip()
     {
         _interactableTooltipUI.HideTooltip();
+    }
+
+    public void ShowShoppingUI(bool value)
+    {
+        _shoppingUI.ShowShopUI(value);
     }
 
     public void ActivateTerminalUI(bool value)

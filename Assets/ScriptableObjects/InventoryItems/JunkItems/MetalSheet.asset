@@ -16,7 +16,7 @@ MonoBehaviour:
   ItemSprite: {fileID: 21300000, guid: 98d6e598dde646c409c0866aa6116154, type: 3}
   ItemPrefab: {fileID: 0}
   ChanceToDrop: 25
-  Price: 0
+  Price: 3
   ForAmount: 1
   IsCollectible: 0
   Color: {r: 1, g: 1, b: 1, a: 1}

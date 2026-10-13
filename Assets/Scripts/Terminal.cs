@@ -60,6 +60,7 @@ public class Terminal : MonoBehaviour, IInteractable
             return;
 
         _isInteracting = false;
+        _uiCanvas.ShowShoppingUI(false);
         _uiCanvas.ActivateTerminalUI(false);
         _uiCanvas.CloseTextConsoleUI(false);
     }
@@ -169,6 +170,11 @@ public class Terminal : MonoBehaviour, IInteractable
     public void ShowExitPortal()
     {
         _exitPortalPosition.SetExitPortalPosition(_exitPortal.transform);
+    }
+
+    public void ToggleShoppingUI()
+    {
+        _uiCanvas.ShowShoppingUI(true);
     }
 
     public void Hack()
