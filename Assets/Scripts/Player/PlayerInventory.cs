@@ -98,6 +98,11 @@ public class PlayerInventory : MonoBehaviour, ICrafting
             _achievementManager.CheckOnItemUsed(consumable);
     }
 
+    public float GetCredits()
+    {
+        return _totalCredits;
+    }
+
     public void AddCredits(float creditsGained)
     {
         _totalCredits += creditsGained;

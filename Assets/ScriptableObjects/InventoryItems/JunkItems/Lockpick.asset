@@ -22,4 +22,4 @@ MonoBehaviour:
   IsCollectible: 0
   Color: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
   PickupAudio: 7
-  ItemTooltipText: 
+  ItemTooltipText: Used for picking locked doors

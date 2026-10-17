@@ -51,6 +51,9 @@ public class GameAssets : MonoBehaviour
     [Header("Consumables")]
     public List<ConsumableItem> Consumables;
 
+    [Header("Junk")]
+    public List<JunkItem> JunkItems;
+
     [Header("Available Weapons")]
     public List<WeaponItem> WeaponsList;
 
