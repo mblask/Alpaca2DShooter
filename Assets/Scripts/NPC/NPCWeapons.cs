@@ -62,7 +62,7 @@ public class NPCWeapons : MonoBehaviour
 
     private void shootingIntervalTimerProcess()
     {
-        if (_shootingIntervalMultiplierTimer.IsOver)
+        if (_shootingIntervalMultiplierTimer.IsOver())
             return;
 
         if (_shootingIntervalMultiplierTimer.Update())

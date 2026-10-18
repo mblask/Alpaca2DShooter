@@ -139,7 +139,7 @@ public class NpcAi : MonoBehaviour, IBlindable
             _state = NpcState.Patrol;
         }
 
-        _viewDistance = _blindnessTimer.Timer / _blindnessTimer.Duration * DEFAULT_VIEW_DISTANCE;
+        _viewDistance = _blindnessTimer.GetTimerDurationRatio() * DEFAULT_VIEW_DISTANCE;
     }
 
     private void chaseState()

@@ -1,56 +1,66 @@
+using System;
 using UnityEngine;
 
+[Serializable]
 public class TimerObject
 {
-    public float Timer { get; private set; } = 0.0f;
-    public float Duration { get; set; } = 0.0f;
-    public bool IsOver
-    {
-        get
-        {
-            return Timer > Duration;
-        }
-        
-        private set { }
-    }
-
+    private float _timer = 0.0f;
+    private float _duration = 0.0f;
 
     public TimerObject()
     {
-        IsOver = false;
-        Timer = 0.0f;
+        _timer = 0.0f;
     }
 
     public TimerObject(float duration)
     {
-        IsOver = false;
-        Timer = 0.0f;
-        Duration = duration;
+        _timer = 0.0f;
+        _duration = duration;
+    }
+
+    public float GetTimer()
+    {
+        return _timer;
+    }
+
+    public float GetDuration()
+    {
+        return _duration;
+    }
+
+    public float GetTimerDurationRatio()
+    {
+        return _timer / _duration;
+    }
+
+    public bool IsOver()
+    {
+        return _timer > _duration;
     }
 
     /// <summary>
     /// Increments the timer by <paramref name="timeIncrement"/>
-    /// <br>Returns true if timer has surpassed the expected <see cref="Duration"/></br>
-    /// <br>Returns true if set <see cref="Duration"/> is 0.0</br>
+    /// <br>Returns true if timer has surpassed the expected <see cref="_duration"/></br>
+    /// <br>Returns true if set <see cref="_duration"/> is 0.0</br>
     /// </summary>
     /// <param name="timeIncrement"></param>
     /// <returns><see cref="bool"/></returns>
     public bool Update(float timeIncrement)
     {
-        if (IsOver)
+        if (IsOver())
             return true;
 
-        if (Duration == 0.0f)
+        if (_duration == 0.0f)
             return true;
 
-        Timer += timeIncrement;
-        return Timer >= Duration;
+        _timer += timeIncrement;
+        return _timer >= _duration;
     }
 
     /// <summary>
     /// Increments the timer by <see cref="Time.deltaTime"/>
-    /// <br>Returns true if timer has surpassed the expected <see cref="Duration"/></br>
-    /// <br>Returns true if set <see cref="Duration"/> is 0.0</br>
+    /// <br>Returns true if timer has surpassed the expected <see cref="_duration"/></br>
+    /// <br>Returns true if set <see cref="_duration"/> is 0.0</br>
     /// </summary>
     /// <returns><see cref="bool"/></returns>
     public bool Update()
@@ -63,7 +73,6 @@ public class TimerObject
     /// </summary>
     public void Reset()
     {
-        Timer = 0.0f;
-        IsOver = false;
+        _timer = 0.0f;
     }
 }

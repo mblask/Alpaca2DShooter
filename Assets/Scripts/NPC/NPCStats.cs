@@ -224,13 +224,13 @@ public class NPCStats : MonoBehaviour, IDamagable
         if (!_isEnraged)
             return;
 
-        if (_enragedTimer.IsOver)
+        if (_enragedTimer.IsOver())
         {
             _bossLight.color = Color.red;
             return;
         }
 
-        _enragedTimer.Update(Time.deltaTime);
+        _enragedTimer.Update();
     }
 
     private void bossEnrage()
@@ -315,7 +315,7 @@ public class NPCStats : MonoBehaviour, IDamagable
         if (!_isHealing)
             return;
 
-        if (_healingTimer.Duration == 0.0f)
+        if (_healingTimer.GetDuration() == 0.0f)
         {
             EnemyHealth.UpdateCurrentValue(_healAmount);
             _enemyHealthCanvas.UpdateHealthSlider(EnemyHealth.GetCurrentValue());
@@ -330,7 +330,7 @@ public class NPCStats : MonoBehaviour, IDamagable
             return;
         }
 
-        float healthincrement = _healAmount / _healingTimer.Duration * Time.deltaTime;
+        float healthincrement = _healAmount / _healingTimer.GetDuration() * Time.deltaTime;
         EnemyHealth.UpdateCurrentValue(healthincrement);
         _enemyHealthCanvas.UpdateHealthSlider(EnemyHealth.GetCurrentValue());
     }

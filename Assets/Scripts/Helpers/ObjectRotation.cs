@@ -3,7 +3,7 @@ using UnityEngine;
 public class ObjectRotation
 {
     private Transform _transform;
-    public float RotationSpeed { get; set; }
+    public float RotationSpeed;
 
     public ObjectRotation(Transform transform, float rotationSpeed)
     {

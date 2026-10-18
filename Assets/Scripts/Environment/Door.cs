@@ -56,7 +56,7 @@ public class Door : MonoBehaviour, IInteractable
                 return;
             }
 
-            _doorCanvas.UpdateSlider(_lockpickingTimer.Timer);
+            _doorCanvas.UpdateSlider(_lockpickingTimer.GetTimer());
             return;
         }
 

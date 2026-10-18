@@ -3,9 +3,9 @@
 /// </summary>
 public class DamageData
 {
-    public float Damage { get; set; }
+    public float Damage;
     /// <summary>
     /// Bleeding chance in percentage, from 0 to 100
     /// </summary>
-    public float BleedingChance { get; set; } = 0.1f;
+    public float BleedingChance = 0.1f;
 }
