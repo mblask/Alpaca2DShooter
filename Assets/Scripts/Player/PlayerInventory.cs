@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour, ICrafting
@@ -98,6 +99,11 @@ public class PlayerInventory : MonoBehaviour, ICrafting
             _achievementManager.CheckOnItemUsed(consumable);
     }
 
+    public List<AmmoItem> GetAmmo(WeaponItem weapon)
+    {
+        return _items.Where(item => item.ItemName.Equals(weapon.Ammo.ItemName)).Cast<AmmoItem>().ToList();
+    }
+
     public float GetCredits()
     {
         return _totalCredits;
@@ -146,7 +152,7 @@ public class PlayerInventory : MonoBehaviour, ICrafting
 
         if (_items.Remove(item))
         {
-            float randomAngleRad = UnityEngine.Random.Range(0.0f, 6.28f);
+            float randomAngleRad = Random.Range(0.0f, 6.28f);
             Vector3 position = transform.position + 2.0f * (Vector3.up * Mathf.Sin(randomAngleRad) + Vector3.right * Mathf.Cos(randomAngleRad));
             _itemSpawner.SpawnItem(position, item);
 

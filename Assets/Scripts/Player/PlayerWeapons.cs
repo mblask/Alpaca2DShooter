@@ -30,8 +30,10 @@ public class PlayerWeapons : MonoBehaviour
     private Transform _shootingSpot;
     private Camera _camera;
     private PlayerAnimations _playerAnimations;
+    private PlayerInventory _playerInventory;
     private PlayerStats _playerStats;
     private CameraController _cameraController;
+    private ItemSpawner _itemSpawner;
     private IPointerOver _pointerOver;
 
     private Vector2 _mousePosition;
@@ -56,7 +58,6 @@ public class PlayerWeapons : MonoBehaviour
     private bool _intervalWeaponActivated = false;
     private bool _isReloading = false;
 
-    private int _currentAmmo;
     private int _shotsFired;
     private int _shotsHit;
 
@@ -72,6 +73,7 @@ public class PlayerWeapons : MonoBehaviour
 
         _shootingSpot = transform.Find("ShootingSpot");
         _playerAnimations = GetComponent<PlayerAnimations>();
+        _playerInventory = GetComponent<PlayerInventory>();
         _playerStats = GetComponent<PlayerStats>();
     }
 
@@ -79,6 +81,7 @@ public class PlayerWeapons : MonoBehaviour
     {
         _camera = Camera.main;
         _cameraController = CameraController.Instance;
+        _itemSpawner = ItemSpawner.Instance;
         _pointerOver = PointerOver.GetInstance();
         _ammoPanel = AmmoPanel.Instance;
 
@@ -103,11 +106,7 @@ public class PlayerWeapons : MonoBehaviour
             SetWeapon(0);
 
         if (_throwables.Count > 0)
-            _currentThrowable = _throwables[0];
-
-        _uiCanvas.SetThrowableImage(_currentThrowable);
-        if (_currentThrowable != null)
-            _uiCanvas.UpdateThrowableAmmoText(_currentThrowable.TotalAmmo);
+            setThrowable();
     }
 
     public void ShowWeapon()
@@ -350,8 +349,8 @@ public class PlayerWeapons : MonoBehaviour
 
         if (_currentWeapon != null)
         {
-            _currentWeapon.TotalAmmo += _currentAmmo;
-            _currentAmmo = 0;
+            _currentWeapon.TotalAmmo += _currentWeapon.CurrentAmmo;
+            _currentWeapon.CurrentAmmo = 0;
         }
 
         _currentWeapon = _weapons[index];
@@ -364,7 +363,7 @@ public class PlayerWeapons : MonoBehaviour
 
         _shootingInterval = _currentWeapon.WeaponItem.ShootInterval;
 
-        _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
+        _ammoPanel.UpdateAmmoText(_currentWeapon.CurrentAmmo, _currentWeapon.TotalAmmo);
 
         if (_weaponEquipped)
             presentWeapon();
@@ -377,13 +376,22 @@ public class PlayerWeapons : MonoBehaviour
         if (ammoDelta > 0)
         {
             _currentWeapon.TotalAmmo = ammoDelta;
-            _currentAmmo = _currentWeapon.WeaponItem.MagazineBullets;
+            _currentWeapon.CurrentAmmo = _currentWeapon.WeaponItem.MagazineBullets;
         }
         else
         {
-            _currentAmmo += _currentWeapon.TotalAmmo;
+            _currentWeapon.CurrentAmmo += _currentWeapon.TotalAmmo;
             _currentWeapon.TotalAmmo = 0;
         }
+    }
+
+    private void setThrowable()
+    {
+        _currentThrowable = _throwables[0];
+
+        _uiCanvas.SetThrowableImage(_currentThrowable);
+        if (_currentThrowable != null)
+            _uiCanvas.UpdateThrowableAmmoText(_currentThrowable.TotalAmmo);
     }
 
     public void IncrementShotsHit()
@@ -402,7 +410,7 @@ public class PlayerWeapons : MonoBehaviour
 
     private bool shootOnce()
     {
-        if (_currentAmmo == 0)
+        if (_currentWeapon.CurrentAmmo == 0)
         {
             FloatingTextSpawner.CreateFloatingTextStatic(transform.position, "Out of ammo!", Color.white);
             return false;
@@ -432,15 +440,15 @@ public class PlayerWeapons : MonoBehaviour
         generateShootingParticleSystem();
         alertNearbyEnemies();
 
-        _currentAmmo--;
+        _currentWeapon.CurrentAmmo--;
 
-        if (_currentAmmo < 0)
-            _currentAmmo = 0;
+        if (_currentWeapon.CurrentAmmo < 0)
+            _currentWeapon.CurrentAmmo = 0;
 
         _mouseCursor.OnShooting(_currentWeapon);
         _audioManager.PlayClip(_currentWeapon.WeaponItem.WeaponShootAudio);
 
-        _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
+        _ammoPanel.UpdateAmmoText(_currentWeapon.CurrentAmmo, _currentWeapon.TotalAmmo);
 
         return true;
     }
@@ -491,7 +499,7 @@ public class PlayerWeapons : MonoBehaviour
         string weaponLoadedString = "Weapon fully loaded!";
         string noMoreAmmoString = "No more ammo!";
 
-        if (_currentAmmo == _currentWeapon.WeaponItem.MagazineBullets)
+        if (_currentWeapon.CurrentAmmo == _currentWeapon.WeaponItem.MagazineBullets)
         {
             FloatingTextSpawner.CreateFloatingTextStatic(transform.position, weaponLoadedString, Color.white);
             return;
@@ -503,17 +511,17 @@ public class PlayerWeapons : MonoBehaviour
             return;
         }
 
-        if (_currentAmmo == 0)
+        if (_currentWeapon.CurrentAmmo == 0)
             setCurrentWeaponAmmo(_currentWeapon.WeaponItem.MagazineBullets);
 
-        if (_currentAmmo > 0 && _currentAmmo < _currentWeapon.WeaponItem.MagazineBullets)
+        if (_currentWeapon.CurrentAmmo > 0 && _currentWeapon.CurrentAmmo < _currentWeapon.WeaponItem.MagazineBullets)
         {
-            int ammoNeeded = _currentWeapon.WeaponItem.MagazineBullets - _currentAmmo;
+            int ammoNeeded = _currentWeapon.WeaponItem.MagazineBullets - _currentWeapon.CurrentAmmo;
             setCurrentWeaponAmmo(ammoNeeded);
         }
 
         _audioManager.PlayClip(_currentWeapon.WeaponItem.WeaponReloadAudio);
-        _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
+        _ammoPanel.UpdateAmmoText(_currentWeapon.CurrentAmmo, _currentWeapon.TotalAmmo);
 
         _playerAnimations.PlayAnimation(AnimationType.Reload);
         presentWeapon();
@@ -533,7 +541,7 @@ public class PlayerWeapons : MonoBehaviour
 
             weapon.TotalAmmo += ammo.AmountInPack;
             if (_currentWeapon == weapon)
-                _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
+                _ammoPanel.UpdateAmmoText(_currentWeapon.CurrentAmmo, _currentWeapon.TotalAmmo);
 
             AudioManager.Instance.PlayClip(ammo.LoadAudio);
             return true;
@@ -600,7 +608,7 @@ public class PlayerWeapons : MonoBehaviour
                 Vector2Int ammoDropRange = new Vector2Int(10, 30);
                 _weapons[i].TotalAmmo += Random.Range(ammoDropRange.x, ammoDropRange.y);
 
-                _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
+                _ammoPanel.UpdateAmmoText(_currentWeapon.CurrentAmmo, _currentWeapon.TotalAmmo);
 
                 return true;
             }
@@ -628,6 +636,14 @@ public class PlayerWeapons : MonoBehaviour
             //If no other weapon uses this ammo type, put the ammo in inventory
             //If there is no space in the inventory, drop it on the ground
             Debug.Log(weapon.WeaponItem.ItemName);
+            if (!_playerInventory.AddToInventory(weapon.WeaponItem.Ammo))
+            {
+                float randomAngleRad = Random.Range(0.0f, 6.28f);
+                Vector3 position = transform.position + 2.0f * (Vector3.up * Mathf.Sin(randomAngleRad) + Vector3.right * Mathf.Cos(randomAngleRad));
+                _itemSpawner.SpawnItem(position, weapon.WeaponItem.Ammo);
+            }
+
+            _weapons.Remove(weapon);
         }
 
         Weapon weaponAmmo = _weapons.
@@ -635,8 +651,8 @@ public class PlayerWeapons : MonoBehaviour
         if (weaponAmmo != null)
         {
             //Remove weappon ammo from the equipped weapon
-
             Debug.Log(weaponAmmo.WeaponItem.Ammo.ItemName);
+            _playerInventory.DeleteItemFromInventory(weaponAmmo.WeaponItem.Ammo);
         }
 
         ThrowableWeapon throwable = _throwables
@@ -645,6 +661,7 @@ public class PlayerWeapons : MonoBehaviour
         {
             //Remove throwable item from the equipment
             Debug.Log(throwable.ThrowableItem.ItemName);
+            _throwables.Remove(throwable);
         }
     }
 

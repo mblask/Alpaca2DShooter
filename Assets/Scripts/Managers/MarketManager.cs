@@ -78,16 +78,20 @@ public class MarketManager
         {
             marketItems.Add(new MarketItemData
             {
-                Item = weapon.WeaponItem.Ammo,
-                Amount = weapon.TotalAmmo,
-                Price = weapon.WeaponItem.Ammo.Price * MARKET_BUYING_FACTOR,
+                Item = weapon.WeaponItem,
+                Amount = 1,
+                Price = weapon.WeaponItem.Price * MARKET_BUYING_FACTOR,
                 Equipped = true
             });
 
+            if (weapon.TotalAmmo == 0)
+                continue;
+
             marketItems.Add(new MarketItemData
-            { 
-                Item = weapon.WeaponItem,
-                Amount = 1, Price = weapon.WeaponItem.Price * MARKET_BUYING_FACTOR,
+            {
+                Item = weapon.WeaponItem.Ammo,
+                Amount = weapon.TotalAmmo,
+                Price = weapon.WeaponItem.Ammo.Price * MARKET_BUYING_FACTOR,
                 Equipped = true
             });
         }
