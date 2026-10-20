@@ -29,12 +29,14 @@ public class ShopItemUI : MonoBehaviour
         _marketManager = MarketManager.Instance;
 
         _button.onLeftClick = () => {
+            bool itemSuccessfullyProcessed = false;
             if (_itemData.Buyable)
-                _marketManager.BuyItem(_itemData);
+                itemSuccessfullyProcessed = _marketManager.BuyItem(_itemData);
             else
-                _marketManager.SellItem(_itemData);
+                itemSuccessfullyProcessed = _marketManager.SellItem(_itemData);
             
-            Destroy(this.gameObject);
+            if (itemSuccessfullyProcessed)
+                Destroy(this.gameObject);
         };
     }
 

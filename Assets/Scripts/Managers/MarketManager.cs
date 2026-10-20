@@ -17,6 +17,7 @@ public class MarketManager
 
     private GameAssets _gameAssets;
     private PlayerInventory _playerInventory;
+    private PlayerWeapons _playerWeapons;
 
     private List<Item> _itemPool = new List<Item>();
 
@@ -31,19 +32,27 @@ public class MarketManager
         _instance = this;
     }
 
-    public void SellItem(ShopItemData itemToSell)
+    public bool SellItem(ShopItemData itemToSell)
     {
         _playerInventory.AddCredits(itemToSell.Price);
+        if (itemToSell.Equipped)
+        {
+            _playerWeapons.RemoveEquippedItem(itemToSell.Item);
+            return true;
+        }
+
         _playerInventory.DeleteItemFromInventory(itemToSell.Item);
+        return true;
     }
 
-    public void BuyItem(ShopItemData itemToBuy)
+    public bool BuyItem(ShopItemData itemToBuy)
     {
         if (itemToBuy.Price > _playerInventory.GetCredits())
-            return;
+            return false;
 
         _playerInventory.AddCredits(-1 * itemToBuy.Price);
         _playerInventory.AddToInventory(itemToBuy.Item);
+        return true;
     }
 
     public List<MarketItemData> GetPlayerItemsForSale()
@@ -51,18 +60,47 @@ public class MarketManager
         if (_playerInventory == null)
             _playerInventory = PlayerInventory.Instance;
 
+        if (_playerWeapons == null)
+            _playerWeapons = PlayerWeapons.Instance;
+
         List<MarketItemData> marketItems = new List<MarketItemData>();
         foreach (Item item in _playerInventory.GetItems())
         {
             float price = item.Price;
             int amount = 1;
             if (item is AmmoItem ammo)
-            {
-                amount = ammo.Amount;
-                price = ammo.Price / ammo.ForAmount * amount;
-            }
+                amount = ammo.AmountInPack;
 
             marketItems.Add(new MarketItemData { Item = item, Amount = amount, Price = price * MARKET_BUYING_FACTOR });
+        }
+
+        foreach (Weapon weapon in _playerWeapons.GetWeapons())
+        {
+            marketItems.Add(new MarketItemData
+            {
+                Item = weapon.WeaponItem.Ammo,
+                Amount = weapon.TotalAmmo,
+                Price = weapon.WeaponItem.Ammo.Price * MARKET_BUYING_FACTOR,
+                Equipped = true
+            });
+
+            marketItems.Add(new MarketItemData
+            { 
+                Item = weapon.WeaponItem,
+                Amount = 1, Price = weapon.WeaponItem.Price * MARKET_BUYING_FACTOR,
+                Equipped = true
+            });
+        }
+
+        foreach (ThrowableWeapon throwable in _playerWeapons.GetThrowables())
+        {
+            marketItems.Add(new MarketItemData
+            {
+                Item = throwable.ThrowableItem,
+                Amount = throwable.TotalAmmo,
+                Price = throwable.ThrowableItem.Price * MARKET_BUYING_FACTOR,
+                Equipped = true
+            });
         }
 
         return marketItems;
@@ -80,10 +118,7 @@ public class MarketManager
             float price = item.Price;
 
             if (item is AmmoItem ammo)
-            {
-                amount = ammo.Amount;
-                price = ammo.Price / ammo.ForAmount * amount;
-            }
+                amount = ammo.AmountInPack;
 
             marketItems.Add(new MarketItemData { Item = item, Amount = amount, Price = price * MARKET_SELLING_FACTOR });
         }

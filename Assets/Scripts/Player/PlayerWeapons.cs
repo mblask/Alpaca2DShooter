@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using AlpacaMyGames;
+using System.Linq;
 
 public class PlayerWeapons : MonoBehaviour
 {
@@ -530,7 +531,7 @@ public class PlayerWeapons : MonoBehaviour
             if (weapon.WeaponItem.AmmoType != ammo.AmmoType)
                 continue;
 
-            weapon.TotalAmmo += ammo.Amount;
+            weapon.TotalAmmo += ammo.AmountInPack;
             if (_currentWeapon == weapon)
                 _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
 
@@ -597,7 +598,7 @@ public class PlayerWeapons : MonoBehaviour
             if (weapon.WeaponItem == _weapons[i].WeaponItem)
             {
                 Vector2Int ammoDropRange = new Vector2Int(10, 30);
-                _weapons[i].TotalAmmo += UnityEngine.Random.Range(ammoDropRange.x, ammoDropRange.y);
+                _weapons[i].TotalAmmo += Random.Range(ammoDropRange.x, ammoDropRange.y);
 
                 _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
 
@@ -617,9 +618,44 @@ public class PlayerWeapons : MonoBehaviour
         return true;
     }
 
+    public void RemoveEquippedItem(Item item)
+    {
+        Weapon weapon = _weapons
+            .Where(weapon => weapon.WeaponItem.ItemName.Equals(item.ItemName)).FirstOrDefault();
+        if (weapon != null)
+        {
+            //Remove weapon from weapon list
+            //If no other weapon uses this ammo type, put the ammo in inventory
+            //If there is no space in the inventory, drop it on the ground
+            Debug.Log(weapon.WeaponItem.ItemName);
+        }
+
+        Weapon weaponAmmo = _weapons.
+            Where(weapon => weapon.WeaponItem.Ammo.ItemName.Equals(item.ItemName)).FirstOrDefault();
+        if (weaponAmmo != null)
+        {
+            //Remove weappon ammo from the equipped weapon
+
+            Debug.Log(weaponAmmo.WeaponItem.Ammo.ItemName);
+        }
+
+        ThrowableWeapon throwable = _throwables
+            .Where(throwable => throwable.ThrowableItem.ItemName.Equals(item.ItemName)).FirstOrDefault();
+        if (throwable != null)
+        {
+            //Remove throwable item from the equipment
+            Debug.Log(throwable.ThrowableItem.ItemName);
+        }
+    }
+
     public List<Weapon> GetWeapons()
     {
         return _weapons;
+    }
+
+    public List<ThrowableWeapon> GetThrowables()
+    {
+        return _throwables;
     }
 
     public Weapon GetCurrentWeapon()

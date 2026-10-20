@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private static Player _instance;
+    /*private static Player _instance;
     public static Player Instance
     {
         get
@@ -1429,29 +1429,6 @@ public class Player : MonoBehaviour
         presentWeapon();
     }
 
-    public static bool AddAmmoStatic(AmmoItem ammo)
-    {
-        return _instance.addAmmo(ammo);
-    }
-
-    private bool addAmmo(AmmoItem ammo)
-    {
-        foreach (Weapon weapon in _weapons)
-        {
-            if (weapon.WeaponItem.AmmoType != ammo.AmmoType)
-                continue;
-
-            weapon.TotalAmmo += ammo.Amount;
-            if (_currentWeapon == weapon)
-                _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
-
-            PlayerInventory.DeleteItemFromInventoryStatic(ammo);
-            return true;
-        }
-
-        return false;
-    }
-
     private void generateShootingParticleSystem()
     {
         Vector3 rotation = new Vector3(-1.0f * _shootingSpot.rotation.eulerAngles.z, 0.0f, 0.0f);
@@ -1463,89 +1440,9 @@ public class Player : MonoBehaviour
         shootingPS.Play();
     }
 
-    public bool AddThrowable(ThrowableWeapon throwable)
-    {
-        if (throwable == null)
-            return false;
-
-        for (int i = 0; i < _throwables.Count; i++)
-        {
-            if (throwable.ThrowableItem == _throwables[i].ThrowableItem)
-            {
-                _throwables[i].TotalAmmo++;
-                _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
-
-                return true;
-            }
-        }
-
-        _throwables.Add(throwable);
-
-        if (_currentThrowable == null)
-            _currentThrowable = throwable;
-
-        _uiCanvas.SetThrowableImage(_currentThrowable);
-        _uiCanvas.UpdateThrowableAmmoText(_currentThrowable.TotalAmmo);
-
-        return true;
-    }
-
-    public bool AddWeapon(Weapon weapon)
-    {
-        if (weapon == null)
-            return false;
-
-        //check strength requirement
-        if (Strength.GetFinalValue() < weapon.WeaponItem.StrengthRequired)
-        {
-            List<string> stringList = new List<string> { "Not enough strength!", "I cannot use this!", "Too big piece..." };
-            FloatingTextSpawner.CreateFloatingTextStatic(transform.position, stringList.GetRandomElement(), Color.white);
-            return false;
-        }
-
-        for (int i = 0; i < _weapons.Count; i++)
-        {
-            if (weapon.WeaponItem == _weapons[i].WeaponItem)
-            {
-                Vector2Int ammoDropRange = new Vector2Int(10, 30);
-                _weapons[i].TotalAmmo += UnityEngine.Random.Range(ammoDropRange.x, ammoDropRange.y);
-
-                _ammoPanel.UpdateAmmoText(_currentAmmo, _currentWeapon.TotalAmmo);
-
-                return true;
-            }
-        }
-
-        _weapons.Add(weapon);
-
-        if (_currentWeapon == null)
-        {
-            _currentWeapon = weapon;
-            _uiCanvas.SetWeaponImage(_currentWeapon);
-            setWeapon(0);
-        }
-
-        return true;
-    }
-
-    public List<Weapon> GetWeapons()
-    {
-        return _weapons;
-    }
-
-    public Weapon GetCurrentWeapon()
-    {
-        return _currentWeapon;
-    }
-
-    private ThrowableWeapon getCurrentThrowable()
-    {
-        return _currentThrowable;
-    }
-
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _nonShootingDistance);
-    }
+    }*/
 }

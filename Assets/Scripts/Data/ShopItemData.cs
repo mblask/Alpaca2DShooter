@@ -6,6 +6,7 @@ public class ShopItemData
     public Item Item;
     public float Price;
     public int Amount;
+    public bool Equipped = false;
     public bool Buyable = true;
 
     public ShopItemData() { }
@@ -15,5 +16,6 @@ public class ShopItemData
         Item = marketItem.Item;
         Price = marketItem.Price;
         Amount = marketItem.Amount;
+        Equipped = marketItem.Equipped;
     }
 }

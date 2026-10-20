@@ -14,9 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemName: Silenced Gun
   ItemSprite: {fileID: 21300000, guid: b0aca9671a3857148ade71ca4d1654eb, type: 3}
+  ItemPrefab: {fileID: 0}
   ChanceToDrop: 50
+  Price: 0
+  ForAmount: 0
+  IsCollectible: 0
   Color: {r: 1, g: 1, b: 1, a: 1}
   PickupAudio: 7
+  ItemTooltipText: 
   Trigger: 2
   WeaponShootAudio: 1
   WeaponReloadAudio: 4
@@ -25,6 +30,7 @@ MonoBehaviour:
   WeaponDamage: {x: 4, y: 6}
   MagazineBullets: 12
   AmmoType: 1
+  Ammo: {fileID: 11400000, guid: c0bb4237c9fd0b849a55738186624d30, type: 2}
   BleedingChance: 7
   StrengthRequired: 1
   UseChance: 30

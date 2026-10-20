@@ -224,7 +224,7 @@ MonoBehaviour:
     TotalAmmo: 100
   _throwables:
   - ThrowableItem: {fileID: 11400000, guid: fdcfedac81c46364898eacd816cdc14f, type: 2}
-    TotalAmmo: 1
+    TotalAmmo: 2
 --- !u!114 &8196825197066008503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,6 +332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fb5ca5c449499449840fbb0cf8ff220, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsObstacle: 0
 --- !u!1 &8196825198217699624
 GameObject:
   m_ObjectHideFlags: 0
